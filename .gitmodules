@@ -1,0 +1,4 @@
+[submodule "mongo-go-driver"]
+	path = tests/mongo-go-driver
+	url = https://github.com/mongodb/mongo-go-driver.git
+	branch = master

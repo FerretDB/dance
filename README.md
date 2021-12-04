@@ -1,2 +1,3 @@
 # dance
-FerretDB integration testing
+
+FerretDB integration testing.
