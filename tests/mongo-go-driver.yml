@@ -1,0 +1,5 @@
+---
+runner: gotest
+tests:
+  pass:
+    - go.mongodb.org/mongo-driver/mongo/TestSingleResult/Decode/decode_with_error
