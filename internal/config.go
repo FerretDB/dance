@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package internal container dance implementation.
 package internal
 
 import (
@@ -22,12 +23,9 @@ import (
 )
 
 type Config struct {
-	Runner string      `yaml:"runner"`
-	Tests  TestsConfig `yaml:"tests"`
-}
-
-type TestsConfig struct {
-	Pass []string `yaml:"pass"`
+	Runner      string      `yaml:"runner"`
+	Directories []string    `yaml:"directories"`
+	Tests       TestsConfig `yaml:"tests"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -41,9 +39,17 @@ func LoadConfig(path string) (*Config, error) {
 	d.KnownFields(true)
 
 	var c Config
-	if err := d.Decode(&c); err != nil {
+	if err = d.Decode(&c); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
+	if err = c.validate(); err != nil {
+		return nil, err
+	}
+
 	return &c, nil
+}
+
+func (c *Config) validate() error {
+	return nil
 }

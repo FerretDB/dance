@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package gotest contains `go test` runner.
 package gotest
 
 import (
@@ -23,16 +24,21 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(dir string) (*internal.Results, error) {
-	cmd := exec.Command("go", "test", "-json", "-count=1", "./...")
-	cmd.Dir = dir
+func Run(root string, dirs []string) (*internal.Results, error) {
+	args := []string{"test", "-json", "-count=1"}
+	for _, dir := range dirs {
+		args = append(args, "./"+dir)
+	}
+
+	cmd := exec.Command("go", args...)
+	cmd.Dir = root
 	cmd.Stderr = os.Stderr
 	p, err := cmd.StdoutPipe()
 	if err != nil {
 		return nil, err
 	}
 	r := io.TeeReader(p, os.Stdout)
-	if err := cmd.Start(); err != nil {
+	if err = cmd.Start(); err != nil {
 		return nil, err
 	}
 
@@ -45,7 +51,7 @@ func Run(dir string) (*internal.Results, error) {
 
 	for {
 		var event TestEvent
-		if err := d.Decode(&event); err != nil {
+		if err = d.Decode(&event); err != nil {
 			if err == io.EOF {
 				break
 			}
@@ -62,12 +68,13 @@ func Run(dir string) (*internal.Results, error) {
 			result.Result = internal.Fail
 		case ActionSkip:
 			result.Result = internal.Skip
+		default:
+			result.Result = internal.Unknown
 		}
 		res.TestResults[testName] = result
 	}
 
-	err = cmd.Wait()
-	if err != nil {
+	if err = cmd.Wait(); err != nil {
 		if _, ok := err.(*exec.ExitError); ok {
 			err = nil
 		}

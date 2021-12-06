@@ -19,21 +19,21 @@ import "time"
 type Action string
 
 const (
-	// the test has started running
+	// ActionRun means the test has started running.
 	ActionRun Action = "run"
-	// the test has been paused
+	// ActionPause means the test has been paused.
 	ActionPause Action = "pause"
-	// the test has continued running
+	// ActionCont means the test has continued running.
 	ActionCont Action = "cont"
-	// the test passed
+	// ActionPass means the test passed.
 	ActionPass Action = "pass"
-	// the benchmark printed log output but did not fail
+	// ActionBench means the benchmark printed log output but did not fail.
 	ActionBench Action = "bench"
-	// the test or benchmark failed
+	// ActionFail means the test or benchmark failed.
 	ActionFail Action = "fail"
-	// the test printed output
+	// ActionOutput means the test printed output.
 	ActionOutput Action = "output"
-	// the test was skipped or the package contained no tests
+	// ActionSkip means the test was skipped or the package contained no tests.
 	ActionSkip Action = "skip"
 )
 
@@ -42,8 +42,8 @@ type TestEvent struct {
 	Action         Action    `json:"Action"`
 	Package        string    `json:"Package"`
 	Test           string    `json:"Test"`
-	ElapsedSeconds float64   `json:"Elapsed"`
 	Output         string    `json:"Output"`
+	ElapsedSeconds float64   `json:"Elapsed"`
 }
 
 func (te TestEvent) Elapsed() time.Duration {

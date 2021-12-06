@@ -14,17 +14,24 @@
 
 package internal
 
+import "strings"
+
 type Result string
 
 const (
-	Pass Result = "PASS"
-	Fail Result = "FAIL"
-	Skip Result = "SKIP"
+	Unknown Result = "UNKNOWN"
+	Pass    Result = "PASS"
+	Fail    Result = "FAIL"
+	Skip    Result = "SKIP"
 )
 
 type TestResult struct {
 	Result Result
 	Output string
+}
+
+func (tr *TestResult) IndentedOutput() string {
+	return strings.Replace(tr.Output, "\n", "\n\t", -1)
 }
 
 type Results struct {

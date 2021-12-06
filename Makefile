@@ -10,3 +10,21 @@ env-up: env-up-detach                  ## Start development environment
 
 env-up-detach:
 	docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach
+
+env-down:                              ## Stop development environment
+	docker-compose down --remove-orphans
+
+init:                                  ## Install development tools
+	go mod tidy
+	cd tools && go mod tidy && go generate -tags=tools -x
+
+fmt: bin/gofumpt                       ## Format code
+    # skip submodules
+	bin/gofumpt -w ./cmd/ ./internal/
+
+lint: bin/golangci-lint                ## Run linters
+	bin/golangci-lint run --config=.golangci-required.yml
+	bin/golangci-lint run --config=.golangci.yml
+
+bin/golangci-lint:
+	$(MAKE) init

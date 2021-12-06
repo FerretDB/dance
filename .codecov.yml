@@ -1,0 +1,7 @@
+---
+codecov:
+  bot: ferretdb-bot
+coverage:
+  range: "30...60"
+github_checks:
+  annotations: false

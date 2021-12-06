@@ -1,0 +1,36 @@
+---
+# The most valuable linters; they are required to pass for PR to be merged.
+
+run:
+  modules-download-mode: readonly
+  issues-exit-code: 1
+
+linters-settings:
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: true
+    ignore-enum-members: ""
+    package-scope-only: false
+  goimports:
+    local-prefixes: github.com/FerretDB/dance
+  govet:
+    check-shadowing: true
+    enable-all: true
+    disable-all: false
+  staticcheck:
+    go: "1.18"
+    checks: ["all"]
+
+linters:
+  disable-all: true
+  enable:
+    - exhaustive
+    - goimports
+    - govet
+    - ineffassign
+
+    # TODO enable when goanalysis_metalinter supports generics
+    # - staticcheck
+
+issues:
+  exclude-use-default: false

@@ -1,5 +1,12 @@
 ---
 runner: gotest
+directories:
+  - examples/documentation_examples
+  - mongo
+  - mongo/gridfs
+  - mongo/integration
+  - mongo/integration/unified
+  - x/mongo/driver/integration
 tests:
   pass:
     - go.mongodb.org/mongo-driver/mongo/TestSingleResult/Decode/decode_with_error

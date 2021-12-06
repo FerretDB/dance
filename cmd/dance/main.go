@@ -17,29 +17,60 @@ package main
 import (
 	"flag"
 	"log"
+	"path/filepath"
+	"sort"
+	"strings"
 
+	"golang.org/x/exp/maps"
+
+	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/gotest"
 )
 
 func main() {
-	log.SetPrefix("dance: ")
 	log.SetFlags(0)
 	flag.Parse()
 
-	res, err := gotest.Run(".")
+	matches, err := filepath.Glob("*.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
-	for t, res := range res.TestResults {
-		log.Printf("%s: %+v", t, res)
+
+	for _, match := range matches {
+		dir := strings.TrimSuffix(match, filepath.Ext(match))
+		log.Printf("%s (%s)", match, dir)
+
+		config, err := internal.LoadConfig(match)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		runRes, err := gotest.Run(dir, config.Directories)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		compareRes := config.Tests.Compare(runRes)
+
+		log.Printf("Unexpectedly failed tests (regressions):")
+		keys := maps.Keys(compareRes.UnexpectedFail)
+		sort.Strings(keys)
+		for _, t := range keys {
+			res := compareRes.UnexpectedFail[t]
+			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		}
+
+		log.Printf("\nPassed tests:")
+		for _, t := range compareRes.ExpectedPass {
+			log.Print(t)
+		}
+
+		log.Printf("\nThe rest:")
+		keys = maps.Keys(compareRes.Rest)
+		sort.Strings(keys)
+		for _, t := range keys {
+			res := compareRes.Rest[t]
+			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		}
 	}
-
-	// matches, err := filepath.Glob("*.yml")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, match := range matches {
-	// 	log.Print(match)
-	// }
 }
