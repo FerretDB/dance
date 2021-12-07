@@ -52,6 +52,7 @@ func waitForPort(ctx context.Context, port uint16) error {
 }
 
 func main() {
+	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
 	flag.Parse()
 
@@ -91,9 +92,11 @@ func main() {
 			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
 		}
 
-		log.Printf("\nPassed tests:")
-		for _, t := range compareRes.ExpectedPass {
-			log.Print(t)
+		if *vF {
+			log.Printf("\nPassed tests:")
+			for _, t := range compareRes.ExpectedPass {
+				log.Print(t)
+			}
 		}
 
 		log.Printf("\nFailed tests:")

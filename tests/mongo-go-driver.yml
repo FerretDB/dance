@@ -4,6 +4,11 @@ args: ["-timeout=30s", "-shuffle=on", "./..."]
 tests:
   pass:
     - go.mongodb.org/mongo-driver/bson
+    - go.mongodb.org/mongo-driver/internal
+    - go.mongodb.org/mongo-driver/mongo/address
+    - go.mongodb.org/mongo-driver/mongo/description
+    - go.mongodb.org/mongo-driver/mongo/options
+    - go.mongodb.org/mongo-driver/mongo/readpref
     - go.mongodb.org/mongo-driver/mongo/TestChangeStream
     - go.mongodb.org/mongo-driver/mongo/TestCollection
     - go.mongodb.org/mongo-driver/mongo/TestCursor
@@ -12,4 +17,7 @@ tests:
     - go.mongodb.org/mongo-driver/mongo/TestReadWriteConcernSpec
     - go.mongodb.org/mongo-driver/mongo/TestResults
     - go.mongodb.org/mongo-driver/mongo/TestSingleResult
+    - go.mongodb.org/mongo-driver/mongo/writeconcern
+    - go.mongodb.org/mongo-driver/tag
+    - go.mongodb.org/mongo-driver/x/bsonx
     - go.mongodb.org/mongo-driver/x/mongo
