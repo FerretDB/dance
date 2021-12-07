@@ -1,5 +1,5 @@
 ---
-version: '3.8'
+version: "3.8"
 
 services:
   ferretdb:
@@ -8,7 +8,14 @@ services:
     restart: on-failure
     ports:
       - 127.0.0.1:27017:27017
-    command: ["--listen-addr=:27017", "--postgresql-url=postgres://user@postgres:5432/dance"]
+    command:
+      [
+        "-listen-addr=:27017",
+        "-postgresql-url=postgres://user@postgres:5432/dance",
+        "-test.coverprofile=cover.txt",
+        "-mode=normal",
+        "-test-conn-timeout=10s",
+      ]
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu

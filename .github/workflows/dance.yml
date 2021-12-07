@@ -1,0 +1,134 @@
+---
+name: Dance
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '42 3 * * *'
+
+env:
+  GOPATH: /home/runner/go
+  GOCACHE: /home/runner/go/cache
+  GOMODCACHE: /home/runner/go/cache/mod
+  GOPROXY: https://proxy.golang.org # remove direct
+  FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb:latest
+
+jobs:
+  mongo-go-driver:
+    name: mongo-go-driver
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Start pulling environment in the background
+        run: make env-pull &
+
+      - name: Install Go
+        run: |
+          sudo rm -fr /opt/hostedtoolcache/go /usr/local/go /usr/bin/go /bin/go
+          curl -o go.tar.gz -L \
+            https://github.com/AlekSi/golang-tip/releases/download/tip/master.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go.tar.gz
+          sudo ln -s /usr/local/go/bin/* /usr/local/bin/
+          go version
+          rm go.tar.gz
+
+      - name: Get week number
+        run: echo WEEK_NUMBER=$(date +%U) >> $GITHUB_ENV
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.GOCACHE }}
+          key: dance-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**') }}
+          restore-keys: |
+            dance-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}
+            dance-${{ env.WEEK_NUMBER }}
+
+      - name: Start environment
+        run: make env-up-detach
+
+      - name: Run init
+        run: make init
+
+      - name: Dance!
+        run: make dance
+
+      - name: Check dirty
+        run: |
+          git status
+          git diff --exit-code
+
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Go
+        run: |
+          sudo rm -fr /opt/hostedtoolcache/go /usr/local/go /usr/bin/go /bin/go
+          curl -o go.tar.gz -L \
+            https://github.com/AlekSi/golang-tip/releases/download/tip/master.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go.tar.gz
+          sudo ln -s /usr/local/go/bin/* /usr/local/bin/
+          go version
+          rm go.tar.gz
+
+      - name: Get week number
+        run: echo WEEK_NUMBER=$(date +%U) >> $GITHUB_ENV
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.GOCACHE }}
+          key: lint-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**') }}
+          restore-keys: |
+            lint-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}
+            lint-${{ env.WEEK_NUMBER }}
+
+      - name: Run init
+        run: make init
+
+      - name: Format code
+        run: make fmt
+
+      - name: Run required linters
+        uses: golangci/golangci-lint-action@v2
+        if: ${{ false }} # skip until golangci-lint is recompiled with Go 1.18
+        with:
+          version: v1.43 # sync with tools/go.mod
+          args: --config=.golangci-required.yml
+          only-new-issues: false
+          skip-go-installation: true
+          skip-pkg-cache: true
+          skip-build-cache: true
+
+      - name: Run all linters
+        uses: golangci/golangci-lint-action@v2
+        if: ${{ false }} # skip until golangci-lint is recompiled with Go 1.18
+        with:
+          version: v1.43 # sync with tools/go.mod
+          args: --config=.golangci.yml
+          only-new-issues: true
+          skip-go-installation: true
+          skip-pkg-cache: true
+          skip-build-cache: true
+
+      - name: Run linters manually
+        run: make lint
+
+      - name: Check dirty
+        run: |
+          git status
+          git diff --exit-code

@@ -19,15 +19,21 @@ env-down:                              ## Stop development environment
 
 init:                                  ## Install development tools
 	go mod tidy
-	cd tools && go mod tidy && go generate -tags=tools -x
+	cd tools && go mod tidy
+	go mod verify
+	cd tools && go generate -tags=tools -x
 
 fmt: bin/gofumpt                       ## Format code
     # skip submodules
 	bin/gofumpt -w ./cmd/ ./internal/
 
+dance:                                 ## Run all integration tests
+	cd tests && go run ../cmd/dance
+
 lint: bin/golangci-lint                ## Run linters
 	bin/golangci-lint run --config=.golangci-required.yml
 	bin/golangci-lint run --config=.golangci.yml
+	bin/go-consistent -v -pedantic ./cmd/... ./internal/...
 
 psql:                                  ## Run psql
 	docker-compose exec postgres psql -U postgres -d ferretdb

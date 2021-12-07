@@ -15,11 +15,15 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"fmt"
 	"log"
+	"net"
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"golang.org/x/exp/maps"
 
@@ -27,9 +31,37 @@ import (
 	"github.com/FerretDB/dance/internal/gotest"
 )
 
+func waitForPort(ctx context.Context, port uint16) error {
+	for ctx.Err() == nil {
+		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", port))
+		if err == nil {
+			conn.Close()
+
+			// FIXME https://github.com/FerretDB/FerretDB/issues/92
+			time.Sleep(time.Second)
+
+			return nil
+		}
+
+		sleepCtx, sleepCancel := context.WithTimeout(ctx, time.Second)
+		<-sleepCtx.Done()
+		sleepCancel()
+	}
+
+	return ctx.Err()
+}
+
 func main() {
+	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
 	flag.Parse()
+
+	ctx := context.Background()
+
+	log.Printf("Waiting for port 27017 to be up...")
+	if err := waitForPort(ctx, 27017); err != nil {
+		log.Fatal(err)
+	}
 
 	matches, err := filepath.Glob("*.yml")
 	if err != nil {
@@ -60,9 +92,11 @@ func main() {
 			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
 		}
 
-		log.Printf("\nPassed tests:")
-		for _, t := range compareRes.ExpectedPass {
-			log.Print(t)
+		if *vF {
+			log.Printf("\nPassed tests:")
+			for _, t := range compareRes.ExpectedPass {
+				log.Print(t)
+			}
 		}
 
 		log.Printf("\nFailed tests:")
@@ -79,6 +113,10 @@ func main() {
 		for _, t := range keys {
 			res := compareRes.Rest[t]
 			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		}
+
+		if len(compareRes.UnexpectedFail) > 0 {
+			log.Fatal("Unexpectedly failed tests present.")
 		}
 	}
 }
