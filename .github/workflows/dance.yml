@@ -58,6 +58,8 @@ jobs:
 
       - name: Setup Go
         uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
 
       - name: Run init
         run: make init
