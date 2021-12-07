@@ -58,7 +58,7 @@ jobs:
         run: make init
 
       - name: Dance!
-        run: make dance
+        run: make -C .. dance
         working-directory: tests
 
       - name: Check dirty
