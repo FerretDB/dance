@@ -31,6 +31,8 @@ jobs:
 
       - name: Setup Go
         uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
 
       - name: Start environment
         run: make env-up-detach
