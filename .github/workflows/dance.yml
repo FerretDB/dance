@@ -24,7 +24,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          submodules: recursive
 
       - name: Start pulling environment in the background
         run: make env-pull &
@@ -58,8 +58,7 @@ jobs:
         run: make init
 
       - name: Dance!
-        run: make -C .. dance
-        working-directory: tests
+        run: make dance
 
       - name: Check dirty
         run: |
