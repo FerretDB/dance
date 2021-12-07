@@ -45,7 +45,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(dir, config.Directories)
+		runRes, err := gotest.Run(dir, config.Args)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -63,6 +63,14 @@ func main() {
 		log.Printf("\nPassed tests:")
 		for _, t := range compareRes.ExpectedPass {
 			log.Print(t)
+		}
+
+		log.Printf("\nFailed tests:")
+		keys = maps.Keys(compareRes.Fail)
+		sort.Strings(keys)
+		for _, t := range keys {
+			res := compareRes.Fail[t]
+			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
 		}
 
 		log.Printf("\nThe rest:")

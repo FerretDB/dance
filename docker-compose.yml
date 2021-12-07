@@ -5,10 +5,10 @@ services:
   ferretdb:
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:local}
     container_name: dance_ferretdb
+    restart: on-failure
     ports:
       - 127.0.0.1:27017:27017
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
+    command: ["--listen-addr=:27017", "--postgresql-url=postgres://user@postgres:5432/dance"]
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
@@ -18,10 +18,17 @@ services:
     container_name: dance_postgres
     ports:
       - 127.0.0.1:5432:5432
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=user
       - POSTGRES_DB=dance
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  # for mongosh
+  mongodb:
+    image: mongo:5.0.4
+    container_name: dance_mongodb
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu

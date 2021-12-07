@@ -16,6 +16,7 @@ package internal
 
 import (
 	"sort"
+	"strings"
 )
 
 type TestsConfig struct {
@@ -25,32 +26,46 @@ type TestsConfig struct {
 type CompareResult struct { //nolint:govet // we care about the fields order more than about alignment
 	UnexpectedFail map[string]TestResult
 	ExpectedPass   []string
+	Fail           map[string]TestResult
 	Rest           map[string]TestResult
 }
 
 func (c *TestsConfig) Compare(results *Results) *CompareResult {
 	compareResult := CompareResult{
 		UnexpectedFail: make(map[string]TestResult),
+		Fail:           make(map[string]TestResult),
 		Rest:           make(map[string]TestResult),
 	}
 
-	for _, test := range c.Pass {
-		testRes := results.TestResults[test]
-		delete(results.TestResults, test)
-
-		switch testRes.Result {
-		case Pass:
-			compareResult.ExpectedPass = append(compareResult.ExpectedPass, test)
-		case Unknown:
-			fallthrough
-		case Fail:
-			fallthrough
-		case Skip:
-			compareResult.UnexpectedFail[test] = testRes
-		}
-	}
-
 	for test, testRes := range results.TestResults {
+		var found bool
+		for _, pass := range c.Pass {
+			if strings.HasPrefix(test, pass) {
+				switch testRes.Result {
+				case Pass:
+					compareResult.ExpectedPass = append(compareResult.ExpectedPass, test)
+				case Unknown:
+					fallthrough
+				case Fail:
+					fallthrough
+				case Skip:
+					compareResult.UnexpectedFail[test] = testRes
+				}
+
+				found = true
+				break
+			}
+		}
+
+		if found {
+			continue
+		}
+
+		if testRes.Result == Fail {
+			compareResult.Fail[test] = testRes
+			continue
+		}
+
 		compareResult.Rest[test] = testRes
 	}
 

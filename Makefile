@@ -11,6 +11,9 @@ env-up: env-up-detach                  ## Start development environment
 env-up-detach:
 	docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach
 
+env-pull:
+	docker-compose pull --include-deps --quiet
+
 env-down:                              ## Stop development environment
 	docker-compose down --remove-orphans
 
@@ -25,6 +28,17 @@ fmt: bin/gofumpt                       ## Format code
 lint: bin/golangci-lint                ## Run linters
 	bin/golangci-lint run --config=.golangci-required.yml
 	bin/golangci-lint run --config=.golangci.yml
+
+psql:                                  ## Run psql
+	docker-compose exec postgres psql -U postgres -d ferretdb
+
+mongosh:                               ## Run mongosh
+	docker-compose exec mongodb mongosh mongodb://ferretdb:27017/ \
+		--verbose --eval 'disableTelemetry()' --shell
+
+mongo:                                 ## Run (legacy) mongo shell
+	docker-compose exec mongodb mongo mongodb://ferretdb:27017/ \
+		--verbose
 
 bin/golangci-lint:
 	$(MAKE) init

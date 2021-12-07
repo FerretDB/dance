@@ -23,9 +23,9 @@ import (
 )
 
 type Config struct {
-	Runner      string      `yaml:"runner"`
-	Directories []string    `yaml:"directories"`
-	Tests       TestsConfig `yaml:"tests"`
+	Runner string      `yaml:"runner"`
+	Args   []string    `yaml:"args"`
+	Tests  TestsConfig `yaml:"tests"`
 }
 
 func LoadConfig(path string) (*Config, error) {

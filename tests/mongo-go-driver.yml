@@ -1,12 +1,15 @@
 ---
 runner: gotest
-directories:
-  - examples/documentation_examples
-  - mongo
-  - mongo/gridfs
-  - mongo/integration
-  - mongo/integration/unified
-  - x/mongo/driver/integration
+args: ["-timeout=30s", "-shuffle=on", "./..."]
 tests:
   pass:
-    - go.mongodb.org/mongo-driver/mongo/TestSingleResult/Decode/decode_with_error
+    - go.mongodb.org/mongo-driver/bson
+    - go.mongodb.org/mongo-driver/mongo/TestChangeStream
+    - go.mongodb.org/mongo-driver/mongo/TestCollection
+    - go.mongodb.org/mongo-driver/mongo/TestCursor
+    - go.mongodb.org/mongo-driver/mongo/TestDatabase
+    - go.mongodb.org/mongo-driver/mongo/TestMongoHelpers
+    - go.mongodb.org/mongo-driver/mongo/TestReadWriteConcernSpec
+    - go.mongodb.org/mongo-driver/mongo/TestResults
+    - go.mongodb.org/mongo-driver/mongo/TestSingleResult
+    - go.mongodb.org/mongo-driver/x/mongo

@@ -24,14 +24,10 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(root string, dirs []string) (*internal.Results, error) {
-	args := []string{"test", "-json", "-count=1"}
-	for _, dir := range dirs {
-		args = append(args, "./"+dir)
-	}
-
+func Run(dir string, args []string) (*internal.Results, error) {
+	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
 	cmd := exec.Command("go", args...)
-	cmd.Dir = root
+	cmd.Dir = dir
 	cmd.Stderr = os.Stderr
 	p, err := cmd.StdoutPipe()
 	if err != nil {
