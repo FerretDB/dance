@@ -1,4 +1,4 @@
-all: fmt test
+all: fmt dance
 
 help:                                  ## Display this help message
 	@echo "Please use \`make <target>\` where <target> is one of:"
