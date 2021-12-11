@@ -29,27 +29,10 @@ jobs:
       - name: Start pulling environment in the background
         run: make env-pull &
 
-      - name: Install Go
-        run: |
-          sudo rm -fr /opt/hostedtoolcache/go /usr/local/go /usr/bin/go /bin/go
-          curl -o go.tar.gz -L \
-            https://github.com/AlekSi/golang-tip/releases/download/tip/master.linux-amd64.tar.gz
-          sudo tar -C /usr/local -xzf go.tar.gz
-          sudo ln -s /usr/local/go/bin/* /usr/local/bin/
-          go version
-          rm go.tar.gz
-
-      - name: Get week number
-        run: echo WEEK_NUMBER=$(date +%U) >> $GITHUB_ENV
-
-      - name: Restore cache
-        uses: actions/cache@v2
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
         with:
-          path: ${{ env.GOCACHE }}
-          key: dance-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**') }}
-          restore-keys: |
-            dance-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}
-            dance-${{ env.WEEK_NUMBER }}
+          cache-key: dance
 
       - name: Start environment
         run: make env-up-detach
@@ -75,27 +58,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Go
-        run: |
-          sudo rm -fr /opt/hostedtoolcache/go /usr/local/go /usr/bin/go /bin/go
-          curl -o go.tar.gz -L \
-            https://github.com/AlekSi/golang-tip/releases/download/tip/master.linux-amd64.tar.gz
-          sudo tar -C /usr/local -xzf go.tar.gz
-          sudo ln -s /usr/local/go/bin/* /usr/local/bin/
-          go version
-          rm go.tar.gz
-
-      - name: Get week number
-        run: echo WEEK_NUMBER=$(date +%U) >> $GITHUB_ENV
-
-      - name: Restore cache
-        uses: actions/cache@v2
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
         with:
-          path: ${{ env.GOCACHE }}
-          key: lint-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}-${{ hashFiles('**') }}
-          restore-keys: |
-            lint-${{ env.WEEK_NUMBER }}-${{ hashFiles('**/go.mod') }}
-            lint-${{ env.WEEK_NUMBER }}
+          cache-key: dance
 
       - name: Run init
         run: make init
