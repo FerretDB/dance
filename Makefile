@@ -33,7 +33,7 @@ dance:                                 ## Run all integration tests
 lint: bin/golangci-lint                ## Run linters
 	bin/golangci-lint run --config=.golangci-required.yml
 	bin/golangci-lint run --config=.golangci.yml
-	bin/go-consistent -v -pedantic ./cmd/... ./internal/...
+	bin/go-consistent -pedantic ./cmd/... ./internal/...
 
 psql:                                  ## Run psql
 	docker-compose exec postgres psql -U postgres -d ferretdb

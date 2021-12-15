@@ -64,6 +64,8 @@ func Run(dir string, args []string) (*internal.Results, error) {
 			result.Result = internal.Fail
 		case ActionSkip:
 			result.Result = internal.Skip
+		case ActionBench, ActionCont, ActionOutput, ActionPause, ActionRun:
+			fallthrough
 		default:
 			result.Result = internal.Unknown
 		}

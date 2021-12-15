@@ -37,6 +37,7 @@ const (
 	ActionSkip Action = "skip"
 )
 
+//nolint:tagliatelle // field names are fixed by `go test`
 type TestEvent struct {
 	Time           time.Time `json:"Time"`
 	Action         Action    `json:"Action"`

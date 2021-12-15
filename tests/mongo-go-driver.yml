@@ -1,6 +1,6 @@
 ---
 runner: gotest
-args: ["-timeout=30s", "-shuffle=on", "./..."]
+args: ["-timeout=60s", "-shuffle=on", "./..."]
 tests:
   pass:
     - go.mongodb.org/mongo-driver/event
@@ -12,3 +12,111 @@ tests:
     - go.mongodb.org/mongo-driver/tag
     - go.mongodb.org/mongo-driver/x/bsonx
     - go.mongodb.org/mongo-driver/x/bsonx/bsoncore
+    - go.mongodb.org/mongo-driver/x/mongo/driver/topology
+
+  skip:
+    # no test files
+    - go.mongodb.org/mongo-driver/bson/bsonoptions/
+    - go.mongodb.org/mongo-driver/bson/bsonrw/bsonrwtest/
+    - go.mongodb.org/mongo-driver/cmd/docbuilder/
+    - go.mongodb.org/mongo-driver/cmd/godriver-benchmark/
+    - go.mongodb.org/mongo-driver/internal/randutil/
+    - go.mongodb.org/mongo-driver/internal/testutil/
+    - go.mongodb.org/mongo-driver/internal/testutil/assert/
+    - go.mongodb.org/mongo-driver/internal/testutil/helpers/
+    - go.mongodb.org/mongo-driver/internal/testutil/israce/
+    - go.mongodb.org/mongo-driver/mongo/integration/mtest/
+    - go.mongodb.org/mongo-driver/mongo/readconcern/
+    - go.mongodb.org/mongo-driver/mongo/testatlas/
+    - go.mongodb.org/mongo-driver/mongo/testaws/
+    - go.mongodb.org/mongo-driver/version/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/dns/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/drivertest/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/examples/cluster_monitoring/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/examples/count/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/examples/server_monitoring/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/examples/workload/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt/options/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/operation/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/wiremessage/
+
+    # no transactions yet
+    - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
+
+    # replicaset / sharded / load-balanced
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported
+    - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet
+    - go.mongodb.org/mongo-driver/mongo/integration/TestClient/direct_connection_made
+    - go.mongodb.org/mongo-driver/mongo/integration/TestClient/hello_lastWriteDate
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_one/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/insert_many/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/insert_one/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/replace_one/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_by_id/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_many/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_one/write_concern_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCursor/all/getMore_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestCursor/close/killCursors_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/replica_set_filter
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/replica_set_no_filter
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/sharded_filter
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/sharded_no_filter
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/run_command/gets_result_and_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/run_command/read_pref_passed_to_mongos
+    - go.mongodb.org/mongo-driver/mongo/integration/TestErrorsCodeNamePropagated
+    - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum
+    - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/replace_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/load_balanced
+    - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set
+    - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/sharded
+    - go.mongodb.org/mongo-driver/mongo/integration/TestLoadBalancerSupport
+    - go.mongodb.org/mongo-driver/mongo/integration/TestMongosPinning
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/wrap_mmapv1_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/bulkWrite-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/bulkWrite-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/bulkWrite.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/deleteMany.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/deleteOne-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/deleteOne-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/deleteOne.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndDelete-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndDelete-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndDelete.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndReplace-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndReplace-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndReplace.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndUpdate-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndUpdate-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/findOneAndUpdate.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertMany-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertMany-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertMany.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertOne-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertOne-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/insertOne.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/replaceOne-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/replaceOne-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/replaceOne.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateMany.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne-errorLabels.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne-serverErrors.json
+    - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne.json
+
+
+    # TLS
+    - go.mongodb.org/mongo-driver/mongo/integration/TestClient/tls_connection
+
+    # auth
+    - go.mongodb.org/mongo-driver/mongo/integration/TestClient/x509
+
+    # not really
+    - go.mongodb.org/mongo-driver/bson/bsoncodec/

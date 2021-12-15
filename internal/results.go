@@ -21,8 +21,8 @@ type Result string
 const (
 	Unknown Result = "UNKNOWN"
 	Pass    Result = "PASS"
-	Fail    Result = "FAIL"
 	Skip    Result = "SKIP"
+	Fail    Result = "FAIL"
 )
 
 type TestResult struct {

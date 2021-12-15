@@ -34,7 +34,7 @@ services:
 
   # for mongosh
   mongodb:
-    image: mongo:5.0.4
+    image: mongo:5.0.5
     container_name: dance_mongodb
     environment:
       # Always UTC+05:45. Set to catch timezone problems.

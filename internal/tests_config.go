@@ -15,61 +15,133 @@
 package internal
 
 import (
-	"sort"
+	"fmt"
 	"strings"
 )
 
+// nextPrefix returns the next prefix of the given path, stopping on / and .
+// It panics for empty string.
+func nextPrefix(path string) string {
+	if path == "" {
+		panic("path is empty")
+	}
+
+	if t := strings.TrimRight(path, "."); t != path {
+		return t
+	}
+
+	if t := strings.TrimRight(path, "/"); t != path {
+		return t
+	}
+
+	i := strings.LastIndexAny(path, "/.")
+	return path[:i+1]
+}
+
+// May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
 	Pass []string `yaml:"pass"`
+	Skip []string `yaml:"skip"`
 }
 
-type CompareResult struct { //nolint:govet // we care about the fields order more than about alignment
-	UnexpectedFail map[string]TestResult
-	ExpectedPass   []string
-	Fail           map[string]TestResult
-	Rest           map[string]TestResult
+func (tc *TestsConfig) toMap() (map[string]Result, error) {
+	res := make(map[string]Result, len(tc.Pass)+len(tc.Skip))
+
+	for _, t := range tc.Pass {
+		res[t] = Pass
+	}
+
+	for _, t := range tc.Skip {
+		if _, ok := res[t]; ok {
+			return nil, fmt.Errorf("duplicate test: %q", t)
+		}
+		res[t] = Skip
+	}
+
+	return res, nil
 }
 
-func (c *TestsConfig) Compare(results *Results) *CompareResult {
-	compareResult := CompareResult{
-		UnexpectedFail: make(map[string]TestResult),
-		Fail:           make(map[string]TestResult),
-		Rest:           make(map[string]TestResult),
+type CompareResult struct {
+	ExpectedPass   map[string]string
+	ExpectedSkip   map[string]string
+	ExpectedFail   map[string]string
+	UnexpectedPass map[string]string
+	UnexpectedSkip map[string]string
+	UnexpectedFail map[string]string
+	UnexpectedRest map[string]TestResult
+}
+
+func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
+	compareResult := &CompareResult{
+		ExpectedPass:   make(map[string]string),
+		ExpectedSkip:   make(map[string]string),
+		ExpectedFail:   make(map[string]string),
+		UnexpectedPass: make(map[string]string),
+		UnexpectedSkip: make(map[string]string),
+		UnexpectedFail: make(map[string]string),
+		UnexpectedRest: make(map[string]TestResult),
+	}
+
+	tcMap, err := tc.toMap()
+	if err != nil {
+		return nil, err
 	}
 
 	for test, testRes := range results.TestResults {
-		var found bool
-		for _, pass := range c.Pass {
-			if strings.HasPrefix(test, pass) {
-				switch testRes.Result {
-				case Pass:
-					compareResult.ExpectedPass = append(compareResult.ExpectedPass, test)
-				case Unknown:
-					fallthrough
-				case Fail:
-					fallthrough
-				case Skip:
-					compareResult.UnexpectedFail[test] = testRes
-				}
-
-				found = true
+		expectedRes := Fail
+		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
+			if res, ok := tcMap[prefix]; ok {
+				expectedRes = res
 				break
 			}
 		}
 
-		if found {
-			continue
+		switch expectedRes {
+		case Pass:
+			switch testRes.Result {
+			case Pass:
+				compareResult.ExpectedPass[test] = testRes.IndentedOutput()
+			case Skip:
+				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+			case Fail:
+				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+			case Unknown:
+				fallthrough
+			default:
+				compareResult.UnexpectedRest[test] = testRes
+			}
+		case Skip:
+			switch testRes.Result {
+			case Pass:
+				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+			case Skip:
+				compareResult.ExpectedSkip[test] = testRes.IndentedOutput()
+			case Fail:
+				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+			case Unknown:
+				fallthrough
+			default:
+				compareResult.UnexpectedRest[test] = testRes
+			}
+		case Fail:
+			switch testRes.Result {
+			case Pass:
+				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+			case Skip:
+				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+			case Fail:
+				compareResult.ExpectedFail[test] = testRes.IndentedOutput()
+			case Unknown:
+				fallthrough
+			default:
+				compareResult.UnexpectedRest[test] = testRes
+			}
+		case Unknown:
+			fallthrough
+		default:
+			panic(fmt.Sprintf("unexpected expectedRes: %q", expectedRes))
 		}
-
-		if testRes.Result == Fail {
-			compareResult.Fail[test] = testRes
-			continue
-		}
-
-		compareResult.Rest[test] = testRes
 	}
 
-	sort.Strings(compareResult.ExpectedPass)
-
-	return &compareResult
+	return compareResult, nil
 }
