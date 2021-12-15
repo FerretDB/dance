@@ -93,7 +93,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(dir, config.Args)
+		runRes, err := gotest.Run(dir, config.Args, *vF)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -151,7 +151,7 @@ func main() {
 			log.Fatal(err)
 		}
 		if diff != "" {
-			log.Fatalf("Unexpected stats:\n%s", diff)
+			log.Fatalf("\nUnexpected stats:\n%s", diff)
 		}
 	}
 }

@@ -24,7 +24,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(dir string, args []string) (*internal.Results, error) {
+func Run(dir string, args []string, verbose bool) (*internal.Results, error) {
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
@@ -33,7 +33,12 @@ func Run(dir string, args []string) (*internal.Results, error) {
 	if err != nil {
 		return nil, err
 	}
-	r := io.TeeReader(p, os.Stdout)
+
+	var r io.Reader = p
+	if verbose {
+		r = io.TeeReader(p, os.Stdout)
+	}
+
 	if err = cmd.Start(); err != nil {
 		return nil, err
 	}

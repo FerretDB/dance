@@ -51,20 +51,20 @@ type Stats struct {
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
 	Stats Stats    `yaml:"stats"`
-	Pass  []string `yaml:"pass"`
+	Fail  []string `yaml:"fail"`
 	Skip  []string `yaml:"skip"`
 }
 
 func (tc *TestsConfig) toMap() (map[string]Result, error) {
-	res := make(map[string]Result, len(tc.Pass)+len(tc.Skip))
+	res := make(map[string]Result, len(tc.Fail)+len(tc.Skip))
 
-	for _, t := range tc.Pass {
-		res[t] = Pass
+	for _, t := range tc.Fail {
+		res[t] = Fail
 	}
 
 	for _, t := range tc.Skip {
 		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test: %q", t)
+			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
 		}
 		res[t] = Skip
 	}
@@ -100,7 +100,7 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 	}
 
 	for test, testRes := range results.TestResults {
-		expectedRes := Fail
+		expectedRes := Pass // default
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
 				expectedRes = res
