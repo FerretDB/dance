@@ -14,7 +14,7 @@ tests:
     # create
     - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/
     - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/
-    - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/no_custom_standalone_error
+    - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/
     - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStreamSpec/
 
     # aggregate

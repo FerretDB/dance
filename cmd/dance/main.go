@@ -145,7 +145,7 @@ func main() {
 			B:        difflib.SplitLines(string(actualStats)),
 			FromFile: "Expected",
 			ToFile:   "Actual",
-			Context:  1,
+			Context:  10,
 		})
 		if err != nil {
 			log.Fatal(err)
