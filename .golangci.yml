@@ -56,6 +56,12 @@ linters-settings:
     dot-import-whitelist: []
     initialisms: []
     http-status-code-whitelist: []
+  tagliatelle:
+    case:
+      use-field-name: false
+      rules:
+        json: pascal
+        yaml: snake
   unparam:
     check-exported: true
   unused:
@@ -63,7 +69,6 @@ linters-settings:
   whitespace:
     multi-if: false
     multi-func: false
-
 linters:
   enable-all: true
   disable:

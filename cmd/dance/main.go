@@ -25,7 +25,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/exp/maps"
+	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/gotest"
@@ -129,21 +131,27 @@ func main() {
 		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
 		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
 
-		if len(compareRes.UnexpectedRest) != 0 {
-			log.Fatal("Unexpected/unknown results present.")
+		expectedStats, err := yaml.Marshal(config.Tests.Stats)
+		if err != nil {
+			log.Fatal(err)
 		}
-		if len(compareRes.UnexpectedFail) != 0 {
-			log.Fatal("Unexpectedly failed tests present.")
+		actualStats, err := yaml.Marshal(compareRes.Stats)
+		if err != nil {
+			log.Fatal(err)
 		}
 
-		// TODO
-		// if len(compareRes.UnexpectedSkip) != 0 {
-		// 	log.Fatal("Unexpectedly skipped tests present.")
-		// }
-
-		// TODO
-		// if len(compareRes.UnexpectedPass) != 0 {
-		// 	log.Fatal("Unexpectedly passed tests present.")
-		// }
+		diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
+			A:        difflib.SplitLines(string(expectedStats)),
+			B:        difflib.SplitLines(string(actualStats)),
+			FromFile: "Expected",
+			ToFile:   "Actual",
+			Context:  1,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		if diff != "" {
+			log.Fatalf("Unexpected stats:\n%s", diff)
+		}
 	}
 }

@@ -2,17 +2,25 @@
 runner: gotest
 args: ["-timeout=60s", "-shuffle=on", "./..."]
 tests:
+  stats:
+    unexpected_skip: 136
+    unexpected_pass: 4103
+    expected_fail: 847
+    expected_skip: 95
+    expected_pass: 1645
+
   pass:
-    - go.mongodb.org/mongo-driver/event
-    - go.mongodb.org/mongo-driver/mongo/address
-    - go.mongodb.org/mongo-driver/mongo/description
-    - go.mongodb.org/mongo-driver/mongo/options
-    - go.mongodb.org/mongo-driver/mongo/readpref
-    - go.mongodb.org/mongo-driver/mongo/writeconcern
-    - go.mongodb.org/mongo-driver/tag
-    - go.mongodb.org/mongo-driver/x/bsonx
-    - go.mongodb.org/mongo-driver/x/bsonx/bsoncore
-    - go.mongodb.org/mongo-driver/x/mongo/driver/topology
+    - go.mongodb.org/mongo-driver/event/
+    - go.mongodb.org/mongo-driver/mongo/address/
+    - go.mongodb.org/mongo-driver/mongo/description/
+    - go.mongodb.org/mongo-driver/mongo/options/
+    - go.mongodb.org/mongo-driver/mongo/readpref/
+    - go.mongodb.org/mongo-driver/mongo/writeconcern/
+    - go.mongodb.org/mongo-driver/tag/
+    - go.mongodb.org/mongo-driver/x/bsonx/
+    - go.mongodb.org/mongo-driver/x/bsonx/bsoncore/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/topology/
+    - go.mongodb.org/mongo-driver/x/mongo/driver/uuid/
 
   skip:
     # no test files
@@ -110,7 +118,6 @@ tests:
     - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne-errorLabels.json
     - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne-serverErrors.json
     - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesSpec/updateOne.json
-
 
     # TLS
     - go.mongodb.org/mongo-driver/mongo/integration/TestClient/tls_connection

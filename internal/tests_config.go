@@ -38,10 +38,21 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
+type Stats struct {
+	UnexpectedRest int `yaml:"unexpected_rest"`
+	UnexpectedFail int `yaml:"unexpected_fail"`
+	UnexpectedSkip int `yaml:"unexpected_skip"`
+	UnexpectedPass int `yaml:"unexpected_pass"`
+	ExpectedFail   int `yaml:"expected_fail"`
+	ExpectedSkip   int `yaml:"expected_skip"`
+	ExpectedPass   int `yaml:"expected_pass"`
+}
+
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Pass []string `yaml:"pass"`
-	Skip []string `yaml:"skip"`
+	Stats Stats    `yaml:"stats"`
+	Pass  []string `yaml:"pass"`
+	Skip  []string `yaml:"skip"`
 }
 
 func (tc *TestsConfig) toMap() (map[string]Result, error) {
@@ -69,6 +80,7 @@ type CompareResult struct {
 	UnexpectedSkip map[string]string
 	UnexpectedFail map[string]string
 	UnexpectedRest map[string]TestResult
+	Stats          Stats
 }
 
 func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
@@ -143,5 +155,14 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 		}
 	}
 
+	compareResult.Stats = Stats{
+		UnexpectedRest: len(compareResult.UnexpectedRest),
+		UnexpectedFail: len(compareResult.UnexpectedFail),
+		UnexpectedSkip: len(compareResult.UnexpectedSkip),
+		UnexpectedPass: len(compareResult.UnexpectedPass),
+		ExpectedFail:   len(compareResult.ExpectedFail),
+		ExpectedSkip:   len(compareResult.ExpectedSkip),
+		ExpectedPass:   len(compareResult.ExpectedPass),
+	}
 	return compareResult, nil
 }
