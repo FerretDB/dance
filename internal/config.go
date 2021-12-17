@@ -51,5 +51,9 @@ func LoadConfig(path string) (*Config, error) {
 }
 
 func (c *Config) validate() error {
+	if _, err := c.Tests.toMap(); err != nil {
+		return err
+	}
+
 	return nil
 }

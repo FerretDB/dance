@@ -25,7 +25,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/exp/maps"
+	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/gotest"
@@ -51,6 +53,20 @@ func waitForPort(ctx context.Context, port uint16) error {
 	return ctx.Err()
 }
 
+func logResult(label string, res map[string]string) {
+	keys := maps.Keys(res)
+	if len(keys) == 0 {
+		return
+	}
+
+	log.Printf("%s tests:", label)
+	sort.Strings(keys)
+	for _, t := range keys {
+		out := res[t]
+		log.Printf("%s:\n\t%s", t, out)
+	}
+}
+
 func main() {
 	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
@@ -68,6 +84,15 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if flag.NArg() != 0 {
+		matches = matches[:0:cap(matches)]
+		for _, arg := range flag.Args() {
+			matches = append(matches, arg+".yml")
+		}
+	}
+
+	log.Printf("Run configurations: %v", matches)
+
 	for _, match := range matches {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)
@@ -77,46 +102,65 @@ func main() {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(dir, config.Args)
+		runRes, err := gotest.Run(dir, config.Args, *vF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		compareRes := config.Tests.Compare(runRes)
-
-		log.Printf("Unexpectedly failed tests (regressions):")
-		keys := maps.Keys(compareRes.UnexpectedFail)
-		sort.Strings(keys)
-		for _, t := range keys {
-			res := compareRes.UnexpectedFail[t]
-			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		compareRes, err := config.Tests.Compare(runRes)
+		if err != nil {
+			log.Fatal(err)
 		}
 
-		if *vF {
-			log.Printf("\nPassed tests:")
-			for _, t := range compareRes.ExpectedPass {
-				log.Print(t)
+		keys := maps.Keys(compareRes.UnexpectedRest)
+		if len(keys) != 0 {
+			log.Printf("Unexpected/unknown results:")
+			sort.Strings(keys)
+			for _, t := range keys {
+				res := compareRes.UnexpectedRest[t]
+				log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
 			}
 		}
 
-		log.Printf("\nFailed tests:")
-		keys = maps.Keys(compareRes.Fail)
-		sort.Strings(keys)
-		for _, t := range keys {
-			res := compareRes.Fail[t]
-			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		logResult("Unexpectedly failed", compareRes.UnexpectedFail)
+		logResult("Unexpectedly skipped", compareRes.UnexpectedSkip)
+		logResult("Unexpectedly passed", compareRes.UnexpectedPass)
+
+		if *vF {
+			logResult("Expectedly failed", compareRes.ExpectedFail)
+			logResult("Expectedly skipped", compareRes.ExpectedSkip)
+			logResult("Expectedly passed", compareRes.ExpectedPass)
 		}
 
-		log.Printf("\nThe rest:")
-		keys = maps.Keys(compareRes.Rest)
-		sort.Strings(keys)
-		for _, t := range keys {
-			res := compareRes.Rest[t]
-			log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+		log.Printf("Unexpected/unknown results: %d.", len(compareRes.UnexpectedRest))
+		log.Printf("Unexpectedly failed: %d.", len(compareRes.UnexpectedFail))
+		log.Printf("Unexpectedly skipped: %d.", len(compareRes.UnexpectedSkip))
+		log.Printf("Unexpectedly passed: %d.", len(compareRes.UnexpectedPass))
+		log.Printf("Expectedly failed: %d.", len(compareRes.ExpectedFail))
+		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
+		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
+
+		expectedStats, err := yaml.Marshal(config.Tests.Stats)
+		if err != nil {
+			log.Fatal(err)
+		}
+		actualStats, err := yaml.Marshal(compareRes.Stats)
+		if err != nil {
+			log.Fatal(err)
 		}
 
-		if len(compareRes.UnexpectedFail) > 0 {
-			log.Fatal("Unexpectedly failed tests present.")
+		diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
+			A:        difflib.SplitLines(string(expectedStats)),
+			B:        difflib.SplitLines(string(actualStats)),
+			FromFile: "Expected",
+			ToFile:   "Actual",
+			Context:  10,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		if diff != "" {
+			log.Fatalf("\nUnexpected stats:\n%s", diff)
 		}
 	}
 }

@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package internal
+package ferret
 
-import "strings"
+import (
+	"context"
+	"testing"
+	"time"
 
-type Result string
-
-const (
-	Unknown Result = "UNKNOWN"
-	Pass    Result = "PASS"
-	Skip    Result = "SKIP"
-	Fail    Result = "FAIL"
+	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type TestResult struct {
-	Result Result
-	Output string
-}
+func TestCore(t *testing.T) {
+	t.Parallel()
 
-func (tr *TestResult) IndentedOutput() string {
-	return strings.Replace(tr.Output, "\n", "\n\t", -1)
-}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-type Results struct {
-	TestResults map[string]TestResult
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	require.NoError(t, err)
+
+	err = client.Disconnect(ctx)
+	require.NoError(t, err)
 }

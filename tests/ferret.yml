@@ -1,0 +1,11 @@
+---
+runner: gotest
+args: ["-timeout=60s", "-shuffle=on", "./..."]
+tests:
+  stats:
+    unexpected_fail: 0
+    unexpected_skip: 0
+    unexpected_pass: 0
+    expected_fail: 0
+    expected_skip: 0
+    expected_pass: 2

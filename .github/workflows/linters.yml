@@ -1,0 +1,24 @@
+---
+name: Linters
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '42 3 * * *'
+
+env:
+  GOPATH: /home/runner/go
+  GOCACHE: /home/runner/go/cache
+  GOMODCACHE: /home/runner/go/cache/mod
+  GOPROXY: https://proxy.golang.org # remove direct
+
+jobs:
+  linters:
+    name: linters
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Run linters
+        uses: FerretDB/github-actions/linters@main
