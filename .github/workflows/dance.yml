@@ -16,8 +16,8 @@ env:
   FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb:latest
 
 jobs:
-  mongo-go-driver:
-    name: mongo-go-driver
+  dance:
+    name: dance
     runs-on: ubuntu-20.04
 
     strategy:
