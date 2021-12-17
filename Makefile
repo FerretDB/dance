@@ -1,4 +1,5 @@
 DB ?= ferretdb
+TEST ?=
 
 all: fmt dance
 
@@ -30,7 +31,7 @@ fmt: bin/gofumpt                       ## Format code
 	bin/gofumpt -w ./cmd/ ./internal/
 
 dance:                                 ## Run all integration tests
-	cd tests && go run ../cmd/dance
+	cd tests && go run ../cmd/dance $(TEST)
 
 lint: bin/golangci-lint                ## Run linters
 	bin/golangci-lint run --config=.golangci-required.yml

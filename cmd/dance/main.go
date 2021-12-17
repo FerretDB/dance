@@ -84,6 +84,15 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if flag.NArg() != 0 {
+		matches = matches[:0:cap(matches)]
+		for _, arg := range flag.Args() {
+			matches = append(matches, arg+".yml")
+		}
+	}
+
+	log.Printf("Run configurations: %v", matches)
+
 	for _, match := range matches {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)

@@ -23,7 +23,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        db: [ferretdb, mongodb]
+        db:
+          - ferretdb
+          - mongodb
+        test:
+          - ferret
+          - mongo-go-driver
 
     steps:
       - name: Checkout code
@@ -49,6 +54,8 @@ jobs:
 
       - name: Dance!
         run: make dance
+        env:
+          TEST: ${{ matrix.test }}
 
       - name: Check dirty
         run: |
