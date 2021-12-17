@@ -20,6 +20,11 @@ jobs:
     name: mongo-go-driver
     runs-on: ubuntu-20.04
 
+    strategy:
+      fail-fast: false
+      matrix:
+        db: [ferretdb, mongodb]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,6 +41,8 @@ jobs:
 
       - name: Start environment
         run: make env-up-detach
+        env:
+          DB: ${{ matrix.db }}
 
       - name: Run init
         run: make init
