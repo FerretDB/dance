@@ -31,6 +31,8 @@ func TestCore(t *testing.T) {
 	ctx, db := setup(t)
 
 	t.Run("InsertMany", func(t *testing.T) {
+		t.Skip("TODO https://github.com/FerretDB/FerretDB/issues/200")
+
 		t.Parallel()
 
 		id1 := primitive.NewObjectID()
