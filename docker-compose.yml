@@ -6,7 +6,7 @@ services:
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:local}
     container_name: dance_ferretdb
     restart: unless-stopped
-    depends_on: ["postgres"]
+    depends_on: ["postgres", "mongosh"]
     ports:
       - 127.0.0.1:27017:27017
     command:
@@ -38,8 +38,17 @@ services:
     image: mongo:5.0.5
     container_name: dance_mongodb
     restart: unless-stopped
+    depends_on: ["mongosh"]
     ports:
       - 127.0.0.1:27017:27017
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+
+  mongosh:
+    image: mongo:5.0.5
+    container_name: dance_mongosh
+    restart: unless-stopped
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu

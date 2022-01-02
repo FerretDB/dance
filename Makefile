@@ -42,11 +42,11 @@ psql:                                  ## Run psql
 	docker-compose exec postgres psql -U postgres -d ferretdb
 
 mongosh:                               ## Run mongosh
-	docker-compose exec mongodb mongosh mongodb://$(DB):27017/ \
+	docker-compose exec mongosh mongosh mongodb://$(DB):27017/ \
 		--verbose --eval 'disableTelemetry()' --shell
 
 mongo:                                 ## Run (legacy) mongo shell
-	docker-compose exec mongodb mongo mongodb://$(DB):27017/ \
+	docker-compose exec mongosh mongo mongodb://$(DB):27017/ \
 		--verbose
 
 bin/golangci-lint:

@@ -15,27 +15,34 @@
 package ferret
 
 import (
+	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func TestCore(t *testing.T) {
-	t.Parallel()
+func setup(t *testing.T) (context.Context, *mongo.Database) {
+	t.Helper()
 
-	ctx, db := setup(t)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	collection := db.Collection("basic_types")
-
-	s1 := bson.D{{"_id", primitive.NewObjectID()}, {"value", "1"}}
-	s2 := bson.D{{"_id", primitive.NewObjectID()}, {"value", "2"}}
-	i1 := bson.D{{"_id", primitive.NewObjectID()}, {"value", 1}}
-	i2 := bson.D{{"_id", primitive.NewObjectID()}, {"value", 2}}
-	docs := []any{
-		s1, s2, i1, i2,
-	}
-	_, err := collection.InsertMany(ctx, docs)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
 	require.NoError(t, err)
+	err = client.Ping(ctx, nil)
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		err = client.Disconnect(ctx)
+		require.NoError(t, err)
+	})
+
+	db := client.Database(t.Name())
+	err = db.Drop(context.Background())
+	require.NoError(t, err)
+
+	return context.Background(), db
 }

@@ -6,7 +6,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/stretchr/testify v1.7.0
 	go.mongodb.org/mongo-driver v1.8.1
-	golang.org/x/exp v0.0.0-20211216164055-b2b84827b756
+	golang.org/x/exp v0.0.0-20211221223016-e29036178569
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
 
