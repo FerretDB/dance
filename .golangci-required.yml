@@ -43,3 +43,7 @@ linters:
 
 issues:
   exclude-use-default: false
+  exclude-rules:
+    - linters:
+        - govet
+      text: "composites: `go.mongodb.org/mongo-driver/bson/primitive.E` composite literal uses unkeyed fields"

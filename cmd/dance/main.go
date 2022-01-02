@@ -38,10 +38,6 @@ func waitForPort(ctx context.Context, port uint16) error {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 		if err == nil {
 			conn.Close()
-
-			// FIXME https://github.com/FerretDB/FerretDB/issues/92
-			time.Sleep(time.Second)
-
 			return nil
 		}
 
