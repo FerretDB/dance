@@ -3,9 +3,8 @@ runner: gotest
 args: ["-timeout=60s", "-shuffle=on", "./..."]
 tests:
   stats:
-    unexpected_fail: 0
-    unexpected_skip: 0
-    unexpected_pass: 0
-    expected_fail: 0
-    expected_skip: 0
+    expected_skip: 1
     expected_pass: 2
+
+  skip:
+    - github.com/FerretDB/dance/tests/ferret/TestCore/InsertMany # https://github.com/FerretDB/FerretDB/issues/200
