@@ -18,7 +18,7 @@ env-pull:
 	docker-compose pull --include-deps --quiet
 
 env-down:                              ## Stop environment
-	docker-compose down --remove-orphans $(DB)
+	docker-compose down --remove-orphans
 
 init:                                  ## Install development tools
 	go mod tidy

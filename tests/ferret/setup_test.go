@@ -16,6 +16,7 @@ package ferret
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -24,6 +25,24 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// databaseName returns valid database name for given test.
+func databaseName(t *testing.T) string {
+	t.Helper()
+
+	name := strings.ToLower(t.Name())
+	name = strings.ReplaceAll(name, "/", "-")
+	name = strings.ReplaceAll(name, " ", "-")
+
+	require.Less(t, len(name), 64)
+	return name
+}
+
+// collectionName returns valid collection name for given test.
+func collectionName(t *testing.T) string {
+	return t.Name()
+}
+
+// setup returns test context and per-test client connection and database.
 func setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 
@@ -40,7 +59,7 @@ func setup(t *testing.T) (context.Context, *mongo.Database) {
 		require.NoError(t, err)
 	})
 
-	db := client.Database(t.Name())
+	db := client.Database(databaseName(t))
 	err = db.Drop(context.Background())
 	require.NoError(t, err)
 

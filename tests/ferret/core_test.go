@@ -17,9 +17,12 @@ package ferret
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func TestCore(t *testing.T) {
@@ -27,15 +30,46 @@ func TestCore(t *testing.T) {
 
 	ctx, db := setup(t)
 
-	collection := db.Collection("basic_types")
+	t.Run("InsertMany", func(t *testing.T) {
+		t.Parallel()
 
-	s1 := bson.D{{"_id", primitive.NewObjectID()}, {"value", "1"}}
-	s2 := bson.D{{"_id", primitive.NewObjectID()}, {"value", "2"}}
-	i1 := bson.D{{"_id", primitive.NewObjectID()}, {"value", 1}}
-	i2 := bson.D{{"_id", primitive.NewObjectID()}, {"value", 2}}
-	docs := []any{
-		s1, s2, i1, i2,
-	}
-	_, err := collection.InsertMany(ctx, docs)
-	require.NoError(t, err)
+		id1 := primitive.NewObjectID()
+		id2 := primitive.NewObjectID()
+		valid1 := bson.D{{"_id", id1}, {"value", "valid1"}}
+		duplicateID := bson.D{{"_id", id1}, {"value", "duplicateID"}}
+		valid2 := bson.D{{"_id", id2}, {"value", "valid2"}}
+		docs := []any{valid1, duplicateID, valid2}
+
+		t.Run("Unordered", func(t *testing.T) {
+			t.Parallel()
+
+			collection := db.Collection(collectionName(t))
+
+			_, err := collection.InsertMany(ctx, docs, options.InsertMany().SetOrdered(false))
+			var writeErr mongo.BulkWriteException
+			assert.ErrorAs(t, err, &writeErr)
+			assert.True(t, writeErr.HasErrorCode(11000))
+
+			cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
+			require.NoError(t, err)
+			require.NoError(t, cursor.All(ctx, &docs))
+			assert.Equal(t, []any{valid1, valid2}, docs)
+		})
+
+		t.Run("Ordered", func(t *testing.T) {
+			t.Parallel()
+
+			collection := db.Collection(collectionName(t))
+
+			_, err := collection.InsertMany(ctx, docs, options.InsertMany().SetOrdered(true))
+			var writeErr mongo.BulkWriteException
+			assert.ErrorAs(t, err, &writeErr)
+			assert.True(t, writeErr.HasErrorCode(11000))
+
+			cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
+			require.NoError(t, err)
+			require.NoError(t, cursor.All(ctx, &docs))
+			assert.Equal(t, []any{valid1}, docs)
+		})
+	})
 }
