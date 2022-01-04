@@ -17,6 +17,9 @@ env-up-detach:
 env-pull:
 	docker-compose pull --include-deps --quiet
 
+env-logs:
+	docker-compose logs
+
 env-down:                              ## Stop environment
 	docker-compose down --remove-orphans
 

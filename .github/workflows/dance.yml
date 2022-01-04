@@ -57,6 +57,16 @@ jobs:
         env:
           TEST: ${{ matrix.test }}
 
+      - name: Collect logs
+        run: |
+          make env-logs > /tmp/compose-logs.txt
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: compose-logs.txt
+          path: /tmp/compose-logs.txt
+
       - name: Check dirty
         run: |
           git status
