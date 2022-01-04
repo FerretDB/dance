@@ -55,6 +55,7 @@ jobs:
       - name: Dance!
         run: make dance
         env:
+          DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
 
       - name: Collect logs
