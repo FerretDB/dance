@@ -16,36 +16,36 @@ package gotest
 
 import "time"
 
-type Action string
+type action string
 
 const (
-	// ActionRun means the test has started running.
-	ActionRun Action = "run"
-	// ActionPause means the test has been paused.
-	ActionPause Action = "pause"
-	// ActionCont means the test has continued running.
-	ActionCont Action = "cont"
-	// ActionPass means the test passed.
-	ActionPass Action = "pass"
-	// ActionBench means the benchmark printed log output but did not fail.
-	ActionBench Action = "bench"
-	// ActionFail means the test or benchmark failed.
-	ActionFail Action = "fail"
-	// ActionOutput means the test printed output.
-	ActionOutput Action = "output"
-	// ActionSkip means the test was skipped or the package contained no tests.
-	ActionSkip Action = "skip"
+	// actionRun means the test has started running.
+	actionRun action = "run"
+	// actionPause means the test has been paused.
+	actionPause action = "pause"
+	// actionCont means the test has continued running.
+	actionCont action = "cont"
+	// actionPass means the test passed.
+	actionPass action = "pass"
+	// actionBench means the benchmark printed log output but did not fail.
+	actionBench action = "bench"
+	// actionFail means the test or benchmark failed.
+	actionFail action = "fail"
+	// actionOutput means the test printed output.
+	actionOutput action = "output"
+	// actionSkip means the test was skipped or the package contained no tests.
+	actionSkip action = "skip"
 )
 
-type TestEvent struct {
+type testEvent struct {
 	Time           time.Time `json:"Time"`
-	Action         Action    `json:"Action"`
+	Action         action    `json:"Action"`
 	Package        string    `json:"Package"`
 	Test           string    `json:"Test"`
 	Output         string    `json:"Output"`
 	ElapsedSeconds float64   `json:"Elapsed"`
 }
 
-func (te TestEvent) Elapsed() time.Duration {
+func (te testEvent) Elapsed() time.Duration {
 	return time.Duration(te.ElapsedSeconds * float64(time.Second))
 }

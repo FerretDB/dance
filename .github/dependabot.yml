@@ -24,7 +24,7 @@ updates:
       time: "04:42"
   - package-ecosystem: "gitsubmodule"
     directory: "/"
-    labels: [tests]
+    labels: [deps]
     schedule:
       interval: "weekly"
       day: "sunday"

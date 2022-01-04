@@ -16,24 +16,36 @@ package internal
 
 import "strings"
 
-type Result string
+// status represents single test status.
+type status string
 
 const (
-	Unknown Result = "UNKNOWN"
-	Pass    Result = "PASS"
-	Skip    Result = "SKIP"
-	Fail    Result = "FAIL"
+	Pass    status = "pass"
+	Skip    status = "skip"
+	Fail    status = "fail"
+	Unknown status = "unknown"
 )
 
+var knownStatuses = map[status]struct{}{
+	Pass: {},
+	Skip: {},
+	Fail: {},
+}
+
+// TestResult represents single test result (status and output).
 type TestResult struct {
-	Result Result
+	Status status
 	Output string
 }
 
 func (tr *TestResult) IndentedOutput() string {
-	return strings.Replace(tr.Output, "\n", "\n\t", -1)
+	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
 }
 
-type Results struct {
+// TestResults represents results of a multiple tests.
+//
+// They are returned by runners.
+type TestResults struct {
+	// Test results by full test name.
 	TestResults map[string]TestResult
 }
