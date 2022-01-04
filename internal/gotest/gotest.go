@@ -63,6 +63,11 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 			return nil, err
 		}
 
+		// skip package failures
+		if event.Test == "" {
+			continue
+		}
+
 		testName := event.Package + "/" + event.Test
 		result := res.TestResults[testName]
 		result.Output += event.Output

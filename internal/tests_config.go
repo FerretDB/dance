@@ -54,15 +54,16 @@ type Stats struct {
 type TestsConfig struct {
 	Default status   `yaml:"default"`
 	Stats   Stats    `yaml:"stats"`
-	Fail    []string `yaml:"fail"`
+	Pass    []string `yaml:"pass"`
 	Skip    []string `yaml:"skip"`
+	Fail    []string `yaml:"fail"`
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Fail)+len(tc.Skip))
+	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
-	for _, t := range tc.Fail {
-		res[t] = Fail
+	for _, t := range tc.Pass {
+		res[t] = Pass
 	}
 
 	for _, t := range tc.Skip {
@@ -70,6 +71,13 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
 		}
 		res[t] = Skip
+	}
+
+	for _, t := range tc.Fail {
+		if _, ok := res[t]; ok {
+			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+		}
+		res[t] = Fail
 	}
 
 	return res, nil
