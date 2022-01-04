@@ -31,7 +31,7 @@ fmt: bin/gofumpt                       ## Format code
 	bin/gofumpt -w ./cmd/ ./internal/
 
 dance:                                 ## Run all integration tests
-	cd tests && go run ../cmd/dance $(TEST)
+	cd tests && go run ../cmd/dance -db=$(DB) $(TEST)
 
 lint: bin/golangci-lint                ## Run linters
 	bin/golangci-lint run --config=.golangci-required.yml

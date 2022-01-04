@@ -64,6 +64,7 @@ func logResult(label string, res map[string]string) {
 }
 
 func main() {
+	dbF := flag.String("db", "", "database to use: ferretdb, mongodb")
 	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
 	flag.Parse()
@@ -98,12 +99,17 @@ func main() {
 			log.Fatal(err)
 		}
 
+		expectedConfig, err := config.Results.ForDB(*dbF)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		runRes, err := gotest.Run(dir, config.Args, *vF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		compareRes, err := config.Tests.Compare(runRes)
+		compareRes, err := expectedConfig.Compare(runRes)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -114,7 +120,7 @@ func main() {
 			sort.Strings(keys)
 			for _, t := range keys {
 				res := compareRes.UnexpectedRest[t]
-				log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+				log.Printf("%s %s:\n\t%s", t, res.Status, res.IndentedOutput())
 			}
 		}
 
@@ -136,7 +142,7 @@ func main() {
 		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
 		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
 
-		expectedStats, err := yaml.Marshal(config.Tests.Stats)
+		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
 		if err != nil {
 			log.Fatal(err)
 		}
