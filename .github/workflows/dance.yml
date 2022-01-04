@@ -66,7 +66,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: compose-logs.txt
+          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
           path: /tmp/compose-logs.txt
 
       - name: Check dirty
