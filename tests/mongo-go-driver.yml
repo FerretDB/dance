@@ -22,20 +22,7 @@ results:
       expected_pass: 633
 
     pass:
-      - go.mongodb.org/mongo-driver/mongo/TestClient/custom_deployment
-      - go.mongodb.org/mongo-driver/mongo/TestClient/database
-      - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI
-      - go.mongodb.org/mongo-driver/mongo/TestClient/localThreshold
-      - go.mongodb.org/mongo-driver/mongo/TestClient/new_client
-      - go.mongodb.org/mongo-driver/mongo/TestClient/nil_document_error
-      - go.mongodb.org/mongo-driver/mongo/TestClient/read_concern
-      - go.mongodb.org/mongo-driver/mongo/TestClient/read_preference
-      - go.mongodb.org/mongo-driver/mongo/TestClient/replace_topology_error
-      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads
-      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes
-      - go.mongodb.org/mongo-driver/mongo/TestClient/server_monitor
-      - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version
-      - go.mongodb.org/mongo-driver/mongo/TestClient/write_concern
+      - go.mongodb.org/mongo-driver/mongo/TestClient/
 
     fail:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
@@ -49,6 +36,7 @@ results:
       # aggregate https://github.com/FerretDB/FerretDB/issues/9
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_does_not_divide_evenly
+      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
     skip: # shared with mongodb
