@@ -16,9 +16,11 @@
 package nodejs
 
 import (
+	"context"
+
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(dir string, args []string) (*internal.Results, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.Results, error) {
 	return nil, nil
 }
