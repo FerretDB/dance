@@ -2,3 +2,7 @@
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
+[submodule "mongoose"]
+	path = tests/mongoose
+	url = https://github.com/Automattic/mongoose.git
+	branch = master
