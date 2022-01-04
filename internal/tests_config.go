@@ -52,8 +52,8 @@ type Stats struct {
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Stats   Stats    `yaml:"stats"`
 	Default status   `yaml:"default"`
+	Stats   Stats    `yaml:"stats"`
 	Fail    []string `yaml:"fail"`
 	Skip    []string `yaml:"skip"`
 }
