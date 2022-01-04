@@ -55,7 +55,20 @@ jobs:
       - name: Dance!
         run: make dance
         env:
+          DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
+
+      - name: Collect logs
+        if: failure()
+        run: |
+          make env-logs > /tmp/compose-logs.txt
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
+          path: /tmp/compose-logs.txt
 
       - name: Check dirty
         run: |

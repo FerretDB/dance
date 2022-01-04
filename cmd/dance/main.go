@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os/signal"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -27,6 +28,7 @@ import (
 
 	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/exp/maps"
+	"golang.org/x/sys/unix"
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
@@ -64,11 +66,17 @@ func logResult(label string, res map[string]string) {
 }
 
 func main() {
+	dbF := flag.String("db", "", "database to use: ferretdb, mongodb")
 	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
 	flag.Parse()
 
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), unix.SIGTERM, unix.SIGINT)
+	go func() {
+		<-ctx.Done()
+		log.Print("Stopping...")
+		stop()
+	}()
 
 	log.Printf("Waiting for port 27017 to be up...")
 	if err := waitForPort(ctx, 27017); err != nil {
@@ -98,12 +106,17 @@ func main() {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(dir, config.Args, *vF)
+		expectedConfig, err := config.Results.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		compareRes, err := config.Tests.Compare(runRes)
+		runRes, err := gotest.Run(ctx, dir, config.Args, *vF)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		compareRes, err := expectedConfig.Compare(runRes)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -114,7 +127,7 @@ func main() {
 			sort.Strings(keys)
 			for _, t := range keys {
 				res := compareRes.UnexpectedRest[t]
-				log.Printf("%s %s:\n\t%s", t, res.Result, res.IndentedOutput())
+				log.Printf("%s %s:\n\t%s", t, res.Status, res.IndentedOutput())
 			}
 		}
 
@@ -136,7 +149,7 @@ func main() {
 		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
 		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
 
-		expectedStats, err := yaml.Marshal(config.Tests.Stats)
+		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
 		if err != nil {
 			log.Fatal(err)
 		}

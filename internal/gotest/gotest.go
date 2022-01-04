@@ -16,6 +16,7 @@
 package gotest
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"os"
@@ -24,7 +25,10 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(dir string, args []string, verbose bool) (*internal.Results, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
+	// TODO https://github.com/FerretDB/dance/issues/20
+	_ = ctx
+
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
@@ -46,12 +50,12 @@ func Run(dir string, args []string, verbose bool) (*internal.Results, error) {
 	d := json.NewDecoder(r)
 	d.DisallowUnknownFields()
 
-	res := &internal.Results{
+	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
 
 	for {
-		var event TestEvent
+		var event testEvent
 		if err = d.Decode(&event); err != nil {
 			if err == io.EOF {
 				break
@@ -59,20 +63,25 @@ func Run(dir string, args []string, verbose bool) (*internal.Results, error) {
 			return nil, err
 		}
 
+		// skip package failures
+		if event.Test == "" {
+			continue
+		}
+
 		testName := event.Package + "/" + event.Test
 		result := res.TestResults[testName]
 		result.Output += event.Output
 		switch event.Action {
-		case ActionPass:
-			result.Result = internal.Pass
-		case ActionFail:
-			result.Result = internal.Fail
-		case ActionSkip:
-			result.Result = internal.Skip
-		case ActionBench, ActionCont, ActionOutput, ActionPause, ActionRun:
+		case actionPass:
+			result.Status = internal.Pass
+		case actionFail:
+			result.Status = internal.Fail
+		case actionSkip:
+			result.Status = internal.Skip
+		case actionBench, actionCont, actionOutput, actionPause, actionRun:
 			fallthrough
 		default:
-			result.Result = internal.Unknown
+			result.Status = internal.Unknown
 		}
 		res.TestResults[testName] = result
 	}

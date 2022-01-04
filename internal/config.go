@@ -18,16 +18,27 @@ package internal
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
+// Config represents dance configuration.
 type Config struct {
-	Runner string      `yaml:"runner"`
-	Args   []string    `yaml:"args"`
-	Tests  TestsConfig `yaml:"tests"`
+	Runner  string   `yaml:"runner"`
+	Args    []string `yaml:"args"`
+	Results Results  `yaml:"results"`
 }
 
+// Results represents expected dance results.
+type Results struct {
+	// Expected results for both FerretDB and MongoDB.
+	Common   *TestsConfig `yaml:"common"`
+	FerretDB *TestsConfig `yaml:"ferretdb"`
+	MongoDB  *TestsConfig `yaml:"mongodb"`
+}
+
+// Loadconfig loads and validates configuration from file.
 func LoadConfig(path string) (*Config, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -43,17 +54,68 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	if err = c.validate(); err != nil {
+	if err = c.fillAndValidate(); err != nil {
 		return nil, err
 	}
 
 	return &c, nil
 }
 
-func (c *Config) validate() error {
-	if _, err := c.Tests.toMap(); err != nil {
-		return err
+func (c *Config) fillAndValidate() error {
+	if c.Results.Common == nil {
+		if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
+			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+		}
+	} else {
+		if c.Results.FerretDB != nil || c.Results.MongoDB != nil {
+			return fmt.Errorf("common results are not allowed with FerretDB or MongoDB results")
+		}
+	}
+
+	for _, r := range []*TestsConfig{
+		c.Results.Common,
+		c.Results.FerretDB,
+		c.Results.MongoDB,
+	} {
+		if r == nil {
+			continue
+		}
+
+		if _, err := r.toMap(); err != nil {
+			return err
+		}
+
+		origDefault := r.Default
+		r.Default = status(strings.ToLower(string(origDefault)))
+		if r.Default == "" {
+			r.Default = Pass
+		}
+
+		if _, ok := knownStatuses[r.Default]; !ok {
+			return fmt.Errorf("invalid default result: %q", origDefault)
+		}
 	}
 
 	return nil
+}
+
+func (r *Results) ForDB(db string) (*TestsConfig, error) {
+	switch db {
+	case "ferretdb":
+		if c := r.FerretDB; c != nil {
+			return c, nil
+		}
+	case "mongodb":
+		if c := r.MongoDB; c != nil {
+			return c, nil
+		}
+	default:
+		return nil, fmt.Errorf("unknown database %q", db)
+	}
+
+	if c := r.Common; c != nil {
+		return c, nil
+	}
+
+	return nil, fmt.Errorf("no expected results for %q", db)
 }

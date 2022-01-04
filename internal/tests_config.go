@@ -48,18 +48,22 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
+// TestsConfig represents a part of the dance configuration for tests.
+//
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Stats Stats    `yaml:"stats"`
-	Fail  []string `yaml:"fail"`
-	Skip  []string `yaml:"skip"`
+	Default status   `yaml:"default"`
+	Stats   Stats    `yaml:"stats"`
+	Pass    []string `yaml:"pass"`
+	Skip    []string `yaml:"skip"`
+	Fail    []string `yaml:"fail"`
 }
 
-func (tc *TestsConfig) toMap() (map[string]Result, error) {
-	res := make(map[string]Result, len(tc.Fail)+len(tc.Skip))
+func (tc *TestsConfig) toMap() (map[string]status, error) {
+	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
-	for _, t := range tc.Fail {
-		res[t] = Fail
+	for _, t := range tc.Pass {
+		res[t] = Pass
 	}
 
 	for _, t := range tc.Skip {
@@ -67,6 +71,13 @@ func (tc *TestsConfig) toMap() (map[string]Result, error) {
 			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
 		}
 		res[t] = Skip
+	}
+
+	for _, t := range tc.Fail {
+		if _, ok := res[t]; ok {
+			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+		}
+		res[t] = Fail
 	}
 
 	return res, nil
@@ -83,7 +94,7 @@ type CompareResult struct {
 	Stats          Stats
 }
 
-func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
+func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
 		ExpectedPass:   make(map[string]string),
 		ExpectedSkip:   make(map[string]string),
@@ -100,7 +111,7 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 	}
 
 	for test, testRes := range results.TestResults {
-		expectedRes := Pass // default
+		expectedRes := tc.Default
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
 				expectedRes = res
@@ -110,7 +121,7 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 
 		switch expectedRes {
 		case Pass:
-			switch testRes.Result {
+			switch testRes.Status {
 			case Pass:
 				compareResult.ExpectedPass[test] = testRes.IndentedOutput()
 			case Skip:
@@ -123,7 +134,7 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 				compareResult.UnexpectedRest[test] = testRes
 			}
 		case Skip:
-			switch testRes.Result {
+			switch testRes.Status {
 			case Pass:
 				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
 			case Skip:
@@ -136,7 +147,7 @@ func (tc *TestsConfig) Compare(results *Results) (*CompareResult, error) {
 				compareResult.UnexpectedRest[test] = testRes
 			}
 		case Fail:
-			switch testRes.Result {
+			switch testRes.Status {
 			case Pass:
 				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
 			case Skip:
