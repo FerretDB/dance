@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os/signal"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -27,6 +28,7 @@ import (
 
 	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/exp/maps"
+	"golang.org/x/sys/unix"
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
@@ -69,7 +71,12 @@ func main() {
 	log.SetFlags(0)
 	flag.Parse()
 
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), unix.SIGTERM, unix.SIGINT)
+	go func() {
+		<-ctx.Done()
+		log.Print("Stopping...")
+		stop()
+	}()
 
 	log.Printf("Waiting for port 27017 to be up...")
 	if err := waitForPort(ctx, 27017); err != nil {
@@ -104,7 +111,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(dir, config.Args, *vF)
+		runRes, err := gotest.Run(ctx, dir, config.Args, *vF)
 		if err != nil {
 			log.Fatal(err)
 		}

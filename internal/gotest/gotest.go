@@ -16,6 +16,7 @@
 package gotest
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"os"
@@ -24,7 +25,10 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(dir string, args []string, verbose bool) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
+	// TODO https://github.com/FerretDB/dance/issues/20
+	_ = ctx
+
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir

@@ -18,7 +18,7 @@ env-pull:
 	docker-compose pull --include-deps --quiet
 
 env-logs:
-	docker-compose logs
+	docker-compose logs --no-color
 
 env-down:                              ## Stop environment
 	docker-compose down --remove-orphans
