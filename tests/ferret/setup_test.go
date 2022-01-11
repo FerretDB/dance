@@ -39,7 +39,14 @@ func databaseName(t *testing.T) string {
 
 // collectionName returns valid collection name for given test.
 func collectionName(t *testing.T) string {
-	return t.Name()
+	t.Helper()
+
+	name := strings.ToLower(t.Name())
+	name = strings.ReplaceAll(name, "/", "-")
+	name = strings.ReplaceAll(name, " ", "-")
+
+	require.Less(t, len(name), 64)
+	return name
 }
 
 // setup returns test context and per-test client connection and database.
