@@ -8,12 +8,20 @@ run:
 linters-settings:
   exhaustive:
     default-signifies-exhaustive: false
+  goconst:
+    min-occurrences: 5
+    ignore-tests: true
   godot:
     scope: toplevel
     exclude:
       - go-sumtype:decl
       - check interfaces
     capital: false # for unexported declarations
+  godox:
+    keywords:
+      - BUG
+      - FIXME
+      - HACK
   goheader:
     template: |-
       Copyright 2021 FerretDB Inc.
@@ -86,7 +94,6 @@ linters:
     - gocognit
     - gocritic
     - gocyclo
-    - godox
     - goerr113
     - gomnd
     - gosec

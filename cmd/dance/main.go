@@ -71,6 +71,11 @@ func main() {
 	log.SetFlags(0)
 	flag.Parse()
 
+	// TODO https://github.com/FerretDB/dance/issues/30
+	if *dbF == "" {
+		log.Fatal("-db is required")
+	}
+
 	ctx, stop := signal.NotifyContext(context.Background(), unix.SIGTERM, unix.SIGINT)
 	go func() {
 		<-ctx.Done()
@@ -88,6 +93,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// TODO validate that args are in matches
 	if flag.NArg() != 0 {
 		matches = matches[:0:cap(matches)]
 		for _, arg := range flag.Args() {
