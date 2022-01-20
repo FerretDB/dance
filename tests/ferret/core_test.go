@@ -78,7 +78,7 @@ func TestCore(t *testing.T) {
 	})
 
 	t.Run("BasicTypes", func(t *testing.T) {
-		// t.Parallel() // FIXME https://github.com/FerretDB/dance/issues/28
+		t.Parallel()
 
 		collection := db.Collection(collectionName(t))
 
@@ -99,7 +99,7 @@ func TestCore(t *testing.T) {
 		} {
 			name, v := name, v
 			t.Run(name, func(t *testing.T) {
-				// t.Parallel() // FIXME https://github.com/FerretDB/dance/issues/28
+				t.Parallel()
 
 				id := primitive.NewObjectID()
 				doc := bson.D{{"_id", id}, {"value", v}}
