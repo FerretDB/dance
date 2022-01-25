@@ -15,6 +15,7 @@
 package ferret
 
 import (
+	"fmt"
 	"math"
 	"testing"
 	"time"
@@ -77,7 +78,112 @@ func TestCore(t *testing.T) {
 		})
 	})
 
-	t.Run("BasicTypes", func(t *testing.T) {
+	t.Run("QueryOperators", func(t *testing.T) {
+		t.Parallel()
+
+		collection := db.Collection(collectionName(t))
+
+		data := map[string]any{
+			// doubles
+			"double":                   42.123,
+			"double-negative-infinity": math.Inf(-1),
+			"double-positive-infinity": math.Inf(+1),
+			"double-nan":               math.NaN(),
+			"double-max":               math.MaxFloat64,
+			"double-smallest":          math.SmallestNonzeroFloat64,
+
+			// strings
+			"string":       "foo",
+			"string-empty": "",
+		}
+
+		testCases := []struct {
+			query       bson.D
+			expectedIDs []string
+		}{
+			// doubles
+			// $eq
+			{
+				bson.D{{"$eq", 42.123}},
+				[]string{"double"},
+			},
+			{
+				bson.D{{"$eq", math.Inf(-1)}},
+				[]string{"double-negative-infinity"},
+			},
+			{
+				bson.D{{"$eq", math.Inf(+1)}},
+				[]string{"double-positive-infinity"},
+			},
+			{
+				bson.D{{"$eq", math.MaxFloat64}},
+				[]string{"double-max"},
+			},
+			{
+				bson.D{{"$eq", math.SmallestNonzeroFloat64}},
+				[]string{"double-smallest"},
+			},
+			// $gt
+			{
+				bson.D{{"$gt", 42.123}},
+				[]string{"double-max", "double-positive-infinity"},
+			},
+			{
+				bson.D{{"$gt", math.Inf(-1)}},
+				[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
+			},
+			{
+				bson.D{{"$gt", math.Inf(+1)}},
+				nil,
+			},
+			{
+				bson.D{{"$gt", math.MaxFloat64}},
+				[]string{"double-positive-infinity"},
+			},
+			{
+				bson.D{{"$gt", math.SmallestNonzeroFloat64}},
+				[]string{"double", "double-max", "double-positive-infinity"},
+			},
+
+			// strings
+			{
+				bson.D{{"$eq", "foo"}},
+				[]string{"string"},
+			},
+			{
+				bson.D{{"$gt", "foo"}},
+				[]string{},
+			},
+		}
+
+		for id, v := range data {
+			_, err := collection.InsertOne(ctx, bson.D{{"_id", id}, {"value", v}})
+			require.NoError(t, err)
+		}
+
+		for _, tc := range testCases {
+			tc := tc
+			t.Run(fmt.Sprint(tc.query), func(t *testing.T) {
+				t.Parallel()
+
+				cursor, err := collection.Find(ctx, bson.D{{"value", tc.query}}, options.Find().SetSort(bson.D{{"value", 1}}))
+				require.NoError(t, err)
+
+				var expected []bson.D
+				for _, id := range tc.expectedIDs {
+					v, ok := data[id]
+					require.True(t, ok)
+					expected = append(expected, bson.D{{"_id", id}, {"value", v}})
+				}
+
+				var actual []bson.D
+				require.NoError(t, cursor.All(ctx, &actual))
+				assert.Equal(t, expected, actual)
+			})
+		}
+	})
+
+	t.Run("InsertOneFindOne", func(t *testing.T) {
 		t.Parallel()
 
 		collection := db.Collection(collectionName(t))
