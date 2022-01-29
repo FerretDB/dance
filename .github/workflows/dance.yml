@@ -13,7 +13,7 @@ env:
   GOCACHE: /home/runner/go/cache
   GOMODCACHE: /home/runner/go/cache/mod
   GOPROXY: https://proxy.golang.org # remove direct
-  FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb:latest
+  FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
 
 jobs:
   dance:
