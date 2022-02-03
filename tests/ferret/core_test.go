@@ -84,7 +84,6 @@ func TestCore(t *testing.T) {
 		collection := db.Collection(collectionName(t))
 
 		data := map[string]any{
-			// doubles
 			"double":                   42.13,
 			"double-zero":              0.0,
 			"double-max":               math.MaxFloat64,
@@ -93,16 +92,56 @@ func TestCore(t *testing.T) {
 			"double-negative-infinity": math.Inf(-1),
 			"double-nan":               math.NaN(),
 
-			// strings
 			"string":       "foo",
 			"string-empty": "",
+			// "\x00",
 
-			// documents
-			// TODO
+			"document":       map[string]any{"document": int32(42)},
+			"document-empty": map[string]any{},
 
-			// arrays
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
+
+			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
+			"binary-empty": primitive.Binary{},
+
+			// no Undefined
+
+			"bool-false": false,
+			"bool-true":  true,
+
+			"datetime":          time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC),
+			"datetime-epoch":    time.Unix(0, 0),
+			"datetime-year-min": time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC),
+			"datetime-year-max": time.Date(9999, 12, 31, 23, 59, 59, 999000000, time.UTC),
+
+			"null": nil,
+
+			"regex":       primitive.Regex{Pattern: "foo", Options: "i"},
+			"regex-empty": primitive.Regex{},
+
+			// no DBPointer
+			// no JavaScript code
+			// no Symbol
+			// no JavaScript code w/ scope
+
+			"int32":      int32(42),
+			"int32-zero": int32(0),
+			"int32-max":  int32(math.MaxInt32),
+			"int32-min":  int32(math.MinInt32),
+
+			"timestamp":   primitive.Timestamp{T: 42, I: 13},
+			"timestamp-i": primitive.Timestamp{I: 1},
+
+			"int64":      int64(42),
+			"int64-zero": int64(0),
+			"int64-max":  int64(math.MaxInt64),
+			"int64-min":  int64(math.MinInt64),
+
+			// no 128-bit decimal floating point (yet)
+
+			// no Min key
+			// no Max key
 		}
 
 		for id, v := range data {
@@ -191,11 +230,27 @@ func TestCore(t *testing.T) {
 				IDs: []string{"array"},
 			},
 			{
+				q: bson.D{{"value", bson.D{{"$size", bson.D{{"$gt", int32(1)}}}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `$size needs a number`,
+				},
+			},
+			{
 				q: bson.D{{"value", bson.D{{"$size", 2.1}}}},
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
 					Message: `$size must be a whole number`,
+				},
+			},
+			{
+				q: bson.D{{"value", bson.D{{"$size", -1}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `$size may not be negative`,
 				},
 			},
 			{
@@ -221,6 +276,7 @@ func TestCore(t *testing.T) {
 				cursor, err := collection.Find(ctx, tc.q, options.Find().SetSort(bson.D{{"value", 1}}))
 
 				if tc.err != nil {
+					require.Error(t, err)
 					require.Equal(t, tc.err, err)
 					return
 				}
