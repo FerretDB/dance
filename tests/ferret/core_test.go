@@ -85,75 +85,24 @@ func TestCore(t *testing.T) {
 
 		data := map[string]any{
 			// doubles
-			"double":                   42.123,
-			"double-negative-infinity": math.Inf(-1),
-			"double-positive-infinity": math.Inf(+1),
-			"double-nan":               math.NaN(),
+			"double":                   42.13,
+			"double-zero":              0.0,
 			"double-max":               math.MaxFloat64,
 			"double-smallest":          math.SmallestNonzeroFloat64,
+			"double-positive-infinity": math.Inf(+1),
+			"double-negative-infinity": math.Inf(-1),
+			"double-nan":               math.NaN(),
 
 			// strings
 			"string":       "foo",
 			"string-empty": "",
-		}
 
-		testCases := []struct {
-			query       bson.D
-			expectedIDs []string
-		}{
-			// doubles
-			// $eq
-			{
-				bson.D{{"$eq", 42.123}},
-				[]string{"double"},
-			},
-			{
-				bson.D{{"$eq", math.Inf(-1)}},
-				[]string{"double-negative-infinity"},
-			},
-			{
-				bson.D{{"$eq", math.Inf(+1)}},
-				[]string{"double-positive-infinity"},
-			},
-			{
-				bson.D{{"$eq", math.MaxFloat64}},
-				[]string{"double-max"},
-			},
-			{
-				bson.D{{"$eq", math.SmallestNonzeroFloat64}},
-				[]string{"double-smallest"},
-			},
-			// $gt
-			{
-				bson.D{{"$gt", 42.123}},
-				[]string{"double-max", "double-positive-infinity"},
-			},
-			{
-				bson.D{{"$gt", math.Inf(-1)}},
-				[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
-			},
-			{
-				bson.D{{"$gt", math.Inf(+1)}},
-				nil,
-			},
-			{
-				bson.D{{"$gt", math.MaxFloat64}},
-				[]string{"double-positive-infinity"},
-			},
-			{
-				bson.D{{"$gt", math.SmallestNonzeroFloat64}},
-				[]string{"double", "double-max", "double-positive-infinity"},
-			},
+			// documents
+			// TODO
 
-			// strings
-			{
-				bson.D{{"$eq", "foo"}},
-				[]string{"string"},
-			},
-			{
-				bson.D{{"$gt", "foo"}},
-				[]string{},
-			},
+			// arrays
+			"array":       primitive.A{"array", int32(42)},
+			"array-empty": primitive.A{},
 		}
 
 		for id, v := range data {
@@ -161,16 +110,126 @@ func TestCore(t *testing.T) {
 			require.NoError(t, err)
 		}
 
+		testCases := []struct {
+			q   bson.D
+			IDs []string
+			err error
+		}{
+			// doubles
+			// $eq
+			/*
+				{
+					bson.D{{"$eq", 42.13}},
+					[]string{"double"},
+				},
+				{
+					bson.D{{"$eq", math.Inf(-1)}},
+					[]string{"double-negative-infinity"},
+				},
+				{
+					bson.D{{"$eq", math.Inf(+1)}},
+					[]string{"double-positive-infinity"},
+				},
+				{
+					bson.D{{"$eq", math.MaxFloat64}},
+					[]string{"double-max"},
+				},
+				{
+					bson.D{{"$eq", math.SmallestNonzeroFloat64}},
+					[]string{"double-smallest"},
+				},
+				// $gt
+				{
+					bson.D{{"$gt", 42.123}},
+					[]string{"double-max", "double-positive-infinity"},
+				},
+				{
+					bson.D{{"$gt", math.Inf(-1)}},
+					[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
+				},
+				{
+					bson.D{{"$gt", math.Inf(+1)}},
+					nil,
+				},
+				{
+					bson.D{{"$gt", math.MaxFloat64}},
+					[]string{"double-positive-infinity"},
+				},
+				{
+					bson.D{{"$gt", math.SmallestNonzeroFloat64}},
+					[]string{"double", "double-max", "double-positive-infinity"},
+				},
+			*/
+
+			// strings
+			/*
+				{
+					bson.D{{"$eq", "foo"}},
+					[]string{"string"},
+				},
+				{
+					bson.D{{"$gt", "foo"}},
+					[]string{},
+				},
+			*/
+
+			// documents
+			// TODO
+
+			// arrays
+			// $size
+			{
+				q:   bson.D{{"value", bson.D{{"$size", int32(2)}}}},
+				IDs: []string{"array"},
+			},
+			{
+				q:   bson.D{{"value", bson.D{{"$size", int64(2)}}}},
+				IDs: []string{"array"},
+			},
+			{
+				q:   bson.D{{"value", bson.D{{"$size", 2.0}}}},
+				IDs: []string{"array"},
+			},
+			{
+				q: bson.D{{"value", bson.D{{"$size", 2.1}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `$size must be a whole number`,
+				},
+			},
+			{
+				q: bson.D{{"$size", 2.1}},
+				err: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `unknown top level operator: $size. If you have a field name that starts with a '$' symbol, ` +
+						`consider using $getField or $setField.`,
+				},
+			},
+		}
+
 		for _, tc := range testCases {
 			tc := tc
-			t.Run(fmt.Sprint(tc.query), func(t *testing.T) {
+			t.Run(fmt.Sprint(tc.q), func(t *testing.T) {
 				t.Parallel()
 
-				cursor, err := collection.Find(ctx, bson.D{{"value", tc.query}}, options.Find().SetSort(bson.D{{"value", 1}}))
+				if (tc.IDs == nil) == (tc.err == nil) {
+					t.Fatal("only one of expectedIDs and expectedErr must be set")
+				}
+
+				cursor, err := collection.Find(ctx, tc.q, options.Find().SetSort(bson.D{{"value", 1}}))
+
+				if tc.err != nil {
+					require.Equal(t, tc.err, err)
+					return
+				}
+
 				require.NoError(t, err)
+				require.NotNil(t, cursor)
 
 				var expected []bson.D
-				for _, id := range tc.expectedIDs {
+				for _, id := range tc.IDs {
 					v, ok := data[id]
 					require.True(t, ok)
 					expected = append(expected, bson.D{{"_id", id}, {"value", v}})
