@@ -3,7 +3,7 @@ version: "3.8"
 
 services:
   ferretdb:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:local}
+    image: ${FERRETDB_IMAGE:-ferretdb-local}
     container_name: dance_ferretdb
     restart: unless-stopped
     depends_on: ["postgres", "mongosh"]
