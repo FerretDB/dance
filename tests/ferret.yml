@@ -5,7 +5,7 @@ results:
   common:
     stats:
       expected_skip: 1
-      expected_pass: 21
+      expected_pass: 23
 
     skip:
       - github.com/FerretDB/dance/tests/ferret/TestCore/InsertMany # https://github.com/FerretDB/FerretDB/issues/200
