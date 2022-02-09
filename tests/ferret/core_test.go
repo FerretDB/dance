@@ -83,6 +83,7 @@ func TestCore(t *testing.T) {
 
 		collection := db.Collection(collectionName(t))
 
+		// TODO keep in sync with test_db? https://github.com/FerretDB/dance/issues/43
 		data := map[string]any{
 			"double":                   42.13,
 			"double-zero":              0.0,
