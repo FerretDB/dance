@@ -239,6 +239,11 @@ func TestCore(t *testing.T) {
 				IDs:  []string{},
 			},
 			{
+				name: "SizeZero",
+				q:    bson.D{{"value", bson.D{{"$size", 0.0}}}},
+				IDs:  []string{"array-empty"},
+			},
+			{
 				name: "SizeInvalidType",
 				q:    bson.D{{"value", bson.D{{"$size", bson.D{{"$gt", int32(1)}}}}}},
 				err: mongo.CommandError{
