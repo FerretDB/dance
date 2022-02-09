@@ -150,9 +150,10 @@ func TestCore(t *testing.T) {
 		}
 
 		testCases := []struct {
-			q   bson.D
-			IDs []string
-			err error
+			name string // TODO move to map key
+			q    bson.D
+			IDs  []string
+			err  error
 		}{
 			// doubles
 			// $eq
@@ -218,19 +219,28 @@ func TestCore(t *testing.T) {
 			// arrays
 			// $size
 			{
-				q:   bson.D{{"value", bson.D{{"$size", int32(2)}}}},
-				IDs: []string{"array"},
+				name: "SizeInt32",
+				q:    bson.D{{"value", bson.D{{"$size", int32(2)}}}},
+				IDs:  []string{"array"},
 			},
 			{
-				q:   bson.D{{"value", bson.D{{"$size", int64(2)}}}},
-				IDs: []string{"array"},
+				name: "SizeInt64",
+				q:    bson.D{{"value", bson.D{{"$size", int64(2)}}}},
+				IDs:  []string{"array"},
 			},
 			{
-				q:   bson.D{{"value", bson.D{{"$size", 2.0}}}},
-				IDs: []string{"array"},
+				name: "SizeDouble",
+				q:    bson.D{{"value", bson.D{{"$size", 2.0}}}},
+				IDs:  []string{"array"},
 			},
 			{
-				q: bson.D{{"value", bson.D{{"$size", bson.D{{"$gt", int32(1)}}}}}},
+				name: "SizeNotFound",
+				q:    bson.D{{"value", bson.D{{"$size", int32(4)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "SizeInvalidType",
+				q:    bson.D{{"value", bson.D{{"$size", bson.D{{"$gt", int32(1)}}}}}},
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
@@ -238,7 +248,8 @@ func TestCore(t *testing.T) {
 				},
 			},
 			{
-				q: bson.D{{"value", bson.D{{"$size", 2.1}}}},
+				name: "SizeNonWhole",
+				q:    bson.D{{"value", bson.D{{"$size", 2.1}}}},
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
@@ -246,7 +257,26 @@ func TestCore(t *testing.T) {
 				},
 			},
 			{
-				q: bson.D{{"value", bson.D{{"$size", -1}}}},
+				name: "SizeNaN",
+				q:    bson.D{{"value", bson.D{{"$size", math.NaN()}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `$size must be a whole number`,
+				},
+			},
+			{
+				name: "SizeInfinity",
+				q:    bson.D{{"value", bson.D{{"$size", math.Inf(1)}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `$size must be a whole number`,
+				},
+			},
+			{
+				name: "SizeNegative",
+				q:    bson.D{{"value", bson.D{{"$size", int32(-1)}}}},
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
@@ -254,7 +284,7 @@ func TestCore(t *testing.T) {
 				},
 			},
 			{
-				q: bson.D{{"$size", 2.1}},
+				q: bson.D{{"$size", int32(2)}},
 				err: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
@@ -266,11 +296,16 @@ func TestCore(t *testing.T) {
 
 		for _, tc := range testCases {
 			tc := tc
-			t.Run(fmt.Sprint(tc.q), func(t *testing.T) {
+
+			if tc.name == "" {
+				tc.name = fmt.Sprint(tc.q)
+			}
+
+			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
 
 				if (tc.IDs == nil) == (tc.err == nil) {
-					t.Fatal("only one of expectedIDs and expectedErr must be set")
+					t.Fatal("exactly one of IDs or err must be set")
 				}
 
 				cursor, err := collection.Find(ctx, tc.q, options.Find().SetSort(bson.D{{"value", 1}}))
