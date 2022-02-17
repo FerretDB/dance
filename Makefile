@@ -21,7 +21,7 @@ env-logs:
 	docker-compose logs --no-color
 
 env-down:                              ## Stop environment
-	docker-compose down --remove-orphans
+	docker-compose down --remove-orphans --volumes
 
 init:                                  ## Install development tools
 	go mod tidy
