@@ -9,7 +9,7 @@ args:
   # - ./mongo/integration
   # - ./mongo/integration/unified
   # - ./x/mongo/driver/integration
-  - ./x/mongo/driver/topology
+  # - ./x/mongo/driver/topology
 
 results:
   ferretdb:
@@ -18,8 +18,8 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 14
-      expected_skip: 6
-      expected_pass: 633
+      expected_skip: 4
+      expected_pass: 182
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -58,8 +58,8 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 6
-      expected_pass: 647
+      expected_skip: 4
+      expected_pass: 196
 
     skip: # shared with ferretdb
       # needs replica set
