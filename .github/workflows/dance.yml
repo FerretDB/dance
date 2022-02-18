@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Extract Docker image name and tag
         id: extract
-        uses: FerretDB/github-actions/extract-docker-tag@main
+        uses: FerretDB/github-actions/extract-docker-tag@fix-extract-docker-tag
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
 
       - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@main
+        uses: FerretDB/github-actions/setup-go@fix-extract-docker-tag
         with:
           cache-key: dance
 

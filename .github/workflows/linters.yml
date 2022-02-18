@@ -21,4 +21,4 @@ jobs:
 
     steps:
       - name: Run linters
-        uses: FerretDB/github-actions/linters@main
+        uses: FerretDB/github-actions/linters@fix-extract-docker-tag
