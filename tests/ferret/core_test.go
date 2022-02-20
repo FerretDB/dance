@@ -189,47 +189,59 @@ func TestCore(t *testing.T) {
 		}{
 			// doubles
 			// $eq
+			{
+				name: "EqDouble",
+				q:    bson.D{{"value", bson.D{{"$eq", 42.13}}}},
+				IDs:  []string{"double"},
+			},
+			{
+				name: "EqDoubleNegativeInfinity",
+				q:    bson.D{{"value", bson.D{{"$eq", math.Inf(-1)}}}},
+				IDs:  []string{"double-negative-infinity"},
+			},
+			{
+				name: "EqDoublePositiveInfinity",
+				q:    bson.D{{"value", bson.D{{"$eq", math.Inf(+1)}}}},
+				IDs:  []string{"double-positive-infinity"},
+			},
+			{
+				name: "EqDoubleMax",
+				q:    bson.D{{"value", bson.D{{"$eq", math.MaxFloat64}}}},
+				IDs:  []string{"double-max"},
+			},
+			{
+				name: "EqDoubleSmallest",
+				q:    bson.D{{"value", bson.D{{"$eq", math.SmallestNonzeroFloat64}}}},
+				IDs:  []string{"double-smallest"},
+			},
+			{
+				name: "EqDoubleZero",
+				q:    bson.D{{"value", bson.D{{"$eq", 0.0}}}},
+				IDs:  []string{"double-zero"},
+			},
+
+			// $gt
 			/*
-				{
-					bson.D{{"$eq", 42.13}},
-					[]string{"double"},
+
+					{
+					q:bson.D{{"$gt", 42.123}},
+					IDs:[]string{"double-max", "double-positive-infinity"},
 				},
 				{
-					bson.D{{"$eq", math.Inf(-1)}},
-					[]string{"double-negative-infinity"},
+					q:bson.D{{"$gt", math.Inf(-1)}},
+					IDs:[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
 				},
 				{
-					bson.D{{"$eq", math.Inf(+1)}},
-					[]string{"double-positive-infinity"},
-				},
-				{
-					bson.D{{"$eq", math.MaxFloat64}},
-					[]string{"double-max"},
-				},
-				{
-					bson.D{{"$eq", math.SmallestNonzeroFloat64}},
-					[]string{"double-smallest"},
-				},
-				// $gt
-				{
-					bson.D{{"$gt", 42.123}},
-					[]string{"double-max", "double-positive-infinity"},
-				},
-				{
-					bson.D{{"$gt", math.Inf(-1)}},
-					[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
-				},
-				{
-					bson.D{{"$gt", math.Inf(+1)}},
+					q:bson.D{{"$gt", math.Inf(+1)}},
 					nil,
 				},
 				{
-					bson.D{{"$gt", math.MaxFloat64}},
-					[]string{"double-positive-infinity"},
+					q:bson.D{{"$gt", math.MaxFloat64}},
+					IDs:[]string{"double-positive-infinity"},
 				},
 				{
-					bson.D{{"$gt", math.SmallestNonzeroFloat64}},
-					[]string{"double", "double-max", "double-positive-infinity"},
+					q:bson.D{{"$gt", math.SmallestNonzeroFloat64}},
+					IDs:[]string{"double", "double-max", "double-positive-infinity"},
 				},
 			*/
 
@@ -262,6 +274,19 @@ func TestCore(t *testing.T) {
 				q:    bson.D{{"value", int64(42)}},
 				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
 				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
+
+			//  $eq
+
+			{
+				name: "EqString",
+				q:    bson.D{{"value", bson.D{{"$eq", "foo"}}}},
+				IDs:  []string{"string"},
+			},
+			{
+				name: "EqEmptyString",
+				q:    bson.D{{"value", bson.D{{"$eq", ""}}}},
+				IDs:  []string{"string-empty"},
 			},
 
 			// documents
@@ -457,6 +482,93 @@ func TestCore(t *testing.T) {
 					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000)}},
 				}},
 				IDs: []string{},
+			},
+
+			// binary
+
+			// $eq
+			{
+				name: "EqBinary",
+				q:    bson.D{{"value", bson.D{{"$eq", primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}}}}}},
+				IDs:  []string{"binary"},
+			},
+
+			// bool
+
+			// $eq
+
+			{
+				name: "EqBoolTrue",
+				q:    bson.D{{"value", bson.D{{"$eq", true}}}},
+				IDs:  []string{"bool-true"},
+			},
+			{
+				name: "EqBoolFalse",
+				q:    bson.D{{"value", bson.D{{"$eq", false}}}},
+				IDs:  []string{"bool-false"},
+			},
+
+			// datetime
+
+			// $eq
+
+			{
+				name: "EqDatetime",
+				q:    bson.D{{"value", bson.D{{"$eq", time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC)}}}},
+				IDs:  []string{"datetime"},
+			},
+
+			// timestamp
+
+			// $eq
+
+			{
+				name: "EqTimestamp",
+				q:    bson.D{{"value", bson.D{{"$eq", primitive.Timestamp{T: 42, I: 13}}}}},
+				IDs:  []string{"timestamp"},
+			},
+
+			// null
+
+			{
+				name: "EqNull",
+				q:    bson.D{{"value", bson.D{{"$eq", nil}}}},
+				IDs:  []string{"null"},
+			},
+
+			// regex
+
+			// $eq
+
+			{
+				name: "EqRegex",
+				q:    bson.D{{"value", primitive.Regex{Pattern: "foo", Options: "i"}}},
+				IDs:  []string{"string", "regex"},
+			},
+
+			// int
+
+			// $eq
+
+			{
+				name: "EqInt64",
+				q:    bson.D{{"value", int64(42)}},
+				IDs:  []string{"int64"},
+			},
+			{
+				name: "EqIntZero",
+				q:    bson.D{{"value", int64(0)}},
+				IDs:  []string{"int64-zero"},
+			},
+			{
+				name: "EqIntMax",
+				q:    bson.D{{"value", int64(math.MaxInt64)}},
+				IDs:  []string{"int64-max"},
+			},
+			{
+				name: "EqIntMin",
+				q:    bson.D{{"value", int64(math.MinInt64)}},
+				IDs:  []string{"int64-min"},
 			},
 		}
 
