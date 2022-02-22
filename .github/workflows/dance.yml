@@ -30,24 +30,24 @@ jobs:
           - mongo-go-driver
 
     steps:
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
+
       - name: Extract Docker image name and tag
         id: extract
         uses: FerretDB/github-actions/extract-docker-tag@main
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
 
       - name: Start pulling environment in the background
         run: make env-pull &
         env:
           FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
 
-      - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@main
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          cache-key: dance
+          submodules: recursive
 
       - name: Start environment
         run: make env-up-detach
