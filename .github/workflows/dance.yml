@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Extract Docker image name and tag
         id: extract
-        uses: FerretDB/github-actions/extract-docker-tag@fix-extract-docker-tag
+        uses: FerretDB/github-actions/extract-docker-tag@main
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,18 +42,16 @@ jobs:
       - name: Start pulling environment in the background
         run: make env-pull &
         env:
-          # FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
           FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
 
       - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@fix-extract-docker-tag
+        uses: FerretDB/github-actions/setup-go@main
         with:
           cache-key: dance
 
       - name: Start environment
         run: make env-up-detach
         env:
-          # FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
           FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
           DB: ${{ matrix.db }}
 
