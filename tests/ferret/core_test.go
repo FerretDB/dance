@@ -538,12 +538,18 @@ func TestCore(t *testing.T) {
 
 			// regex
 
+			{
+				name: "FindRegex",
+				q:    bson.D{{"value", primitive.Regex{Pattern: "foo", Options: "i"}}},
+				IDs:  []string{"string", "regex"},
+			},
+
 			// $eq
 
 			{
 				name: "EqRegex",
-				q:    bson.D{{"value", primitive.Regex{Pattern: "foo", Options: "i"}}},
-				IDs:  []string{"string", "regex"},
+				q:    bson.D{{"value", bson.D{{"$eq", primitive.Regex{Pattern: "foo", Options: "i"}}}}},
+				IDs:  []string{"regex"},
 			},
 
 			// int
@@ -552,25 +558,36 @@ func TestCore(t *testing.T) {
 
 			{
 				name: "EqInt64",
-				q:    bson.D{{"value", int64(42)}},
+				q:    bson.D{{"value", bson.D{{"$eq", int64(42)}}}},
 				IDs:  []string{"int64"},
 			},
 			{
 				name: "EqIntZero",
-				q:    bson.D{{"value", int64(0)}},
+				q:    bson.D{{"value", bson.D{{"$eq", int64(0)}}}},
 				IDs:  []string{"int64-zero"},
 			},
 			{
 				name: "EqIntMax",
-				q:    bson.D{{"value", int64(math.MaxInt64)}},
+				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MaxInt64)}}}},
 				IDs:  []string{"int64-max"},
 			},
 			{
 				name: "EqIntMin",
-				q:    bson.D{{"value", int64(math.MinInt64)}},
+				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MinInt64)}}}},
 				IDs:  []string{"int64-min"},
 			},
 		}
+
+		t.Run("EqNaN", func(t *testing.T) {
+			t.Parallel()
+
+			var result bson.M
+			err := collection.FindOne(ctx, bson.D{{"value", bson.D{{"$eq", math.NaN()}}}}).Decode(&result)
+			require.NoError(t, err)
+			if nan, ok := result["value"].(float64); ok {
+				assert.True(t, math.IsNaN(nan))
+			}
+		})
 
 		for _, tc := range testCases {
 			tc := tc
