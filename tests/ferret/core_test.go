@@ -102,6 +102,23 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
+			"array-embedded": primitive.A{
+				primitive.D{
+					primitive.E{Key: "score", Value: 42.13},
+					primitive.E{Key: "age", Value: int32(1000)},
+					primitive.E{Key: "document", Value: "abc"},
+				},
+				primitive.D{
+					primitive.E{Key: "document", Value: "def"},
+					primitive.E{Key: "score", Value: 42.13},
+					primitive.E{Key: "age", Value: int32(1000)},
+				},
+				primitive.D{
+					primitive.E{Key: "score", Value: int32(24)},
+					primitive.E{Key: "age", Value: int32(1002)},
+					primitive.E{Key: "document", Value: "jkl"},
+				},
+			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
@@ -217,6 +234,36 @@ func TestCore(t *testing.T) {
 			// documents
 			// TODO
 
+			// $elemMatch
+			{
+				name: "elemMatchGtScalar",
+				q: bson.D{{"value", bson.M{
+					"$elemMatch": bson.M{
+						"age":   bson.D{{"$gt", int32(999)}},
+						"score": int32(24),
+					},
+				}}},
+				IDs: []string{"array-embedded"},
+			},
+			{
+				name: "elemMatchLtScalarEmpty",
+				q: bson.D{{"value", bson.M{
+					"$elemMatch": bson.M{
+						"age":   bson.D{{"$lt", int32(999)}},
+						"score": int32(24),
+					},
+				}}},
+				IDs: []string{},
+			},
+			{
+				name: "elemMatchScalar",
+				q: bson.D{{"value", bson.M{
+					"$elemMatch": bson.M{
+						"score": int32(24),
+					},
+				}}},
+				IDs: []string{"array-embedded"},
+			},
 			// arrays
 			// $size
 			{
