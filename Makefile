@@ -1,4 +1,6 @@
-DB ?= ferretdb
+# one of: ferretdb, mongodb
+DB ?=
+
 TEST ?=
 
 all: fmt dance
@@ -12,6 +14,7 @@ env-up: env-up-detach                  ## Start environment
 	docker-compose logs --follow
 
 env-up-detach:
+	test $(DB)
 	docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach $(DB)
 
 env-pull:
@@ -21,7 +24,7 @@ env-logs:
 	docker-compose logs --no-color
 
 env-down:                              ## Stop environment
-	docker-compose down --remove-orphans
+	docker-compose down --remove-orphans --volumes
 
 init:                                  ## Install development tools
 	go mod tidy
