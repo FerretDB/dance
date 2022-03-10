@@ -102,12 +102,6 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
-			"array-of-maps": primitive.A{
-				primitive.D{
-					primitive.E{Key: "code", Value: int32(121081)},
-					primitive.E{Key: "document", Value: "zyx"},
-				},
-			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
@@ -223,19 +217,6 @@ func TestCore(t *testing.T) {
 			// documents
 			// TODO
 
-			// $elemMatch
-			{
-				name: "elemMatchFilterProjection",
-				q: bson.D{
-					primitive.E{Key: "name", Value: "array-four"},
-					primitive.E{Key: "value", Value: bson.M{
-						"$elemMatch": bson.M{
-							"code": int32(121081),
-						},
-					}},
-				},
-				IDs: []string{"array-of-maps"},
-			},
 			// arrays
 			// $size
 			{
