@@ -2,3 +2,7 @@
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
+[submodule "cla-assistant"]
+	path = tests/cla-assistant
+	url = https://github.com/cla-assistant/cla-assistant.git
+	branch = main

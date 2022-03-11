@@ -1,0 +1,7 @@
+---
+runner: nodejs
+results:
+  common:
+    stats:
+      expected_skip: 1
+      expected_pass: 1
