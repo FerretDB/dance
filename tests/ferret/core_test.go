@@ -300,8 +300,13 @@ func TestCore(t *testing.T) {
 			},
 			{
 				name: "BitsAllClear",
-				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(42)}}}},
 				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAllClearEmptyResult",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
+				IDs:  []string{},
 			},
 		}
 
