@@ -298,6 +298,11 @@ func TestCore(t *testing.T) {
 						`consider using $getField or $setField.`,
 				},
 			},
+			{
+				name: "BitsAllClear",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
+				IDs:  []string{"int32"},
+			},
 		}
 
 		for _, tc := range testCases {
