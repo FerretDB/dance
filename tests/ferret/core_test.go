@@ -102,6 +102,13 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
+			"array-embedded": primitive.A{
+				primitive.D{
+					primitive.E{Key: "score", Value: int32(24)},
+					primitive.E{Key: "age", Value: int32(1002)},
+					primitive.E{Key: "document", Value: "jkl"},
+				},
+			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
@@ -217,6 +224,15 @@ func TestCore(t *testing.T) {
 			// documents
 			// TODO
 
+			// $elemMatch
+			{
+				name: "elemMatchWithFilter",
+				q: bson.D{
+					bson.E{Key: "name", Value: "array-embedded"},
+					bson.E{Key: "value", Value: bson.D{{"$elemMatch", bson.M{"score": int32(24)}},
+				},
+				IDs: []string{"array-embedded"},
+			},
 			// arrays
 			// $size
 			{
