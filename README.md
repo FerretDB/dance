@@ -4,4 +4,4 @@
 
 FerretDB integration testing tool named after [Ferret war dance](https://en.wikipedia.org/wiki/Weasel_war_dance).
 
-Work-in-progress.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for running instructions.
