@@ -107,7 +107,7 @@ func TestCore(t *testing.T) {
 		// TODO keep in sync with test_db? https://github.com/FerretDB/dance/issues/43
 		data := map[string]any{
 			"double":                   42.13,
-			"double-zero":              0.0,
+			"double-zero":              0.0000001,
 			"double-max":               math.MaxFloat64,
 			"double-smallest":          math.SmallestNonzeroFloat64,
 			"double-positive-infinity": math.Inf(+1),
@@ -216,7 +216,7 @@ func TestCore(t *testing.T) {
 			},
 			{
 				name: "EqDoubleZero",
-				q:    bson.D{{"value", bson.D{{"$eq", 0.0}}}},
+				q:    bson.D{{"value", bson.D{{"$eq", 0.0000001}}}},
 				IDs:  []string{"double-zero"},
 			},
 
@@ -552,7 +552,32 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"regex"},
 			},
 
-			// int
+			// int32
+
+			// $eq
+
+			{
+				name: "EqInt32",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(42)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "EqInt32Zero",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(0)}}}},
+				IDs:  []string{"int32-zero"},
+			},
+			{
+				name: "EqInt32Max",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MaxInt32)}}}},
+				IDs:  []string{"int32-max"},
+			},
+			{
+				name: "EqInt32Min",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MinInt32)}}}},
+				IDs:  []string{"int32-min"},
+			},
+
+			// int64
 
 			// $eq
 
@@ -562,32 +587,21 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"int64"},
 			},
 			{
-				name: "EqIntZero",
+				name: "EqInt64Zero",
 				q:    bson.D{{"value", bson.D{{"$eq", int64(0)}}}},
 				IDs:  []string{"int64-zero"},
 			},
 			{
-				name: "EqIntMax",
+				name: "EqInt64Max",
 				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MaxInt64)}}}},
 				IDs:  []string{"int64-max"},
 			},
 			{
-				name: "EqIntMin",
+				name: "EqInt64Min",
 				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MinInt64)}}}},
 				IDs:  []string{"int64-min"},
 			},
 		}
-
-		t.Run("EqNaN", func(t *testing.T) {
-			t.Parallel()
-
-			var result bson.M
-			err := collection.FindOne(ctx, bson.D{{"value", bson.D{{"$eq", math.NaN()}}}}).Decode(&result)
-			require.NoError(t, err)
-			if nan, ok := result["value"].(float64); ok {
-				assert.True(t, math.IsNaN(nan))
-			}
-		})
 
 		for _, tc := range testCases {
 			tc := tc
@@ -646,6 +660,17 @@ func TestCore(t *testing.T) {
 				}
 			})
 		}
+
+		t.Run("EqNaN", func(t *testing.T) {
+			t.Parallel()
+
+			var result bson.M
+			err := collection.FindOne(ctx, bson.D{{"value", bson.D{{"$eq", math.NaN()}}}}).Decode(&result)
+			require.NoError(t, err)
+			if nan, ok := result["value"].(float64); ok {
+				assert.True(t, math.IsNaN(nan))
+			}
+		})
 	})
 
 	t.Run("InsertOneFindOne", func(t *testing.T) {
