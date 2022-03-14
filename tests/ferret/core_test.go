@@ -324,7 +324,7 @@ func TestCore(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `value takes an Array, a number, or a BinData but received: $bitsAllClear: "123"`,
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: \"123\"",
 				},
 			},
 		}
