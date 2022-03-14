@@ -310,12 +310,12 @@ func TestCore(t *testing.T) {
 			},
 			{
 				name: "BitsAllClearInt64",
-				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int64(21)}}}},
+				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
 				IDs:  []string{"int64"},
 			},
 			{
 				name: "BitsAllClearEmptyResultInt64",
-				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int64(53)}}}},
+				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
 				IDs:  []string{},
 			},
 			{
