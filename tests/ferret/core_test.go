@@ -228,8 +228,10 @@ func TestCore(t *testing.T) {
 			{
 				name: "elemMatchWithFilter",
 				q: bson.D{
-					bson.E{Key: "name", Value: "array-embedded"},
-					bson.E{Key: "value", Value: bson.D{{"$elemMatch", bson.M{"score": int32(24)}}}},
+					{"name", "array-embedded"},
+					{"value", bson.D{{
+						"$elemMatch", bson.D{{"score", int32(24)}},
+					}}},
 				},
 				IDs: []string{"array-embedded"},
 			},
