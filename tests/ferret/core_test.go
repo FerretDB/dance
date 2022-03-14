@@ -214,6 +214,22 @@ func TestCore(t *testing.T) {
 				},
 			*/
 
+			// int32
+
+			{
+				name: "FindManyInt32",
+				q:    bson.D{{"value", int32(42)}},
+				IDs:  []string{"int32", "array", "int64"},
+			},
+
+			//int64
+
+			{
+				name: "FindManyInt64",
+				q:    bson.D{{"value", int64(42)}},
+				IDs:  []string{"int32", "array", "int64"},
+			},
+
 			// documents
 			// TODO
 
