@@ -104,9 +104,9 @@ func TestCore(t *testing.T) {
 			"array-empty": primitive.A{},
 			"array-embedded": primitive.A{
 				primitive.D{
-					primitive.E{Key: "score", Value: int32(24)},
 					primitive.E{Key: "age", Value: int32(1002)},
 					primitive.E{Key: "document", Value: "jkl"},
+					primitive.E{Key: "score", Value: int32(24)},
 				},
 			},
 
@@ -229,7 +229,7 @@ func TestCore(t *testing.T) {
 				name: "elemMatchWithFilter",
 				q: bson.D{
 					bson.E{Key: "name", Value: "array-embedded"},
-					bson.E{Key: "value", Value: bson.D{{"$elemMatch", bson.M{"score": int32(24)}}},
+					bson.E{Key: "value", Value: bson.D{{"$elemMatch", bson.M{"score": int32(24)}}}},
 				},
 				IDs: []string{"array-embedded"},
 			},
