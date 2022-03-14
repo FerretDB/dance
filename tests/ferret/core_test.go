@@ -54,7 +54,6 @@ func TestCore(t *testing.T) {
 			var writeErr mongo.BulkWriteException
 			assert.ErrorAs(t, err, &writeErr)
 			assert.True(t, writeErr.HasErrorCode(11000))
-
 			cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 			require.NoError(t, err)
 			require.NoError(t, cursor.All(ctx, &docs))
@@ -104,12 +103,21 @@ func TestCore(t *testing.T) {
 			"array-empty": primitive.A{},
 			"array-embedded": primitive.A{
 				primitive.D{
+					primitive.E{Key: "age", Value: int32(1000)},
+					primitive.E{Key: "document", Value: "abc"},
+					primitive.E{Key: "score", Value: float32(42.13)},
+				},
+				primitive.D{
+					primitive.E{Key: "age", Value: int32(1000)},
+					primitive.E{Key: "document", Value: "def"},
+					primitive.E{Key: "score", Value: float32(42.13)},
+				},
+				primitive.D{
 					primitive.E{Key: "age", Value: int32(1002)},
 					primitive.E{Key: "document", Value: "jkl"},
 					primitive.E{Key: "score", Value: int32(24)},
 				},
 			},
-
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
 
@@ -160,6 +168,8 @@ func TestCore(t *testing.T) {
 		testCases := []struct {
 			name string // TODO move to map key
 			q    bson.D
+			o    *options.FindOptions // options
+			v    any
 			IDs  []string
 			err  error
 		}{
@@ -228,11 +238,17 @@ func TestCore(t *testing.T) {
 			{
 				name: "elemMatchWithFilter",
 				q: bson.D{
-					{"name", "array-embedded"},
-					{"value", bson.D{{
-						"$elemMatch", bson.D{{"score", int32(24)}},
-					}}},
+					{"_id", "array-embedded"},
 				},
+				o: options.Find().SetProjection(bson.D{
+					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
+				}),
+				v: bson.A{
+					bson.D{
+						{"age", int32(1002)},
+						{"document", "jkl"},
+						{"score", int32(24)},
+					}},
 				IDs: []string{"array-embedded"},
 			},
 			// arrays
@@ -332,7 +348,13 @@ func TestCore(t *testing.T) {
 					t.Fatal("exactly one of IDs or err must be set")
 				}
 
-				cursor, err := collection.Find(ctx, tc.q, options.Find().SetSort(bson.D{{"value", 1}}))
+				var cursor *mongo.Cursor
+				var err error
+				opts := options.Find().SetSort(bson.D{{"value", 1}})
+				if tc.o != nil {
+					opts = tc.o
+				}
+				cursor, err = collection.Find(ctx, tc.q, opts)
 
 				if tc.err != nil {
 					require.Error(t, err)
@@ -344,10 +366,14 @@ func TestCore(t *testing.T) {
 				require.NotNil(t, cursor)
 
 				var expected []bson.D
-				for _, id := range tc.IDs {
-					v, ok := data[id]
-					require.True(t, ok)
-					expected = append(expected, bson.D{{"_id", id}, {"value", v}})
+				if tc.v != nil {
+					expected = append(expected, bson.D{{"_id", tc.IDs[0]}, {"value", tc.v}})
+				} else {
+					for _, id := range tc.IDs {
+						v, ok := data[id]
+						require.True(t, ok)
+						expected = append(expected, bson.D{{"_id", id}, {"value", v}})
+					}
 				}
 
 				var actual []bson.D
