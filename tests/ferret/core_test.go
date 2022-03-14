@@ -308,6 +308,25 @@ func TestCore(t *testing.T) {
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
 				IDs:  []string{},
 			},
+			{
+				name: "BitsAllClearInt64",
+				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int64(21)}}}},
+				IDs:  []string{"int64"},
+			},
+			{
+				name: "BitsAllClearEmptyResultInt64",
+				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int64(53)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAllClearString",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", "123"}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `value takes an Array, a number, or a BinData but received: $bitsAllClear: "123"`,
+				},
+			},
 		}
 
 		for _, tc := range testCases {
