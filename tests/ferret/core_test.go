@@ -309,16 +309,6 @@ func TestCore(t *testing.T) {
 				IDs:  []string{},
 			},
 			{
-				name: "BitsAllClearInt64",
-				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
-				IDs:  []string{"int64"},
-			},
-			{
-				name: "BitsAllClearEmptyResultInt64",
-				q:    bson.D{{"_id", "int64"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
-				IDs:  []string{},
-			},
-			{
 				name: "BitsAllClearString",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", "123"}}}},
 				err: mongo.CommandError{
