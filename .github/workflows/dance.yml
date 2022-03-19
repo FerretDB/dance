@@ -40,7 +40,7 @@ jobs:
         uses: FerretDB/github-actions/extract-docker-tag@main
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
