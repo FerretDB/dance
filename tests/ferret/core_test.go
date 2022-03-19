@@ -375,4 +375,14 @@ func TestCore(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("CommandsAreCaseSensitive", func(t *testing.T) {
+		t.Parallel()
+
+		res := db.RunCommand(ctx, bson.D{{"listcollections", 1}})
+		assert.Error(t, res.Err())
+
+		res = db.RunCommand(ctx, bson.D{{"listCollections", 1}})
+		assert.NoError(t, res.Err())
+	})
 }
