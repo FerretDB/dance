@@ -376,7 +376,7 @@ func TestCore(t *testing.T) {
 		}
 	})
 
-	t.Run("CommandsAreCaseSensitive", func(t *testing.T) {
+	t.Run("MostCommandsAreCaseSensitive", func(t *testing.T) {
 		t.Parallel()
 
 		res := db.RunCommand(ctx, bson.D{{"listcollections", 1}})
@@ -385,6 +385,12 @@ func TestCore(t *testing.T) {
 		assert.Equal(t, mongo.CommandError{Code: 59, Name: "CommandNotFound", Message: `no such command: 'listcollections'`}, err)
 
 		res = db.RunCommand(ctx, bson.D{{"listCollections", 1}})
+		assert.NoError(t, res.Err())
+
+		// special case
+		res = db.RunCommand(ctx, bson.D{{"ismaster", 1}})
+		assert.NoError(t, res.Err())
+		res = db.RunCommand(ctx, bson.D{{"isMaster", 1}})
 		assert.NoError(t, res.Err())
 	})
 }
