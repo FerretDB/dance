@@ -250,6 +250,21 @@ func TestCore(t *testing.T) {
 				},
 				IDs: []string{"document-diverse"},
 			},
+			{
+				name: "projectionBothError",
+				q: bson.D{
+					{"_id", "document-diverse"},
+				},
+				o: options.Find().SetProjection(bson.D{
+					{"document_id", false},
+					{"array", true},
+				}),
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `projection can be either inclusive or exclusive`,
+				},
+			},
 			// arrays
 			// $size
 			{
