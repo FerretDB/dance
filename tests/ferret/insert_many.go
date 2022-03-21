@@ -27,7 +27,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var TestInsertMany = func(ctx context.Context, db *mongo.Database, t *testing.T) func(t *testing.T) {
+func TestInsertMany(ctx context.Context, db *mongo.Database, t *testing.T) func(t *testing.T) {
 	return func(t *testing.T) {
 		t.Skip("TODO https://github.com/FerretDB/FerretDB/issues/200")
 		t.Parallel()

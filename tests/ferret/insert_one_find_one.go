@@ -28,7 +28,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var TestInsertOneFindOne = func(ctx context.Context, db *mongo.Database, t *testing.T) func(t *testing.T) {
+func TestInsertOneFindOne(ctx context.Context, db *mongo.Database, t *testing.T) func(t *testing.T) {
 	return func(t *testing.T) {
 		t.Parallel()
 
