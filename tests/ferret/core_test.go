@@ -98,26 +98,20 @@ func TestCore(t *testing.T) {
 
 			"document":       map[string]any{"document": int32(42)},
 			"document-empty": map[string]any{},
+			"document-diverse": map[string]any{
+				"array":       []any{1, "any", true, 42.13, 0, nil},
+				"last_at":     time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC),
+				"document_id": 1234,
+			},
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
-			"array-embedded": primitive.A{
-				primitive.D{
-					primitive.E{Key: "age", Value: int32(1000)},
-					primitive.E{Key: "document", Value: "abc"},
-					primitive.E{Key: "score", Value: float32(42.13)},
-				},
-				primitive.D{
-					primitive.E{Key: "age", Value: int32(1000)},
-					primitive.E{Key: "document", Value: "def"},
-					primitive.E{Key: "score", Value: float32(42.13)},
-				},
-				primitive.D{
-					primitive.E{Key: "age", Value: int32(1002)},
-					primitive.E{Key: "document", Value: "jkl"},
-					primitive.E{Key: "score", Value: int32(24)},
-				},
+			"array-embedded": []any{
+				map[string]any{"document": "abc", "score": 42.13, "age": 1000},
+				map[string]any{"document": "def", "score": 42.13, "age": 1000},
+				map[string]any{"document": "jkl", "score": 24, "age": 1002},
 			},
+
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
 
@@ -234,22 +228,32 @@ func TestCore(t *testing.T) {
 			// documents
 			// TODO
 
-			// $elemMatch
+			// projection
 			{
-				name: "elemMatchWithFilter",
+				name: "projectionInclusion",
 				q: bson.D{
-					{"_id", "array-embedded"},
+					{"_id", "document-diverse"},
 				},
-				o: options.Find().SetProjection(bson.D{
-					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
-				}),
+				o: options.Find().SetProjection(bson.D{{"document_id", int32(1)}}),
 				v: bson.A{
 					bson.D{
-						{"age", int32(1002)},
-						{"document", "jkl"},
-						{"score", int32(24)},
+						{"document_id", int32(1234)},
 					}},
-				IDs: []string{"array-embedded"},
+				IDs: []string{"document-diverse"},
+			},
+			{
+				name: "projectionExclusion",
+				q: bson.D{
+					{"_id", "document-diverse"},
+				},
+				o: options.Find().SetProjection(bson.D{{"document_id", false}}),
+				v: bson.A{
+					bson.D{
+						{"array", bson.A{1, "any", true, 42.13, 0, nil}},
+						{"last_at", time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC)},
+					},
+				},
+				IDs: []string{"document-diverse"},
 			},
 			// arrays
 			// $size
