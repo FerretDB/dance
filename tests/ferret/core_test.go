@@ -106,11 +106,6 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
-			"array-embedded": []any{
-				map[string]any{"document": "abc", "score": 42.13, "age": 1000},
-				map[string]any{"document": "def", "score": 42.13, "age": 1000},
-				map[string]any{"document": "jkl", "score": 24, "age": 1002},
-			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{},
@@ -234,7 +229,7 @@ func TestCore(t *testing.T) {
 				q: bson.D{
 					{"_id", "document-diverse"},
 				},
-				o: options.Find().SetProjection(bson.D{{"document_id", int32(1)}}),
+				o: options.Find().SetProjection(bson.D{{"document_id", int32(11)}}),
 				v: bson.A{
 					bson.D{
 						{"document_id", int32(1234)},
