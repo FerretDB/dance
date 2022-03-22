@@ -365,7 +365,7 @@ func TestCore(t *testing.T) {
 			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
 
-				if (tc.IDs == nil) == (tc.err == nil) {
+				if (tc.IDs == nil) == (tc.err == nil) == (tc.v == nil) {
 					t.Fatal("exactly one of IDs or err must be set")
 				}
 
