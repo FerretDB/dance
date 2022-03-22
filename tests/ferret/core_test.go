@@ -243,7 +243,7 @@ func TestCore(t *testing.T) {
 				},
 			},
 			{
-				name: "ProjectionBothError",
+				name: "ProjectionBothErrorInclusion",
 				q: bson.D{
 					{"_id", "document-diverse"},
 				},
@@ -252,9 +252,24 @@ func TestCore(t *testing.T) {
 					{"array", true},
 				}),
 				err: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
-					Message: `projection must contain only inclusions or exclusions`,
+					Code:    31253,
+					Name:    "ErrorCode(31253)",
+					Message: `Cannot do exclusion on field array in inclusion projection`,
+				},
+			},
+			{
+				name: "ProjectionBothErrorExclusion",
+				q: bson.D{
+					{"_id", "document-diverse"},
+				},
+				o: options.Find().SetProjection(bson.D{
+					{"array", true},
+					{"document_id", false},
+				}),
+				err: mongo.CommandError{
+					Code:    31253,
+					Name:    "ErrorCode(31253)",
+					Message: `Cannot do inclusion on field array in exclusion projection`,
 				},
 			},
 			// arrays
