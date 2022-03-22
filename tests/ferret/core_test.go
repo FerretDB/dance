@@ -151,7 +151,7 @@ func TestCore(t *testing.T) {
 		}
 
 		// o is FindOptions, it's used in projections testing.
-		// v is a value and it is also is being used in the projections testing,
+		// v is a value and it is also being used in the projections testing,
 		// since the resulting value for projection differs from the document value.
 		// It's being checked only one of (v, IDs, err).
 		testCases := []struct {
