@@ -98,11 +98,6 @@ func TestCore(t *testing.T) {
 
 			"document":       map[string]any{"document": int32(42)},
 			"document-empty": map[string]any{},
-			"document-diverse": map[string]any{
-				"array":       []any{1, "any", true, 42.13, 0, nil},
-				"last_at":     time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC),
-				"document_id": 1234,
-			},
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
