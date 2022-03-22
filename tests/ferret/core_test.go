@@ -252,7 +252,7 @@ func TestCore(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    31254,
 					Name:    "Location31254",
-					Message: `Cannot do exclusion on field array in inclusion projection`,
+					Message: `Cannot do inclusion on field array in exclusion projection`,
 				},
 			},
 			{
@@ -267,7 +267,7 @@ func TestCore(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    31253,
 					Name:    "Location31253",
-					Message: `Cannot do inclusion on field document_id in exclusion projection`,
+					Message: `Cannot do exclusion on field document_id in inclusion projection`,
 				},
 			},
 			// arrays
