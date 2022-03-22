@@ -159,7 +159,7 @@ func TestCore(t *testing.T) {
 			q    bson.D
 			o    *options.FindOptions
 			v    bson.D
-			IDs  []string
+			IDs  []string // expected values IDs; useful when projections are not used
 			err  error
 		}{
 			// doubles
