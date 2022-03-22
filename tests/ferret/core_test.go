@@ -15,6 +15,7 @@
 package ferret
 
 import (
+	"fmt"
 	"math"
 	"testing"
 	"time"
@@ -302,7 +303,9 @@ func TestCore(t *testing.T) {
 		for _, tc := range testCases {
 			tc := tc
 
-			require.NotEmpty(t, tc.name)
+			if tc.name == "" {
+				tc.name = fmt.Sprint(tc.q)
+			}
 
 			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()

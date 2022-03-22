@@ -15,7 +15,6 @@
 package ferret
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -78,9 +77,7 @@ func TestAggregate(t *testing.T) {
 		for _, tc := range testCases {
 			tc := tc
 
-			if tc.name == "" {
-				tc.name = fmt.Sprint(tc.sort)
-			}
+			require.NotEmpty(t, tc.name)
 
 			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
