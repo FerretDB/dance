@@ -158,7 +158,7 @@ func TestCore(t *testing.T) {
 			name string // TODO move to map key
 			q    bson.D
 			o    *options.FindOptions // if empty, defaults to sorting by value for stable tests
-			v    bson.D               // expected value; useful for testing projections
+			v    []bson.D             // expected value; useful for testing projections
 			IDs  []string             // expected values IDs; useful when projections are not used
 			err  error
 		}{
@@ -238,9 +238,7 @@ func TestCore(t *testing.T) {
 					{"_id", "double"},
 				},
 				o: options.Find().SetProjection(bson.D{{"value", false}}),
-				v: bson.D{
-					{"_id", "double"},
-				},
+				v: []bson.D{{{"_id", "double"}}},
 			},
 			{
 				name: "ProjectionBothErrorInclusion",
@@ -387,7 +385,7 @@ func TestCore(t *testing.T) {
 
 				var expected []bson.D
 				if tc.v != nil {
-					expected = []bson.D{tc.v}
+					expected = tc.v
 				} else {
 					for _, id := range tc.IDs {
 						v, ok := data[id]
