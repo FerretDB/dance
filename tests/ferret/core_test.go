@@ -158,7 +158,7 @@ func TestCore(t *testing.T) {
 			name string // TODO move to map key
 			q    bson.D
 			o    *options.FindOptions
-			v    bson.D
+			v    bson.D // expected value; useful for testing projections
 			IDs  []string // expected values IDs; useful when projections are not used
 			err  error
 		}{
