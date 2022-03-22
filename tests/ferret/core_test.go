@@ -54,6 +54,7 @@ func TestCore(t *testing.T) {
 			var writeErr mongo.BulkWriteException
 			assert.ErrorAs(t, err, &writeErr)
 			assert.True(t, writeErr.HasErrorCode(11000))
+
 			cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 			require.NoError(t, err)
 			require.NoError(t, cursor.All(ctx, &docs))
