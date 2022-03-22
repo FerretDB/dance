@@ -224,11 +224,7 @@ func TestCore(t *testing.T) {
 				q: bson.D{
 					{"_id", "double"},
 				},
-				o: options.Find().SetProjection(bson.D{{"value", int32(11)}}),
-				v: bson.D{
-					{"_id", "double"},
-					{"value", 42.13},
-				},
+				o:   options.Find().SetProjection(bson.D{{"value", int32(11)}}),
 				IDs: []string{"double"},
 			},
 			{
