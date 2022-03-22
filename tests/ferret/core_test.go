@@ -158,7 +158,7 @@ func TestCore(t *testing.T) {
 			name string // TODO move to map key
 			q    bson.D
 			o    *options.FindOptions // options
-			v    any
+			v    bson.D
 			IDs  []string
 			err  error
 		}{
@@ -225,33 +225,30 @@ func TestCore(t *testing.T) {
 
 			// projection
 			{
-				name: "projectionInclusion",
+				name: "ProjectionInclusion",
 				q: bson.D{
-					{"_id", "document-diverse"},
+					{"_id", "double"},
 				},
-				o: options.Find().SetProjection(bson.D{{"document_id", int32(11)}}),
-				v: bson.A{
-					bson.D{
-						{"document_id", int32(1234)},
-					}},
-				IDs: []string{"document-diverse"},
+				o: options.Find().SetProjection(bson.D{{"value", int32(11)}}),
+				v: bson.D{
+					{"_id", "double"},
+					{"value", 42.13},
+				},
+				IDs: []string{"double"},
 			},
 			{
-				name: "projectionExclusion",
+				name: "ProjectionExclusion",
 				q: bson.D{
-					{"_id", "document-diverse"},
+					{"_id", "double"},
 				},
-				o: options.Find().SetProjection(bson.D{{"document_id", false}}),
-				v: bson.A{
-					bson.D{
-						{"array", bson.A{1, "any", true, 42.13, 0, nil}},
-						{"last_at", time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC)},
-					},
+				o: options.Find().SetProjection(bson.D{{"value", false}}),
+				v: bson.D{
+					{"_id", "double"},
 				},
-				IDs: []string{"document-diverse"},
+				IDs: []string{"double"},
 			},
 			{
-				name: "projectionBothError",
+				name: "ProjectionBothError",
 				q: bson.D{
 					{"_id", "document-diverse"},
 				},
@@ -262,7 +259,7 @@ func TestCore(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `projection can be either inclusive or exclusive`,
+					Message: `projection must contain only inclusions or exclusions`,
 				},
 			},
 			// arrays
@@ -380,12 +377,13 @@ func TestCore(t *testing.T) {
 				require.NotNil(t, cursor)
 
 				var expected []bson.D
-				if tc.v != nil {
-					expected = append(expected, bson.D{{"_id", tc.IDs[0]}, {"value", tc.v}})
-				} else {
-					for _, id := range tc.IDs {
-						v, ok := data[id]
-						require.True(t, ok)
+
+				for _, id := range tc.IDs {
+					v, ok := data[id]
+					require.True(t, ok)
+					if tc.v != nil {
+						expected = append(expected, tc.v)
+					} else {
 						expected = append(expected, bson.D{{"_id", id}, {"value", v}})
 					}
 				}
