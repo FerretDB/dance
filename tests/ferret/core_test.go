@@ -371,9 +371,8 @@ func TestCore(t *testing.T) {
 
 				var cursor *mongo.Cursor
 				var err error
-				opts := options.Find().SetSort(bson.D{{"value", 1}})
-				if tc.o != nil {
-					opts = tc.o
+				if tc.o == nil {
+					tc.o = options.Find().SetSort(bson.D{{"value", 1}})
 				}
 				cursor, err = collection.Find(ctx, tc.q, opts)
 
