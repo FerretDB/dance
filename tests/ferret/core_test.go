@@ -369,13 +369,12 @@ func TestCore(t *testing.T) {
 				require.NotNil(t, cursor)
 
 				var expected []bson.D
-
-				for _, id := range tc.IDs {
-					v, ok := data[id]
-					require.True(t, ok)
-					if tc.v != nil {
-						expected = append(expected, tc.v)
-					} else {
+				if tc.v != nil {
+					expected = append(expected, tc.v)
+				} else {
+					for _, id := range tc.IDs {
+						v, ok := data[id]
+						require.True(t, ok)
 						expected = append(expected, bson.D{{"_id", id}, {"value", v}})
 					}
 				}
