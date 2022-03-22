@@ -158,8 +158,8 @@ func TestCore(t *testing.T) {
 			name string // TODO move to map key
 			q    bson.D
 			o    *options.FindOptions // if empty, defaults to sorting by value for stable tests
-			v    bson.D // expected value; useful for testing projections
-			IDs  []string // expected values IDs; useful when projections are not used
+			v    bson.D               // expected value; useful for testing projections
+			IDs  []string             // expected values IDs; useful when projections are not used
 			err  error
 		}{
 			// doubles
@@ -366,7 +366,7 @@ func TestCore(t *testing.T) {
 				t.Parallel()
 
 				if (tc.IDs == nil) == (tc.err == nil) == (tc.v == nil) {
-					t.Fatal("exactly one of IDs or err must be set")
+					t.Fatal("exactly one of IDs, err or v must be set")
 				}
 
 				var cursor *mongo.Cursor
@@ -374,7 +374,7 @@ func TestCore(t *testing.T) {
 				if tc.o == nil {
 					tc.o = options.Find().SetSort(bson.D{{"value", 1}})
 				}
-				cursor, err = collection.Find(ctx, tc.q, opts)
+				cursor, err = collection.Find(ctx, tc.q, tc.o)
 
 				if tc.err != nil {
 					require.Error(t, err)
