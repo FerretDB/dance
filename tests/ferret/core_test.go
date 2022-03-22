@@ -152,7 +152,7 @@ func TestCore(t *testing.T) {
 		testCases := []struct {
 			name string // TODO move to map key
 			q    bson.D
-			o    *options.FindOptions // options
+			o    *options.FindOptions
 			v    bson.D
 			IDs  []string
 			err  error
