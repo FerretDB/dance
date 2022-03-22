@@ -64,8 +64,13 @@ func TestAggregate(t *testing.T) {
 				IDs:  []string{"3", "5", "1", "4", "2"},
 			},
 			{
-				name: "SortBoroughsAndNamesPassInt64Value",
-				sort: bson.D{{"borough", int64(1)}, {"name", int64(1)}},
+				name: "SortBoroughsPassInt64Value",
+				sort: bson.D{{"borough", int64(1)}},
+				IDs:  []string{"3", "5", "1", "4", "2"},
+			},
+			{
+				name: "SortBoroughsPassFloat64Value",
+				sort: bson.D{{"borough", float64(1.0)}, {"name", int64(1)}},
 				IDs:  []string{"3", "5", "1", "4", "2"},
 			},
 		}
