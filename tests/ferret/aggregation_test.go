@@ -84,7 +84,7 @@ func TestAggregate(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: "failed to determine $sort type",
+					Message: `Illegal key in $sort specification: _id: "123"`,
 				},
 			},
 		}
@@ -123,7 +123,6 @@ func TestAggregate(t *testing.T) {
 						}
 
 						actualIDs = append(actualIDs, v)
-						break
 					}
 				}
 
