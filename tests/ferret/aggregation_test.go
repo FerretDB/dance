@@ -116,14 +116,17 @@ func TestAggregate(t *testing.T) {
 				require.NoError(t, cursor.All(ctx, &actual))
 				var actualIDs []string
 				for _, d := range actual {
-					if v, ok := d.Map()["_id"]; ok {
-						v, ok := v.(string)
-						if !ok {
-							t.Fatal("bad _id value", v)
-						}
-
-						actualIDs = append(actualIDs, v)
+					v, ok := d.Map()["_id"]
+					if !ok {
+						continue
 					}
+
+					v1, ok := v.(string)
+					if !ok {
+						t.Fatal("bad _id value", v1)
+					}
+
+					actualIDs = append(actualIDs, v1)
 				}
 
 				assert.Equal(t, tc.IDs, actualIDs)
