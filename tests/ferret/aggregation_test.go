@@ -82,8 +82,8 @@ func TestAggregate(t *testing.T) {
 				name: "SortBoroughsPassString",
 				sort: bson.D{{"_id", "123"}},
 				err: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
+					Code:    15974,
+					Name:    "Location15974",
 					Message: `Illegal key in $sort specification: _id: "123"`,
 				},
 			},
