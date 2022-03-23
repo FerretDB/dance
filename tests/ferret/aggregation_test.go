@@ -20,6 +20,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -72,6 +73,20 @@ func TestAggregate(t *testing.T) {
 				sort: bson.D{{"borough", float64(1.0)}, {"name", int64(1)}},
 				IDs:  []string{"3", "5", "1", "4", "2"},
 			},
+			{
+				name: "SortBoroughsPassNegativeValue",
+				sort: bson.D{{"_id", int32(-1)}},
+				IDs:  []string{"5", "4", "3", "2", "1"},
+			},
+			{
+				name: "SortBoroughsPassString",
+				sort: bson.D{{"_id", "123"}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "failed to determine $sort type",
+				},
+			},
 		}
 
 		for _, tc := range testCases {
@@ -101,16 +116,14 @@ func TestAggregate(t *testing.T) {
 				require.NoError(t, cursor.All(ctx, &actual))
 				var actualIDs []string
 				for _, d := range actual {
-					for k, v := range d.Map() {
-						if k == "_id" {
-							v, ok := v.(string)
-							if !ok {
-								t.Fatal("bad _id value", v)
-							}
-
-							actualIDs = append(actualIDs, v)
-							break
+					if v, ok := d.Map()["_id"]; ok {
+						v, ok := v.(string)
+						if !ok {
+							t.Fatal("bad _id value", v)
 						}
+
+						actualIDs = append(actualIDs, v)
+						break
 					}
 				}
 
