@@ -373,13 +373,17 @@ func TestCore(t *testing.T) {
 				err: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: 1.2",
+					Message: "Expected an integer: $bitsAllClear: 1.2",
 				},
 			},
 			{
 				name: "BitsAllClearPassNegativeValue",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(-1)}}}},
-				IDs:  []string{},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "Expected a positive number in: $bitsAllClear: -1",
+				},
 			},
 		}
 
