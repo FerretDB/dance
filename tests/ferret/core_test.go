@@ -279,9 +279,13 @@ func TestCore(t *testing.T) {
 					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
 				}),
 				v: []bson.D{{
-					{"age", int32(1002)},
-					{"document", "jkl"},
-					{"score", int32(24)},
+					{"_id", "array-embedded"},
+					{"value", bson.A{bson.D{
+						{"document", "jkl"},
+						{"score", int32(24)},
+						{"age", int32(1002)},
+					}},
+					},
 				}},
 			},
 
