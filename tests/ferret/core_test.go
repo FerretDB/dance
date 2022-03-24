@@ -103,9 +103,9 @@ func TestCore(t *testing.T) {
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
 			"array-embedded": []any{
-				map[string]any{"document": "abc", "score": 42.13, "age": 1000},
-				map[string]any{"document": "def", "score": 42.13, "age": 1000},
-				map[string]any{"document": "jkl", "score": 24, "age": 1002},
+				map[string]any{"age": 1000, "document": "abc", "score": 42.13},
+				map[string]any{"age": 1000, "document": "def", "score": 42.13},
+				map[string]any{"age": 1002, "document": "jkl", "score": 24},
 			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
@@ -281,9 +281,9 @@ func TestCore(t *testing.T) {
 				v: []bson.D{{
 					{"_id", "array-embedded"},
 					{"value", bson.A{bson.D{
+						{"age", int32(1002)},
 						{"document", "jkl"},
 						{"score", int32(24)},
-						{"age", int32(1002)},
 					}},
 					},
 				}},
