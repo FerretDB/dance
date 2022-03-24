@@ -380,8 +380,8 @@ func TestCore(t *testing.T) {
 				name: "BitsAllClearPassNegativeValue",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(-1)}}}},
 				err: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
+					Code:    9,
+					Name:    "FailedToParse",
 					Message: "Expected a positive number in: $bitsAllClear: -1",
 				},
 			},
