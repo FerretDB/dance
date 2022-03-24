@@ -29,8 +29,11 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
+	arg := []string{"clean", "testcache"}
+	cmd := exec.Command("go", arg...)
+
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
-	cmd := exec.Command("go", args...)
+	cmd = exec.Command("go", args...)
 	cmd.Dir = dir
 	cmd.Stderr = os.Stderr
 	p, err := cmd.StdoutPipe()
