@@ -367,6 +367,20 @@ func TestCore(t *testing.T) {
 					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: \"123\"",
 				},
 			},
+			{
+				name: "BitsAllClearPassFloat",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", 1.2}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: 1.2",
+				},
+			},
+			{
+				name: "BitsAllClearPassNegativeValue",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(-1)}}}},
+				IDs:  []string{},
+			},
 		}
 
 		for _, tc := range testCases {
