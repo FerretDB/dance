@@ -371,9 +371,9 @@ func TestCore(t *testing.T) {
 				name: "BitsAllClearPassFloat",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", 1.2}}}},
 				err: mongo.CommandError{
-					Code:    9,
-					Name:    "FailedToParse",
-					Message: "Expected an integer: $bitsAllClear: 1.2",
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: 1.2",
 				},
 			},
 			{
