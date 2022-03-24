@@ -11,7 +11,7 @@ on:
 env:
   GOPATH: /home/runner/go
   GOCACHE: /home/runner/go/cache
-  GOMODCACHE: /home/runner/go/cache/mod
+  GOMODCACHE: /home/runner/go/mod
   GOPROXY: https://proxy.golang.org # remove direct
 
 jobs:
@@ -30,19 +30,19 @@ jobs:
           - mongo-go-driver
 
     steps:
-      - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@main
-        with:
-          cache-key: dance
-
       - name: Extract Docker image name and tag
         id: extract
         uses: FerretDB/github-actions/extract-docker-tag@main
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
+
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
 
       - name: Start environment
         run: make env-up-detach
