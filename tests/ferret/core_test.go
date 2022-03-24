@@ -150,10 +150,13 @@ func TestCore(t *testing.T) {
 			require.NoError(t, err)
 		}
 
+		// It's being checked only one of (v, IDs, err).
 		testCases := []struct {
 			name string // TODO move to map key
 			q    bson.D
-			IDs  []string
+			o    *options.FindOptions // if empty, defaults to sorting by value for stable tests
+			v    []bson.D             // expected value; useful for testing projections
+			IDs  []string             // expected values IDs; useful when projections are not used
 			err  error
 		}{
 			// doubles
@@ -217,6 +220,53 @@ func TestCore(t *testing.T) {
 			// documents
 			// TODO
 
+			// projection
+			{
+				name: "ProjectionInclusion",
+				q: bson.D{
+					{"_id", "double"},
+				},
+				o:   options.Find().SetProjection(bson.D{{"value", int32(11)}}),
+				IDs: []string{"double"},
+			},
+			{
+				name: "ProjectionExclusion",
+				q: bson.D{
+					{"_id", "double"},
+				},
+				o: options.Find().SetProjection(bson.D{{"value", false}}),
+				v: []bson.D{{{"_id", "double"}}},
+			},
+			{
+				name: "ProjectionBothErrorInclusion",
+				q: bson.D{
+					{"_id", "document-diverse"},
+				},
+				o: options.Find().SetProjection(bson.D{
+					{"document_id", false},
+					{"array", true},
+				}),
+				err: mongo.CommandError{
+					Code:    31253,
+					Name:    "Location31253",
+					Message: `Cannot do inclusion on field array in exclusion projection`,
+				},
+			},
+			{
+				name: "ProjectionBothErrorExclusion",
+				q: bson.D{
+					{"_id", "document-diverse"},
+				},
+				o: options.Find().SetProjection(bson.D{
+					{"array", true},
+					{"document_id", false},
+				}),
+				err: mongo.CommandError{
+					Code:    31254,
+					Name:    "Location31254",
+					Message: `Cannot do exclusion on field document_id in inclusion projection`,
+				},
+			},
 			// arrays
 			// $size
 			{
@@ -310,11 +360,16 @@ func TestCore(t *testing.T) {
 			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
 
-				if (tc.IDs == nil) == (tc.err == nil) {
-					t.Fatal("exactly one of IDs or err must be set")
+				if (tc.IDs == nil) == (tc.err == nil) == (tc.v == nil) {
+					t.Fatal("exactly one of IDs, err or v must be set")
 				}
 
-				cursor, err := collection.Find(ctx, tc.q, options.Find().SetSort(bson.D{{"value", 1}}))
+				var cursor *mongo.Cursor
+				var err error
+				if tc.o == nil {
+					tc.o = options.Find().SetSort(bson.D{{"value", 1}})
+				}
+				cursor, err = collection.Find(ctx, tc.q, tc.o)
 
 				if tc.err != nil {
 					require.Error(t, err)
@@ -326,10 +381,14 @@ func TestCore(t *testing.T) {
 				require.NotNil(t, cursor)
 
 				var expected []bson.D
-				for _, id := range tc.IDs {
-					v, ok := data[id]
-					require.True(t, ok)
-					expected = append(expected, bson.D{{"_id", id}, {"value", v}})
+				if tc.v != nil {
+					expected = tc.v
+				} else {
+					for _, id := range tc.IDs {
+						v, ok := data[id]
+						require.True(t, ok)
+						expected = append(expected, bson.D{{"_id", id}, {"value", v}})
+					}
 				}
 
 				var actual []bson.D
