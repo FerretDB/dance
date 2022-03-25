@@ -43,6 +43,7 @@ linters:
   disable-all: true
   enable:
     - exhaustive
+    - gci
     - godox
     - goheader
     - goimports
