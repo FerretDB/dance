@@ -102,10 +102,10 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
-			"array-embedded": []any{
-				map[string]any{"age": 1000, "document": "abc", "score": 42.13},
-				map[string]any{"age": 1000, "document": "def", "score": 42.13},
-				map[string]any{"age": 1002, "document": "jkl", "score": 24},
+			"array-embedded": bson.A{
+				bson.D{{"age", 1000}, {"document", "abc"}, {"score", 42.13}},
+				bson.D{{"age", 1000}, {"document", "def"}, {"score", 42.13}},
+				bson.D{{"age", 1002}, {"document", "jkl"}, {"score", 24}},
 			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
