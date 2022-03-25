@@ -2,6 +2,15 @@ module github.com/FerretDB/dance/tools
 
 go 1.18
 
+// TODO remove once https://github.com/quasilyte/go-consistent/issues/38 is fixed properly
+replace github.com/quasilyte/go-consistent => github.com/AlekSi/go-consistent v0.0.0-20220110091530-6bd5f7d2362a
+
+// Hack to make `bin/task gen` work without `stringer: Unexpected package creation during export data loading` errors.
+// TODO remove once stringer is fixed
+// https://github.com/golang/go/issues/45218
+// https://github.com/golang/go/issues/51629
+replace golang.org/x/tools => github.com/AlekSi/tools v0.1.11-0.20220317161929-e47c4f46a332
+
 require (
 	github.com/golangci/golangci-lint v1.45.2 // sync with Go workflow
 	github.com/quasilyte/go-consistent v0.0.0-20200404105227-766526bf1e96
@@ -55,7 +64,7 @@ require (
 	github.com/go-toolsmith/astcopy v1.0.0 // indirect
 	github.com/go-toolsmith/astequal v1.0.1 // indirect
 	github.com/go-toolsmith/astfmt v1.0.0 // indirect
-	github.com/go-toolsmith/astinfo v0.0.0-20180906194353-9809ff7efb21 // indirect
+	github.com/go-toolsmith/astinfo v1.0.0 // indirect
 	github.com/go-toolsmith/astp v1.0.0 // indirect
 	github.com/go-toolsmith/pkgload v1.0.2-0.20220101231613-e814995d17c5 // indirect
 	github.com/go-toolsmith/strparse v1.0.0 // indirect
