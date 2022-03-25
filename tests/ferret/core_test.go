@@ -443,6 +443,26 @@ func TestCore(t *testing.T) {
 					Message: "Expected a positive number in: $bitsAllSet: -1",
 				},
 			},
+			{
+				name: "BitsAnyClear",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnyClear", int32(1)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAnyClearEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnyClear", int32(42)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAnySet",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(2)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAnySetEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(4)}}}},
+				IDs:  []string{},
+			},
 		}
 
 		for _, tc := range testCases {
