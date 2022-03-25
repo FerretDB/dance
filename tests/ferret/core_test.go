@@ -369,6 +369,43 @@ func TestCore(t *testing.T) {
 						`consider using $getField or $setField.`,
 				},
 			},
+			{
+				name: "BitsAllClear",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAllClearEmptyResult",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAllClearString",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", "123"}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: \"123\"",
+				},
+			},
+			{
+				name: "BitsAllClearPassFloat",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", 1.2}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected an integer: $bitsAllClear: 1.2",
+				},
+			},
+			{
+				name: "BitsAllClearPassNegativeValue",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(-1)}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected a positive number in: $bitsAllClear: -1",
+				},
+			},
 		}
 
 		for _, tc := range testCases {
