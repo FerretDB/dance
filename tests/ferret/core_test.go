@@ -406,6 +406,43 @@ func TestCore(t *testing.T) {
 					Message: "Expected a positive number in: $bitsAllClear: -1",
 				},
 			},
+			{
+				name: "BitsAllSet",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(42)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAllSetEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(43)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAllSetString",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", "123"}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllSet: \"123\"",
+				},
+			},
+			{
+				name: "BitsAllSetPassFloat",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", 1.2}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected an integer: $bitsAllSet: 1.2",
+				},
+			},
+			{
+				name: "BitsAllSetPassNegativeValue",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(-1)}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected a positive number in: $bitsAllSet: -1",
+				},
+			},
 		}
 
 		for _, tc := range testCases {
