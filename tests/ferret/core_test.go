@@ -118,24 +118,24 @@ func TestCore(t *testing.T) {
 			"string-empty": "",
 			// "\x00",
 
-			"document":       map[string]any{"document": int32(42)},
-			"document-empty": map[string]any{},
+			"document":       bson.D{{"document", int32(42)}},
+			"document-empty": bson.D{},
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
-			"binary-empty": primitive.Binary{},
+			"binary-empty": primitive.Binary{Data: []byte{}},
 
 			// no Undefined
 
 			"bool-false": false,
 			"bool-true":  true,
 
-			"datetime":          time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC),
-			"datetime-epoch":    time.Unix(0, 0),
-			"datetime-year-min": time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC),
-			"datetime-year-max": time.Date(9999, 12, 31, 23, 59, 59, 999000000, time.UTC),
+			"datetime":          primitive.NewDateTimeFromTime(time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC)),
+			"datetime-epoch":    primitive.NewDateTimeFromTime(time.Unix(0, 0)),
+			"datetime-year-min": primitive.NewDateTimeFromTime(time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)),
+			"datetime-year-max": primitive.NewDateTimeFromTime(time.Date(9999, 12, 31, 23, 59, 59, 999000000, time.UTC)),
 
 			"null": nil,
 
@@ -414,7 +414,18 @@ func TestCore(t *testing.T) {
 
 				var actual []bson.D
 				require.NoError(t, cursor.All(ctx, &actual))
-				assert.Equal(t, expected, actual)
+				if !assert.Equal(t, expected, actual) {
+					// a diff of IDs is easier to read
+					expectedIDs := make([]string, len(expected))
+					for i, e := range expected {
+						expectedIDs[i] = e.Map()["_id"].(string)
+					}
+					actualIDs := make([]string, len(actual))
+					for i, a := range actual {
+						actualIDs[i] = a.Map()["_id"].(string)
+					}
+					assert.Equal(t, expectedIDs, actualIDs)
+				}
 			})
 		}
 	})
