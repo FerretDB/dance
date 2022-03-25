@@ -78,6 +78,27 @@ func TestCore(t *testing.T) {
 		})
 	})
 
+	t.Run("Limit", func(t *testing.T) {
+		t.Parallel()
+
+		collection := db.Collection(collectionName(t))
+
+		docs := []any{
+			bson.D{{"_id", "1"}},
+			bson.D{{"_id", "2"}},
+			bson.D{{"_id", "3"}},
+		}
+		_, err := collection.InsertMany(ctx, docs)
+		require.NoError(t, err)
+
+		cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetLimit(1).SetSort(bson.D{{"_id", 1}}))
+		require.NoError(t, err)
+
+		var actual []any
+		require.NoError(t, cursor.All(ctx, &actual))
+		assert.Equal(t, []any{docs[0]}, actual)
+	})
+
 	t.Run("QueryOperators", func(t *testing.T) {
 		t.Parallel()
 
