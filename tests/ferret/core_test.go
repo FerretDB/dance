@@ -278,15 +278,20 @@ func TestCore(t *testing.T) {
 				o: options.Find().SetProjection(bson.D{
 					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
 				}),
-				v: []bson.D{{
-					{"_id", "array-embedded"},
-					{"value", bson.A{bson.D{
-						{"age", int32(1002)},
-						{"document", "jkl"},
-						{"score", int32(24)},
-					}},
+				v: []bson.D{
+					{
+						{"_id", "array-embedded"},
+						{
+							"value", bson.A{
+								bson.D{
+									{"age", int32(1002)},
+									{"document", "jkl"},
+									{"score", int32(24)},
+								},
+							},
+						},
 					},
-				}},
+				},
 			},
 
 			// arrays
