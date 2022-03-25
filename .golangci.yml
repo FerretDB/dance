@@ -8,6 +8,11 @@ run:
 linters-settings:
   exhaustive:
     default-signifies-exhaustive: false
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/FerretDB/dance)
   goconst:
     min-occurrences: 5
     ignore-tests: true
