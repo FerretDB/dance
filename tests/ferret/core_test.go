@@ -123,6 +123,11 @@ func TestCore(t *testing.T) {
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
+			"array-embedded": bson.A{
+				bson.D{{"age", 1000}, {"document", "abc"}, {"score", 42.13}},
+				bson.D{{"age", 1000}, {"document", "def"}, {"score", 42.13}},
+				bson.D{{"age", 1002}, {"document", "jkl"}, {"score", 24}},
+			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{Data: []byte{}},
@@ -288,6 +293,24 @@ func TestCore(t *testing.T) {
 					Message: `Cannot do exclusion on field document_id in inclusion projection`,
 				},
 			},
+			{
+				name: "ProjectionElemMatchWithFilter",
+				q:    bson.D{{"_id", "array-embedded"}},
+				o: options.Find().SetProjection(bson.D{
+					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
+				}),
+				v: []bson.D{{
+					{"_id", "array-embedded"},
+					{"value", bson.A{
+						bson.D{
+							{"age", int32(1002)},
+							{"document", "jkl"},
+							{"score", int32(24)},
+						},
+					}},
+				}},
+			},
+
 			// arrays
 			// $size
 			{
