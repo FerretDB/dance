@@ -126,6 +126,7 @@ func TestCore(t *testing.T) {
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{Data: []byte{}},
+			"binary-big":   primitive.Binary{Data: []byte{0, 0, 128}},
 
 			// no Undefined
 
@@ -462,6 +463,19 @@ func TestCore(t *testing.T) {
 				name: "BitsAnySetEmpty",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(4)}}}},
 				IDs:  []string{},
+			},
+			{
+				name: "BitsAnySetBigBinary",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000_0000_0000)}},
+				}},
+				IDs: []string{"binary-big"},
+			},
+			{
+				name: "BitsAnyClearBigBinary",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000)}}}},
+				IDs: []string{"binary-big"},
 			},
 		}
 
