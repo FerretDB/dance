@@ -472,10 +472,24 @@ func TestCore(t *testing.T) {
 				IDs: []string{"binary-big"},
 			},
 			{
+				name: "BitsAnySetBigBinaryEmptyResult",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000)}},
+				}},
+				IDs: []string{},
+			},
+
+			{
 				name: "BitsAnyClearBigBinary",
 				q: bson.D{{"_id", "binary-big"}, {"value",
 					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000)}}}},
 				IDs: []string{"binary-big"},
+			},
+			{
+				name: "BitsAnyClearBigBinaryEmptyResult",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000_0000_0000)}}}},
+				IDs: []string{},
 			},
 		}
 
