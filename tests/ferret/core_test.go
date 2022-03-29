@@ -78,6 +78,27 @@ func TestCore(t *testing.T) {
 		})
 	})
 
+	t.Run("Limit", func(t *testing.T) {
+		t.Parallel()
+
+		collection := db.Collection(collectionName(t))
+
+		docs := []any{
+			bson.D{{"_id", "1"}},
+			bson.D{{"_id", "2"}},
+			bson.D{{"_id", "3"}},
+		}
+		_, err := collection.InsertMany(ctx, docs)
+		require.NoError(t, err)
+
+		cursor, err := collection.Find(ctx, bson.D{}, options.Find().SetLimit(1).SetSort(bson.D{{"_id", 1}}))
+		require.NoError(t, err)
+
+		var actual []any
+		require.NoError(t, cursor.All(ctx, &actual))
+		assert.Equal(t, []any{docs[0]}, actual)
+	})
+
 	t.Run("QueryOperators", func(t *testing.T) {
 		t.Parallel()
 
@@ -97,24 +118,29 @@ func TestCore(t *testing.T) {
 			"string-empty": "",
 			// "\x00",
 
-			"document":       map[string]any{"document": int32(42)},
-			"document-empty": map[string]any{},
+			"document":       bson.D{{"document", int32(42)}},
+			"document-empty": bson.D{},
 
 			"array":       primitive.A{"array", int32(42)},
 			"array-empty": primitive.A{},
+			"array-embedded": bson.A{
+				bson.D{{"age", 1000}, {"document", "abc"}, {"score", 42.13}},
+				bson.D{{"age", 1000}, {"document", "def"}, {"score", 42.13}},
+				bson.D{{"age", 1002}, {"document", "jkl"}, {"score", 24}},
+			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
-			"binary-empty": primitive.Binary{},
+			"binary-empty": primitive.Binary{Data: []byte{}},
 
 			// no Undefined
 
 			"bool-false": false,
 			"bool-true":  true,
 
-			"datetime":          time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC),
-			"datetime-epoch":    time.Unix(0, 0),
-			"datetime-year-min": time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC),
-			"datetime-year-max": time.Date(9999, 12, 31, 23, 59, 59, 999000000, time.UTC),
+			"datetime":          primitive.NewDateTimeFromTime(time.Date(2021, 11, 1, 10, 18, 42, 123000000, time.UTC)),
+			"datetime-epoch":    primitive.NewDateTimeFromTime(time.Unix(0, 0)),
+			"datetime-year-min": primitive.NewDateTimeFromTime(time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)),
+			"datetime-year-max": primitive.NewDateTimeFromTime(time.Date(9999, 12, 31, 23, 59, 59, 999000000, time.UTC)),
 
 			"null": nil,
 
@@ -283,6 +309,24 @@ func TestCore(t *testing.T) {
 					Message: `Cannot do exclusion on field document_id in inclusion projection`,
 				},
 			},
+			{
+				name: "ProjectionElemMatchWithFilter",
+				q:    bson.D{{"_id", "array-embedded"}},
+				o: options.Find().SetProjection(bson.D{
+					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
+				}),
+				v: []bson.D{{
+					{"_id", "array-embedded"},
+					{"value", bson.A{
+						bson.D{
+							{"age", int32(1002)},
+							{"document", "jkl"},
+							{"score", int32(24)},
+						},
+					}},
+				}},
+			},
+
 			// arrays
 			// $size
 			{
@@ -364,6 +408,43 @@ func TestCore(t *testing.T) {
 						`consider using $getField or $setField.`,
 				},
 			},
+			{
+				name: "BitsAllClear",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(21)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAllClearEmptyResult",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(53)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAllClearString",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", "123"}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllClear: \"123\"",
+				},
+			},
+			{
+				name: "BitsAllClearPassFloat",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", 1.2}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected an integer: $bitsAllClear: 1.2",
+				},
+			},
+			{
+				name: "BitsAllClearPassNegativeValue",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllClear", int32(-1)}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected a positive number in: $bitsAllClear: -1",
+				},
+			},
 		}
 
 		for _, tc := range testCases {
@@ -409,7 +490,18 @@ func TestCore(t *testing.T) {
 
 				var actual []bson.D
 				require.NoError(t, cursor.All(ctx, &actual))
-				assert.Equal(t, expected, actual)
+				if !assert.Equal(t, expected, actual) {
+					// a diff of IDs is easier to read
+					expectedIDs := make([]string, len(expected))
+					for i, e := range expected {
+						expectedIDs[i] = e.Map()["_id"].(string)
+					}
+					actualIDs := make([]string, len(actual))
+					for i, a := range actual {
+						actualIDs[i] = a.Map()["_id"].(string)
+					}
+					assert.Equal(t, expectedIDs, actualIDs)
+				}
 			})
 		}
 	})
