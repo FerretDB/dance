@@ -122,6 +122,7 @@ func TestCore(t *testing.T) {
 			"document-empty": bson.D{},
 
 			"array":       primitive.A{"array", int32(42)},
+			"array-three": primitive.A{int32(42), "foo", nil},
 			"array-empty": primitive.A{},
 			"array-embedded": bson.A{
 				bson.D{{"age", 1000}, {"document", "abc"}, {"score", 42.13}},
@@ -233,16 +234,35 @@ func TestCore(t *testing.T) {
 			*/
 
 			// strings
-			/*
-				{
-					bson.D{{"$eq", "foo"}},
-					[]string{"string"},
-				},
-				{
-					bson.D{{"$gt", "foo"}},
-					[]string{},
-				},
-			*/
+
+			{
+				name: "FindManyString",
+				q:    bson.D{{"value", "foo"}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "string"},
+			},
+			//{
+			//	bson.D{{"$gt", "foo"}},
+			//	[]string{},
+			//},
+
+			// int32
+
+			{
+				name: "FindManyInt32",
+				q:    bson.D{{"value", int32(42)}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
+
+			//int64
+
+			{
+				name: "FindManyInt64",
+				q:    bson.D{{"value", int64(42)}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
 
 			// documents
 			// TODO
