@@ -455,6 +455,18 @@ func TestCore(t *testing.T) {
 				IDs:  []string{},
 			},
 			{
+				name: "BitsAnyClearBigBinary",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000)}}}},
+				IDs: []string{"binary-big"},
+			},
+			{
+				name: "BitsAnyClearBigBinaryEmptyResult",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000_0000_0000)}}}},
+				IDs: []string{},
+			},
+			{
 				name: "BitsAnySet",
 				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(2)}}}},
 				IDs:  []string{"int32"},
@@ -476,19 +488,6 @@ func TestCore(t *testing.T) {
 				q: bson.D{{"_id", "binary-big"}, {"value",
 					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000)}},
 				}},
-				IDs: []string{},
-			},
-
-			{
-				name: "BitsAnyClearBigBinary",
-				q: bson.D{{"_id", "binary-big"}, {"value",
-					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000)}}}},
-				IDs: []string{"binary-big"},
-			},
-			{
-				name: "BitsAnyClearBigBinaryEmptyResult",
-				q: bson.D{{"_id", "binary-big"}, {"value",
-					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000_0000_0000)}}}},
 				IDs: []string{},
 			},
 		}
