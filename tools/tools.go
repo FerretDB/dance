@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build tools
-// +build tools
+//go:build go1.18
+// +build go1.18
 
 package tools // import "github.com/FerretDB/dance/tools"
 
 import (
+	_ "github.com/go-task/task/v3/cmd/task"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
 	_ "github.com/quasilyte/go-consistent"
 	_ "github.com/reviewdog/reviewdog/cmd/reviewdog"
@@ -26,9 +27,10 @@ import (
 	_ "mvdan.cc/gofumpt"
 )
 
-//go:generate go build -v -o ../bin/golangci-lint github.com/golangci/golangci-lint/cmd/golangci-lint
-//go:generate go build -v -o ../bin/go-consistent github.com/quasilyte/go-consistent
-//go:generate go build -v -o ../bin/reviewdog github.com/reviewdog/reviewdog/cmd/reviewdog
-//go:generate go build -v -o ../bin/benchstat golang.org/x/perf/cmd/benchstat
-//go:generate go build -v -o ../bin/stringer golang.org/x/tools/cmd/stringer
-//go:generate go build -v -o ../bin/gofumpt mvdan.cc/gofumpt
+//go:generate go build -v -o ../bin/ github.com/golangci/golangci-lint/cmd/golangci-lint
+//go:generate go build -v -o ../bin/ github.com/quasilyte/go-consistent
+//go:generate go build -v -o ../bin/ github.com/reviewdog/reviewdog/cmd/reviewdog
+//go:generate go build -v -o ../bin/ golang.org/x/perf/cmd/benchstat
+//go:generate go build -v -o ../bin/ golang.org/x/tools/cmd/stringer
+//go:generate go build -v -o ../bin/ mvdan.cc/gofumpt
+//go:generate go build -v -o ../bin/ github.com/go-task/task/v3/cmd/task

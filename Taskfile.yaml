@@ -1,0 +1,70 @@
+---
+version: '3'
+
+vars:
+  DB: mongodb
+  TEST: ""
+
+tasks:
+  init-tools:
+    dir: tools
+    cmds:
+      - go mod tidy
+      - go mod verify
+      - go generate -x
+
+  init:
+    desc: "Install development tools"
+    deps: [init-tools]
+    cmds:
+      - go mod tidy
+
+  fmt:
+    desc: "Format code"
+    cmds:
+    # skip submodules
+    - bin/gofumpt -w ./cmd/ ./internal/
+
+
+  end-up-detach:
+    desc: "Start dependencies in docker"
+    cmds:
+      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
+
+  env-pull:
+    cmds:
+      - docker-compose pull --include-deps --quiet
+
+  env-logs:
+    cmds:
+      - docker-compose logs --no-color
+
+  env-down:
+    desc: "Stop environment"
+    cmds:
+      - docker-compose down --remove-orphans --volumes
+
+  dance:
+    desc: "Run all integration tests"
+    dir: tests
+    cmds:
+      - go run ../cmd/dance -db=$(DB) $(TEST)
+
+  lint:
+    desc: "Run linters"
+    cmds:
+      - bin/golangci-lint run --config=.golangci-required.yml
+      - bin/golangci-lint run --config=.golangci.yml
+      - bin/go-consistent -pedantic ./cmd/... ./internal/...
+
+  psql:
+    desc: "Run psql"
+    cmds:
+      - docker-compose exec postgres psql -U postgres -d ferretdb
+
+  mongosh:
+    desc: "Run mongo shell"
+    cmds:
+      - >
+        docker-compose exec mongosh mongosh mongodb://$(DB):27017/
+        --verbose --eval 'disableTelemetry()' --shell
