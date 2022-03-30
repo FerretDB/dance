@@ -1,3 +1,7 @@
+[submodule "FerretDB"]
+	path = tests/FerretDB
+	url = https://github.com/FerretDB/FerretDB.git
+	branch = main
 [submodule "mongo-go-driver"]
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
