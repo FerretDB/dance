@@ -9,8 +9,7 @@ as it does not involve Docker images building or PostgreSQL restarts.
 ## Running tests
 
 ```sh
-make dance DB=ferretdb TEST=ferret
-bin/task dance
+bin/task dance DB=ferretdb TEST=ferret
 ```
 
 That command will run `ferret` tests ([configuration](https://github.com/FerretDB/dance/blob/main/tests/ferret.yml), 
@@ -25,8 +24,7 @@ It defines what test configuration to run; empty value runs all configurations.
 ## Starting environment with Docker Compose
 
 ```sh
-make env-up DB=mongodb
-bin/task env-up
+bin/task env-up DB=mongodb
 ```
 
 That command will start MongoDB in Docker container.

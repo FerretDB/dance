@@ -1,10 +1,6 @@
 ---
 version: '3'
 
-vars:
-  DB: mongodb
-  TEST: ""
-
 tasks:
   init-tools:
     dir: tools
@@ -25,11 +21,18 @@ tasks:
     # skip submodules
     - bin/gofumpt -w ./cmd/ ./internal/
 
+  env-up:
+    desc: "Start environment"
+    deps: [env-up-detach]
+    cmds:
+      - docker-compose logs --follow
 
   end-up-detach:
     desc: "Start dependencies in docker"
     cmds:
       - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
+    preconditions:
+      - test {{.DB}}
 
   env-pull:
     cmds:
@@ -48,7 +51,9 @@ tasks:
     desc: "Run all integration tests"
     dir: tests
     cmds:
-      - go run ../cmd/dance -db=$(DB) $(TEST)
+      - go run ../cmd/dance -db={{.DB}} {{.TEST}}
+    preconditions:
+      - test $DB
 
   lint:
     desc: "Run linters"
