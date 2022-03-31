@@ -14,11 +14,12 @@ tasks:
     deps: [init-tools]
     cmds:
       - go mod tidy
+      - go mod verify
 
   fmt:
     desc: "Format code"
     cmds:
-      - bin/gofumpt -w ./cmd/ ./internal/
+      - bin/gofumpt -w ./cmd/ ./internal/ ./tests/ferret
 
   env-up:
     desc: "Start environment"
@@ -29,9 +30,7 @@ tasks:
   env-up-detach:
     desc: "Start dependencies in docker"
     cmds:
-      - >
-        docker-compose up --always-recreate-deps
-        --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
+      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"

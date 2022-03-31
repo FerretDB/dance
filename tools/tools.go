@@ -27,10 +27,17 @@ import (
 	_ "mvdan.cc/gofumpt"
 )
 
+// Check that `go` in $PATH have the right version.
+// Catches problems like `/some/path/go generate` invocations where `/some/path/go` is 1.18+
+// (that's checked by the build tags above), but just `go` in $PATH (typically something like `/usr/bin/go`)
+// is an earlier version.
+
+//go:generate go run check.go
+
+//go:generate go build -v -o ../bin/ github.com/go-task/task/v3/cmd/task
 //go:generate go build -v -o ../bin/ github.com/golangci/golangci-lint/cmd/golangci-lint
 //go:generate go build -v -o ../bin/ github.com/quasilyte/go-consistent
 //go:generate go build -v -o ../bin/ github.com/reviewdog/reviewdog/cmd/reviewdog
 //go:generate go build -v -o ../bin/ golang.org/x/perf/cmd/benchstat
 //go:generate go build -v -o ../bin/ golang.org/x/tools/cmd/stringer
 //go:generate go build -v -o ../bin/ mvdan.cc/gofumpt
-//go:generate go build -v -o ../bin/ github.com/go-task/task/v3/cmd/task
