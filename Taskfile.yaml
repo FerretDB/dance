@@ -18,8 +18,7 @@ tasks:
   fmt:
     desc: "Format code"
     cmds:
-    # skip submodules
-    - bin/gofumpt -w ./cmd/ ./internal/
+      - bin/gofumpt -w ./cmd/ ./internal/
 
   env-up:
     desc: "Start environment"
@@ -30,9 +29,11 @@ tasks:
   end-up-detach:
     desc: "Start dependencies in docker"
     cmds:
-      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
+      - >
+        docker-compose up --always-recreate-deps 
+        --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
     preconditions:
-      - test {{.DB}}
+      - test $DB
 
   env-pull:
     cmds:
@@ -71,5 +72,7 @@ tasks:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker-compose exec mongosh mongosh mongodb://$(DB):27017/
+        docker-compose exec mongosh mongosh mongodb://{{.DB}}:27017/
         --verbose --eval 'disableTelemetry()' --shell
+    preconditions:
+      - test $DB
