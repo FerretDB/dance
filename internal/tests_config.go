@@ -175,5 +175,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
+
+	// special case: zero in expected_pass means "don't check"
+	if tc.Stats.ExpectedPass == 0 {
+		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
+	}
+
 	return compareResult, nil
 }
