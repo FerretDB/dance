@@ -26,6 +26,7 @@ import (
 // Config represents dance configuration.
 type Config struct {
 	Runner  string   `yaml:"runner"`
+	Dir     string   `yaml:"dir"`
 	Args    []string `yaml:"args"`
 	Results Results  `yaml:"results"`
 }

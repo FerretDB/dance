@@ -110,6 +110,10 @@ func main() {
 			log.Fatal(err)
 		}
 
+		if config.Dir != "" {
+			dir = filepath.Join(dir, config.Dir)
+		}
+
 		expectedConfig, err := config.Results.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)

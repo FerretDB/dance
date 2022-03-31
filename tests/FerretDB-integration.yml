@@ -1,0 +1,7 @@
+---
+runner: gotest
+dir: integration
+args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
+results:
+  common:
+    stats: {}

@@ -27,6 +27,7 @@ jobs:
           - mongodb
         test:
           - ferret
+          - FerretDB-integration
           - mongo-go-driver
 
     steps:
