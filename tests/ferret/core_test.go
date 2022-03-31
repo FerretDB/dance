@@ -122,10 +122,17 @@ func TestCore(t *testing.T) {
 			"document-empty": bson.D{},
 
 			"array":       primitive.A{"array", int32(42)},
+			"array-three": primitive.A{int32(42), "foo", nil},
 			"array-empty": primitive.A{},
+			"array-embedded": bson.A{
+				bson.D{{"age", 1000}, {"document", "abc"}, {"score", 42.13}},
+				bson.D{{"age", 1000}, {"document", "def"}, {"score", 42.13}},
+				bson.D{{"age", 1002}, {"document", "jkl"}, {"score", 24}},
+			},
 
 			"binary":       primitive.Binary{Subtype: 0x80, Data: []byte{42, 0, 13}},
 			"binary-empty": primitive.Binary{Data: []byte{}},
+			"binary-big":   primitive.Binary{Data: []byte{0, 0, 128}},
 
 			// no Undefined
 
@@ -227,16 +234,35 @@ func TestCore(t *testing.T) {
 			*/
 
 			// strings
-			/*
-				{
-					bson.D{{"$eq", "foo"}},
-					[]string{"string"},
-				},
-				{
-					bson.D{{"$gt", "foo"}},
-					[]string{},
-				},
-			*/
+
+			{
+				name: "FindManyString",
+				q:    bson.D{{"value", "foo"}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "string"},
+			},
+			//{
+			//	bson.D{{"$gt", "foo"}},
+			//	[]string{},
+			//},
+
+			// int32
+
+			{
+				name: "FindManyInt32",
+				q:    bson.D{{"value", int32(42)}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
+
+			//int64
+
+			{
+				name: "FindManyInt64",
+				q:    bson.D{{"value", int64(42)}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
 
 			// documents
 			// TODO
@@ -288,6 +314,24 @@ func TestCore(t *testing.T) {
 					Message: `Cannot do exclusion on field document_id in inclusion projection`,
 				},
 			},
+			{
+				name: "ProjectionElemMatchWithFilter",
+				q:    bson.D{{"_id", "array-embedded"}},
+				o: options.Find().SetProjection(bson.D{
+					{"value", bson.D{{"$elemMatch", bson.D{{"score", int32(24)}}}}},
+				}),
+				v: []bson.D{{
+					{"_id", "array-embedded"},
+					{"value", bson.A{
+						bson.D{
+							{"age", int32(1002)},
+							{"document", "jkl"},
+							{"score", int32(24)},
+						},
+					}},
+				}},
+			},
+
 			// arrays
 			// $size
 			{
@@ -405,6 +449,89 @@ func TestCore(t *testing.T) {
 					Name:    "FailedToParse",
 					Message: "Expected a positive number in: $bitsAllClear: -1",
 				},
+			},
+			{
+				name: "BitsAllSet",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(42)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAllSetEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(43)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAllSetString",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", "123"}}}},
+				err: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: "value takes an Array, a number, or a BinData but received: $bitsAllSet: \"123\"",
+				},
+			},
+			{
+				name: "BitsAllSetPassFloat",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", 1.2}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected an integer: $bitsAllSet: 1.2",
+				},
+			},
+			{
+				name: "BitsAllSetPassNegativeValue",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAllSet", int32(-1)}}}},
+				err: mongo.CommandError{
+					Code:    9,
+					Name:    "FailedToParse",
+					Message: "Expected a positive number in: $bitsAllSet: -1",
+				},
+			},
+			{
+				name: "BitsAnyClear",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnyClear", int32(1)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAnyClearEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnyClear", int32(42)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAnyClearBigBinary",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000)}}}},
+				IDs: []string{"binary-big"},
+			},
+			{
+				name: "BitsAnyClearBigBinaryEmptyResult",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnyClear", int32(0b1000_0000_0000_0000_0000_0000)}}}},
+				IDs: []string{},
+			},
+			{
+				name: "BitsAnySet",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(2)}}}},
+				IDs:  []string{"int32"},
+			},
+			{
+				name: "BitsAnySetEmpty",
+				q:    bson.D{{"_id", "int32"}, {"value", bson.D{{"$bitsAnySet", int32(4)}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "BitsAnySetBigBinary",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000_0000_0000)}},
+				}},
+				IDs: []string{"binary-big"},
+			},
+			{
+				name: "BitsAnySetBigBinaryEmptyResult",
+				q: bson.D{{"_id", "binary-big"}, {"value",
+					bson.D{{"$bitsAnySet", int32(0b1000_0000_0000_0000)}},
+				}},
+				IDs: []string{},
 			},
 		}
 
