@@ -107,12 +107,13 @@ func TestCore(t *testing.T) {
 		// TODO keep in sync with test_db? https://github.com/FerretDB/dance/issues/43
 		data := map[string]any{
 			"double":                   42.13,
-			"double-zero":              0.0000001,
+			"double-zero":              0.0,
 			"double-max":               math.MaxFloat64,
 			"double-smallest":          math.SmallestNonzeroFloat64,
 			"double-positive-infinity": math.Inf(+1),
 			"double-negative-infinity": math.Inf(-1),
 			"double-nan":               math.NaN(),
+			"negative-zero":            math.Copysign(0, -1),
 
 			"string":       "foo",
 			"string-empty": "",
@@ -216,8 +217,15 @@ func TestCore(t *testing.T) {
 			},
 			{
 				name: "EqDoubleZero",
-				q:    bson.D{{"value", bson.D{{"$eq", 0.0000001}}}},
-				IDs:  []string{"double-zero"},
+				q:    bson.D{{"value", bson.D{{"$eq", 0.0}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double-zero", "int32-zero", "int64-zero", "negative-zero"},
+			},
+			{
+				name: "EqNegativeZero",
+				q:    bson.D{{"value", bson.D{{"$eq", math.Copysign(0, -1)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double-zero", "int32-zero", "int64-zero", "negative-zero"},
 			},
 
 			// $gt
@@ -294,7 +302,7 @@ func TestCore(t *testing.T) {
 				name: "EqInt32Zero",
 				q:    bson.D{{"value", bson.D{{"$eq", int32(0)}}}},
 				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
-				IDs:  []string{"int32-zero", "int64-zero"},
+				IDs:  []string{"double-zero", "int32-zero", "int64-zero", "negative-zero"},
 			},
 			{
 				name: "EqInt32Max",
@@ -307,7 +315,7 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"int32-min"},
 			},
 
-			//int64
+			// int64
 
 			{
 				name: "FindManyInt64",
@@ -328,7 +336,7 @@ func TestCore(t *testing.T) {
 				name: "EqInt64Zero",
 				q:    bson.D{{"value", bson.D{{"$eq", int64(0)}}}},
 				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
-				IDs:  []string{"int32-zero", "int64-zero"},
+				IDs:  []string{"double-zero", "int32-zero", "int64-zero", "negative-zero"},
 			},
 			{
 				name: "EqInt64Max",
@@ -592,9 +600,28 @@ func TestCore(t *testing.T) {
 			// regex
 
 			{
-				name: "FindRegex",
+				name: "FindRegexWithoutOption",
 				q:    bson.D{{"value", primitive.Regex{Pattern: "foo"}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
 				IDs:  []string{"array-three", "string"},
+			},
+			{
+				name: "FindRegexWithOption",
+				q:    bson.D{{"value", primitive.Regex{Pattern: "foo", Options: "i"}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "regex", "string"},
+			},
+
+			// eq
+			{
+				name: "EqFindRegexWithoutOption",
+				q:    bson.D{{"value", bson.D{{"$eq", primitive.Regex{Pattern: "foo"}}}}},
+				IDs:  []string{},
+			},
+			{
+				name: "EqFindRegexWithOption",
+				q:    bson.D{{"value", bson.D{{"$eq", primitive.Regex{Pattern: "foo", Options: "i"}}}}},
+				IDs:  []string{"regex"},
 			},
 		}
 
