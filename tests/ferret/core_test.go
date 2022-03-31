@@ -253,6 +253,21 @@ func TestCore(t *testing.T) {
 				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
 				IDs:  []string{"array-three", "string"},
 			},
+
+			//  $eq
+
+			{
+				name: "EqString",
+				q:    bson.D{{"value", bson.D{{"$eq", "foo"}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "string"},
+			},
+			{
+				name: "EqEmptyString",
+				q:    bson.D{{"value", bson.D{{"$eq", ""}}}},
+				IDs:  []string{"string-empty"},
+			},
+
 			//{
 			//	bson.D{{"$gt", "foo"}},
 			//	[]string{},
@@ -267,7 +282,32 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"array", "array-three", "int32", "int64"},
 			},
 
-			// int64
+			// $eq
+
+			{
+				name: "EqInt32",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(42)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
+			},
+			{
+				name: "EqInt32Zero",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(0)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"int32-zero", "int64-zero"},
+			},
+			{
+				name: "EqInt32Max",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MaxInt32)}}}},
+				IDs:  []string{"int32-max"},
+			},
+			{
+				name: "EqInt32Min",
+				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MinInt32)}}}},
+				IDs:  []string{"int32-min"},
+			},
+
+			//int64
 
 			{
 				name: "FindManyInt64",
@@ -276,17 +316,29 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"array", "array-three", "int32", "int64"},
 			},
 
-			//  $eq
+			// $eq
 
 			{
-				name: "EqString",
-				q:    bson.D{{"value", bson.D{{"$eq", "foo"}}}},
-				IDs:  []string{"string"},
+				name: "EqInt64",
+				q:    bson.D{{"value", bson.D{{"$eq", int64(42)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "int32", "int64"},
 			},
 			{
-				name: "EqEmptyString",
-				q:    bson.D{{"value", bson.D{{"$eq", ""}}}},
-				IDs:  []string{"string-empty"},
+				name: "EqInt64Zero",
+				q:    bson.D{{"value", bson.D{{"$eq", int64(0)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"int32-zero", "int64-zero"},
+			},
+			{
+				name: "EqInt64Max",
+				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MaxInt64)}}}},
+				IDs:  []string{"int64-max"},
+			},
+			{
+				name: "EqInt64Min",
+				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MinInt64)}}}},
+				IDs:  []string{"int64-min"},
 			},
 
 			// documents
@@ -533,73 +585,16 @@ func TestCore(t *testing.T) {
 			{
 				name: "EqNull",
 				q:    bson.D{{"value", bson.D{{"$eq", nil}}}},
-				IDs:  []string{"null"},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "null"},
 			},
 
 			// regex
 
 			{
 				name: "FindRegex",
-				q:    bson.D{{"value", primitive.Regex{Pattern: "foo", Options: "i"}}},
-				IDs:  []string{"string", "regex"},
-			},
-
-			// $eq
-
-			{
-				name: "EqRegex",
-				q:    bson.D{{"value", bson.D{{"$eq", primitive.Regex{Pattern: "foo", Options: "i"}}}}},
-				IDs:  []string{"regex"},
-			},
-
-			// int32
-
-			// $eq
-
-			{
-				name: "EqInt32",
-				q:    bson.D{{"value", bson.D{{"$eq", int32(42)}}}},
-				IDs:  []string{"int32"},
-			},
-			{
-				name: "EqInt32Zero",
-				q:    bson.D{{"value", bson.D{{"$eq", int32(0)}}}},
-				IDs:  []string{"int32-zero"},
-			},
-			{
-				name: "EqInt32Max",
-				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MaxInt32)}}}},
-				IDs:  []string{"int32-max"},
-			},
-			{
-				name: "EqInt32Min",
-				q:    bson.D{{"value", bson.D{{"$eq", int32(math.MinInt32)}}}},
-				IDs:  []string{"int32-min"},
-			},
-
-			// int64
-
-			// $eq
-
-			{
-				name: "EqInt64",
-				q:    bson.D{{"value", bson.D{{"$eq", int64(42)}}}},
-				IDs:  []string{"int64"},
-			},
-			{
-				name: "EqInt64Zero",
-				q:    bson.D{{"value", bson.D{{"$eq", int64(0)}}}},
-				IDs:  []string{"int64-zero"},
-			},
-			{
-				name: "EqInt64Max",
-				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MaxInt64)}}}},
-				IDs:  []string{"int64-max"},
-			},
-			{
-				name: "EqInt64Min",
-				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MinInt64)}}}},
-				IDs:  []string{"int64-min"},
+				q:    bson.D{{"value", primitive.Regex{Pattern: "foo"}}},
+				IDs:  []string{"array-three", "string"},
 			},
 		}
 
