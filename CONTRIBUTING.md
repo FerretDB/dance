@@ -23,12 +23,14 @@ It defines what test configuration to run; empty value runs all configurations.
 bin/task env-up DB=mongodb
 ```
 
-That command will start MongoDB in Docker container. Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
+That command will start MongoDB in Docker container.
+Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
 In short, that would be wrong.
 
 ```sh
 bin/task env-up DB=ferretdb
 ```
 
-That command will start FerretDB from `ferretdb-local` Docker image. That image can be built by `bin/task docker-local` command in FerretDB repository checkout.
+That command will start FerretDB from `ferretdb-local` Docker image.
+That image can be built by `bin/task docker-local` command in FerretDB repository checkout.
 As mentioned above, this approach is not recommended.
