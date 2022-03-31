@@ -7,7 +7,7 @@ In particular, the FerretDB development cycle (fix-compile-run-dance) is faster 
 ## Running tests
 
 ```sh
-make dance DB=ferretdb TEST=ferret
+bin/task dance DB=ferretdb TEST=ferret
 ```
 
 That command will run `ferret` tests ([configuration](https://github.com/FerretDB/dance/blob/main/tests/ferret.yml), [test](https://github.com/FerretDB/dance/tree/main/tests/ferret)) against FerretDB.
@@ -20,17 +20,17 @@ It defines what test configuration to run; empty value runs all configurations.
 ## Starting environment with Docker Compose
 
 ```sh
-make env-up DB=mongodb
+bin/task env-up DB=mongodb
 ```
 
 That command will start MongoDB in Docker container.
-Please note that running `make dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
+Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
 In short, that would be wrong.
 
 ```sh
-make env-up DB=ferretdb
+bin/task env-up DB=ferretdb
 ```
 
 That command will start FerretDB from `ferretdb-local` Docker image.
-That image can be built by `make docker-local` command in FerretDB repository checkout.
+That image can be built by `bin/task docker-local` command in FerretDB repository checkout.
 As mentioned above, this approach is not recommended.

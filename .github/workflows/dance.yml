@@ -44,17 +44,21 @@ jobs:
         with:
           cache-key: dance
 
+      - name: Install Task
+        run: go generate -x
+        working-directory: tools
+
       - name: Start environment
-        run: make env-up-detach
+        run: bin/task env-up-detach
         env:
           FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
           DB: ${{ matrix.db }}
 
       - name: Run init
-        run: make init
+        run: bin/task init
 
       - name: Dance!
-        run: make dance
+        run: bin/task dance
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
