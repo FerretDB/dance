@@ -9,7 +9,7 @@ as it does not involve Docker images building or PostgreSQL restarts.
 ## Running tests
 
 ```sh
-DB=ferretdb TEST=ferret bin/task dance
+bin/task dance DB=ferretdb TEST=ferret
 ```
 
 That command will run `ferret` tests ([configuration](https://github.com/FerretDB/dance/blob/main/tests/ferret.yml), 
@@ -24,16 +24,16 @@ It defines what test configuration to run; empty value runs all configurations.
 ## Starting environment with Docker Compose
 
 ```sh
-DB=mongodb bin/task env-up
+bin/task env-up DB=mongodb
 ```
 
 That command will start MongoDB in Docker container.
-Please note that running `DB=ferretdb bin/task dance` after that would run tests against that MongoDB, 
+Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB,
 but results would be compared against results expected for FerretDB.
 In short, that would be wrong.
 
 ```sh
-DB=ferretdb bin/task env-up
+bin/task env-up DB=ferretdb
 ```
 
 That command will start FerretDB from `ferretdb-local` Docker image.
