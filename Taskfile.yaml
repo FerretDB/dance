@@ -30,7 +30,7 @@ tasks:
     desc: "Start dependencies in docker"
     cmds:
       - >
-        docker-compose up --always-recreate-deps 
+        docker-compose up --always-recreate-deps
         --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
     preconditions:
       - test $DB
