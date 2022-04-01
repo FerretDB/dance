@@ -63,8 +63,10 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 2
-      expected_pass: 193
+      # expected_skip: 2
+      expected_skip: 5
+      # expected_pass: 193
+      expected_pass: 209
 
     skip: # shared with ferretdb
       # needs replica set
