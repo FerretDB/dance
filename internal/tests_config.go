@@ -16,7 +16,10 @@ package internal
 
 import (
 	"fmt"
+	"sort"
 	"strings"
+
+	"golang.org/x/exp/maps"
 )
 
 // nextPrefix returns the next prefix of the given path, stopping on / and .
@@ -110,7 +113,12 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		return nil, err
 	}
 
-	for test, testRes := range results.TestResults {
+	tests := maps.Keys(results.TestResults)
+	sort.Strings(tests)
+
+	for _, test := range tests {
+		testRes := results.TestResults[test]
+
 		expectedRes := tc.Default
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {

@@ -15,19 +15,24 @@ results:
   ferretdb:
     stats:
       unexpected_fail: 0
-      unexpected_skip:
+      unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 14
+      expected_fail: 21
       expected_skip: 4
-      expected_pass: 182
+      expected_pass: 188
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
+
     fail:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestCausalConsistencyExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
       # projection https://github.com/FerretDB/FerretDB/issues/80
@@ -58,12 +63,15 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 4
-      expected_pass: 196
+      # expected_skip: 2
+      expected_skip: 5
+      # expected_pass: 193
+      expected_pass: 209
 
     skip: # shared with ferretdb
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
 
