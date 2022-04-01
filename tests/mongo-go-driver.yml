@@ -27,15 +27,16 @@ results:
     fail:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
 
       # projection https://github.com/FerretDB/FerretDB/issues/80
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
@@ -65,13 +66,13 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 4
+      expected_skip: 5
       expected_pass: 209
 
     skip: # shared with ferretdb
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
 
