@@ -229,29 +229,25 @@ func TestCore(t *testing.T) {
 			},
 
 			// $gt
-			/*
 
-					{
-					q:bson.D{{"$gt", 42.123}},
-					IDs:[]string{"double-max", "double-positive-infinity"},
-				},
-				{
-					q:bson.D{{"$gt", math.Inf(-1)}},
-					IDs:[]string{"double-smallest", "double", "double-max", "double-positive-infinity"},
-				},
-				{
-					q:bson.D{{"$gt", math.Inf(+1)}},
-					nil,
-				},
-				{
-					q:bson.D{{"$gt", math.MaxFloat64}},
-					IDs:[]string{"double-positive-infinity"},
-				},
-				{
-					q:bson.D{{"$gt", math.SmallestNonzeroFloat64}},
-					IDs:[]string{"double", "double-max", "double-positive-infinity"},
-				},
-			*/
+			{
+				name: "GtDouble",
+				q:    bson.D{{"value", bson.D{{"$gt", 40.123}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array", "array-three", "double", "double-max", "double-positive-infinity", "int32", "int32-max", "int64", "int64-max"},
+			},
+			{
+				name: "GtDoublePositiveInfinity",
+				q:    bson.D{{"value", bson.D{{"$gt", math.Inf(+1)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{},
+			},
+			{
+				name: "GtDoubleMax",
+				q:    bson.D{{"value", bson.D{{"$gt", math.MaxFloat64}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double-positive-infinity"},
+			},
 
 			// strings
 
@@ -276,10 +272,20 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"string-empty"},
 			},
 
-			//{
-			//	bson.D{{"$gt", "foo"}},
-			//	[]string{},
-			//},
+			//  $gt
+
+			{
+				name: "GtString",
+				q:    bson.D{{"value", bson.D{{"$gt", "boo"}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "string"},
+			},
+			{
+				name: "GtEmptyString",
+				q:    bson.D{{"value", bson.D{{"$gt", "boo"}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"array-three", "string"},
+			},
 
 			// int32
 
@@ -315,6 +321,21 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"int32-min"},
 			},
 
+			// $gt
+
+			{
+				name: "GtInt32",
+				q:    bson.D{{"value", bson.D{{"$gt", int32(42)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double", "double-max", "double-positive-infinity", "int32-max", "int64-max"},
+			},
+			{
+				name: "GtInt32Max",
+				q:    bson.D{{"value", bson.D{{"$gt", int32(math.MaxInt32)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double-max", "double-positive-infinity", "int64-max"},
+			},
+
 			// int64
 
 			{
@@ -347,6 +368,21 @@ func TestCore(t *testing.T) {
 				name: "EqInt64Min",
 				q:    bson.D{{"value", bson.D{{"$eq", int64(math.MinInt64)}}}},
 				IDs:  []string{"int64-min"},
+			},
+
+			// $gt
+
+			{
+				name: "GtInt64",
+				q:    bson.D{{"value", bson.D{{"$gt", int64(42)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double", "double-max", "double-positive-infinity", "int32-max", "int64-max"},
+			},
+			{
+				name: "GtInt64Max",
+				q:    bson.D{{"value", bson.D{{"$gt", int64(math.MaxInt64)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"double-max", "double-positive-infinity"},
 			},
 
 			// documents
@@ -578,6 +614,15 @@ func TestCore(t *testing.T) {
 				IDs:  []string{"datetime"},
 			},
 
+			// $gt
+
+			{
+				name: "GtDatetime",
+				q:    bson.D{{"value", bson.D{{"$gt", time.Date(2021, 11, 1, 10, 18, 41, 123000000, time.UTC)}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
+				IDs:  []string{"datetime", "datetime-year-max"},
+			},
+
 			// timestamp
 
 			// $eq
@@ -585,6 +630,14 @@ func TestCore(t *testing.T) {
 			{
 				name: "EqTimestamp",
 				q:    bson.D{{"value", bson.D{{"$eq", primitive.Timestamp{T: 42, I: 13}}}}},
+				IDs:  []string{"timestamp"},
+			},
+
+			// $gt
+			{
+				name: "GtInt64",
+				q:    bson.D{{"value", bson.D{{"$gt", primitive.Timestamp{T: 41, I: 13}}}}},
+				o:    options.Find().SetSort(bson.D{{"_id", 1}}),
 				IDs:  []string{"timestamp"},
 			},
 
