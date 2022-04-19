@@ -186,7 +186,7 @@ func TestCore(t *testing.T) {
 			o    *options.FindOptions // if empty, defaults to sorting by value for stable tests
 			v    []bson.D             // expected value; useful for testing projections
 			IDs  []string             // expected values IDs; useful when projections are not used
-			err  error
+			err  mongo.CommandError
 		}{
 			// doubles
 			// $eq
@@ -688,10 +688,6 @@ func TestCore(t *testing.T) {
 			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
 
-				if (tc.IDs == nil) == (tc.err == nil) == (tc.v == nil) {
-					t.Fatal("exactly one of IDs, err or v must be set")
-				}
-
 				var cursor *mongo.Cursor
 				var err error
 				if tc.o == nil {
@@ -699,9 +695,8 @@ func TestCore(t *testing.T) {
 				}
 				cursor, err = collection.Find(ctx, tc.q, tc.o)
 
-				if tc.err != nil {
-					require.Error(t, err)
-					require.Equal(t, tc.err, err)
+				if tc.err.Code != 0 {
+					assertEqualError(t, tc.err, err)
 					return
 				}
 
@@ -790,8 +785,7 @@ func TestCore(t *testing.T) {
 
 		res := db.RunCommand(ctx, bson.D{{"listcollections", 1}})
 		err := res.Err()
-		require.Error(t, err)
-		assert.Equal(t, mongo.CommandError{Code: 59, Name: "CommandNotFound", Message: `no such command: 'listcollections'`}, err)
+		assertEqualError(t, mongo.CommandError{Code: 59, Name: "CommandNotFound", Message: `no such command: 'listcollections'`}, err)
 
 		res = db.RunCommand(ctx, bson.D{{"listCollections", 1}})
 		assert.NoError(t, res.Err())

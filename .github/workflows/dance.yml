@@ -67,11 +67,11 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          make env-logs > /tmp/compose-logs.txt
+          bin/task env-logs > /tmp/compose-logs.txt
 
       - name: Upload logs
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
           path: /tmp/compose-logs.txt

@@ -12,11 +12,11 @@ replace github.com/quasilyte/go-consistent => github.com/AlekSi/go-consistent v0
 replace golang.org/x/tools => github.com/AlekSi/tools v0.1.11-0.20220317161929-e47c4f46a332
 
 require (
-	github.com/go-task/task/v3 v3.11.0
+	github.com/go-task/task/v3 v3.12.0
 	github.com/golangci/golangci-lint v1.45.2 // sync with Go workflow
 	github.com/quasilyte/go-consistent v0.0.0-20200404105227-766526bf1e96
 	github.com/reviewdog/reviewdog v0.14.0
-	golang.org/x/perf v0.0.0-20220325151055-db1824ac6972
+	golang.org/x/perf v0.0.0-20220411212318-84e58bfe0a7e
 	golang.org/x/tools v0.1.10
 	mvdan.cc/gofumpt v0.3.1
 )
