@@ -67,7 +67,7 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          make env-logs > /tmp/compose-logs.txt
+          bin/task env-logs > /tmp/compose-logs.txt
 
       - name: Upload logs
         if: failure()
