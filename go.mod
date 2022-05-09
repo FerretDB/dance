@@ -5,9 +5,9 @@ go 1.18
 require (
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/stretchr/testify v1.7.1
-	go.mongodb.org/mongo-driver v1.9.0
-	golang.org/x/exp v0.0.0-20220414153411-bcd21879b8fd
-	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad
+	go.mongodb.org/mongo-driver v1.9.1
+	golang.org/x/exp v0.0.0-20220428152302-39d4317da171
+	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
 
