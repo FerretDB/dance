@@ -7,14 +7,14 @@ In particular, the FerretDB development cycle (fix-compile-run-dance) is faster 
 ## Running tests
 
 ```sh
-bin/task dance DB=ferretdb TEST=ferret
+bin/task dance DB=ferretdb TEST=mongo-go-driver
 ```
 
-That command will run `ferret` tests ([configuration](https://github.com/FerretDB/dance/blob/main/tests/ferret.yml), [test](https://github.com/FerretDB/dance/tree/main/tests/ferret)) against FerretDB.
+That command will run `mongo-go-driver` tests against FerretDB.
 `DB` environment variable should have the value `ferretdb` or `mongodb`.
 It defines what tests are expected to pass and fail.
 For example, see [mongo-go-driver tests configuration](https://github.com/FerretDB/dance/blob/main/tests/mongo-go-driver.yml) (fields under `results.ferretdb` and `results.mongodb`).
-`TEST` environment variable should have the value `ferret`, `mongo-go-driver`, or be empty.
+`TEST` environment variable should have the value `mongo-go-driver`, or be empty.
 It defines what test configuration to run; empty value runs all configurations.
 
 ## Starting environment with Docker Compose

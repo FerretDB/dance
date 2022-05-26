@@ -18,6 +18,7 @@ import "time"
 
 type action string
 
+//nolint:godot // false positive for unexported identifiers
 const (
 	// actionRun means the test has started running.
 	actionRun action = "run"
