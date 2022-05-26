@@ -1,0 +1,3 @@
+---
+runner: gotest
+args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
