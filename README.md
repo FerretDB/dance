@@ -7,4 +7,7 @@ It runs integration tests of various software that uses MongoDB (such as [MongoD
 It is expected that most or all tests pass when run against MongoDB, so we mark a few or none tests as expected failures or skips in configuration.
 More tests fail (and are marked as expected failures in tests configuration) when run against FerretDB, but their number goes down over time.
 
+Dance also includes one additional set of integration tests (called `diff`) that is written by FerretDB developers.
+FIXME
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for running instructions.

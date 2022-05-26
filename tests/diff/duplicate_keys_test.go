@@ -25,7 +25,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func TestCore(t *testing.T) {
+func TestDuplicateKeys(t *testing.T) {
 	t.Parallel()
 
 	ctx, db := setup(t)
