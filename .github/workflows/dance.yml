@@ -27,15 +27,9 @@ jobs:
           - ferretdb
           - mongodb
         test:
-          - ferret
-          - FerretDB-integration
           - mongo-go-driver
 
     steps:
-      - name: Extract Docker image name and tag
-        id: extract
-        uses: FerretDB/github-actions/extract-docker-tag@main
-
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -53,7 +47,7 @@ jobs:
       - name: Start environment
         run: bin/task env-up-detach
         env:
-          FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
           DB: ${{ matrix.db }}
 
       - name: Run init
