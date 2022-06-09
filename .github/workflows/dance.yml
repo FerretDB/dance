@@ -27,8 +27,6 @@ jobs:
           - ferretdb
           - mongodb
         test:
-          - ferret
-          - FerretDB-integration
           - mongo-go-driver
 
     steps:
@@ -53,7 +51,7 @@ jobs:
       - name: Start environment
         run: bin/task env-up-detach
         env:
-          FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
           DB: ${{ matrix.db }}
 
       - name: Run init

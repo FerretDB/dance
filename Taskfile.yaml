@@ -19,7 +19,7 @@ tasks:
   fmt:
     desc: "Format code"
     cmds:
-      - bin/gofumpt -w ./cmd/ ./internal/ ./tests/ferret
+      - bin/gofumpt -w ./cmd/ ./internal/
 
   env-up:
     desc: "Start environment"
@@ -60,8 +60,8 @@ tasks:
   lint:
     desc: "Run linters"
     cmds:
-      - bin/golangci-lint run --config=.golangci-required.yml
       - bin/golangci-lint run --config=.golangci.yml
+      - bin/golangci-lint run --config=.golangci-new.yml --new-from-rev=main
       - bin/go-consistent -pedantic ./cmd/... ./internal/...
 
   psql:

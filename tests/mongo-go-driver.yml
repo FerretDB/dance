@@ -17,18 +17,23 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 21
-      expected_skip: 4
-      expected_pass: 188
+      expected_fail: 18
+      expected_skip: 8
+      expected_pass: 198
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
 
     fail:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
@@ -47,6 +52,11 @@ results:
     skip: # shared with mongodb
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
 
@@ -63,15 +73,17 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      # expected_skip: 2
-      expected_skip: 5
-      # expected_pass: 193
-      expected_pass: 209
+      expected_skip: 8
+      expected_pass: 216
 
     skip: # shared with ferretdb
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
 
