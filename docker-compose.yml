@@ -15,7 +15,7 @@ services:
         "-postgresql-url=postgres://user@postgres:5432/dance",
         "-test.coverprofile=cover.txt",
         "-mode=normal",
-        "-test-conn-timeout=10s",
+        "-test-conn-timeout=10s"
       ]
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
