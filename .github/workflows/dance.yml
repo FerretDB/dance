@@ -6,14 +6,14 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: '42 3 * * *'
+    - cron: "42 3 * * *"
 
 env:
   GOPATH: /home/runner/go
   GOCACHE: /home/runner/go/cache
   GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
   GOMODCACHE: /home/runner/go/mod
-  GOPROXY: https://proxy.golang.org # remove direct
+  GOPROXY: https://proxy.golang.org
 
 jobs:
   dance:
@@ -32,6 +32,11 @@ jobs:
           - mongo-go-driver
 
     steps:
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
+
       - name: Extract Docker image name and tag
         id: extract
         uses: FerretDB/github-actions/extract-docker-tag@main
@@ -40,11 +45,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-
-      - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@main
-        with:
-          cache-key: dance
 
       - name: Install Task
         run: go generate -x
