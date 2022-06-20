@@ -25,27 +25,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// databaseName returns valid database name for given test.
-func databaseName(t *testing.T) string {
-	t.Helper()
+// databaseName returns a stable database name for that test.
+func databaseName(tb testing.TB) string {
+	tb.Helper()
 
-	name := strings.ToLower(t.Name())
+	name := strings.ToLower(tb.Name())
 	name = strings.ReplaceAll(name, "/", "-")
 	name = strings.ReplaceAll(name, " ", "-")
 
-	require.Less(t, len(name), 64)
-	return name
-}
-
-// collectionName returns valid collection name for given test.
-func collectionName(t *testing.T) string {
-	t.Helper()
-
-	name := strings.ToLower(t.Name())
-	name = strings.ReplaceAll(name, "/", "-")
-	name = strings.ReplaceAll(name, " ", "-")
-
-	require.Less(t, len(name), 64)
+	require.Less(tb, len(name), 64)
 	return name
 }
 
@@ -56,7 +44,7 @@ func setup(t *testing.T) (context.Context, *mongo.Database) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
 	require.NoError(t, err)
 	err = client.Ping(ctx, nil)
 	require.NoError(t, err)
