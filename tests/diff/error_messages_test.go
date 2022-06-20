@@ -36,14 +36,17 @@ func TestErrorMessages(t *testing.T) {
 	assert.Equal(t, int32(14), actual.Code)
 	assert.Equal(t, "TypeMismatch", actual.Name)
 
-	messages := []string{
-		// MongoDB has closing single quote is in the wrong place
-		`BSON field 'getParameter.allParameters' is the wrong type 'string', ` +
-			`expected types '[bool, long, int, decimal, double']`,
+	t.Run("FerretDB", func(t *testing.T) {
+		// our error message is better
+		expected := `BSON field 'allParameters' is the wrong type 'string', ` +
+			`expected types '[bool, long, int, decimal, double]'`
+		assert.Equal(t, expected, actual.Message)
+	})
 
-		// FerretDB's error message is better
-		`BSON field 'allParameters' is the wrong type 'string', ` +
-			`expected types '[bool, long, int, decimal, double]'`,
-	}
-	assert.Contains(t, messages, actual.Message)
+	t.Run("MongoDB", func(t *testing.T) {
+		// closing single quote is in the wrong place
+		expected := `BSON field 'getParameter.allParameters' is the wrong type 'string', ` +
+			`expected types '[bool, long, int, decimal, double']`
+		assert.Equal(t, expected, actual.Message)
+	})
 }
