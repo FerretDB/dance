@@ -1,13 +1,18 @@
 ---
-# Almost all linters; some of them are optional.
+# Linters that should pass for all code.
 
 run:
-  modules-download-mode: readonly
-  issues-exit-code: 0
+  timeout: 2m
 
 linters-settings:
+  # asciicheck
   exhaustive:
     default-signifies-exhaustive: false
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/FerretDB/dance)
   goconst:
     min-occurrences: 5
     ignore-tests: true
@@ -16,13 +21,14 @@ linters-settings:
     exclude:
       - go-sumtype:decl
       - check interfaces
-    capital: false # for unexported declarations
+    capital: true
   godox:
     keywords:
       - BUG
       - FIXME
       - HACK
   goheader:
+    # Please do not update it, including bumping a year.
     template: |-
       Copyright 2021 FerretDB Inc.
 
@@ -40,11 +46,13 @@ linters-settings:
   goimports:
     local-prefixes: github.com/FerretDB/dance
   gosimple:
-    go: "1.18"
-    checks: ["all"]
+    go: '1.18'
+    checks: ['all']
+  # govet
+  # ineffassign
   lll:
     line-length: 130
-    tab-width: 1
+    tab-width: 4
   misspell:
     ignore-words:
       - guiness # present in the test dataset
@@ -55,74 +63,35 @@ linters-settings:
     require-explanation: true
     require-specific: true
   staticcheck:
-    go: "1.18"
-    checks: ["all"]
-  stylecheck:
-    go: "1.18"
-    checks: ["all"]
-    dot-import-whitelist: []
-    initialisms: []
-    http-status-code-whitelist: []
-  tagliatelle:
-    case:
-      use-field-name: false
-      rules:
-        json: pascal
-        yaml: snake
-  unparam:
-    check-exported: true
+    go: '1.18'
+    checks: ['all']
   unused:
-    go: "1.18"
+    go: '1.18'
   whitespace:
     multi-if: false
     multi-func: false
 
 linters:
-  enable-all: true
-  disable:
-    # TODO configure and enable one by one
-    - cyclop
-    - dupl
-    - errcheck
-    - errname
-    - errorlint
-    - exhaustivestruct
-    - forcetypeassert
-    - funlen
-    - gochecknoglobals
-    - gochecknoinits
-    - gocognit
-    - gocritic
-    - gocyclo
-    - goerr113
-    - gomnd
-    - gosec
-    - ifshort
-    - ireturn
-    - nakedret
-    - revive
-    - thelper
-    - unparam
-    - varnamelen
-    - wrapcheck
-
-    # TODO enable when goanalysis_metalinter supports generics
+  disable-all: true
+  enable:
+    - asciicheck
+    # - depguard
+    - exhaustive
+    - gci
+    - goconst
+    - godot
+    - godox
+    - goheader
+    - goimports
     - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nolintlint
     - staticcheck
-    - stylecheck
     - unused
-
-    - golint      # deprecated
-    - interfacer  # deprecated
-    - maligned    # deprecated
-    - nlreturn    # too annoying
-    - scopelint   # deprecated
-    - testpackage # we test internals
-    - wsl         # too annoying
+    - whitespace
 
 issues:
   exclude-use-default: false
-  exclude-rules:
-    - linters:
-        - govet
-      text: "composites: `go.mongodb.org/mongo-driver/bson/primitive.E` composite literal uses unkeyed fields"

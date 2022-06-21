@@ -15,14 +15,14 @@ services:
         "-postgresql-url=postgres://user@postgres:5432/dance",
         "-test.coverprofile=cover.txt",
         "-mode=normal",
-        "-test-conn-timeout=10s",
+        "-test-conn-timeout=10s"
       ]
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
 
   postgres:
-    image: postgres:14.2
+    image: postgres:14.3
     container_name: dance_postgres
     restart: unless-stopped
     ports:
@@ -35,7 +35,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
 
   mongodb:
-    image: mongo:5.0.6
+    image: mongo:5.0.8
     container_name: dance_mongodb
     restart: unless-stopped
     depends_on: ["mongosh"]
@@ -46,7 +46,7 @@ services:
       - TZ=Asia/Kathmandu
 
   mongosh:
-    image: mongo:5.0.6
+    image: mongo:5.0.8
     container_name: dance_mongosh
     restart: unless-stopped
     environment:

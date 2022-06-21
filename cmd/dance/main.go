@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os/signal"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -28,7 +27,6 @@ import (
 
 	"github.com/pmezard/go-difflib/difflib"
 	"golang.org/x/exp/maps"
-	"golang.org/x/sys/unix"
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
@@ -76,7 +74,7 @@ func main() {
 		log.Fatal("-db is required")
 	}
 
-	ctx, stop := signal.NotifyContext(context.Background(), unix.SIGTERM, unix.SIGINT)
+	ctx, stop := notifyAppTermination(context.Background())
 	go func() {
 		<-ctx.Done()
 		log.Print("Stopping...")
@@ -110,6 +108,10 @@ func main() {
 		config, err := internal.LoadConfig(match)
 		if err != nil {
 			log.Fatal(err)
+		}
+
+		if config.Dir != "" {
+			dir = filepath.Join(dir, config.Dir)
 		}
 
 		expectedConfig, err := config.Results.ForDB(*dbF)
