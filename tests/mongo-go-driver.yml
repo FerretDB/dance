@@ -18,8 +18,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 18
-      expected_skip: 8
-      expected_pass: 198
+      expected_skip: 9
+      expected_pass: 197
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -67,14 +67,17 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
 
+      # skip if CRYPT_SHARED_LIB_PATH is not set
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+
   mongodb:
     stats:
       unexpected_fail: 0
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 8
-      expected_pass: 216
+      expected_skip: 9
+      expected_pass: 215
 
     skip: # shared with ferretdb
       # needs replica set
@@ -93,3 +96,6 @@ results:
       # test requires that close does not aggressively close used connections
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+
+      # skip if CRYPT_SHARED_LIB_PATH is not set
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
