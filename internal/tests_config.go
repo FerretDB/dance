@@ -16,7 +16,10 @@ package internal
 
 import (
 	"fmt"
+	"sort"
 	"strings"
+
+	"golang.org/x/exp/maps"
 )
 
 // nextPrefix returns the next prefix of the given path, stopping on / and .
@@ -51,6 +54,8 @@ type Stats struct {
 // TestsConfig represents a part of the dance configuration for tests.
 //
 // May contain prefixes; the longest prefix wins.
+//
+//nolint:govet // we don't care about alignment there
 type TestsConfig struct {
 	Default status   `yaml:"default"`
 	Stats   Stats    `yaml:"stats"`
@@ -110,7 +115,12 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		return nil, err
 	}
 
-	for test, testRes := range results.TestResults {
+	tests := maps.Keys(results.TestResults)
+	sort.Strings(tests)
+
+	for _, test := range tests {
+		testRes := results.TestResults[test]
+
 		expectedRes := tc.Default
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
@@ -175,5 +185,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
+
+	// special case: zero in expected_pass means "don't check"
+	if tc.Stats.ExpectedPass == 0 {
+		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
+	}
+
 	return compareResult, nil
 }

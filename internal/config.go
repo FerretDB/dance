@@ -24,8 +24,11 @@ import (
 )
 
 // Config represents dance configuration.
+//
+//nolint:govet // we don't care about alignment there
 type Config struct {
 	Runner  string   `yaml:"runner"`
+	Dir     string   `yaml:"dir"`
 	Args    []string `yaml:"args"`
 	Results Results  `yaml:"results"`
 }

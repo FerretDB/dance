@@ -6,13 +6,14 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: '42 3 * * *'
+    - cron: "42 3 * * *"
 
 env:
   GOPATH: /home/runner/go
   GOCACHE: /home/runner/go/cache
-  GOMODCACHE: /home/runner/go/cache/mod
-  GOPROXY: https://proxy.golang.org # remove direct
+  GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
+  GOMODCACHE: /home/runner/go/mod
+  GOPROXY: https://proxy.golang.org
 
 jobs:
   dance:
@@ -26,35 +27,35 @@ jobs:
           - ferretdb
           - mongodb
         test:
-          - ferret
+          - diff
           - mongo-go-driver
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name: Setup Go
         uses: FerretDB/github-actions/setup-go@main
         with:
           cache-key: dance
 
-      - name: Extract Docker image name and tag
-        id: extract
-        uses: FerretDB/github-actions/extract-docker-tag@main
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+      - name: Install Task
+        run: go generate -x
+        working-directory: tools
 
       - name: Start environment
-        run: make env-up-detach
+        run: bin/task env-up-detach
         env:
-          FERRETDB_IMAGE: ${{ steps.extract.outputs.ghcr }}
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
           DB: ${{ matrix.db }}
 
       - name: Run init
-        run: make init
+        run: bin/task init
 
       - name: Dance!
-        run: make dance
+        run: bin/task dance
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
@@ -62,11 +63,11 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          make env-logs > /tmp/compose-logs.txt
+          bin/task env-logs > /tmp/compose-logs.txt
 
       - name: Upload logs
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
           path: /tmp/compose-logs.txt
