@@ -27,6 +27,7 @@ jobs:
           - ferretdb
           - mongodb
         test:
+          - diff
           - mongo-go-driver
 
     steps:
