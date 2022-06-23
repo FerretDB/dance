@@ -54,6 +54,8 @@ type Stats struct {
 // TestsConfig represents a part of the dance configuration for tests.
 //
 // May contain prefixes; the longest prefix wins.
+//
+//nolint:govet // we don't care about alignment there
 type TestsConfig struct {
 	Default status   `yaml:"default"`
 	Stats   Stats    `yaml:"stats"`
