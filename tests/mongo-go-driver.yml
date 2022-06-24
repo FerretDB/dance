@@ -8,7 +8,7 @@ args:
   - ./mongo/gridfs
   # - ./mongo/integration
   # - ./mongo/integration/unified
-  # - ./x/mongo/driver/integration
+  - ./x/mongo/driver/integration
   # - ./x/mongo/driver/topology
 
 results:
@@ -17,8 +17,8 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 18
-      expected_skip: 9
+      expected_fail: 22
+      expected_skip: 12
       expected_pass: 197
 
     pass:
@@ -44,6 +44,10 @@ results:
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
 
       # aggregate https://github.com/FerretDB/FerretDB/issues/9
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_does_not_divide_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
@@ -70,14 +74,22 @@ results:
       # skip if CRYPT_SHARED_LIB_PATH is not set
       - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
 
+      # skip if no compressor specified
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
+
+      # skip because authentication is required
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
+
   mongodb:
     stats:
       unexpected_fail: 0
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 9
-      expected_pass: 215
+      expected_skip: 12
+      expected_pass: 219
 
     skip: # shared with ferretdb
       # needs replica set
@@ -99,3 +111,11 @@ results:
 
       # skip if CRYPT_SHARED_LIB_PATH is not set
       - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+
+      # skip if no compressor specified
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
+
+      # skip because authentication is required
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
