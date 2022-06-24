@@ -6,10 +6,10 @@ args:
   - ./examples/...
   - ./mongo
   - ./mongo/gridfs
-  # - ./mongo/integration
-  # - ./mongo/integration/unified
   - ./x/mongo/driver/integration
-  # - ./x/mongo/driver/topology
+  - ./x/mongo/driver/topology
+# - ./mongo/integration
+# - ./mongo/integration/unified
 
 results:
   ferretdb:
@@ -18,8 +18,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 22
-      expected_skip: 12
-      expected_pass: 197
+      expected_skip: 17
+      expected_pass: 675
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -71,6 +71,16 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
 
+      # event ordering incompatible with load-balancer SDAM spec test
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+
+      # test requires that connections established by minPoolSize
+      # are immediately used to satisfy check-out requests 
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
+
+      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
+
       # skip if CRYPT_SHARED_LIB_PATH is not set
       - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
 
@@ -88,8 +98,8 @@ results:
       unexpected_skip:
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 12
-      expected_pass: 219
+      expected_skip: 17
+      expected_pass: 697
 
     skip: # shared with ferretdb
       # needs replica set
@@ -108,6 +118,16 @@ results:
       # test requires that close does not aggressively close used connections
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+
+      # event ordering incompatible with load-balancer SDAM spec test
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+
+      # test requires that connections established by minPoolSize
+      # are immediately used to satisfy check-out requests 
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
+
+      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
 
       # skip if CRYPT_SHARED_LIB_PATH is not set
       - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
