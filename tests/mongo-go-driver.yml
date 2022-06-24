@@ -87,10 +87,11 @@ results:
       # skip if no compressor specified
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
 
+      # always skipped
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
+
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
 
   mongodb:
     stats:
