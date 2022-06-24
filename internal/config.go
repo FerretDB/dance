@@ -36,7 +36,7 @@ type Config struct {
 // Results represents expected dance results.
 type Results struct {
 	// Expected results for both FerretDB and MongoDB.
-	Common   *TestsConfig `yaml:"common"` //TODO:
+	Common   *TestsConfig `yaml:"common"`
 	FerretDB *TestsConfig `yaml:"ferretdb"`
 	MongoDB  *TestsConfig `yaml:"mongodb"`
 }
