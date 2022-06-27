@@ -58,7 +58,7 @@ type Stats struct {
 //nolint:govet // we don't care about alignment there
 type TestsConfig struct {
 	Default status   `yaml:"default"`
-	Stats   Stats    `yaml:"stats"`
+	Stats   *Stats   `yaml:"stats"`
 	Pass    []string `yaml:"pass"`
 	Skip    []string `yaml:"skip"`
 	Fail    []string `yaml:"fail"`

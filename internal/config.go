@@ -16,6 +16,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -86,6 +87,22 @@ func (c *Config) fillAndValidate() error {
 		for _, result := range c.Results.Common.Pass {
 			c.Results.MongoDB.Pass = append(c.Results.MongoDB.Pass, result)
 			c.Results.FerretDB.Pass = append(c.Results.FerretDB.Pass, result)
+		}
+
+		if c.Results.Common.Default != "" {
+			if c.Results.FerretDB.Default != "" || c.Results.MongoDB.Default != "" {
+				return errors.New("default value cannot be set in common, when it's set in database")
+			}
+			c.Results.MongoDB.Default = c.Results.Common.Default
+			c.Results.FerretDB.Default = c.Results.Common.Default
+		}
+
+		if c.Results.Common.Stats != nil {
+			if c.Results.FerretDB.Stats != nil || c.Results.MongoDB.Stats != nil {
+				return errors.New("stats value cannot be set in common, when it's set in database")
+			}
+			c.Results.MongoDB.Stats = c.Results.Common.Stats
+			c.Results.FerretDB.Stats = c.Results.Common.Stats
 		}
 	}
 

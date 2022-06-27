@@ -50,7 +50,6 @@ func TestFillAndValidate(t *testing.T) {
 					Fail: []string{"D", "E", "e", "f"},
 				},
 			},
-			//TODO: no common; no ferret/mongo; common; stats
 		},
 		"FillAndValidate_Duplicates_Pass": {
 			in: &Results{
@@ -98,6 +97,70 @@ func TestFillAndValidate(t *testing.T) {
 				MongoDB: &TestsConfig{},
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidate_Default": {
+			in: &Results{
+				Common: &TestsConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestsConfig{},
+				MongoDB:  &TestsConfig{},
+			},
+			expected: &Results{
+				Common: &TestsConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestsConfig{
+					Default: "pass",
+				},
+				MongoDB: &TestsConfig{
+					Default: "pass",
+				},
+			},
+		},
+		"FillAndValidate_DefaultDuplicate": {
+			in: &Results{
+				Common: &TestsConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestsConfig{Default: "fail"},
+				MongoDB:  &TestsConfig{},
+			},
+			expectedErr: errors.New("default value cannot be set in common, when it's set in database"),
+		},
+		"FillAndValidate_Stats": {
+			in: &Results{
+				Common: &TestsConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				FerretDB: &TestsConfig{},
+				MongoDB:  &TestsConfig{},
+			},
+			expected: &Results{
+				Common: &TestsConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				FerretDB: &TestsConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				MongoDB: &TestsConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+			},
+		},
+		"FillAndValidate_StatsDuplicate": {
+			in: &Results{
+				Common: &TestsConfig{
+					Stats: &Stats{},
+				},
+				FerretDB: &TestsConfig{
+					Stats: &Stats{},
+				},
+				MongoDB: &TestsConfig{
+					Stats: &Stats{},
+				},
+			},
+			expectedErr: errors.New("stats value cannot be set in common, when it's set in database"),
 		},
 	} {
 		name, tc := name, tc
