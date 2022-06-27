@@ -50,6 +50,7 @@ func TestFillAndValidate(t *testing.T) {
 					Fail: []string{"D", "E", "e", "f"},
 				},
 			},
+			//TODO: no common; no ferret/mongo; common; stats
 		},
 		"FillAndValidate_Duplicates": {
 			in: &Results{
@@ -61,7 +62,7 @@ func TestFillAndValidate(t *testing.T) {
 				},
 				MongoDB: &TestsConfig{},
 			},
-			expectedErr: errors.New("Test \"a\" placed both in Common and FerretDB."),
+			expectedErr: errors.New("test \"a\" placed both in Common and FerretDB"),
 		},
 	} {
 		name, tc := name, tc

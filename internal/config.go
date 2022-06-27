@@ -16,6 +16,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -64,14 +65,26 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-func (c *Config) fillAndValidate() error {
-	if c.Results.Common == nil {
-		if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
-			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+func arrContains[T comparable](arr []T, item T) bool {
+	for _, i := range arr {
+		if item == i {
+			return true
 		}
-	} else {
-		if c.Results.FerretDB != nil || c.Results.MongoDB != nil {
-			return fmt.Errorf("common results are not allowed with FerretDB or MongoDB results")
+	}
+	return false
+}
+
+func (c *Config) fillAndValidate() error {
+	if c.Results.Common != nil {
+		for _, result := range c.Results.Common.Skip {
+			if arrContains(c.Results.FerretDB.Skip, result) {
+				return errors.New(fmt.Sprintf("test \"%s\" placed both in Common and %s", result, "FerretDB"))
+			}
+
+			if arrContains(c.Results.FerretDB.Skip, result) {
+				return errors.New(fmt.Sprintf("test \"%s\" placed both in Common and %s", result, "MongoDB"))
+			}
+			c.Results.MongoDB.Skip = append(c.Results.MongoDB.Skip, result)
 		}
 	}
 
