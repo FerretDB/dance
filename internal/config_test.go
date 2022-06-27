@@ -8,7 +8,7 @@ import (
 )
 
 func TestFillAndValidate(t *testing.T) {
-	// NOTE: this shouldn't be Parallel I guess?
+	t.Parallel()
 
 	for name, tc := range map[string]struct {
 		in          *Results
@@ -52,7 +52,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			//TODO: no common; no ferret/mongo; common; stats
 		},
-		"FillAndValidate_Duplicates": {
+		"FillAndValidate_Duplicates_Pass": {
 			in: &Results{
 				Common: &TestsConfig{
 					Pass: []string{"a"},
@@ -62,7 +62,42 @@ func TestFillAndValidate(t *testing.T) {
 				},
 				MongoDB: &TestsConfig{},
 			},
-			expectedErr: errors.New("test \"a\" placed both in Common and FerretDB"),
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidate_Duplicates_Skip": {
+			in: &Results{
+				Common: &TestsConfig{
+					Skip: []string{"a"},
+				},
+				FerretDB: &TestsConfig{
+					Skip: []string{"a", "b"},
+				},
+				MongoDB: &TestsConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidate_Duplicates_Fail": {
+			in: &Results{
+				Common: &TestsConfig{
+					Fail: []string{"a"},
+				},
+				FerretDB: &TestsConfig{
+					Fail: []string{"a", "b"},
+				},
+				MongoDB: &TestsConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidate_Duplicates_All": {
+			in: &Results{
+				FerretDB: &TestsConfig{
+					Pass: []string{"a"},
+					Skip: []string{"a"},
+					Fail: []string{"a"},
+				},
+				MongoDB: &TestsConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
 	} {
 		name, tc := name, tc
@@ -79,18 +114,24 @@ func TestFillAndValidate(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			//TODO: len after merge - len before merge = len common
 
-			for _, item := range tc.expected.FerretDB.Pass {
-				assert.Contains(t, tc.expected.MongoDB.Pass, item)
+			for _, field := range []struct {
+				expected []string
+				actual   []string
+			}{
+				{tc.expected.FerretDB.Pass, tc.in.FerretDB.Pass},
+				{tc.expected.FerretDB.Skip, tc.in.FerretDB.Skip},
+				{tc.expected.FerretDB.Fail, tc.in.FerretDB.Fail},
+
+				{tc.expected.MongoDB.Pass, tc.in.MongoDB.Pass},
+				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
+				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
+			} {
+				for _, item := range field.expected {
+					assert.Contains(t, field.actual, item)
+				}
+				assert.Equal(t, len(field.expected), len(field.actual))
 			}
 		})
-	}
-}
-
-func assertCorrectlyMerged[T comparable](t *testing.T, source []T, arr1 []T, arr2 []T) {
-	for _, item := range source {
-		assert.Contains(t, arr1, item)
-		assert.Contains(t, arr2, item)
 	}
 }

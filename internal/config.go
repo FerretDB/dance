@@ -16,7 +16,6 @@
 package internal
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -77,14 +76,16 @@ func arrContains[T comparable](arr []T, item T) bool {
 func (c *Config) fillAndValidate() error {
 	if c.Results.Common != nil {
 		for _, result := range c.Results.Common.Skip {
-			if arrContains(c.Results.FerretDB.Skip, result) {
-				return errors.New(fmt.Sprintf("test \"%s\" placed both in Common and %s", result, "FerretDB"))
-			}
-
-			if arrContains(c.Results.FerretDB.Skip, result) {
-				return errors.New(fmt.Sprintf("test \"%s\" placed both in Common and %s", result, "MongoDB"))
-			}
 			c.Results.MongoDB.Skip = append(c.Results.MongoDB.Skip, result)
+			c.Results.FerretDB.Skip = append(c.Results.FerretDB.Skip, result)
+		}
+		for _, result := range c.Results.Common.Fail {
+			c.Results.MongoDB.Fail = append(c.Results.MongoDB.Fail, result)
+			c.Results.FerretDB.Fail = append(c.Results.FerretDB.Fail, result)
+		}
+		for _, result := range c.Results.Common.Pass {
+			c.Results.MongoDB.Pass = append(c.Results.MongoDB.Pass, result)
+			c.Results.FerretDB.Pass = append(c.Results.FerretDB.Pass, result)
 		}
 	}
 

@@ -68,6 +68,9 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
 	for _, t := range tc.Pass {
+		if _, ok := res[t]; ok {
+			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+		}
 		res[t] = Pass
 	}
 
