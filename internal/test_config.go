@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,11 +11,12 @@ func TestFillAndValidate(t *testing.T) {
 	// NOTE: this shouldn't be Parallel I guess?
 
 	for name, tc := range map[string]struct {
-		in       *Results
-		expected *Results
+		in          *Results
+		expected    *Results
+		expectedErr error
 	}{
 		"FillAndValidate_Filled": {
-			&Results{
+			in: &Results{
 				Common: &TestsConfig{
 					Pass: []string{"a", "b"},
 					Skip: []string{"c", "d"},
@@ -31,7 +33,7 @@ func TestFillAndValidate(t *testing.T) {
 					Fail: []string{"D", "E"},
 				},
 			},
-			&Results{
+			expected: &Results{
 				Common: &TestsConfig{
 					Pass: []string{"a", "b"},
 					Skip: []string{"c", "d"},
@@ -49,6 +51,18 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
+		"FillAndValidate_Duplicates": {
+			in: &Results{
+				Common: &TestsConfig{
+					Pass: []string{"a"},
+				},
+				FerretDB: &TestsConfig{
+					Pass: []string{"a", "b"},
+				},
+				MongoDB: &TestsConfig{},
+			},
+			expectedErr: errors.New("Test \"a\" placed both in Common and FerretDB."),
+		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
@@ -56,7 +70,14 @@ func TestFillAndValidate(t *testing.T) {
 			var c Config
 			c.Results = *tc.in
 
-			assert.NoError(t, c.fillAndValidate())
+			err := c.fillAndValidate()
+
+			if tc.expectedErr != nil {
+				assert.Equal(t, tc.expectedErr, err)
+				return
+			}
+
+			assert.NoError(t, err)
 			//TODO: len after merge - len before merge = len common
 
 			for _, item := range tc.expected.FerretDB.Pass {
