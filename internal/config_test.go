@@ -51,6 +51,13 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
+		"FillAndValidate_NotSet": {
+			in: &Results{
+				Common:   nil,
+				FerretDB: &TestsConfig{},
+			},
+			expectedErr: errors.New("both FerretDB and MongoDB results must be set (if common results are not set)"),
+		},
 		"FillAndValidate_Duplicates_Pass": {
 			in: &Results{
 				Common: &TestsConfig{

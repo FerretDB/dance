@@ -65,15 +65,6 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-func arrContains[T comparable](arr []T, item T) bool {
-	for _, i := range arr {
-		if item == i {
-			return true
-		}
-	}
-	return false
-}
-
 func (c *Config) fillAndValidate() error {
 	if c.Results.Common != nil {
 		for _, result := range c.Results.Common.Skip {
@@ -104,6 +95,8 @@ func (c *Config) fillAndValidate() error {
 			c.Results.MongoDB.Stats = c.Results.Common.Stats
 			c.Results.FerretDB.Stats = c.Results.Common.Stats
 		}
+	} else if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
+		return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
 	}
 
 	for _, r := range []*TestsConfig{
