@@ -65,20 +65,17 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-func (c *Config) fillAndValidate() error {
+// Merge common config with both databases
+func mergeTestConfigs(c *Config) error {
 	if c.Results.Common != nil {
-		for _, result := range c.Results.Common.Skip {
-			c.Results.MongoDB.Skip = append(c.Results.MongoDB.Skip, result)
-			c.Results.FerretDB.Skip = append(c.Results.FerretDB.Skip, result)
-		}
-		for _, result := range c.Results.Common.Fail {
-			c.Results.MongoDB.Fail = append(c.Results.MongoDB.Fail, result)
-			c.Results.FerretDB.Fail = append(c.Results.FerretDB.Fail, result)
-		}
-		for _, result := range c.Results.Common.Pass {
-			c.Results.MongoDB.Pass = append(c.Results.MongoDB.Pass, result)
-			c.Results.FerretDB.Pass = append(c.Results.FerretDB.Pass, result)
-		}
+		c.Results.MongoDB.Skip = append(c.Results.MongoDB.Skip, c.Results.Common.Skip...)
+		c.Results.FerretDB.Skip = append(c.Results.FerretDB.Skip, c.Results.Common.Skip...)
+
+		c.Results.MongoDB.Fail = append(c.Results.MongoDB.Fail, c.Results.Common.Fail...)
+		c.Results.FerretDB.Fail = append(c.Results.FerretDB.Fail, c.Results.Common.Fail...)
+
+		c.Results.MongoDB.Pass = append(c.Results.MongoDB.Pass, c.Results.Common.Pass...)
+		c.Results.FerretDB.Pass = append(c.Results.FerretDB.Pass, c.Results.Common.Pass...)
 
 		if c.Results.Common.Default != "" {
 			if c.Results.FerretDB.Default != "" || c.Results.MongoDB.Default != "" {
@@ -97,6 +94,13 @@ func (c *Config) fillAndValidate() error {
 		}
 	} else if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
 		return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+	}
+	return nil
+}
+
+func (c *Config) fillAndValidate() error {
+	if err := mergeTestConfigs(c); err != nil {
+		return err
 	}
 
 	for _, r := range []*TestsConfig{
