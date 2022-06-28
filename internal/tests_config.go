@@ -41,6 +41,8 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
+// Stats represent the expected/actual amount of
+// failed/skipped/passed tests.
 type Stats struct {
 	UnexpectedRest int `yaml:"unexpected_rest"`
 	UnexpectedFail int `yaml:"unexpected_fail"`
