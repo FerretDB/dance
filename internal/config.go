@@ -66,40 +66,40 @@ func LoadConfig(path string) (*Config, error) {
 }
 
 // Merge common config with both databases
-func mergeTestConfigs(c *Config) error {
-	if c.Results.Common != nil {
-		c.Results.MongoDB.Skip = append(c.Results.MongoDB.Skip, c.Results.Common.Skip...)
-		c.Results.FerretDB.Skip = append(c.Results.FerretDB.Skip, c.Results.Common.Skip...)
+func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
+	if common != nil {
+		ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
+		mongodb.Skip = append(mongodb.Skip, common.Skip...)
 
-		c.Results.MongoDB.Fail = append(c.Results.MongoDB.Fail, c.Results.Common.Fail...)
-		c.Results.FerretDB.Fail = append(c.Results.FerretDB.Fail, c.Results.Common.Fail...)
+		ferretdb.Fail = append(ferretdb.Fail, common.Fail...)
+		mongodb.Fail = append(mongodb.Fail, common.Fail...)
 
-		c.Results.MongoDB.Pass = append(c.Results.MongoDB.Pass, c.Results.Common.Pass...)
-		c.Results.FerretDB.Pass = append(c.Results.FerretDB.Pass, c.Results.Common.Pass...)
+		ferretdb.Pass = append(ferretdb.Pass, common.Pass...)
+		mongodb.Pass = append(mongodb.Pass, common.Pass...)
 
-		if c.Results.Common.Default != "" {
-			if c.Results.FerretDB.Default != "" || c.Results.MongoDB.Default != "" {
+		if common.Default != "" {
+			if ferretdb.Default != "" || mongodb.Default != "" {
 				return errors.New("default value cannot be set in common, when it's set in database")
 			}
-			c.Results.MongoDB.Default = c.Results.Common.Default
-			c.Results.FerretDB.Default = c.Results.Common.Default
+			ferretdb.Default = common.Default
+			mongodb.Default = common.Default
 		}
 
-		if c.Results.Common.Stats != nil {
-			if c.Results.FerretDB.Stats != nil || c.Results.MongoDB.Stats != nil {
+		if common.Stats != nil {
+			if ferretdb.Stats != nil || mongodb.Stats != nil {
 				return errors.New("stats value cannot be set in common, when it's set in database")
 			}
-			c.Results.MongoDB.Stats = c.Results.Common.Stats
-			c.Results.FerretDB.Stats = c.Results.Common.Stats
+			ferretdb.Stats = common.Stats
+			mongodb.Stats = common.Stats
 		}
-	} else if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
+	} else if ferretdb == nil || mongodb == nil {
 		return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
 	}
 	return nil
 }
 
 func (c *Config) fillAndValidate() error {
-	if err := mergeTestConfigs(c); err != nil {
+	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return err
 	}
 
