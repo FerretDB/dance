@@ -65,14 +65,14 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidate_NotSet": {
+		"FillAndValidateNotSet": {
 			in: &Results{
 				Common:   nil,
 				FerretDB: &TestsConfig{},
 			},
 			expectedErr: errors.New("both FerretDB and MongoDB results must be set (if common results are not set)"),
 		},
-		"FillAndValidate_Duplicates_Pass": {
+		"FillAndValidateDuplicatesPass": {
 			in: &Results{
 				Common: &TestsConfig{
 					Pass: []string{"a"},
@@ -84,7 +84,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidate_Duplicates_Skip": {
+		"FillAndValidateDuplicatesSkip": {
 			in: &Results{
 				Common: &TestsConfig{
 					Skip: []string{"a"},
@@ -96,7 +96,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidate_Duplicates_Fail": {
+		"FillAndValidateDuplicatesFail": {
 			in: &Results{
 				Common: &TestsConfig{
 					Fail: []string{"a"},
@@ -108,7 +108,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidate_Duplicates_All": {
+		"FillAndValidateDuplicatesAll": {
 			in: &Results{
 				FerretDB: &TestsConfig{
 					Pass: []string{"a"},
@@ -119,7 +119,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidate_Default": {
+		"FillAndValidateDefault": {
 			in: &Results{
 				Common: &TestsConfig{
 					Default: "pass",
@@ -139,7 +139,7 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidate_DefaultDuplicate": {
+		"FillAndValidateDefaultDuplicate": {
 			in: &Results{
 				Common: &TestsConfig{
 					Default: "pass",
@@ -149,7 +149,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("default value cannot be set in common, when it's set in database"),
 		},
-		"FillAndValidate_Stats": {
+		"FillAndValidateStats": {
 			in: &Results{
 				Common: &TestsConfig{
 					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
@@ -169,7 +169,7 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidate_StatsDuplicate": {
+		"FillAndValidateStatsDuplicate": {
 			in: &Results{
 				Common: &TestsConfig{
 					Stats: &Stats{},
