@@ -12,6 +12,47 @@ args:
 # - ./mongo/integration/unified
 
 results:
+  common: # shared between ferretdb and mongodb
+    skip:
+      # needs replica set
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+
+      # OCSP
+      - go.mongodb.org/mongo-driver/mongo/TestOCSP
+
+      # test requires that close does not aggressively close used connections
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+
+      # event ordering incompatible with load-balancer SDAM spec test
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+
+      # test requires that connections established by minPoolSize
+      # are immediately used to satisfy check-out requests 
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
+
+      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
+
+      # skip if CRYPT_SHARED_LIB_PATH is not set
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+
+      # skip if no compressor specified
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
+
+      # always skipped
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
+
+      # skip because authentication is required
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
   ferretdb:
     stats:
       unexpected_fail: 0
@@ -53,46 +94,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
-    skip: # shared with mongodb
-      # needs replica set
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-
-      # OCSP
-      - go.mongodb.org/mongo-driver/mongo/TestOCSP
-
-      # test requires that close does not aggressively close used connections
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
-
-      # event ordering incompatible with load-balancer SDAM spec test
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
-
-      # test requires that connections established by minPoolSize
-      # are immediately used to satisfy check-out requests 
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
-
-      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
-
-      # skip if CRYPT_SHARED_LIB_PATH is not set
-      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
-
-      # skip if no compressor specified
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
-
-      # always skipped
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
-
-      # skip because authentication is required
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-
   mongodb:
     stats:
       unexpected_fail: 0
@@ -101,43 +102,3 @@ results:
       expected_fail: 0
       expected_skip: 17
       expected_pass: 697
-
-    skip: # shared with ferretdb
-      # needs replica set
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-
-      # OCSP
-      - go.mongodb.org/mongo-driver/mongo/TestOCSP
-
-      # test requires that close does not aggressively close used connections
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
-
-      # event ordering incompatible with load-balancer SDAM spec test
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
-
-      # test requires that connections established by minPoolSize
-      # are immediately used to satisfy check-out requests 
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
-
-      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
-
-      # skip if CRYPT_SHARED_LIB_PATH is not set
-      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
-
-      # skip if no compressor specified
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
-
-      # always skipped
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
-
-      # skip because authentication is required
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
