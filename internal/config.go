@@ -65,7 +65,7 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-// Merge common config with both databases
+// Merge common config with both databases.
 func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 	if common != nil {
 		ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
