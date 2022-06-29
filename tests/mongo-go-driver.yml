@@ -97,8 +97,25 @@ results:
   mongodb:
     stats:
       unexpected_fail: 0
-      unexpected_skip:
+      unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 0
+      expected_fail: 2
       expected_skip: 17
-      expected_pass: 697
+      expected_pass: 695
+    fail:
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+    pass:
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
