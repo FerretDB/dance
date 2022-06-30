@@ -58,9 +58,9 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 22
+      expected_fail: 23
       expected_skip: 17
-      expected_pass: 675
+      expected_pass: 717
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -93,6 +93,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_does_not_divide_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient
+
+      # session commands https://github.com/FerretDB/FerretDB/issues/153
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
 
   mongodb:
     stats:
