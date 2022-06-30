@@ -5,6 +5,11 @@ on:
     branches:
       - main
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - auto_merge_enabled # if GitHub Actions stuck, re-enable auto-merge to force rebuild
   schedule:
     - cron: "12 3 * * *"
 
