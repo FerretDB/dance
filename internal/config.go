@@ -67,33 +67,36 @@ func LoadConfig(path string) (*Config, error) {
 
 // mergeTestConfigs merges common config with both databases test configs.
 func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
-	if common != nil {
-		ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
-		mongodb.Skip = append(mongodb.Skip, common.Skip...)
-
-		ferretdb.Fail = append(ferretdb.Fail, common.Fail...)
-		mongodb.Fail = append(mongodb.Fail, common.Fail...)
-
-		ferretdb.Pass = append(ferretdb.Pass, common.Pass...)
-		mongodb.Pass = append(mongodb.Pass, common.Pass...)
-
-		if common.Default != "" {
-			if ferretdb.Default != "" || mongodb.Default != "" {
-				return errors.New("default value cannot be set in common, when it's set in database")
-			}
-			ferretdb.Default = common.Default
-			mongodb.Default = common.Default
+	if common == nil {
+		if ferretdb == nil || mongodb == nil {
+			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
 		}
+		return nil
+	}
 
-		if common.Stats != nil {
-			if ferretdb.Stats != nil || mongodb.Stats != nil {
-				return errors.New("stats value cannot be set in common, when it's set in database")
-			}
-			ferretdb.Stats = common.Stats
-			mongodb.Stats = common.Stats
+	ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
+	mongodb.Skip = append(mongodb.Skip, common.Skip...)
+
+	ferretdb.Fail = append(ferretdb.Fail, common.Fail...)
+	mongodb.Fail = append(mongodb.Fail, common.Fail...)
+
+	ferretdb.Pass = append(ferretdb.Pass, common.Pass...)
+	mongodb.Pass = append(mongodb.Pass, common.Pass...)
+
+	if common.Default != "" {
+		if ferretdb.Default != "" || mongodb.Default != "" {
+			return errors.New("default value cannot be set in common, when it's set in database")
 		}
-	} else if ferretdb == nil || mongodb == nil {
-		return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+		ferretdb.Default = common.Default
+		mongodb.Default = common.Default
+	}
+
+	if common.Stats != nil {
+		if ferretdb.Stats != nil || mongodb.Stats != nil {
+			return errors.New("stats value cannot be set in common, when it's set in database")
+		}
+		ferretdb.Stats = common.Stats
+		mongodb.Stats = common.Stats
 	}
 	return nil
 }
