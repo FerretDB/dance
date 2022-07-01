@@ -65,7 +65,7 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-// mergeTestConfigs merges common config with both databases test configs.
+// mergeTestConfigs merges common config into both databases test configs.
 func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 	if common == nil {
 		if ferretdb == nil || mongodb == nil {
