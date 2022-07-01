@@ -60,7 +60,7 @@ type TestsConfig struct {
 	Default status   `yaml:"default"`
 	Stats   Stats    `yaml:"stats"`
 	Pass    []string `yaml:"pass"`
-	Skip    []string `yaml:"skip"`
+	Skip    []string `yaml:"skip"` //TODO
 	Fail    []string `yaml:"fail"`
 }
 
