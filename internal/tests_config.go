@@ -41,6 +41,8 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
+// Stats represent the expected/actual amount of
+// failed, skipped and passed tests.
 type Stats struct {
 	UnexpectedRest int `yaml:"unexpected_rest"`
 	UnexpectedFail int `yaml:"unexpected_fail"`
@@ -54,11 +56,9 @@ type Stats struct {
 // TestsConfig represents a part of the dance configuration for tests.
 //
 // May contain prefixes; the longest prefix wins.
-//
-//nolint:govet // we don't care about alignment there
 type TestsConfig struct {
 	Default status   `yaml:"default"`
-	Stats   Stats    `yaml:"stats"`
+	Stats   *Stats   `yaml:"stats"`
 	Pass    []string `yaml:"pass"`
 	Skip    []string `yaml:"skip"`
 	Fail    []string `yaml:"fail"`
@@ -68,6 +68,9 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
 	for _, t := range tc.Pass {
+		if _, ok := res[t]; ok {
+			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+		}
 		res[t] = Pass
 	}
 
