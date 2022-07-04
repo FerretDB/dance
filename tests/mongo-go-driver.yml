@@ -12,7 +12,7 @@ args:
   - ./mongo/integration/unified
 
 results:
-  common: # shared between ferretdb and mongodb
+  common:
     skip:
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
