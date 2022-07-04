@@ -16,6 +16,8 @@ package internal
 
 import (
 	"fmt"
+	"log"
+	"reflect"
 	"sort"
 	"strings"
 
@@ -57,35 +59,45 @@ type Stats struct {
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Default status   `yaml:"default"`
-	Stats   *Stats   `yaml:"stats"`
-	Pass    []string `yaml:"pass"`
-	Skip    []string `yaml:"skip"`
-	Fail    []string `yaml:"fail"`
+	Default status `yaml:"default"`
+	Stats   *Stats `yaml:"stats"`
+	Pass    []any  `yaml:"pass"`
+	Skip    []any  `yaml:"skip"`
+	Fail    []any  `yaml:"fail"`
+}
+
+type ResRegexp struct {
+	Regexp map[string]interface{} `yaml:"regexp"`
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
-	for _, t := range tc.Pass {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Pass
-	}
+	for _, tcat := range []struct {
+		tests       []any
+		testsStatus status
+	}{
+		{tc.Pass, Pass},
+		{tc.Skip, Skip},
+		{tc.Fail, Fail},
+	} {
+		for _, t := range tcat.tests {
+			if regex, ok := t.(map[string]interface{}); ok {
+				log.Fatal(regex)
+				//TODO
+			}
 
-	for _, t := range tc.Skip {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Skip
-	}
+			testName, ok := t.(string)
+			if !ok {
+				log.Println(reflect.TypeOf(t))
+				return nil, fmt.Errorf("invalid type of \"%q\": %q", t, reflect.TypeOf(t))
+			}
 
-	for _, t := range tc.Fail {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+			if _, ok := res[testName]; ok {
+				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+			}
+			res[testName] = tcat.testsStatus
 		}
-		res[t] = Fail
 	}
 
 	return res, nil
