@@ -105,6 +105,7 @@ func main() {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)
 
+		// decode yaml, merge common, convert toMap() to validate and check for dups TODO: remove comment
 		config, err := internal.LoadConfig(match)
 		if err != nil {
 			log.Fatal(err)
@@ -114,6 +115,7 @@ func main() {
 			dir = filepath.Join(dir, config.Dir)
 		}
 
+		// choose configs from expected db TODO: remove comment
 		expectedConfig, err := config.Results.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)
@@ -124,6 +126,7 @@ func main() {
 			log.Fatal(err)
 		}
 
+		// convert toMap(), compare to test responses TODO: remove comment
 		compareRes, err := expectedConfig.Compare(runRes)
 		if err != nil {
 			log.Fatal(err)
