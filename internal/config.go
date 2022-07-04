@@ -16,6 +16,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -64,15 +65,45 @@ func LoadConfig(path string) (*Config, error) {
 	return &c, nil
 }
 
-func (c *Config) fillAndValidate() error {
-	if c.Results.Common == nil {
-		if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
+// mergeTestConfigs merges common config into both databases test configs.
+func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
+	if common == nil {
+		if ferretdb == nil || mongodb == nil {
 			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
 		}
-	} else {
-		if c.Results.FerretDB != nil || c.Results.MongoDB != nil {
-			return fmt.Errorf("common results are not allowed with FerretDB or MongoDB results")
+		return nil
+	}
+
+	ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
+	mongodb.Skip = append(mongodb.Skip, common.Skip...)
+
+	ferretdb.Fail = append(ferretdb.Fail, common.Fail...)
+	mongodb.Fail = append(mongodb.Fail, common.Fail...)
+
+	ferretdb.Pass = append(ferretdb.Pass, common.Pass...)
+	mongodb.Pass = append(mongodb.Pass, common.Pass...)
+
+	if common.Default != "" {
+		if ferretdb.Default != "" || mongodb.Default != "" {
+			return errors.New("default value cannot be set in common, when it's set in database")
 		}
+		ferretdb.Default = common.Default
+		mongodb.Default = common.Default
+	}
+
+	if common.Stats != nil {
+		if ferretdb.Stats != nil || mongodb.Stats != nil {
+			return errors.New("stats value cannot be set in common, when it's set in database")
+		}
+		ferretdb.Stats = common.Stats
+		mongodb.Stats = common.Stats
+	}
+	return nil
+}
+
+func (c *Config) fillAndValidate() error {
+	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
+		return err
 	}
 
 	for _, r := range []*TestsConfig{
