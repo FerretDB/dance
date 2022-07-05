@@ -12,7 +12,7 @@ Remember to use that command to clone this repository with all submodules includ
 
 ---
 ```sh
-git submodule update --init --remote
+git submodule update --init
 ```
 If you've already cloned it without submodules you can use that command
 to include required submodules.
