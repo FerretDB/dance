@@ -61,9 +61,54 @@ type Stats struct {
 type TestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
+	Pass    *Tests `yaml:"pass"`
+	Skip    *Tests `yaml:"skip"`
+	Fail    *Tests `yaml:"fail"`
+}
+
+type Tests struct {
+	TestNames []string
+	ResRegexp []string
+}
+
+type importedTestsConfig struct {
+	Default status `yaml:"default"`
+	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
 	Skip    []any  `yaml:"skip"`
 	Fail    []any  `yaml:"fail"`
+}
+
+func (itc *importedTestsConfig) Convert() (*TestsConfig, error) {
+	tc := TestsConfig{itc.Default, itc.Stats, &Tests{}, &Tests{}, &Tests{}}
+	for _, tcat := range []struct {
+		inTests  []any
+		outTests *Tests
+	}{
+		{itc.Pass, tc.Pass},
+		{itc.Skip, tc.Skip},
+		{itc.Fail, tc.Fail},
+	} {
+		for _, t := range tcat.inTests {
+			switch t.(type) {
+			case map[string]any:
+				if _, ok := t.(map[string]any); ok {
+					//TODO
+					continue
+				}
+				panic("map[string]any assertion error")
+			case string:
+				if testname, ok := t.(string); ok {
+					tc.Pass.TestNames = append(tc.Pass.TestNames, testname)
+					continue
+				}
+				panic("string assertion error")
+			default:
+				return nil, fmt.Errorf("invalid type of \"%q\": %q", t, reflect.TypeOf(t))
+			}
+		}
+	}
+	return &tc, nil
 }
 
 type ResRegexp struct {
