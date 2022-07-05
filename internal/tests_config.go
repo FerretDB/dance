@@ -59,11 +59,11 @@ type Stats struct {
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Default status `yaml:"default"`
-	Stats   *Stats `yaml:"stats"`
-	Pass    *Tests `yaml:"pass"`
-	Skip    *Tests `yaml:"skip"`
-	Fail    *Tests `yaml:"fail"`
+	Default status
+	Stats   *Stats
+	Pass    *Tests
+	Skip    *Tests
+	Fail    *Tests
 }
 
 type Tests struct {
@@ -71,7 +71,7 @@ type Tests struct {
 	ResRegexp []string
 }
 
-type importedTestsConfig struct {
+type importTestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -79,7 +79,7 @@ type importedTestsConfig struct {
 	Fail    []any  `yaml:"fail"`
 }
 
-func (itc *importedTestsConfig) Convert() (*TestsConfig, error) {
+func (itc *importTestsConfig) Convert() (*TestsConfig, error) {
 	tc := TestsConfig{itc.Default, itc.Stats, &Tests{}, &Tests{}, &Tests{}}
 	for _, tcat := range []struct {
 		inTests  []any
@@ -92,8 +92,12 @@ func (itc *importedTestsConfig) Convert() (*TestsConfig, error) {
 		for _, t := range tcat.inTests {
 			switch t.(type) {
 			case map[string]any:
-				if _, ok := t.(map[string]any); ok {
-					//TODO
+				if m, ok := t.(map[string]any); ok {
+					regexps, ok := m["regexp"]
+					if !ok {
+						return nil, fmt.Errorf("invalid field name (\"regexp\" expected)")
+					}
+					log.Fatal(regexps) //TODO
 					continue
 				}
 				panic("map[string]any assertion error")
