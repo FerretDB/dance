@@ -44,7 +44,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
 			}
-			require.Equal(t, expected, err)
+			AssertEqualError(t, expected, err)
 			err = db.Collection(collection).Drop(ctx)
 			require.NoError(t, err)
 		})
@@ -67,7 +67,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
 			}
-			require.Equal(t, expected, err)
+			AssertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -88,8 +88,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
 			}
-
-			require.Equal(t, expected, err)
+			AssertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -110,7 +109,7 @@ func TestCollectionName(t *testing.T) {
 					Code:    73,
 					Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
 				}
-				require.Equal(t, expected, err)
+				AssertEqualError(t, expected, err)
 			})
 
 			t.Run("MongoDB", func(t *testing.T) {
@@ -137,7 +136,7 @@ func TestCollectionName(t *testing.T) {
 					Code:    73,
 					Message: "Invalid system namespace: admin.system.",
 				}
-				require.Equal(t, expected, err)
+				AssertEqualError(t, expected, err)
 			})
 		})
 	})
