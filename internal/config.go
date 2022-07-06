@@ -42,7 +42,7 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
-type importConfig struct {
+type ImportConfig struct {
 	Runner  string        `yaml:"runner"`
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
@@ -50,12 +50,12 @@ type importConfig struct {
 }
 
 type importResults struct {
-	Common   *importTestsConfig `yaml:"common"`
-	FerretDB *importTestsConfig `yaml:"ferretdb"`
-	MongoDB  *importTestsConfig `yaml:"mongodb"`
+	Common   *ImportTestsConfig `yaml:"common"`
+	FerretDB *ImportTestsConfig `yaml:"ferretdb"`
+	MongoDB  *ImportTestsConfig `yaml:"mongodb"`
 }
 
-func (ic *importConfig) Convert() (*Config, error) {
+func (ic *ImportConfig) Convert() (*Config, error) {
 	common, err := ic.Results.Common.Convert()
 	if err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var ic importConfig
+	var ic ImportConfig
 	if err = d.Decode(&ic); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}

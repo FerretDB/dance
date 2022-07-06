@@ -71,7 +71,7 @@ type Tests struct {
 	ResRegexp []string
 }
 
-type importTestsConfig struct {
+type ImportTestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -79,7 +79,10 @@ type importTestsConfig struct {
 	Fail    []any  `yaml:"fail"`
 }
 
-func (itc *importTestsConfig) Convert() (*TestsConfig, error) {
+func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
+	if itc == nil {
+		return nil, nil // not sure if that works
+	}
 	tc := TestsConfig{itc.Default, itc.Stats, &Tests{}, &Tests{}, &Tests{}}
 	for _, tcat := range []struct {
 		inTests  []any
