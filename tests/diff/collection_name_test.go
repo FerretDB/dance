@@ -100,8 +100,8 @@ func TestCollectionName(t *testing.T) {
 	})
 
 	t.Run("ReservedPrefixes", func(t *testing.T) {
-		collection := "_ferretdb_xxx"
 		t.Run("_ferretdb_", func(t *testing.T) {
+			collection := "_ferretdb_xxx"
 			t.Run("FerretDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
 				expected := mongo.CommandError{
@@ -120,8 +120,8 @@ func TestCollectionName(t *testing.T) {
 			})
 		})
 
-		collection = "system."
 		t.Run("system", func(t *testing.T) {
+			collection := "system."
 			t.Run("FerretDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
 				require.NoError(t, err)
