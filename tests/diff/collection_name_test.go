@@ -19,8 +19,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // TestCollectionName documents difference in reposnes:
@@ -39,12 +39,20 @@ func TestCollectionName(t *testing.T) {
 
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
-			expected := fmt.Errorf(`Invalid collection name: 'testcollectionname-err.collection_name_with_a-dot.'`)
-			assert.Equal(t, expected, err)
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+			}
+			require.Equal(t, expected, err)
+			err = db.Collection(collection).Drop(ctx)
+			require.NoError(t, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
+			require.NoError(t, err)
+			err = db.Collection(collection).Drop(ctx)
 			require.NoError(t, err)
 		})
 	})
@@ -54,12 +62,18 @@ func TestCollectionName(t *testing.T) {
 
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
-			expected := fmt.Errorf(`Invalid collection name: 'testcollectionname-err.collection_name_with_a-dash'`)
-			assert.Equal(t, expected, err)
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+			}
+			require.Equal(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
+			require.NoError(t, err)
+			err = db.Collection(collection).Drop(ctx)
 			require.NoError(t, err)
 		})
 	})
@@ -70,12 +84,18 @@ func TestCollectionName(t *testing.T) {
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
+			err = db.Collection(collection).Drop(ctx)
+			require.NoError(t, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
-			expected := fmt.Errorf(`Invalid collection name: 'testcollectionname-err.%s'`, collection)
-			assert.Equal(t, expected, err)
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+			}
+			require.Equal(t, expected, err)
 		})
 	})
 
@@ -84,12 +104,18 @@ func TestCollectionName(t *testing.T) {
 		t.Run("_ferretdb_", func(t *testing.T) {
 			t.Run("FerretDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
-				expected := fmt.Errorf(`Invalid collection name: 'testcollectionname-err.%s'`, collection)
-				assert.Equal(t, expected, err)
+				expected := mongo.CommandError{
+					Name:    "InvalidNamespace",
+					Code:    73,
+					Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+				}
+				require.Equal(t, expected, err)
 			})
 
 			t.Run("MongoDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
+				require.NoError(t, err)
+				err = db.Collection(collection).Drop(ctx)
 				require.NoError(t, err)
 			})
 		})
@@ -99,12 +125,18 @@ func TestCollectionName(t *testing.T) {
 			t.Run("FerretDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
 				require.NoError(t, err)
+				err = db.Collection(collection).Drop(ctx)
+				require.NoError(t, err)
 			})
 
 			t.Run("MongoDB", func(t *testing.T) {
 				err := db.CreateCollection(ctx, collection)
-				expected := fmt.Errorf(`Invalid collection name: 'testcollectionname-err.%s'`, collection)
-				assert.Equal(t, expected, err)
+				expected := mongo.CommandError{
+					Name:    "InvalidNamespace",
+					Code:    73,
+					Message: "Invalid system namespace: admin.system.",
+				}
+				require.Equal(t, expected, err)
 			})
 		})
 	})
