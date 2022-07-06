@@ -120,32 +120,21 @@ type ResRegexp struct {
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
+	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
 
 	for _, tcat := range []struct {
-		tests       []any
+		tests       *Tests
 		testsStatus status
 	}{
 		{tc.Pass, Pass},
 		{tc.Skip, Skip},
 		{tc.Fail, Fail},
 	} {
-		for _, t := range tcat.tests {
-			if regex, ok := t.(map[string]interface{}); ok {
-				log.Fatal(regex)
-				//TODO
-			}
-
-			testName, ok := t.(string)
-			if !ok {
-				log.Println(reflect.TypeOf(t))
-				return nil, fmt.Errorf("invalid type of \"%q\": %q", t, reflect.TypeOf(t))
-			}
-
-			if _, ok := res[testName]; ok {
+		for _, t := range tcat.tests.TestNames {
+			if _, ok := res[t]; ok {
 				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
 			}
-			res[testName] = tcat.testsStatus
+			res[t] = tcat.testsStatus
 		}
 	}
 
