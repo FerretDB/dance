@@ -5,24 +5,44 @@ args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 2
-      expected_pass: 1
+      expected_fail: 7
+      expected_pass: 6
 
     pass:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/_ferretdb_/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/system/FerretDB
 
     fail:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/_ferretdb_/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/system/MongoDB
 
   mongodb:
     stats:
-      expected_fail: 2
-      expected_pass: 1
+      expected_fail: 7
+      expected_pass: 6
 
     pass:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/_ferretdb_/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/system/MongoDB
 
     fail:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/_ferretdb_/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefixes/system/FerretDB
