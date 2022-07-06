@@ -78,24 +78,25 @@ func TestCollectionName(t *testing.T) {
 		})
 	})
 
-	t.Run("Length65", func(t *testing.T) {
-		collection := strings.Repeat("a", 65)
+	t.Run("Length121", func(t *testing.T) {
+		collection := strings.Repeat("a", 121)
 
 		t.Run("FerretDB", func(t *testing.T) {
-			err := db.CreateCollection(ctx, collection)
-			require.NoError(t, err)
-			err = db.Collection(collection).Drop(ctx)
-			require.NoError(t, err)
-		})
-
-		t.Run("MongoDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
 			}
+
 			require.Equal(t, expected, err)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			err := db.CreateCollection(ctx, collection)
+			require.NoError(t, err)
+			err = db.Collection(collection).Drop(ctx)
+			require.NoError(t, err)
 		})
 	})
 
