@@ -175,6 +175,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
+	// convert expected results to map
 	tcMap, err := tc.toMap()
 	if err != nil {
 		return nil, err
@@ -206,6 +207,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		}
 	}
 
+	// get keys of test results and sort them
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
 
@@ -213,12 +215,18 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testRes := results.TestResults[test]
 
 		expectedRes := tc.Default
+		//TODO: Get testRes.Output and compile it with every regexp.
+		// If any of them match, set expectedRes to regexp status and
+		// skip below code
+		//
+		// >>>begin skip
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
 				expectedRes = res
 				break
 			}
 		}
+		// <<<end skip
 
 		switch expectedRes {
 		case Pass:
