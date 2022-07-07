@@ -17,6 +17,7 @@ package internal
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -177,6 +178,31 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	tcMap, err := tc.toMap()
 	if err != nil {
 		return nil, err
+	}
+
+	for _, expectedRes := range []struct {
+		tests *Tests
+		expectedStatus status
+	}{
+		{tc.Pass,pass}
+		{tc.Skip,skip}
+		{tc.Fail,fail}
+	} {
+		for _, reg := range expectedRes.ResRegexp {
+			r, err := regexp.Compile(reg)
+			if err != nil {
+				return nil, err
+			}
+
+			for _,test := range results.TestResults {
+				if ! r.MatchString(test.Output){
+					continue
+				}
+				if test.Status == expectedRes.expectedStatus {
+					//TODO
+				}
+			}
+		}
 	}
 
 	tests := maps.Keys(results.TestResults)
