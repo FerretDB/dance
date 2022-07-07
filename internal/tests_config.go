@@ -164,6 +164,32 @@ type CompareResult struct {
 	Stats          Stats
 }
 
+// Compiles result output with expected outputs and return expected status.
+// If no output matches expected - returns nil.
+func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
+	for _, expectedRes := range []struct {
+		tests          *Tests
+		expectedStatus status
+	}{
+		{tc.Pass, Pass},
+		{tc.Skip, Skip},
+		{tc.Fail, Fail},
+	} {
+		for _, reg := range expectedRes.tests.ResRegexp {
+			r, err := regexp.Compile(reg)
+			if err != nil {
+				panic(err)
+			}
+
+			if !r.MatchString(result.Output) {
+				continue
+			}
+			return &expectedRes.expectedStatus
+		}
+	}
+	return nil
+}
+
 func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
 		ExpectedPass:   make(map[string]string),
@@ -181,32 +207,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		return nil, err
 	}
 
-	for _, expectedRes := range []struct {
-		tests          *Tests
-		expectedStatus status
-	}{
-		{tc.Pass, Pass},
-		{tc.Skip, Skip},
-		{tc.Fail, Fail},
-	} {
-		for _, reg := range expectedRes.tests.ResRegexp {
-			r, err := regexp.Compile(reg)
-			if err != nil {
-				return nil, err
-			}
-
-			for _, test := range results.TestResults {
-				if !r.MatchString(test.Output) {
-					continue
-				}
-
-				if test.Status != expectedRes.expectedStatus {
-					//TODO
-				}
-			}
-		}
-	}
-
 	// get keys of test results and sort them
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
@@ -215,18 +215,17 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testRes := results.TestResults[test]
 
 		expectedRes := tc.Default
-		//TODO: Get testRes.Output and compile it with every regexp.
-		// If any of them match, set expectedRes to regexp status and
-		// skip below code
-		//
-		// >>>begin skip
-		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
-			if res, ok := tcMap[prefix]; ok {
-				expectedRes = res
-				break
+
+		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
+			expectedRes = *expStatus
+		} else {
+			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
+				if res, ok := tcMap[prefix]; ok {
+					expectedRes = res
+					break
+				}
 			}
 		}
-		// <<<end skip
 
 		switch expectedRes {
 		case Pass:
