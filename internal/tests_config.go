@@ -181,24 +181,25 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	}
 
 	for _, expectedRes := range []struct {
-		tests *Tests
+		tests          *Tests
 		expectedStatus status
 	}{
-		{tc.Pass,pass}
-		{tc.Skip,skip}
-		{tc.Fail,fail}
+		{tc.Pass, Pass},
+		{tc.Skip, Skip},
+		{tc.Fail, Fail},
 	} {
-		for _, reg := range expectedRes.ResRegexp {
+		for _, reg := range expectedRes.tests.ResRegexp {
 			r, err := regexp.Compile(reg)
 			if err != nil {
 				return nil, err
 			}
 
-			for _,test := range results.TestResults {
-				if ! r.MatchString(test.Output){
+			for _, test := range results.TestResults {
+				if !r.MatchString(test.Output) {
 					continue
 				}
-				if test.Status == expectedRes.expectedStatus {
+
+				if test.Status != expectedRes.expectedStatus {
 					//TODO
 				}
 			}
