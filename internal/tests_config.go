@@ -16,6 +16,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -57,35 +58,86 @@ type Stats struct {
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Default status   `yaml:"default"`
-	Stats   *Stats   `yaml:"stats"`
-	Pass    []string `yaml:"pass"`
-	Skip    []string `yaml:"skip"`
-	Fail    []string `yaml:"fail"`
+	Default status
+	Stats   *Stats
+	Pass    Tests
+	Skip    Tests
+	Fail    Tests
+}
+
+type Tests struct {
+	TestNames []string
+	OutRegex  []string
+}
+
+type FileTestsConfig struct {
+	Default status `yaml:"default"`
+	Stats   *Stats `yaml:"stats"`
+	Pass    []any  `yaml:"pass"`
+	Skip    []any  `yaml:"skip"`
+	Fail    []any  `yaml:"fail"`
+}
+
+func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
+	if ftc == nil {
+		return nil, nil // not sure if that works
+	}
+	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
+	//nolint:govet // we don't care about alignment there
+	for _, tcat := range []struct {
+		inTests  []any
+		outTests *Tests
+	}{
+		{ftc.Pass, &tc.Pass},
+		{ftc.Skip, &tc.Skip},
+		{ftc.Fail, &tc.Fail},
+	} {
+		for _, t := range tcat.inTests {
+			switch test := t.(type) {
+			case map[string]any:
+				mValue, ok := test["output_regex"]
+				if !ok {
+					return nil, fmt.Errorf("invalid field name (\"output_regex\" expected)")
+				}
+				regexp, ok := mValue.(string)
+				if !ok {
+					// Check specifically for an array
+					if _, ok := mValue.([]string); ok {
+						return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
+					}
+					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
+				}
+
+				tcat.outTests.OutRegex = append(tcat.outTests.OutRegex, regexp)
+				continue
+			case string:
+				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
+				continue
+			default:
+				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", t)
+			}
+		}
+	}
+	return &tc, nil
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
+	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
 
-	for _, t := range tc.Pass {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+	for _, tcat := range []struct {
+		testsStatus status
+		tests       Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, t := range tcat.tests.TestNames {
+			if _, ok := res[t]; ok {
+				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+			}
+			res[t] = tcat.testsStatus
 		}
-		res[t] = Pass
-	}
-
-	for _, t := range tc.Skip {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Skip
-	}
-
-	for _, t := range tc.Fail {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Fail
 	}
 
 	return res, nil
@@ -100,6 +152,29 @@ type CompareResult struct {
 	UnexpectedFail map[string]string
 	UnexpectedRest map[string]TestResult
 	Stats          Stats
+}
+
+// Compiles result output with expected outputs and return expected status.
+// If no output matches expected - returns nil.
+func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
+	for _, expectedRes := range []struct {
+		expectedStatus status
+		tests          Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, reg := range expectedRes.tests.OutRegex {
+			r := regexp.MustCompile(reg)
+
+			if !r.MatchString(result.Output) {
+				continue
+			}
+			return &expectedRes.expectedStatus
+		}
+	}
+	return nil
 }
 
 func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
@@ -125,10 +200,15 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testRes := results.TestResults[test]
 
 		expectedRes := tc.Default
-		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
-			if res, ok := tcMap[prefix]; ok {
-				expectedRes = res
-				break
+
+		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
+			expectedRes = *expStatus
+		} else {
+			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
+				if res, ok := tcMap[prefix]; ok {
+					expectedRes = res
+					break
+				}
 			}
 		}
 

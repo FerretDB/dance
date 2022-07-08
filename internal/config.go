@@ -28,18 +28,62 @@ import (
 //
 //nolint:govet // we don't care about alignment there
 type Config struct {
-	Runner  string   `yaml:"runner"`
-	Dir     string   `yaml:"dir"`
-	Args    []string `yaml:"args"`
-	Results Results  `yaml:"results"`
+	Runner  string
+	Dir     string
+	Args    []string
+	Results Results
 }
 
 // Results represents expected dance results.
 type Results struct {
 	// Expected results for both FerretDB and MongoDB.
-	Common   *TestsConfig `yaml:"common"`
-	FerretDB *TestsConfig `yaml:"ferretdb"`
-	MongoDB  *TestsConfig `yaml:"mongodb"`
+	Common   *TestsConfig
+	FerretDB *TestsConfig
+	MongoDB  *TestsConfig
+}
+
+// ConfigFile is a yaml representation of the Config struct.
+//
+// It is used only to fetch data from file. To get any of
+// the dance configuration data it should be converted to
+// Config struct with Convert() function.
+//
+//nolint:govet // we don't care about alignment there
+type ConfigFile struct {
+	Runner  string      `yaml:"runner"`
+	Dir     string      `yaml:"dir"`
+	Args    []string    `yaml:"args"`
+	Results fileResults `yaml:"results"`
+}
+
+// fileResults is a yaml representation of the Results struct.
+type fileResults struct {
+	Common   *FileTestsConfig `yaml:"common"`
+	FerretDB *FileTestsConfig `yaml:"ferretdb"`
+	MongoDB  *FileTestsConfig `yaml:"mongodb"`
+}
+
+// Converts ConfigFile to Config struct.
+func (cf *ConfigFile) Convert() (*Config, error) {
+	common, err := cf.Results.Common.Convert()
+	if err != nil {
+		return nil, err
+	}
+	ferretDB, err := cf.Results.FerretDB.Convert()
+	if err != nil {
+		return nil, err
+	}
+	mongoDB, err := cf.Results.MongoDB.Convert()
+	if err != nil {
+		return nil, err
+	}
+
+	return &Config{
+		cf.Runner,
+		cf.Dir,
+		cf.Args,
+		Results{common, ferretDB, mongoDB},
+	}, nil
 }
 
 // Loadconfig loads and validates configuration from file.
@@ -53,16 +97,21 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var c Config
-	if err = d.Decode(&c); err != nil {
+	var cf ConfigFile
+	if err = d.Decode(&cf); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
+	}
+
+	c, err := cf.Convert()
+	if err != nil {
+		return nil, err
 	}
 
 	if err = c.fillAndValidate(); err != nil {
 		return nil, err
 	}
 
-	return &c, nil
+	return c, nil
 }
 
 // mergeTestConfigs merges common config into both databases test configs.
@@ -74,14 +123,21 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		return nil
 	}
 
-	ferretdb.Skip = append(ferretdb.Skip, common.Skip...)
-	mongodb.Skip = append(mongodb.Skip, common.Skip...)
+	for _, t := range []struct {
+		Common   *Tests
+		FerretDB *Tests
+		MongoDB  *Tests
+	}{
+		{&common.Skip, &ferretdb.Skip, &mongodb.Skip},
+		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
+		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
+	} {
+		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
+		t.FerretDB.OutRegex = append(t.FerretDB.OutRegex, t.Common.OutRegex...)
 
-	ferretdb.Fail = append(ferretdb.Fail, common.Fail...)
-	mongodb.Fail = append(mongodb.Fail, common.Fail...)
-
-	ferretdb.Pass = append(ferretdb.Pass, common.Pass...)
-	mongodb.Pass = append(mongodb.Pass, common.Pass...)
+		t.MongoDB.TestNames = append(t.MongoDB.TestNames, t.Common.TestNames...)
+		t.MongoDB.OutRegex = append(t.MongoDB.OutRegex, t.Common.OutRegex...)
+	}
 
 	if common.Default != "" {
 		if ferretdb.Default != "" || mongodb.Default != "" {
