@@ -12,7 +12,7 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/FerretDB
-      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length255/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
 
     fail:
@@ -23,14 +23,14 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/MongoDB
-      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65
-      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length255
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length255/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
 
   mongodb:
     stats:
-      expected_fail: 6
+      expected_fail: 11
       expected_pass: 5
 
     pass:
@@ -43,7 +43,12 @@ results:
     fail:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dot/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Dash/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length65/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
