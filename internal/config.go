@@ -42,8 +42,8 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
-// ImportConfig is a yaml representation of the Config struct.
-type ImportConfig struct {
+// ConfigFile is a yaml representation of the Config struct.
+type ConfigFile struct {
 	Runner  string        `yaml:"runner"`
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
@@ -57,8 +57,8 @@ type importResults struct {
 	MongoDB  *ImportTestsConfig `yaml:"mongodb"`
 }
 
-// Converts ImportConfig to Config struct.
-func (ic *ImportConfig) Convert() (*Config, error) {
+// Converts ConfigFile to Config struct.
+func (ic *ConfigFile) Convert() (*Config, error) {
 	common, err := ic.Results.Common.Convert()
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var ic ImportConfig
+	var ic ConfigFile
 	if err = d.Decode(&ic); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
@@ -127,10 +127,10 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
 	} {
 		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
-		t.FerretDB.ResRegexp = append(t.FerretDB.ResRegexp, t.Common.ResRegexp...)
+		t.FerretDB.OutRegex = append(t.FerretDB.OutRegex, t.Common.OutRegex...)
 
 		t.MongoDB.TestNames = append(t.MongoDB.TestNames, t.Common.TestNames...)
-		t.MongoDB.ResRegexp = append(t.MongoDB.ResRegexp, t.Common.ResRegexp...)
+		t.MongoDB.OutRegex = append(t.MongoDB.OutRegex, t.Common.OutRegex...)
 	}
 
 	if common.Default != "" {

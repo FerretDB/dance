@@ -23,7 +23,7 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-      - regexp: "skipping due to environmental constraints:.*"
+      - output_regex: "skipping due to environmental constraints:.*"
 
       # OCSP
       - go.mongodb.org/mongo-driver/mongo/TestOCSP
@@ -68,10 +68,6 @@ results:
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
-      # invalid syntax
-      #- regexp:
-      # - foo
-      # - bar
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples

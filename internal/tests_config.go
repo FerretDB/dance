@@ -16,7 +16,6 @@ package internal
 
 import (
 	"fmt"
-	"reflect"
 	"regexp"
 	"sort"
 	"strings"
@@ -68,7 +67,7 @@ type TestsConfig struct {
 
 type Tests struct {
 	TestNames []string
-	ResRegexp []string
+	OutRegex  []string
 }
 
 type ImportTestsConfig struct {
@@ -95,10 +94,9 @@ func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
 		for _, t := range tcat.inTests {
 			switch test := t.(type) {
 			case map[string]any:
-				//if m, ok := t.(map[string]any); ok {
-				mValue, ok := test["regexp"]
+				mValue, ok := test["output_regex"]
 				if !ok {
-					return nil, fmt.Errorf("invalid field name (\"regexp\" expected)")
+					return nil, fmt.Errorf("invalid field name (\"output_regex\" expected)")
 				}
 				regexp, ok := mValue.(string)
 				if !ok {
@@ -106,27 +104,20 @@ func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
 					if _, ok := mValue.([]string); ok {
 						return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
 					}
-					return nil, fmt.Errorf("invalid syntax: expected string, got: %v", reflect.TypeOf(mValue))
+					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
 				}
 
-				tcat.outTests.ResRegexp = append(tcat.outTests.ResRegexp, regexp)
+				tcat.outTests.OutRegex = append(tcat.outTests.OutRegex, regexp)
 				continue
-				//}
 			case string:
-				//if testname, ok := t.(string); ok {
 				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
 				continue
-				//}
 			default:
-				return nil, fmt.Errorf("invalid type of \"%q\": %q", t, reflect.TypeOf(t))
+				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", t)
 			}
 		}
 	}
 	return &tc, nil
-}
-
-type ResRegexp struct {
-	Regexp map[string]interface{} `yaml:"regexp"`
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
@@ -173,11 +164,8 @@ func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 		{tc.Skip, Skip},
 		{tc.Fail, Fail},
 	} {
-		for _, reg := range expectedRes.tests.ResRegexp {
-			r, err := regexp.Compile(reg)
-			if err != nil {
-				panic(err)
-			}
+		for _, reg := range expectedRes.tests.OutRegex {
+			r := regexp.MustCompile(reg)
 
 			if !r.MatchString(result.Output) {
 				continue
