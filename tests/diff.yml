@@ -21,7 +21,7 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 3
+      expected_fail: 4
       expected_pass: 2
 
     pass:
@@ -31,4 +31,5 @@ results:
     fail:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestNullStrings
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/FerretDB
