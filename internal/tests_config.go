@@ -187,13 +187,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
-	// convert expected results to map
 	tcMap, err := tc.toMap()
 	if err != nil {
 		return nil, err
 	}
 
-	// get keys of test results and sort them
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
 

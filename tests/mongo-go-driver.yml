@@ -9,7 +9,7 @@ args:
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
 # - ./mongo/integration
-  - ./mongo/integration/unified
+# - ./mongo/integration/unified
 
 results:
   common:
@@ -23,7 +23,6 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-      - output_regex: "skipping due to environmental constraints:.*"
 
       # OCSP
       - go.mongodb.org/mongo-driver/mongo/TestOCSP
@@ -80,8 +79,6 @@ results:
     fail:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
-
-
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
       # projection https://github.com/FerretDB/FerretDB/issues/80
