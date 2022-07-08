@@ -23,6 +23,7 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+      - regexp: "skipping due to environmental constraints:.*"
 
       # OCSP
       - go.mongodb.org/mongo-driver/mongo/TestOCSP
@@ -71,7 +72,6 @@ results:
       #- regexp:
       # - foo
       # - bar
-      - regexp: foo
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples

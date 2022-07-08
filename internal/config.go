@@ -119,9 +119,9 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		FerretDB *Tests
 		MongoDB  *Tests
 	}{
-		{common.Skip, ferretdb.Skip, mongodb.Skip},
-		{common.Fail, ferretdb.Fail, mongodb.Fail},
-		{common.Pass, ferretdb.Pass, mongodb.Pass},
+		{&common.Skip, &ferretdb.Skip, &mongodb.Skip},
+		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
+		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
 	} {
 		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
 		t.FerretDB.ResRegexp = append(t.FerretDB.ResRegexp, t.Common.ResRegexp...)

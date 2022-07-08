@@ -61,9 +61,9 @@ type Stats struct {
 type TestsConfig struct {
 	Default status
 	Stats   *Stats
-	Pass    *Tests
-	Skip    *Tests
-	Fail    *Tests
+	Pass    Tests
+	Skip    Tests
+	Fail    Tests
 }
 
 type Tests struct {
@@ -83,14 +83,14 @@ func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
 	if itc == nil {
 		return nil, nil // not sure if that works
 	}
-	tc := TestsConfig{itc.Default, itc.Stats, &Tests{}, &Tests{}, &Tests{}}
+	tc := TestsConfig{itc.Default, itc.Stats, Tests{}, Tests{}, Tests{}}
 	for _, tcat := range []struct {
 		inTests  []any
 		outTests *Tests
 	}{
-		{itc.Pass, tc.Pass},
-		{itc.Skip, tc.Skip},
-		{itc.Fail, tc.Fail},
+		{itc.Pass, &tc.Pass},
+		{itc.Skip, &tc.Skip},
+		{itc.Fail, &tc.Fail},
 	} {
 		for _, t := range tcat.inTests {
 			switch t.(type) {
@@ -135,7 +135,7 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
 
 	for _, tcat := range []struct {
-		tests       *Tests
+		tests       Tests
 		testsStatus status
 	}{
 		{tc.Pass, Pass},
@@ -168,7 +168,7 @@ type CompareResult struct {
 // If no output matches expected - returns nil.
 func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 	for _, expectedRes := range []struct {
-		tests          *Tests
+		tests          Tests
 		expectedStatus status
 	}{
 		{tc.Pass, Pass},
