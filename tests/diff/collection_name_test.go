@@ -79,9 +79,31 @@ func TestCollectionName(t *testing.T) {
 		})
 	})
 
-	t.Run("Length121", func(t *testing.T) {
-		collection := strings.Repeat("a", 121)
+	t.Run("Length65", func(t *testing.T) {
+		collection := strings.Repeat("a", 65)
 
+		t.Run("FerretDB", func(t *testing.T) {
+			_ = db.Collection(collection).Drop(ctx)
+
+			err := db.CreateCollection(ctx, collection)
+			require.NoError(t, err)
+			err = db.Collection(collection).Drop(ctx)
+			require.NoError(t, err)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			err := db.CreateCollection(ctx, collection)
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
+			}
+			AssertEqualError(t, expected, err)
+		})
+	})
+
+	t.Run("ReservedPrefix", func(t *testing.T) {
+		collection := "_ferretdb_xxx"
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
@@ -97,48 +119,6 @@ func TestCollectionName(t *testing.T) {
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
 			require.NoError(t, err)
-		})
-	})
-
-	t.Run("ReservedPrefixes", func(t *testing.T) {
-		t.Run("_ferretdb_", func(t *testing.T) {
-			collection := "_ferretdb_xxx"
-			t.Run("FerretDB", func(t *testing.T) {
-				err := db.CreateCollection(ctx, collection)
-				expected := mongo.CommandError{
-					Name:    "InvalidNamespace",
-					Code:    73,
-					Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
-				}
-				AssertEqualError(t, expected, err)
-			})
-
-			t.Run("MongoDB", func(t *testing.T) {
-				err := db.CreateCollection(ctx, collection)
-				require.NoError(t, err)
-				err = db.Collection(collection).Drop(ctx)
-				require.NoError(t, err)
-			})
-		})
-
-		t.Run("system", func(t *testing.T) {
-			collection := "system."
-			t.Run("FerretDB", func(t *testing.T) {
-				err := db.CreateCollection(ctx, collection)
-				require.NoError(t, err)
-				err = db.Collection(collection).Drop(ctx)
-				require.NoError(t, err)
-			})
-
-			t.Run("MongoDB", func(t *testing.T) {
-				err := db.CreateCollection(ctx, collection)
-				expected := mongo.CommandError{
-					Name:    "InvalidNamespace",
-					Code:    73,
-					Message: "Invalid system namespace: admin.system.",
-				}
-				AssertEqualError(t, expected, err)
-			})
 		})
 	})
 }

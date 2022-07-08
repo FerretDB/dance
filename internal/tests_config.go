@@ -122,8 +122,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	sort.Strings(tests)
 
 	for _, test := range tests {
-		testRes := results.TestResults[test]
-
 		expectedRes := tc.Default
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
@@ -132,15 +130,18 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 			}
 		}
 
+		testRes := results.TestResults[test]
+		testResOutput := testRes.IndentedOutput()
+
 		switch expectedRes {
 		case Pass:
 			switch testRes.Status {
 			case Pass:
-				compareResult.ExpectedPass[test] = testRes.IndentedOutput()
+				compareResult.ExpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -149,11 +150,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Skip:
 			switch testRes.Status {
 			case Pass:
-				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.ExpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.ExpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -162,11 +163,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Fail:
 			switch testRes.Status {
 			case Pass:
-				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.ExpectedFail[test] = testRes.IndentedOutput()
+				compareResult.ExpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -188,7 +189,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
-
 	// special case: zero in expected_pass means "don't check"
 	if tc.Stats.ExpectedPass == 0 {
 		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
