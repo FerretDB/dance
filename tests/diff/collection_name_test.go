@@ -81,7 +81,7 @@ func TestCollectionName(t *testing.T) {
 	})
 
 	t.Run("Length255", func(t *testing.T) {
-		collection := strings.Repeat("a", 255)
+		collection := strings.Repeat("a", 249)
 
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
@@ -94,6 +94,7 @@ func TestCollectionName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
+			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
