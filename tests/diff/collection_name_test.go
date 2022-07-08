@@ -33,6 +33,7 @@ func TestCollectionName(t *testing.T) {
 
 	ctx, db := setup(t)
 	db = db.Client().Database("admin")
+	dbName := db.Name()
 
 	t.Run("Dot", func(t *testing.T) {
 		collection := "collection_name_with_a_dot."
@@ -42,7 +43,7 @@ func TestCollectionName(t *testing.T) {
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
 			AssertEqualError(t, expected, err)
 			err = db.Collection(collection).Drop(ctx)
@@ -65,7 +66,7 @@ func TestCollectionName(t *testing.T) {
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
 			AssertEqualError(t, expected, err)
 		})
@@ -86,7 +87,7 @@ func TestCollectionName(t *testing.T) {
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
 			AssertEqualError(t, expected, err)
 		})
@@ -107,7 +108,7 @@ func TestCollectionName(t *testing.T) {
 				expected := mongo.CommandError{
 					Name:    "InvalidNamespace",
 					Code:    73,
-					Message: fmt.Sprintf(`Invalid collection name: 'testcollectionname-err.%s'`, collection),
+					Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 				}
 				AssertEqualError(t, expected, err)
 			})
