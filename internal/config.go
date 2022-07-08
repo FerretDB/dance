@@ -47,6 +47,8 @@ type Results struct {
 // It is used only to fetch data from file. To get any of
 // the dance configuration data it should be converted to
 // Config struct with Convert() function.
+//
+//nolint:govet // we don't care about alignment there
 type ConfigFile struct {
 	Runner  string      `yaml:"runner"`
 	Dir     string      `yaml:"dir"`

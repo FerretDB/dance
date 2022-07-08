@@ -211,7 +211,6 @@ func TestFillAndValidate(t *testing.T) {
 				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
 				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
 			} {
-
 				for _, item := range tests.expected.TestNames {
 					assert.Contains(t, tests.actual.TestNames, item)
 				}

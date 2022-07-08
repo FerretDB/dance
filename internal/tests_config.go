@@ -83,6 +83,7 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 		return nil, nil // not sure if that works
 	}
 	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
+	//nolint:govet // we don't care about alignment there
 	for _, tcat := range []struct {
 		inTests  []any
 		outTests *Tests
@@ -124,12 +125,12 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
 
 	for _, tcat := range []struct {
-		tests       Tests
 		testsStatus status
+		tests       Tests
 	}{
-		{tc.Pass, Pass},
-		{tc.Skip, Skip},
-		{tc.Fail, Fail},
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
 	} {
 		for _, t := range tcat.tests.TestNames {
 			if _, ok := res[t]; ok {
@@ -157,12 +158,12 @@ type CompareResult struct {
 // If no output matches expected - returns nil.
 func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 	for _, expectedRes := range []struct {
-		tests          Tests
 		expectedStatus status
+		tests          Tests
 	}{
-		{tc.Pass, Pass},
-		{tc.Skip, Skip},
-		{tc.Fail, Fail},
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
 	} {
 		for _, reg := range expectedRes.tests.OutRegex {
 			r := regexp.MustCompile(reg)
