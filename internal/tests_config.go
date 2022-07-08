@@ -70,7 +70,7 @@ type Tests struct {
 	OutRegex  []string
 }
 
-type ImportTestsConfig struct {
+type FileTestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -78,18 +78,18 @@ type ImportTestsConfig struct {
 	Fail    []any  `yaml:"fail"`
 }
 
-func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
-	if itc == nil {
+func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
+	if ftc == nil {
 		return nil, nil // not sure if that works
 	}
-	tc := TestsConfig{itc.Default, itc.Stats, Tests{}, Tests{}, Tests{}}
+	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
 	for _, tcat := range []struct {
 		inTests  []any
 		outTests *Tests
 	}{
-		{itc.Pass, &tc.Pass},
-		{itc.Skip, &tc.Skip},
-		{itc.Fail, &tc.Fail},
+		{ftc.Pass, &tc.Pass},
+		{ftc.Skip, &tc.Skip},
+		{ftc.Fail, &tc.Fail},
 	} {
 		for _, t := range tcat.inTests {
 			switch test := t.(type) {

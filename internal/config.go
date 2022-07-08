@@ -43,39 +43,43 @@ type Results struct {
 }
 
 // ConfigFile is a yaml representation of the Config struct.
+//
+// It is used only to fetch data from file. To get any of
+// the dance configuration data it should be converted to
+// Config struct with Convert() function.
 type ConfigFile struct {
-	Runner  string        `yaml:"runner"`
-	Dir     string        `yaml:"dir"`
-	Args    []string      `yaml:"args"`
-	Results importResults `yaml:"results"`
+	Runner  string      `yaml:"runner"`
+	Dir     string      `yaml:"dir"`
+	Args    []string    `yaml:"args"`
+	Results fileResults `yaml:"results"`
 }
 
-// importResults is a yaml representation of the Results struct.
-type importResults struct {
-	Common   *ImportTestsConfig `yaml:"common"`
-	FerretDB *ImportTestsConfig `yaml:"ferretdb"`
-	MongoDB  *ImportTestsConfig `yaml:"mongodb"`
+// fileResults is a yaml representation of the Results struct.
+type fileResults struct {
+	Common   *FileTestsConfig `yaml:"common"`
+	FerretDB *FileTestsConfig `yaml:"ferretdb"`
+	MongoDB  *FileTestsConfig `yaml:"mongodb"`
 }
 
 // Converts ConfigFile to Config struct.
-func (ic *ConfigFile) Convert() (*Config, error) {
-	common, err := ic.Results.Common.Convert()
+func (cf *ConfigFile) Convert() (*Config, error) {
+	common, err := cf.Results.Common.Convert()
 	if err != nil {
 		return nil, err
 	}
-	ferretDB, err := ic.Results.FerretDB.Convert()
+	ferretDB, err := cf.Results.FerretDB.Convert()
 	if err != nil {
 		return nil, err
 	}
-	mongoDB, err := ic.Results.MongoDB.Convert()
+	mongoDB, err := cf.Results.MongoDB.Convert()
 	if err != nil {
 		return nil, err
 	}
 
 	return &Config{
-		ic.Runner,
-		ic.Dir,
-		ic.Args,
+		cf.Runner,
+		cf.Dir,
+		cf.Args,
 		Results{common, ferretDB, mongoDB},
 	}, nil
 }
@@ -91,12 +95,12 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var ic ConfigFile
-	if err = d.Decode(&ic); err != nil {
+	var cf ConfigFile
+	if err = d.Decode(&cf); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	c, err := ic.Convert()
+	c, err := cf.Convert()
 	if err != nil {
 		return nil, err
 	}
