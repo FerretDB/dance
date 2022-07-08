@@ -17,8 +17,6 @@ package diff
 import (
 	"testing"
 
-	"go.mongodb.org/mongo-driver/mongo"
-
 	"github.com/stretchr/testify/require"
 
 	"github.com/stretchr/testify/assert"
@@ -29,37 +27,16 @@ func TestNullStrings(t *testing.T) {
 	t.Parallel()
 	ctx, db := setup(t)
 
-	t.Run("Insert", func(t *testing.T) {
-		_, err := db.Collection("insert").InsertOne(ctx, bson.D{
-			{"_id", "document"},
-			{"a", string([]byte{0})},
-		})
-
-		t.Run("FerretDB", func(t *testing.T) {
-			assert.Regexp(t, "^.* unsupported Unicode escape sequence .*$", err.Error())
-		})
-
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-		})
+	_, err := db.Collection("insert").InsertOne(ctx, bson.D{
+		{"_id", "document"},
+		{"a", string([]byte{0})},
 	})
 
-	t.Run("Update", func(t *testing.T) {
-		_, err := db.Collection("update").InsertOne(ctx, bson.D{{"_id", "document"}, {"a", "foo"}})
+	t.Run("FerretDB", func(t *testing.T) {
+		assert.Regexp(t, "^.* unsupported Unicode escape sequence .*$", err.Error())
+	})
+
+	t.Run("MongoDB", func(t *testing.T) {
 		require.NoError(t, err)
-
-		_, err = db.Collection("update").UpdateOne(ctx, bson.D{{"_id", "document"}}, bson.D{
-			{"$set", bson.D{
-				{"\000", string([]byte{0})},
-			}},
-		})
-
-		t.Run("FerretDB", func(t *testing.T) {
-			assert.Equal(t, mongo.CommandError{}, err)
-		})
-
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-		})
 	})
 }

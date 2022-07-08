@@ -5,20 +5,18 @@ args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 5
-      expected_pass: 3
+      expected_fail: 4
+      expected_pass: 2
 
     pass:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
-      - github.com/FerretDB/dance/tests/diff/TestNullStrings/Insert/FerretDB
-      - github.com/FerretDB/dance/tests/diff/TestNullStrings/Update/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestNullStrings/FerretDB
 
     fail:
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
-      - github.com/FerretDB/dance/tests/diff/TestNullStrings/Insert/MongoDB
-      - github.com/FerretDB/dance/tests/diff/TestNullStrings/Update/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
 
 
   mongodb:
