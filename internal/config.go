@@ -42,6 +42,7 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
+// ImportConfig is a yaml representation of the Config struct.
 type ImportConfig struct {
 	Runner  string        `yaml:"runner"`
 	Dir     string        `yaml:"dir"`
@@ -49,12 +50,14 @@ type ImportConfig struct {
 	Results importResults `yaml:"results"`
 }
 
+// importResults is a yaml representation of the Results struct.
 type importResults struct {
 	Common   *ImportTestsConfig `yaml:"common"`
 	FerretDB *ImportTestsConfig `yaml:"ferretdb"`
 	MongoDB  *ImportTestsConfig `yaml:"mongodb"`
 }
 
+// Converts ImportConfig to Config struct.
 func (ic *ImportConfig) Convert() (*Config, error) {
 	common, err := ic.Results.Common.Convert()
 	if err != nil {

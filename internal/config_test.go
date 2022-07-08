@@ -211,12 +211,7 @@ func TestFillAndValidate(t *testing.T) {
 				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
 				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
 			} {
-				//if tests.expected == nil {
-				//	assert.Equal(t, tests.expected, tests.actual)
-				//	continue
-				//}
 
-				//TODO: we're not checking for Default value
 				for _, item := range tests.expected.TestNames {
 					assert.Contains(t, tests.actual.TestNames, item)
 				}

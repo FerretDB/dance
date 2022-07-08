@@ -93,32 +93,30 @@ func (itc *ImportTestsConfig) Convert() (*TestsConfig, error) {
 		{itc.Fail, &tc.Fail},
 	} {
 		for _, t := range tcat.inTests {
-			switch t.(type) {
+			switch test := t.(type) {
 			case map[string]any:
-				if m, ok := t.(map[string]any); ok {
-					mValue, ok := m["regexp"]
-					if !ok {
-						return nil, fmt.Errorf("invalid field name (\"regexp\" expected)")
+				//if m, ok := t.(map[string]any); ok {
+				mValue, ok := test["regexp"]
+				if !ok {
+					return nil, fmt.Errorf("invalid field name (\"regexp\" expected)")
+				}
+				regexp, ok := mValue.(string)
+				if !ok {
+					// Check specifically for an array
+					if _, ok := mValue.([]string); ok {
+						return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
 					}
-					regexp, ok := mValue.(string)
-					if !ok {
-						// Check specifically for an array
-						if _, ok := mValue.([]string); ok {
-							return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
-						}
-						return nil, fmt.Errorf("invalid syntax: expected string, got: %v", reflect.TypeOf(mValue))
-					}
+					return nil, fmt.Errorf("invalid syntax: expected string, got: %v", reflect.TypeOf(mValue))
+				}
 
-					tcat.outTests.ResRegexp = append(tcat.outTests.ResRegexp, regexp)
-					continue
-				}
-				panic("map[string]any assertion error")
+				tcat.outTests.ResRegexp = append(tcat.outTests.ResRegexp, regexp)
+				continue
+				//}
 			case string:
-				if testname, ok := t.(string); ok {
-					tcat.outTests.TestNames = append(tcat.outTests.TestNames, testname)
-					continue
-				}
-				panic("string assertion error")
+				//if testname, ok := t.(string); ok {
+				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
+				continue
+				//}
 			default:
 				return nil, fmt.Errorf("invalid type of \"%q\": %q", t, reflect.TypeOf(t))
 			}
