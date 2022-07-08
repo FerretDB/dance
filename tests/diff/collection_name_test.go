@@ -84,7 +84,6 @@ func TestCollectionName(t *testing.T) {
 
 		t.Run("FerretDB", func(t *testing.T) {
 			err := db.CreateCollection(ctx, collection)
-			require.NoError(t, err)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
