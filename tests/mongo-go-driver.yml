@@ -1,7 +1,7 @@
 ---
 runner: gotest
 args:
-  - -timeout=2m
+  - -timeout=10m
   - -shuffle=on
   - ./examples/...
   - ./mongo
