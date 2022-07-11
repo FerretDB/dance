@@ -198,6 +198,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 	for _, test := range tests {
 		expectedRes := tc.Default
+		testRes := results.TestResults[test]
 
 		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
 			expectedRes = *expStatus
@@ -210,7 +211,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 			}
 		}
 
-		testRes := results.TestResults[test]
 		testResOutput := testRes.IndentedOutput()
 
 		switch expectedRes {
