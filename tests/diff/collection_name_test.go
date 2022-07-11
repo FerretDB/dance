@@ -44,8 +44,6 @@ func TestCollectionName(t *testing.T) {
 			ctx, db := setup(t)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
-			err = db.Collection(collection).Drop(ctx)
-			require.NoError(t, err)
 		})
 	})
 
@@ -66,8 +64,6 @@ func TestCollectionName(t *testing.T) {
 		t.Run("MongoDB", func(t *testing.T) {
 			ctx, db := setup(t)
 			err := db.CreateCollection(ctx, collection)
-			require.NoError(t, err)
-			err = db.Collection(collection).Drop(ctx)
 			require.NoError(t, err)
 		})
 	})
