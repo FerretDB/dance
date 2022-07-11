@@ -23,7 +23,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// TestCollectionName documents difference in reposnes:
+// TestCollectionName documents difference in responses:
 //   * dots
 //   * dashes
 //   * max length in FerretDB: 255, in MongoDB: 63.
