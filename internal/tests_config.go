@@ -67,6 +67,7 @@ type TestsConfig struct {
 
 type Tests struct {
 	TestNames []string
+	NameRegex []string
 	OutRegex  []string
 }
 
@@ -95,20 +96,35 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 		for _, t := range tcat.inTests {
 			switch test := t.(type) {
 			case map[string]any:
-				mValue, ok := test["output_regex"]
-				if !ok {
-					return nil, fmt.Errorf("invalid field name (\"output_regex\" expected)")
+				keys := maps.Keys(test)
+				if len(keys) != 1 {
+					return nil, fmt.Errorf("invalid syntax: expected 1 element, got: %v", keys)
 				}
+
+				var outArr []string
+				k := keys[0]
+
+				switch k {
+				case "regex":
+					outArr = tcat.outTests.TestNames
+				case "output_regex":
+					outArr = tcat.outTests.OutRegex
+				default:
+					return nil, fmt.Errorf("invalid field name: expected \"regex\" or \"output_regex\", got: %s", k)
+				}
+
+				mValue, _ := test[k]
+
 				regexp, ok := mValue.(string)
 				if !ok {
 					// Check specifically for an array
 					if _, ok := mValue.([]string); ok {
-						return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
+						return nil, fmt.Errorf("invalid syntax: %s value shouldn't be an array", k)
 					}
 					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
 				}
 
-				tcat.outTests.OutRegex = append(tcat.outTests.OutRegex, regexp)
+				outArr = append(outArr, regexp)
 				continue
 			case string:
 				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
