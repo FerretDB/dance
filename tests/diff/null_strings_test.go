@@ -31,6 +31,9 @@ func TestNullStrings(t *testing.T) {
 	})
 
 	t.Run("FerretDB", func(t *testing.T) {
+		if err == nil {
+			t.FailNow()
+		}
 		assert.Regexp(t, "^.* unsupported Unicode escape sequence .*$", err.Error())
 	})
 
