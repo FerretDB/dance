@@ -26,12 +26,10 @@ import (
 func TestCollectionName(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := setup(t)
-	dbName := db.Name()
-
 	t.Run("Length200", func(t *testing.T) {
+		ctx, db := setup(t)
+		dbName := db.Name()
 		collection := strings.Repeat("a", 200)
-
 		t.Run("FerretDB", func(t *testing.T) {
 			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
@@ -53,6 +51,8 @@ func TestCollectionName(t *testing.T) {
 	})
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
+		ctx, db := setup(t)
+		dbName := db.Name()
 		collection := "_ferretdb_xxx"
 		t.Run("FerretDB", func(t *testing.T) {
 			_ = db.Collection(collection).Drop(ctx)
