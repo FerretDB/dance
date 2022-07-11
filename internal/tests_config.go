@@ -84,6 +84,7 @@ type FileTestsConfig struct {
 	Fail    []any  `yaml:"fail"`
 }
 
+// Convert converts a FileTestsConfig to TestsConfig struct.
 func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 	if ftc == nil {
 		return nil, nil // not sure if that works

@@ -63,7 +63,7 @@ type fileResults struct {
 	MongoDB  *FileTestsConfig `yaml:"mongodb"`
 }
 
-// Converts ConfigFile to Config struct.
+// Convert converts a ConfigFile to Config struct.
 func (cf *ConfigFile) Convert() (*Config, error) {
 	common, err := cf.Results.Common.Convert()
 	if err != nil {
