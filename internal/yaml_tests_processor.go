@@ -16,6 +16,7 @@ package internal
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"sort"
 	"strings"
@@ -55,6 +56,7 @@ type Stats struct {
 }
 
 // TestsConfig represents a part of the dance configuration for tests.
+// TODO: purpose and cases where it's used.
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
@@ -65,12 +67,15 @@ type TestsConfig struct {
 	Fail    Tests
 }
 
+// Tests are tests from yaml category pass / fail / skip
 type Tests struct {
-	TestNames []string
-	NameRegex []string
-	OutRegex  []string
+	TestNames    []string //
+	RegexPattern []string // i.e. mongo.org/.*
+	OutRegex     []string // does't check for names - checks output
 }
 
+// FileTestsConfig differs from TestsConfig: has any in array element
+// TODO example on the the yaml to parse.
 type FileTestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
@@ -101,19 +106,19 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 					return nil, fmt.Errorf("invalid syntax: expected 1 element, got: %v", keys)
 				}
 
-				var outArr []string
+				var outArr *[]string
 				k := keys[0]
 
 				switch k {
 				case "regex":
-					outArr = tcat.outTests.TestNames
+					outArr = &tcat.outTests.RegexPattern
 				case "output_regex":
-					outArr = tcat.outTests.OutRegex
+					outArr = &tcat.outTests.OutRegex
 				default:
 					return nil, fmt.Errorf("invalid field name: expected \"regex\" or \"output_regex\", got: %s", k)
 				}
 
-				mValue, _ := test[k]
+				mValue := test[k]
 
 				regexp, ok := mValue.(string)
 				if !ok {
@@ -124,7 +129,8 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
 				}
 
-				outArr = append(outArr, regexp)
+				*outArr = append(*outArr, regexp)
+				//log.Fatal(outArr, tcat.outTests.NameRegex)
 				continue
 			case string:
 				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
@@ -172,7 +178,8 @@ type CompareResult struct {
 
 // Compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
-func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
+func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
+	//log.Fatal(tc.Fail.NameRegex)
 	for _, expectedRes := range []struct {
 		expectedStatus status
 		tests          Tests
@@ -181,14 +188,31 @@ func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 		{Skip, tc.Skip},
 		{Fail, tc.Fail},
 	} {
+		// TODO: we should also check for outStatus duplicates here
+		var outStatus *status
+		for _, reg := range expectedRes.tests.RegexPattern {
+			log.Fatal(reg)
+			r := regexp.MustCompile(reg)
+
+			if !r.MatchString(testName) {
+				continue
+			}
+			outStatus = &expectedRes.expectedStatus
+		}
+
 		for _, reg := range expectedRes.tests.OutRegex {
 			r := regexp.MustCompile(reg)
 
 			if !r.MatchString(result.Output) {
 				continue
 			}
+			if outStatus != nil {
+				panic(fmt.Sprintf(""))
+			}
 			return &expectedRes.expectedStatus
 		}
+
+		return outStatus //TODO: bug
 	}
 	return nil
 }
@@ -215,8 +239,9 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	for _, test := range tests {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
+		//log.Fatal(tc.Fail.NameRegex)
 
-		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
+		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
 			expectedRes = *expStatus
 		} else {
 			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {

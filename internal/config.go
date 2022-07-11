@@ -42,7 +42,7 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
-// ConfigFile is a yaml representation of the Config struct.
+// ConfigFile is a yaml tests representation of the Config struct.
 //
 // It is used only to fetch data from file. To get any of
 // the dance configuration data it should be converted to
@@ -133,11 +133,11 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
 	} {
 		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
-		t.FerretDB.NameRegex = append(t.FerretDB.NameRegex, t.Common.NameRegex...)
+		t.FerretDB.RegexPattern = append(t.FerretDB.RegexPattern, t.Common.RegexPattern...)
 		t.FerretDB.OutRegex = append(t.FerretDB.OutRegex, t.Common.OutRegex...)
 
 		t.MongoDB.TestNames = append(t.MongoDB.TestNames, t.Common.TestNames...)
-		t.MongoDB.NameRegex = append(t.MongoDB.NameRegex, t.Common.NameRegex...)
+		t.MongoDB.RegexPattern = append(t.MongoDB.RegexPattern, t.Common.RegexPattern...)
 		t.MongoDB.OutRegex = append(t.MongoDB.OutRegex, t.Common.OutRegex...)
 	}
 

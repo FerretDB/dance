@@ -64,6 +64,9 @@ results:
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
+      - regex: go.mongodb.org/.*
+      - output_regex: error.*
+
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
@@ -105,6 +108,7 @@ results:
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+      - regex: .*
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
