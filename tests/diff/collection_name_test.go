@@ -49,7 +49,6 @@ func TestCollectionName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
-			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
@@ -70,7 +69,6 @@ func TestCollectionName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
-			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
