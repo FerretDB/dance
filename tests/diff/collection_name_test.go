@@ -27,10 +27,10 @@ func TestCollectionName(t *testing.T) {
 	t.Parallel()
 
 	t.Run("Length200", func(t *testing.T) {
-		ctx, db := setup(t)
-		dbName := db.Name()
 		collection := strings.Repeat("a", 200)
 		t.Run("FerretDB", func(t *testing.T) {
+			ctx, db := setup(t)
+			dbName := db.Name()
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
@@ -41,6 +41,7 @@ func TestCollectionName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
+			ctx, db := setup(t)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
@@ -49,10 +50,10 @@ func TestCollectionName(t *testing.T) {
 	})
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
-		ctx, db := setup(t)
-		dbName := db.Name()
 		collection := "_ferretdb_xxx"
 		t.Run("FerretDB", func(t *testing.T) {
+			ctx, db := setup(t)
+			dbName := db.Name()
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
@@ -63,6 +64,7 @@ func TestCollectionName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
+			ctx, db := setup(t)
 			err := db.CreateCollection(ctx, collection)
 			require.NoError(t, err)
 			err = db.Collection(collection).Drop(ctx)
