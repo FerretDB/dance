@@ -31,7 +31,7 @@ results:
       expected_pass: 4
 
     pass:
-      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length00/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
