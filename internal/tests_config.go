@@ -54,8 +54,11 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
-// TestsConfig represents a part of the dance configuration for tests.
-// TODO: purpose and cases where it's used.
+// TestsConfig represents a part of the dance configuration for tests
+// (i.e. ferretdb/mongodb/common tests).
+//
+// It's used to store information about expected test results for a
+// specific database.
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
