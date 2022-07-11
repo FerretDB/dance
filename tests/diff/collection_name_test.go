@@ -39,6 +39,7 @@ func TestCollectionName(t *testing.T) {
 		collection := strings.Repeat("a", 200)
 
 		t.Run("FerretDB", func(t *testing.T) {
+			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
@@ -60,6 +61,7 @@ func TestCollectionName(t *testing.T) {
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		collection := "_ferretdb_xxx"
 		t.Run("FerretDB", func(t *testing.T) {
+			_ = db.Collection(collection).Drop(ctx)
 			err := db.CreateCollection(ctx, collection)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
