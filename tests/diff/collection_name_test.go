@@ -27,7 +27,8 @@ import (
 //   * dots
 //   * dashes
 //   * max length in FerretDB: 255, in MongoDB: 63.
-//   * FerretDB reserved prefix is _ferretdb_, MongoDB - system..
+//   * FerretDB reserved prefix is _ferretdb_, so FerretDB doesn't allow such prefixes.
+//  MongoDB's reserved prefix is 'system.'. However FerretDB doesn't allow such name because of a dot in it.
 func TestCollectionName(t *testing.T) {
 	t.Parallel()
 
