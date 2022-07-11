@@ -19,24 +19,21 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func TestNullStrings(t *testing.T) {
-	t.Parallel()
-	ctx, db := setup(t)
+// AssertEqualError asserts that the expected error is the same as the actual (ignoring the Raw part).
+func AssertEqualError(t testing.TB, expected mongo.CommandError, actual error) bool {
+	t.Helper()
 
-	_, err := db.Collection("insert").InsertOne(ctx, bson.D{
-		{"_id", "document"},
-		{"a", string([]byte{0})},
-	})
+	a, ok := actual.(mongo.CommandError)
+	if !ok {
+		return assert.Equal(t, expected, actual)
+	}
 
-	t.Run("FerretDB", func(t *testing.T) {
-		require.Error(t, err)
-		assert.Regexp(t, "^.* unsupported Unicode escape sequence .*$", err.Error())
-	})
+	// set expected fields that might be helpful in the test output
+	require.Nil(t, expected.Raw)
+	expected.Raw = a.Raw
 
-	t.Run("MongoDB", func(t *testing.T) {
-		assert.Equal(t, err, nil)
-	})
+	return assert.Equal(t, expected, a)
 }
