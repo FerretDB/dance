@@ -112,12 +112,12 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
 	} {
 		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
-		t.FerretDB.RegexPattern = append(t.FerretDB.RegexPattern, t.Common.RegexPattern...)
-		t.FerretDB.OutputRegex = append(t.FerretDB.OutputRegex, t.Common.OutputRegex...)
+		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.FerretDB.OutputRegexPattern = append(t.FerretDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 
 		t.MongoDB.Names = append(t.MongoDB.Names, t.Common.Names...)
-		t.MongoDB.RegexPattern = append(t.MongoDB.RegexPattern, t.Common.RegexPattern...)
-		t.MongoDB.OutputRegex = append(t.MongoDB.OutputRegex, t.Common.OutputRegex...)
+		t.MongoDB.NameRegexPattern = append(t.MongoDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.MongoDB.OutputRegexPattern = append(t.MongoDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 	}
 
 	if common.Default != "" {

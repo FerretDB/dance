@@ -72,9 +72,9 @@ type TestsConfig struct {
 
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	Names        []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	RegexPattern []string // i.e. mongo.org/.*
-	OutputRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
+	Names              []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	NameRegexPattern   []string // regex: "mongo.org/.*", the regext for the test name.
+	OutputRegexPattern []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*", regexps that match the tests output.
 }
 
 // ConfigFile is a yaml tests representation of the Config struct.
@@ -114,32 +114,33 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 	if ftc == nil {
 		return nil, nil // not sure if that works
 	}
+
 	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
+
 	//nolint:govet // we don't care about alignment there
-	for _, tcat := range []struct {
-		inTests  []any
-		outTests *Tests
+	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
+		yamlTests []any  // taken from the file, yaml representation of tests, incoming tests
+		outTests  *Tests // output tests
 	}{
 		{ftc.Pass, &tc.Pass},
 		{ftc.Skip, &tc.Skip},
 		{ftc.Fail, &tc.Fail},
 	} {
-		for _, t := range tcat.inTests {
-			switch test := t.(type) {
+		for _, test := range testCategory.yamlTests {
+			switch test := test.(type) {
 			case map[string]any:
 				keys := maps.Keys(test)
 				if len(keys) != 1 {
 					return nil, fmt.Errorf("invalid syntax: expected 1 element, got: %v", keys)
 				}
 
-				var outArr *[]string
+				var arrPointer *[]string
 				k := keys[0]
-
 				switch k {
 				case "regex":
-					outArr = &tcat.outTests.RegexPattern
+					arrPointer = &testCategory.outTests.NameRegexPattern
 				case "output_regex":
-					outArr = &tcat.outTests.OutputRegex
+					arrPointer = &testCategory.outTests.OutputRegexPattern
 				default:
 					return nil, fmt.Errorf("invalid field name: expected \"regex\" or \"output_regex\", got: %s", k)
 				}
@@ -148,21 +149,26 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 
 				regexp, ok := mValue.(string)
 				if !ok {
-					// Check specifically for an array
+					// Arrays are illegal:
+					// - regex:
+					//   - foo
+					//   - bar
 					if _, ok := mValue.([]string); ok {
 						return nil, fmt.Errorf("invalid syntax: %s value shouldn't be an array", k)
 					}
 					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
 				}
 
-				*outArr = append(*outArr, regexp)
-				// log.Fatal(outArr, tcat.outTests.NameRegex)
+				// i.e. pointer to testCategory.outTests.RegexPattern = append(testCategory.outTests.RegexPattern, regexp)
+				*arrPointer = append(*arrPointer, regexp)
 				continue
+
 			case string:
-				tcat.outTests.Names = append(tcat.outTests.Names, test)
+				testCategory.outTests.Names = append(testCategory.outTests.Names, test)
 				continue
+
 			default:
-				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", t)
+				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", test)
 			}
 		}
 	}
@@ -215,7 +221,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 	} {
 		// TODO: we should also check for outStatus duplicates here
 		var outStatus *status
-		for _, reg := range expectedRes.tests.RegexPattern {
+		for _, reg := range expectedRes.tests.NameRegexPattern {
 			log.Fatal(reg)
 			r := regexp.MustCompile(reg)
 
@@ -225,7 +231,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			outStatus = &expectedRes.expectedStatus
 		}
 
-		for _, reg := range expectedRes.tests.OutputRegex {
+		for _, reg := range expectedRes.tests.OutputRegexPattern {
 			r := regexp.MustCompile(reg)
 
 			if !r.MatchString(result.Output) {
