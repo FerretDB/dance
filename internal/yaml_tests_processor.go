@@ -72,9 +72,9 @@ type TestsConfig struct {
 
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	TestNames    []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	Names        []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	RegexPattern []string // i.e. mongo.org/.*
-	OutRegex     []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
+	OutputRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
 }
 
 // ConfigFile is a yaml tests representation of the Config struct.
@@ -139,7 +139,7 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 				case "regex":
 					outArr = &tcat.outTests.RegexPattern
 				case "output_regex":
-					outArr = &tcat.outTests.OutRegex
+					outArr = &tcat.outTests.OutputRegex
 				default:
 					return nil, fmt.Errorf("invalid field name: expected \"regex\" or \"output_regex\", got: %s", k)
 				}
@@ -159,7 +159,7 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 				// log.Fatal(outArr, tcat.outTests.NameRegex)
 				continue
 			case string:
-				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
+				tcat.outTests.Names = append(tcat.outTests.Names, test)
 				continue
 			default:
 				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", t)
@@ -170,7 +170,7 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
+	res := make(map[string]status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
 	for _, tcat := range []struct {
 		testsStatus status
@@ -180,7 +180,7 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 		{Skip, tc.Skip},
 		{Fail, tc.Fail},
 	} {
-		for _, t := range tcat.tests.TestNames {
+		for _, t := range tcat.tests.Names {
 			if _, ok := res[t]; ok {
 				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
 			}
@@ -225,7 +225,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			outStatus = &expectedRes.expectedStatus
 		}
 
-		for _, reg := range expectedRes.tests.OutRegex {
+		for _, reg := range expectedRes.tests.OutputRegex {
 			r := regexp.MustCompile(reg)
 
 			if !r.MatchString(result.Output) {
