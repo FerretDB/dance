@@ -31,38 +31,15 @@ type Config struct {
 	Runner  string
 	Dir     string
 	Args    []string
-	Results Results
+	Results ResultList
 }
 
-// Results represents expected dance results.
-type Results struct {
+// ResultList represents expected dance results.
+type ResultList struct {
 	// Expected results for both FerretDB and MongoDB.
 	Common   *TestsConfig
 	FerretDB *TestsConfig
 	MongoDB  *TestsConfig
-}
-
-// Converts ConfigFile to Config struct.
-func (cf *ConfigFile) Convert() (*Config, error) {
-	common, err := cf.Results.Common.Convert()
-	if err != nil {
-		return nil, err
-	}
-	ferretDB, err := cf.Results.FerretDB.Convert()
-	if err != nil {
-		return nil, err
-	}
-	mongoDB, err := cf.Results.MongoDB.Convert()
-	if err != nil {
-		return nil, err
-	}
-
-	return &Config{
-		cf.Runner,
-		cf.Dir,
-		cf.Args,
-		Results{common, ferretDB, mongoDB},
-	}, nil
 }
 
 // Loadconfig loads and validates configuration from file.
@@ -170,7 +147,7 @@ func (c *Config) fillAndValidate() error {
 	return nil
 }
 
-func (r *Results) ForDB(db string) (*TestsConfig, error) {
+func (r *ResultList) ForDB(db string) (*TestsConfig, error) {
 	switch db {
 	case "ferretdb":
 		if c := r.FerretDB; c != nil {
