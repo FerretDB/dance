@@ -39,7 +39,7 @@ type Stats struct {
 // Config struct with Convert() function.
 //
 //nolint:govet // we don't care about alignment there
-type ConfigFile struct {
+type ConfigFile struct { // ConfigFile -> Config
 	Runner  string     `yaml:"runner"`
 	Dir     string     `yaml:"dir"`
 	Args    []string   `yaml:"args"`
@@ -47,17 +47,17 @@ type ConfigFile struct {
 }
 
 // resultList is a yaml representation of the Results struct.
-type resultList struct {
-	Common   *fileTestsConfig `yaml:"common"`
-	FerretDB *fileTestsConfig `yaml:"ferretdb"`
-	MongoDB  *fileTestsConfig `yaml:"mongodb"`
+type resultList struct { // resultList -> ResultList
+	Common   *testsConfig `yaml:"common"`
+	FerretDB *testsConfig `yaml:"ferretdb"`
+	MongoDB  *testsConfig `yaml:"mongodb"`
 }
 
-// fileTestsConfig is a yaml representation of the TestsConfig struct.
+// testsConfig is a yaml representation of the TestsConfig struct.
 // It differs from it by using "any" type to be able to parse maps (i.e. "- output_regex: ...").
 //
-// To gain a data the struct should be first converted to TestsConfig with fileTestsConfig.Convert() function.
-type fileTestsConfig struct {
+// To gain a data the struct should be first converted to TestsConfig with testsConfig.Convert() function.
+type testsConfig struct { // testsConfig -> TestsConfig
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -92,7 +92,7 @@ func (cf *ConfigFile) Convert() (*Config, error) {
 // Convert converts a FileTestConfig to TestConfig struct.
 // FileTestsConfig it's yaml file with the tests.
 // TestsConfig is an internal representation of yaml test file.
-func (ftc *fileTestsConfig) Convert() (*TestsConfig, error) {
+func (ftc *testsConfig) Convert() (*TestsConfig, error) {
 	if ftc == nil {
 		return nil, nil // not sure if that works
 	}
