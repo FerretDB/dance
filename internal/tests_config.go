@@ -16,6 +16,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -53,39 +54,44 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
-// TestsConfig represents a part of the dance configuration for tests.
+// TestsConfig represents a part of the dance configuration for tests
+// (i.e. ferretdb/mongodb/common tests).
+//
+// It's used to store information about expected test results for a
+// specific database.
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Default status   `yaml:"default"`
-	Stats   *Stats   `yaml:"stats"`
-	Pass    []string `yaml:"pass"`
-	Skip    []string `yaml:"skip"`
-	Fail    []string `yaml:"fail"`
+	Default status
+	Stats   *Stats
+	Pass    Tests
+	Skip    Tests
+	Fail    Tests
+}
+
+// Tests are the tests from yaml category pass / fail / skip.
+type Tests struct {
+	TestNames []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	OutRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
+	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
 
-	for _, t := range tc.Pass {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+	for _, tcat := range []struct {
+		testsStatus status
+		tests       Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, t := range tcat.tests.TestNames {
+			if _, ok := res[t]; ok {
+				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+			}
+			res[t] = tcat.testsStatus
 		}
-		res[t] = Pass
-	}
-
-	for _, t := range tc.Skip {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Skip
-	}
-
-	for _, t := range tc.Fail {
-		if _, ok := res[t]; ok {
-			return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-		}
-		res[t] = Fail
 	}
 
 	return res, nil
@@ -100,6 +106,29 @@ type CompareResult struct {
 	UnexpectedFail map[string]string
 	UnexpectedRest map[string]TestResult
 	Stats          Stats
+}
+
+// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
+// If no output matches expected - returns nil.
+func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
+	for _, expectedRes := range []struct {
+		expectedStatus status
+		tests          Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, reg := range expectedRes.tests.OutRegex {
+			r := regexp.MustCompile(reg)
+
+			if !r.MatchString(result.Output) {
+				continue
+			}
+			return &expectedRes.expectedStatus
+		}
+	}
+	return nil
 }
 
 func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
@@ -123,14 +152,19 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 	for _, test := range tests {
 		expectedRes := tc.Default
-		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
-			if res, ok := tcMap[prefix]; ok {
-				expectedRes = res
-				break
+		testRes := results.TestResults[test]
+
+		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
+			expectedRes = *expStatus
+		} else {
+			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
+				if res, ok := tcMap[prefix]; ok {
+					expectedRes = res
+					break
+				}
 			}
 		}
 
-		testRes := results.TestResults[test]
 		testResOutput := testRes.IndentedOutput()
 
 		switch expectedRes {
