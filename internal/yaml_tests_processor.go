@@ -17,6 +17,7 @@ package internal
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -71,13 +72,36 @@ type TestsConfig struct {
 
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	TestNames []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	TestNames    []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	RegexPattern []string // i.e. mongo.org/.*
-	OutRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
+	OutRegex     []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
 }
 
-// FileTestsConfig differs from TestsConfig: has any in array element
-// TODO example on the the yaml to parse.
+// ConfigFile is a yaml tests representation of the Config struct.
+//
+// It is used only to fetch data from file. To get any of
+// the dance configuration data it should be converted to
+// Config struct with Convert() function.
+//
+//nolint:govet // we don't care about alignment there
+type ConfigFile struct {
+	Runner  string      `yaml:"runner"`
+	Dir     string      `yaml:"dir"`
+	Args    []string    `yaml:"args"`
+	Results fileResults `yaml:"results"`
+}
+
+// fileResults is a yaml representation of the Results struct.
+type fileResults struct {
+	Common   *FileTestsConfig `yaml:"common"`
+	FerretDB *FileTestsConfig `yaml:"ferretdb"`
+	MongoDB  *FileTestsConfig `yaml:"mongodb"`
+}
+
+// FileTestsConfig is a yaml representation of the TestsConfig struct.
+// It differs from it by using "any" type to be able to parse maps (i.e. "- output_regex: ...").
+//
+// To gain a data the struct should be first converted to TestsConfig with FileTestsConfig.Convert() function.
 type FileTestsConfig struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
@@ -132,7 +156,7 @@ func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
 				}
 
 				*outArr = append(*outArr, regexp)
-				//log.Fatal(outArr, tcat.outTests.NameRegex)
+				// log.Fatal(outArr, tcat.outTests.NameRegex)
 				continue
 			case string:
 				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
@@ -180,7 +204,7 @@ type CompareResult struct {
 
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
-func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
+func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
 	for _, expectedRes := range []struct {
 		expectedStatus status
 		tests          Tests
@@ -213,7 +237,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 			return &expectedRes.expectedStatus
 		}
 
-		return outStatus //TODO: bug
+		return outStatus // TODO: bug
 	}
 	return nil
 }
@@ -240,10 +264,9 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	for _, test := range tests {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
-		//log.Fatal(tc.Fail.NameRegex)
+		// log.Fatal(tc.Fail.NameRegex)
 
 		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
-
 			expectedRes = *expStatus
 		} else {
 			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {

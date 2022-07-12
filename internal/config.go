@@ -42,27 +42,6 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
-// ConfigFile is a yaml tests representation of the Config struct.
-//
-// It is used only to fetch data from file. To get any of
-// the dance configuration data it should be converted to
-// Config struct with Convert() function.
-//
-//nolint:govet // we don't care about alignment there
-type ConfigFile struct {
-	Runner  string      `yaml:"runner"`
-	Dir     string      `yaml:"dir"`
-	Args    []string    `yaml:"args"`
-	Results fileResults `yaml:"results"`
-}
-
-// fileResults is a yaml representation of the Results struct.
-type fileResults struct {
-	Common   *FileTestsConfig `yaml:"common"`
-	FerretDB *FileTestsConfig `yaml:"ferretdb"`
-	MongoDB  *FileTestsConfig `yaml:"mongodb"`
-}
-
 // Converts ConfigFile to Config struct.
 func (cf *ConfigFile) Convert() (*Config, error) {
 	common, err := cf.Results.Common.Convert()
