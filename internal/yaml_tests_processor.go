@@ -17,7 +17,6 @@ package internal
 import (
 	"fmt"
 	"log"
-	"regexp"
 	"sort"
 	"strings"
 
@@ -56,7 +55,10 @@ type Stats struct {
 }
 
 // TestsConfig represents a part of the dance configuration for tests.
-// TODO: purpose and cases where it's used.
+// (i.e. ferretdb/mongodb/common tests).
+//
+// It's used to store information about expected test results for a
+// specific database.
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
@@ -67,11 +69,11 @@ type TestsConfig struct {
 	Fail    Tests
 }
 
-// Tests are tests from yaml category pass / fail / skip
+// Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	TestNames    []string //
+	TestNames []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	RegexPattern []string // i.e. mongo.org/.*
-	OutRegex     []string // does't check for names - checks output
+	OutRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
 }
 
 // FileTestsConfig differs from TestsConfig: has any in array element
@@ -176,10 +178,9 @@ type CompareResult struct {
 	Stats          Stats
 }
 
-// Compiles result output with expected outputs and return expected status.
+// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
-func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
-	//log.Fatal(tc.Fail.NameRegex)
+func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 	for _, expectedRes := range []struct {
 		expectedStatus status
 		tests          Tests
@@ -242,6 +243,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		//log.Fatal(tc.Fail.NameRegex)
 
 		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
+
 			expectedRes = *expStatus
 		} else {
 			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
