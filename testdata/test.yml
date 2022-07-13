@@ -1,0 +1,63 @@
+#TODO: 
+#- [ ] create inputs and expected outputs
+#- [ ] name all of these test cases
+#- [ ] seperate them to new yml files
+---
+runner: gotest
+args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
+
+results:
+  ferretdb:
+    pass:
+      - regex: .*
+
+# expected: match all
+---
+runner: gotest
+args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
+
+
+results:
+  ferretdb:
+    pass:
+      - regex: foo.*
+      - output_regex: foobar.*
+
+
+---
+results:
+  ferretdb:
+    pass:
+      - regex: foo.*
+    fail:
+      - regex: foobar.*
+
+---
+results:
+  ferretdb:
+    pass:
+      - regex: foo.*
+    fail:
+      - output_regex: foobar.* # create some output that will match the output of the foo.* testname
+
+---
+results:
+  ferretdb:
+    pass:
+      - regex: foo.*
+      - foobar
+
+---
+results:
+  ferretdb:
+    pass:
+      - regex_output: foo.* # create some output that will match the output of the foo.* testname
+      - foobar
+
+---
+results:
+  ferretdb:
+    pass:
+      - regex_output: foo.* # create some output that will match the output of the foo.* testname
+    fail:
+      - foobar
