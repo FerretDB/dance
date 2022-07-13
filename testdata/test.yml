@@ -2,6 +2,7 @@
 #- [ ] create inputs and expected outputs
 #- [ ] name all of these test cases
 #- [ ] seperate them to new yml files
+#- [ ] we could implement decoding multiple yamls from one file (---) to organize tests in groups
 ---
 runner: gotest
 args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
