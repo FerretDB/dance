@@ -22,7 +22,9 @@ services:
       - TZ=Asia/Kathmandu
 
   postgres:
-    image: postgres:14.3
+    build:
+      context: ./build/deps
+      dockerfile: postgres.Dockerfile
     container_name: dance_postgres
     restart: unless-stopped
     ports:
@@ -35,7 +37,9 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
 
   mongodb:
-    image: mongo:5.0.8
+    build:
+      context: ./build/deps
+      dockerfile: mongo.Dockerfile
     container_name: dance_mongodb
     restart: unless-stopped
     depends_on: ["mongosh"]
@@ -46,7 +50,9 @@ services:
       - TZ=Asia/Kathmandu
 
   mongosh:
-    image: mongo:5.0.8
+    build:
+      context: ./build/deps
+      dockerfile: mongo.Dockerfile
     container_name: dance_mongosh
     restart: unless-stopped
     environment:

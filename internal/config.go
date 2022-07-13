@@ -16,6 +16,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -27,18 +28,18 @@ import (
 //
 //nolint:govet // we don't care about alignment there
 type Config struct {
-	Runner  string   `yaml:"runner"`
-	Dir     string   `yaml:"dir"`
-	Args    []string `yaml:"args"`
-	Results Results  `yaml:"results"`
+	Runner  string
+	Dir     string
+	Args    []string
+	Results Results
 }
 
 // Results represents expected dance results.
 type Results struct {
 	// Expected results for both FerretDB and MongoDB.
-	Common   *TestsConfig `yaml:"common"`
-	FerretDB *TestsConfig `yaml:"ferretdb"`
-	MongoDB  *TestsConfig `yaml:"mongodb"`
+	Common   *TestsConfig
+	FerretDB *TestsConfig
+	MongoDB  *TestsConfig
 }
 
 // Loadconfig loads and validates configuration from file.
@@ -52,27 +53,69 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var c Config
-	if err = d.Decode(&c); err != nil {
+	var cf ConfigFile
+	if err = d.Decode(&cf); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
+	}
+
+	c, err := cf.Convert()
+	if err != nil {
+		return nil, err
 	}
 
 	if err = c.fillAndValidate(); err != nil {
 		return nil, err
 	}
 
-	return &c, nil
+	return c, nil
+}
+
+// mergeTestConfigs merges common config into both databases test configs.
+func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
+	if common == nil {
+		if ferretdb == nil || mongodb == nil {
+			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+		}
+		return nil
+	}
+
+	for _, t := range []struct {
+		Common   *Tests
+		FerretDB *Tests
+		MongoDB  *Tests
+	}{
+		{&common.Skip, &ferretdb.Skip, &mongodb.Skip},
+		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
+		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
+	} {
+		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
+		t.FerretDB.OutRegex = append(t.FerretDB.OutRegex, t.Common.OutRegex...)
+
+		t.MongoDB.TestNames = append(t.MongoDB.TestNames, t.Common.TestNames...)
+		t.MongoDB.OutRegex = append(t.MongoDB.OutRegex, t.Common.OutRegex...)
+	}
+
+	if common.Default != "" {
+		if ferretdb.Default != "" || mongodb.Default != "" {
+			return errors.New("default value cannot be set in common, when it's set in database")
+		}
+		ferretdb.Default = common.Default
+		mongodb.Default = common.Default
+	}
+
+	if common.Stats != nil {
+		if ferretdb.Stats != nil || mongodb.Stats != nil {
+			return errors.New("stats value cannot be set in common, when it's set in database")
+		}
+		ferretdb.Stats = common.Stats
+		mongodb.Stats = common.Stats
+	}
+	return nil
 }
 
 func (c *Config) fillAndValidate() error {
-	if c.Results.Common == nil {
-		if c.Results.FerretDB == nil || c.Results.MongoDB == nil {
-			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
-		}
-	} else {
-		if c.Results.FerretDB != nil || c.Results.MongoDB != nil {
-			return fmt.Errorf("common results are not allowed with FerretDB or MongoDB results")
-		}
+	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
+		return err
 	}
 
 	for _, r := range []*TestsConfig{
