@@ -16,7 +16,6 @@ package internal
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"sort"
 	"strings"
@@ -161,6 +160,9 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
 func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
+	var matchedRegex string   // name of regex that matched the test (it's required to print it on panic)
+	var matchedStatus *status // matched status by regex
+
 	for _, expectedRes := range []struct {
 		expectedStatus status
 		tests          Tests
@@ -169,16 +171,17 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 		{Skip, tc.Skip},
 		{Fail, tc.Fail},
 	} {
-		// TODO: we should also check for outStatus duplicates here
-		var outStatus *status
 		for _, reg := range expectedRes.tests.NameRegexPattern {
-			log.Fatal(reg)
 			r := regexp.MustCompile(reg)
 
 			if !r.MatchString(testName) {
 				continue
 			}
-			outStatus = &expectedRes.expectedStatus
+			if matchedStatus != nil {
+				panic(fmt.Sprintf("test %s match more than one regexps: %s, %s", testName, matchedRegex, reg))
+			}
+			matchedStatus = &expectedRes.expectedStatus
+			matchedRegex = reg
 		}
 
 		for _, reg := range expectedRes.tests.OutputRegexPattern {
@@ -187,15 +190,14 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(result.Output) {
 				continue
 			}
-			if outStatus != nil {
-				panic(fmt.Sprintf(""))
+			if matchedStatus != nil {
+				panic(fmt.Sprintf("test %s match more than one regexps: %s, %s", testName, matchedRegex, reg))
 			}
-			return &expectedRes.expectedStatus
+			matchedStatus = &expectedRes.expectedStatus
+			matchedRegex = reg
 		}
-
-		return outStatus // TODO: bug
 	}
-	return nil
+	return matchedStatus
 }
 
 // nextPrefix returns the next prefix of the given path, stopping on / and .
