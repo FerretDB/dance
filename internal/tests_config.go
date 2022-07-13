@@ -78,7 +78,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	for _, test := range tests {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
-		// log.Fatal(tc.Fail.NameRegex)
 
 		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
 			expectedRes = *expStatus
