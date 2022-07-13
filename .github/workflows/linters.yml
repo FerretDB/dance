@@ -5,8 +5,13 @@ on:
     branches:
       - main
   pull_request:
+    types:
+      - unlabeled # if GitHub Actions stuck, add and remove "no ci" label to force rebuild
+      - opened
+      - reopened
+      - synchronize
   schedule:
-    - cron: "42 3 * * *"
+    - cron: "12 3 * * *"
 
 env:
   GOPATH: /home/runner/go
@@ -20,7 +25,14 @@ jobs:
     name: linters
     runs-on: ubuntu-20.04
 
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'no ci')
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Setup Go
         uses: FerretDB/github-actions/setup-go@main
         with:

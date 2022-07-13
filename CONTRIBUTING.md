@@ -4,6 +4,19 @@ The dance tool and tests run on the host; macOS, Linux, and Windows are expected
 Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker; Docker Compose configuration is provided for convenience, but not required.
 In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host as it does not involve Docker images building or PostgreSQL restarts.
 
+## Cloning repository
+```sh
+git clone --recursive
+```
+Remember to use that command to clone this repository with all submodules included.
+
+---
+```sh
+git submodule update --init
+```
+If you've already cloned it without submodules you can use that command
+to include required submodules.
+
 ## Running tests
 
 ```sh

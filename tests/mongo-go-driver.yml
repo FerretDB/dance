@@ -6,20 +6,61 @@ args:
   - ./examples/...
   - ./mongo
   - ./mongo/gridfs
-  # - ./mongo/integration
-  # - ./mongo/integration/unified
-  # - ./x/mongo/driver/integration
-  # - ./x/mongo/driver/topology
+  - ./x/mongo/driver/integration
+  - ./x/mongo/driver/topology
+# - ./mongo/integration
+# - ./mongo/integration/unified
 
 results:
+  common:
+    skip:
+      # needs replica set
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+
+      # OCSP
+      - go.mongodb.org/mongo-driver/mongo/TestOCSP
+
+      # test requires that close does not aggressively close used connections
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+
+      # event ordering incompatible with load-balancer SDAM spec test
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+
+      # test requires that connections established by minPoolSize
+      # are immediately used to satisfy check-out requests 
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
+
+      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
+
+      # skip if CRYPT_SHARED_LIB_PATH is not set
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+
+      # skip if no compressor specified
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
+
+      # always skipped
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
+
+      # skip because authentication is required
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
   ferretdb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 18
-      expected_skip: 8
-      expected_pass: 198
+      expected_fail: 22
+      expected_skip: 17
+      expected_pass: 675
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -44,52 +85,37 @@ results:
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
 
       # aggregate https://github.com/FerretDB/FerretDB/issues/9
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_does_not_divide_evenly
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
-    skip: # shared with mongodb
-      # needs replica set
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-
-      # OCSP
-      - go.mongodb.org/mongo-driver/mongo/TestOCSP
-
-      # test requires that close does not aggressively close used connections
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
-
   mongodb:
     stats:
       unexpected_fail: 0
-      unexpected_skip:
+      unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 0
-      expected_skip: 8
-      expected_pass: 216
-
-    skip: # shared with ferretdb
-      # needs replica set
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-
-      # OCSP
-      - go.mongodb.org/mongo-driver/mongo/TestOCSP
-
-      # test requires that close does not aggressively close used connections
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+      expected_fail: 2
+      expected_skip: 17
+      expected_pass: 695
+    fail:
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+    pass:
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
