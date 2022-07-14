@@ -1,14 +1,20 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"log"
 	"path/filepath"
 	"testing"
 )
 
-func Test(t *testing.T) {
-	t.Run("test", func(t *testing.T) {
-		filePath := filepath.Join("..", "..", "testdata", fmt.Sprint(t.Name, ".yml"))
-
+func TestDance(t *testing.T) {
+	// duplicates.yml -> duplicates
+	t.Run("duplicate", func(t *testing.T) {
+		matches, err := filepath.Glob("../../testdata/*.yml")
+		if err != nil {
+			log.Fatal(err)
+		}
+		run(context.Background(), matches, "ferretdb", false)
 	})
+
 }
