@@ -8,7 +8,14 @@ runner: gotest
 args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
 
 results:
+  common:
+    stats:
+      expected_fail: 9
+      expected_pass: 4
   ferretdb:
+    pass:
+      - regex: .*
+  mongodb:
     pass:
       - regex: .*
 
