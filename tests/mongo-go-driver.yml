@@ -64,9 +64,6 @@ results:
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
-      - regex: go.mongodb.org/.*
-      - output_regex: error.*
-      - regex: .*
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples

@@ -91,10 +91,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	run(ctx, matches, *dbF, *vF)
-}
-
-func run(ctx context.Context, matches []string, dbName string, verbose bool) {
 	// TODO validate that args are in matches
 	if flag.NArg() != 0 {
 		matches = matches[:0:cap(matches)]
@@ -118,12 +114,12 @@ func run(ctx context.Context, matches []string, dbName string, verbose bool) {
 			dir = filepath.Join(dir, config.Dir)
 		}
 
-		expectedConfig, err := config.Results.ForDB(dbName)
+		expectedConfig, err := config.Results.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		runRes, err := gotest.Run(ctx, dir, config.Args, verbose)
+		runRes, err := gotest.Run(ctx, dir, config.Args, *vF)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -147,7 +143,7 @@ func run(ctx context.Context, matches []string, dbName string, verbose bool) {
 		logResult("Unexpectedly skipped", compareRes.UnexpectedSkip)
 		logResult("Unexpectedly passed", compareRes.UnexpectedPass)
 
-		if verbose {
+		if *vF {
 			logResult("Expectedly failed", compareRes.ExpectedFail)
 			logResult("Expectedly skipped", compareRes.ExpectedSkip)
 			logResult("Expectedly passed", compareRes.ExpectedPass)
