@@ -65,8 +65,7 @@ type testsConfig struct { // testsConfig -> TestsConfig
 	Fail    []any  `yaml:"fail"`
 }
 
-// Converts ConfigFile to Config struct.
-// ConfigFile
+// Convert converts ConfigFile to the Config struct.
 func (cf *ConfigFile) Convert() (*Config, error) {
 	common, err := cf.Results.Common.Convert()
 	if err != nil {

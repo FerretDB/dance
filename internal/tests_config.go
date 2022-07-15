@@ -41,8 +41,8 @@ type TestsConfig struct {
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
 	Names              []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	NameRegexPattern   []string // regex: "mongo.org/.*", the regext for the test name.
-	OutputRegexPattern []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*", regexps that match the tests output.
+	NameRegexPattern   []string // regex: "mongo.org/.*", the regex for the test name.
+	OutputRegexPattern []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*".
 }
 
 type CompareResult struct {
