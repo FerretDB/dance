@@ -6,10 +6,10 @@ on:
       - main
   pull_request:
     types:
+      - unlabeled # if GitHub Actions stuck, add and remove "no ci" label to force rebuild
       - opened
       - reopened
       - synchronize
-      - auto_merge_enabled # if GitHub Actions stuck, re-enable auto-merge to force rebuild
   schedule:
     - cron: "12 3 * * *" # after FerretDB's Docker workflow
 
@@ -25,6 +25,8 @@ jobs:
     name: dance
     runs-on: ubuntu-20.04
 
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'no ci')
+
     strategy:
       fail-fast: false
       matrix:
@@ -39,6 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           submodules: recursive
 
       - name: Setup Go
