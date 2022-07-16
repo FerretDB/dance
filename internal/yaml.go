@@ -32,6 +32,11 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
+// Structs and their internal equivalents:
+// - ConfigYAML -> Config
+// - ResultsYAML -> Results
+// - TestsConfigYAML -> TestsConfig
+
 // ConfigYAML is a yaml tests representation of the Config struct.
 //
 // It is used only to fetch data from file. To get any of
@@ -39,7 +44,7 @@ type Stats struct {
 // Config struct with Convert() function.
 //
 //nolint:govet // we don't care about alignment there
-type ConfigYAML struct { // ConfigYAML -> Config
+type ConfigYAML struct {
 	Runner  string      `yaml:"runner"`
 	Dir     string      `yaml:"dir"`
 	Args    []string    `yaml:"args"`
@@ -47,7 +52,7 @@ type ConfigYAML struct { // ConfigYAML -> Config
 }
 
 // ResultsYAML is a yaml representation of the Results struct.
-type ResultsYAML struct { // ResultsYAML -> Results
+type ResultsYAML struct {
 	Common   *TestsConfigYAML `yaml:"common"`
 	FerretDB *TestsConfigYAML `yaml:"ferretdb"`
 	MongoDB  *TestsConfigYAML `yaml:"mongodb"`
@@ -57,7 +62,7 @@ type ResultsYAML struct { // ResultsYAML -> Results
 // It differs from it by using "any" type to be able to parse maps (i.e. "- output_regex: ...").
 //
 // To gain a data the struct should be first converted to TestsConfig with TestsConfigYAML.Convert() function.
-type TestsConfigYAML struct { // TestsConfigYAML -> TestsConfig
+type TestsConfigYAML struct {
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -65,7 +70,8 @@ type TestsConfigYAML struct { // TestsConfigYAML -> TestsConfig
 	Fail    []any  `yaml:"fail"`
 }
 
-// Convert converts ConfigYAML to the Config struct.
+// Convert validates yaml and converts ConfigYAML to the
+// internal representation - Config.
 func (cf *ConfigYAML) Convert() (*Config, error) {
 	common, err := cf.Results.Common.Convert()
 	if err != nil {
@@ -88,12 +94,11 @@ func (cf *ConfigYAML) Convert() (*Config, error) {
 	}, nil
 }
 
-// Convert converts a TestsConfigYAML to the TestsConfig struct.
-// TestsConfigYAML is a yaml file with the tests.
-// TestsConfig is an internal representation of yaml test file.
+// Convert validates yaml and converts TestsConfigYAML to the
+// internal representation - TestsConfig.
 func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 	if ftc == nil {
-		return nil, nil // not sure if that works
+		return nil, nil
 	}
 
 	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
@@ -101,7 +106,7 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
 		yamlTests []any  // taken from the file, yaml representation of tests, incoming tests
-		outTests  *Tests // output tests
+		outTests  *Tests // yamlTests transformed to the internal representation
 	}{
 		{ftc.Pass, &tc.Pass},
 		{ftc.Skip, &tc.Skip},

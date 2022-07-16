@@ -158,6 +158,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
+// If both of the regexps match, returns the error.
 func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
 	var matchedRegex string   // name of regex that matched the test (it's required to print it on panic)
 	var matchedStatus *status // matched status by regex
