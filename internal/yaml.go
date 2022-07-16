@@ -32,32 +32,32 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
-// ConfigFile is a yaml tests representation of the Config struct.
+// ConfigYAML is a yaml tests representation of the Config struct.
 //
 // It is used only to fetch data from file. To get any of
 // the dance configuration data it should be converted to
 // Config struct with Convert() function.
 //
 //nolint:govet // we don't care about alignment there
-type ConfigFile struct { // ConfigFile -> Config
-	Runner  string     `yaml:"runner"`
-	Dir     string     `yaml:"dir"`
-	Args    []string   `yaml:"args"`
-	Results resultList `yaml:"results"`
+type ConfigYAML struct { // ConfigYAML -> Config
+	Runner  string      `yaml:"runner"`
+	Dir     string      `yaml:"dir"`
+	Args    []string    `yaml:"args"`
+	Results ResultsYAML `yaml:"results"`
 }
 
-// resultList is a yaml representation of the Results struct.
-type resultList struct { // resultList -> ResultList
-	Common   *testsConfig `yaml:"common"`
-	FerretDB *testsConfig `yaml:"ferretdb"`
-	MongoDB  *testsConfig `yaml:"mongodb"`
+// ResultsYAML is a yaml representation of the Results struct.
+type ResultsYAML struct { // ResultsYAML -> Results
+	Common   *TestsConfigYAML `yaml:"common"`
+	FerretDB *TestsConfigYAML `yaml:"ferretdb"`
+	MongoDB  *TestsConfigYAML `yaml:"mongodb"`
 }
 
-// testsConfig is a yaml representation of the TestsConfig struct.
+// TestsConfigYAML is a yaml representation of the TestsConfig struct.
 // It differs from it by using "any" type to be able to parse maps (i.e. "- output_regex: ...").
 //
-// To gain a data the struct should be first converted to TestsConfig with testsConfig.Convert() function.
-type testsConfig struct { // testsConfig -> TestsConfig
+// To gain a data the struct should be first converted to TestsConfig with TestsConfigYAML.Convert() function.
+type TestsConfigYAML struct { // TestsConfigYAML -> TestsConfig
 	Default status `yaml:"default"`
 	Stats   *Stats `yaml:"stats"`
 	Pass    []any  `yaml:"pass"`
@@ -65,8 +65,8 @@ type testsConfig struct { // testsConfig -> TestsConfig
 	Fail    []any  `yaml:"fail"`
 }
 
-// Convert converts ConfigFile to the Config struct.
-func (cf *ConfigFile) Convert() (*Config, error) {
+// Convert converts ConfigYAML to the Config struct.
+func (cf *ConfigYAML) Convert() (*Config, error) {
 	common, err := cf.Results.Common.Convert()
 	if err != nil {
 		return nil, err
@@ -84,14 +84,14 @@ func (cf *ConfigFile) Convert() (*Config, error) {
 		cf.Runner,
 		cf.Dir,
 		cf.Args,
-		ResultList{common, ferretDB, mongoDB},
+		Results{common, ferretDB, mongoDB},
 	}, nil
 }
 
-// Convert converts a FileTestConfig to TestConfig struct.
-// FileTestsConfig it's yaml file with the tests.
+// Convert converts a TestsConfigYAML to the TestsConfig struct.
+// TestsConfigYAML is a yaml file with the tests.
 // TestsConfig is an internal representation of yaml test file.
-func (ftc *testsConfig) Convert() (*TestsConfig, error) {
+func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 	if ftc == nil {
 		return nil, nil // not sure if that works
 	}
