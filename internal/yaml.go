@@ -35,7 +35,7 @@ type Stats struct {
 // Structs and their internal equivalents:
 // - ConfigYAML -> Config
 // - ResultsYAML -> Results
-// - TestsConfigYAML -> TestsConfig
+// - TestsConfigYAML -> TestsConfig.
 
 // ConfigYAML is a yaml tests representation of the Config struct.
 //

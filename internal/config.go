@@ -53,7 +53,7 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var cf ConfigFile
+	var cf ConfigYAML
 	if err = d.Decode(&cf); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
