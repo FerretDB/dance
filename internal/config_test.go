@@ -25,12 +25,12 @@ func TestFillAndValidate(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
-		in          *ResultList
-		expected    *ResultList
+		in          *Results
+		expected    *Results
 		expectedErr error
 	}{
 		"FillAndValidateFilled": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Pass: Tests{Names: []string{"a", "b"}},
 					Skip: Tests{Names: []string{"c", "d"}},
@@ -47,7 +47,7 @@ func TestFillAndValidate(t *testing.T) {
 					Fail: Tests{Names: []string{"D", "E"}},
 				},
 			},
-			expected: &ResultList{
+			expected: &Results{
 				Common: &TestsConfig{
 					Pass: Tests{Names: []string{"a", "b"}},
 					Skip: Tests{Names: []string{"c", "d"}},
@@ -66,14 +66,14 @@ func TestFillAndValidate(t *testing.T) {
 			},
 		},
 		"FillAndValidateNotSet": {
-			in: &ResultList{
+			in: &Results{
 				Common:   nil,
 				FerretDB: &TestsConfig{},
 			},
 			expectedErr: errors.New("both FerretDB and MongoDB results must be set (if common results are not set)"),
 		},
 		"FillAndValidateDuplicatesPass": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Pass: Tests{Names: []string{"a"}},
 				},
@@ -85,7 +85,7 @@ func TestFillAndValidate(t *testing.T) {
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
 		"FillAndValidateDuplicatesSkip": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Skip: Tests{Names: []string{"a"}},
 				},
@@ -97,7 +97,7 @@ func TestFillAndValidate(t *testing.T) {
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
 		"FillAndValidateDuplicatesFail": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Fail: Tests{Names: []string{"a"}},
 				},
@@ -109,7 +109,7 @@ func TestFillAndValidate(t *testing.T) {
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
 		"FillAndValidateDuplicatesAll": {
-			in: &ResultList{
+			in: &Results{
 				FerretDB: &TestsConfig{
 					Pass: Tests{Names: []string{"a"}},
 					Skip: Tests{Names: []string{"a"}},
@@ -120,14 +120,14 @@ func TestFillAndValidate(t *testing.T) {
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
 		"FillAndValidateDefault": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Default: "pass",
 				},
 				FerretDB: &TestsConfig{},
 				MongoDB:  &TestsConfig{},
 			},
-			expected: &ResultList{
+			expected: &Results{
 				Common: &TestsConfig{
 					Default: "pass",
 				},
@@ -140,7 +140,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 		},
 		"FillAndValidateDefaultDuplicate": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Default: "pass",
 				},
@@ -150,14 +150,14 @@ func TestFillAndValidate(t *testing.T) {
 			expectedErr: errors.New("default value cannot be set in common, when it's set in database"),
 		},
 		"FillAndValidateStats": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
 				},
 				FerretDB: &TestsConfig{},
 				MongoDB:  &TestsConfig{},
 			},
-			expected: &ResultList{
+			expected: &Results{
 				Common: &TestsConfig{
 					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
 				},
@@ -170,7 +170,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 		},
 		"FillAndValidateStatsDuplicate": {
-			in: &ResultList{
+			in: &Results{
 				Common: &TestsConfig{
 					Stats: &Stats{},
 				},
