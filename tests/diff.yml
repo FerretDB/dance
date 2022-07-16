@@ -5,30 +5,43 @@ args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 4
-      expected_pass: 2
+      expected_fail: 9
+      expected_pass: 4
 
     pass:
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/FerretDB
 
     fail:
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
 
-
   mongodb:
     stats:
-      expected_fail: 4
-      expected_pass: 1
+      expected_fail: 9
+      expected_pass: 4
 
     pass:
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
 
     fail:
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings

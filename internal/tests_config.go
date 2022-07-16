@@ -54,7 +54,11 @@ type Stats struct {
 	ExpectedPass   int `yaml:"expected_pass"`
 }
 
-// TestsConfig represents a part of the dance configuration for tests.
+// TestsConfig represents a part of the dance configuration for tests
+// (i.e. ferretdb/mongodb/common tests).
+//
+// It's used to store information about expected test results for a
+// specific database.
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
@@ -65,60 +69,10 @@ type TestsConfig struct {
 	Fail    Tests
 }
 
+// Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	TestNames []string
-	OutRegex  []string
-}
-
-type FileTestsConfig struct {
-	Default status `yaml:"default"`
-	Stats   *Stats `yaml:"stats"`
-	Pass    []any  `yaml:"pass"`
-	Skip    []any  `yaml:"skip"`
-	Fail    []any  `yaml:"fail"`
-}
-
-func (ftc *FileTestsConfig) Convert() (*TestsConfig, error) {
-	if ftc == nil {
-		return nil, nil // not sure if that works
-	}
-	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
-	//nolint:govet // we don't care about alignment there
-	for _, tcat := range []struct {
-		inTests  []any
-		outTests *Tests
-	}{
-		{ftc.Pass, &tc.Pass},
-		{ftc.Skip, &tc.Skip},
-		{ftc.Fail, &tc.Fail},
-	} {
-		for _, t := range tcat.inTests {
-			switch test := t.(type) {
-			case map[string]any:
-				mValue, ok := test["output_regex"]
-				if !ok {
-					return nil, fmt.Errorf("invalid field name (\"output_regex\" expected)")
-				}
-				regexp, ok := mValue.(string)
-				if !ok {
-					// Check specifically for an array
-					if _, ok := mValue.([]string); ok {
-						return nil, fmt.Errorf("invalid syntax: regexp value shouldn't be an array")
-					}
-					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
-				}
-
-				tcat.outTests.OutRegex = append(tcat.outTests.OutRegex, regexp)
-				continue
-			case string:
-				tcat.outTests.TestNames = append(tcat.outTests.TestNames, test)
-				continue
-			default:
-				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", t)
-			}
-		}
-	}
-	return &tc, nil
+	TestNames []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	OutRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
 }
 
 func (tc *TestsConfig) toMap() (map[string]status, error) {
@@ -154,7 +108,7 @@ type CompareResult struct {
 	Stats          Stats
 }
 
-// Compiles result output with expected outputs and return expected status.
+// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
 func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
 	for _, expectedRes := range []struct {
@@ -197,9 +151,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	sort.Strings(tests)
 
 	for _, test := range tests {
-		testRes := results.TestResults[test]
-
 		expectedRes := tc.Default
+		testRes := results.TestResults[test]
 
 		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
 			expectedRes = *expStatus
@@ -212,15 +165,17 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 			}
 		}
 
+		testResOutput := testRes.IndentedOutput()
+
 		switch expectedRes {
 		case Pass:
 			switch testRes.Status {
 			case Pass:
-				compareResult.ExpectedPass[test] = testRes.IndentedOutput()
+				compareResult.ExpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -229,11 +184,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Skip:
 			switch testRes.Status {
 			case Pass:
-				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.ExpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.ExpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.UnexpectedFail[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -242,11 +197,11 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Fail:
 			switch testRes.Status {
 			case Pass:
-				compareResult.UnexpectedPass[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Skip:
-				compareResult.UnexpectedSkip[test] = testRes.IndentedOutput()
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
-				compareResult.ExpectedFail[test] = testRes.IndentedOutput()
+				compareResult.ExpectedFail[test] = testResOutput
 			case Unknown:
 				fallthrough
 			default:
@@ -268,7 +223,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
-
 	// special case: zero in expected_pass means "don't check"
 	if tc.Stats.ExpectedPass == 0 {
 		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
