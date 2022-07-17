@@ -178,7 +178,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedStatus != nil {
-				panic(fmt.Sprintf("test %s match more than one regexps: %s, %s", testName, matchedRegex, reg))
+				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
 			}
 			matchedStatus = &expectedRes.expectedStatus
 			matchedRegex = reg
@@ -191,7 +191,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedStatus != nil {
-				panic(fmt.Sprintf("test %s match more than one regexps: %s, %s", testName, matchedRegex, reg))
+				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
 			}
 			matchedStatus = &expectedRes.expectedStatus
 			matchedRegex = reg
