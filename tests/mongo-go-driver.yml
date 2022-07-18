@@ -35,7 +35,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
 
       # test requires that connections established by minPoolSize
-      # are immediately used to satisfy check-out requests 
+      # are immediately used to satisfy check-out requests
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
 
       # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection

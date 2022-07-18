@@ -23,38 +23,7 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-// nextPrefix returns the next prefix of the given path, stopping on / and .
-// It panics for empty string.
-func nextPrefix(path string) string {
-	if path == "" {
-		panic("path is empty")
-	}
-
-	if t := strings.TrimRight(path, "."); t != path {
-		return t
-	}
-
-	if t := strings.TrimRight(path, "/"); t != path {
-		return t
-	}
-
-	i := strings.LastIndexAny(path, "/.")
-	return path[:i+1]
-}
-
-// Stats represent the expected/actual amount of
-// failed, skipped and passed tests.
-type Stats struct {
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	UnexpectedFail int `yaml:"unexpected_fail"`
-	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
-	ExpectedFail   int `yaml:"expected_fail"`
-	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
-}
-
-// TestsConfig represents a part of the dance configuration for tests
+// TestsConfig represents a part of the dance configuration for tests.
 // (i.e. ferretdb/mongodb/common tests).
 //
 // It's used to store information about expected test results for a
@@ -71,30 +40,9 @@ type TestsConfig struct {
 
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	TestNames []string // tests names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	OutRegex  []string // regexps that match the tests output (i.e. "^server version \"5.0.9\" is (lower|higher).*")
-}
-
-func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass.TestNames)+len(tc.Skip.TestNames)+len(tc.Fail.TestNames))
-
-	for _, tcat := range []struct {
-		testsStatus status
-		tests       Tests
-	}{
-		{Pass, tc.Pass},
-		{Skip, tc.Skip},
-		{Fail, tc.Fail},
-	} {
-		for _, t := range tcat.tests.TestNames {
-			if _, ok := res[t]; ok {
-				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-			}
-			res[t] = tcat.testsStatus
-		}
-	}
-
-	return res, nil
+	Names              []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	NameRegexPattern   []string // regex: "mongo.org/.*", the regex for the test name.
+	OutputRegexPattern []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*".
 }
 
 type CompareResult struct {
@@ -106,29 +54,6 @@ type CompareResult struct {
 	UnexpectedFail map[string]string
 	UnexpectedRest map[string]TestResult
 	Stats          Stats
-}
-
-// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
-// If no output matches expected - returns nil.
-func (tc *TestsConfig) getExpectedStatusRegex(result *TestResult) *status {
-	for _, expectedRes := range []struct {
-		expectedStatus status
-		tests          Tests
-	}{
-		{Pass, tc.Pass},
-		{Skip, tc.Skip},
-		{Fail, tc.Fail},
-	} {
-		for _, reg := range expectedRes.tests.OutRegex {
-			r := regexp.MustCompile(reg)
-
-			if !r.MatchString(result.Output) {
-				continue
-			}
-			return &expectedRes.expectedStatus
-		}
-	}
-	return nil
 }
 
 func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
@@ -154,7 +79,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
 
-		if expStatus := tc.getExpectedStatusRegex(&testRes); expStatus != nil {
+		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
 			expectedRes = *expStatus
 		} else {
 			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
@@ -229,4 +154,111 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	}
 
 	return compareResult, nil
+}
+
+// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
+// If no output matches expected - returns nil.
+// If both of the regexps match, it panics.
+func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
+	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
+	var matchedStatus status // matched status by regex
+
+	for _, expectedRes := range []struct {
+		expectedStatus status
+		tests          Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, reg := range expectedRes.tests.NameRegexPattern {
+			r := regexp.MustCompile(reg)
+
+			if !r.MatchString(testName) {
+				continue
+			}
+			if matchedRegex != "" {
+				panic(
+					fmt.Sprintf(
+						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
+						testName,
+						result.Output,
+						matchedRegex,
+						reg,
+					),
+				)
+			}
+			matchedStatus = expectedRes.expectedStatus
+			matchedRegex = reg
+		}
+
+		for _, reg := range expectedRes.tests.OutputRegexPattern {
+			r := regexp.MustCompile(reg)
+
+			if !r.MatchString(result.Output) {
+				continue
+			}
+			if matchedRegex != "" {
+				panic(
+					fmt.Sprintf(
+						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
+						testName,
+						result.Output,
+						matchedRegex,
+						reg,
+					),
+				)
+			}
+			matchedStatus = expectedRes.expectedStatus
+			matchedRegex = reg
+		}
+	}
+	if matchedStatus == "" {
+		return nil
+	}
+	return &matchedStatus
+}
+
+// nextPrefix returns the next prefix of the given path, stopping on / and .
+// It panics for empty string.
+func nextPrefix(path string) string {
+	if path == "" {
+		panic("path is empty")
+	}
+
+	if t := strings.TrimRight(path, "."); t != path {
+		return t
+	}
+
+	if t := strings.TrimRight(path, "/"); t != path {
+		return t
+	}
+
+	i := strings.LastIndexAny(path, "/.")
+	return path[:i+1]
+}
+
+// toMap converts TestsConfig to the map of tests.
+// The map stores test names as a keys and their status (pass|skip|fail), as their value.
+// It returns an error if there's a test duplicate.
+func (tc *TestsConfig) toMap() (map[string]status, error) {
+	res := make(map[string]status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
+
+	for _, tcat := range []struct {
+		testsStatus status
+		tests       Tests
+	}{
+		{Pass, tc.Pass},
+		{Skip, tc.Skip},
+		{Fail, tc.Fail},
+	} {
+		for _, t := range tcat.tests.Names {
+			if _, ok := res[t]; ok {
+				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
+			}
+			res[t] = tcat.testsStatus
+		}
+	}
+
+	return res, nil
 }
