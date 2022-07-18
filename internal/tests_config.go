@@ -158,7 +158,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
-// If both of the regexps match, returns the error.
+// If both of the regexps match, it panics.
 func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
 	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
 	var matchedStatus status // matched status by regex
@@ -178,7 +178,15 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedRegex != "" {
-				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
+				panic(
+					fmt.Sprintf(
+						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
+						testName,
+						result.Output,
+						matchedRegex,
+						reg,
+					),
+				)
 			}
 			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg
@@ -191,7 +199,15 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedRegex != "" {
-				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
+				panic(
+					fmt.Sprintf(
+						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
+						testName,
+						result.Output,
+						matchedRegex,
+						reg,
+					),
+				)
 			}
 			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg
@@ -222,6 +238,9 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
+// toMap converts TestsConfig to the map of tests.
+// The map stores test names as a keys and their status (pass|skip|fail), as their value.
+// It returns an error if there's a test duplicate.
 func (tc *TestsConfig) toMap() (map[string]status, error) {
 	res := make(map[string]status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
