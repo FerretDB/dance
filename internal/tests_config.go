@@ -160,8 +160,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 // If no output matches expected - returns nil.
 // If both of the regexps match, returns the error.
 func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
-	var matchedRegex string   // name of regex that matched the test (it's required to print it on panic)
-	var matchedStatus *status // matched status by regex
+	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
+	var matchedStatus status // matched status by regex
 
 	for _, expectedRes := range []struct {
 		expectedStatus status
@@ -177,10 +177,10 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(testName) {
 				continue
 			}
-			if matchedStatus != nil {
+			if matchedRegex != "" {
 				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
 			}
-			matchedStatus = &expectedRes.expectedStatus
+			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg
 		}
 
@@ -190,14 +190,17 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(result.Output) {
 				continue
 			}
-			if matchedStatus != nil {
+			if matchedRegex != "" {
 				panic(fmt.Sprintf("test %s\n(output: %s)\nmatch more than one regexps: %s, %s", testName, result.Output, matchedRegex, reg))
 			}
-			matchedStatus = &expectedRes.expectedStatus
+			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg
 		}
 	}
-	return matchedStatus
+	if matchedStatus == "" {
+		return nil
+	}
+	return &matchedStatus
 }
 
 // nextPrefix returns the next prefix of the given path, stopping on / and .

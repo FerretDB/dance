@@ -8,13 +8,13 @@ args:
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
-  - ./mongo/integration
-  - ./mongo/integration/unified
+    #- ./mongo/integration
+    #- ./mongo/integration/unified
 
 results:
   common:
     skip:
-      - output_regex: .*skipping due to environmental constraints:.*
+      - output_regex: ".*skipping due to environmental constraints.*"
       - output_regex: skipping due to known failure:.*
       - output_regex: operation list(Database|Collection)Objects not implemented
       - output_regex: count has been deprecated
@@ -159,8 +159,8 @@ results:
       expected_skip: 138
       expected_pass: 1160
     fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+      #- go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      #- go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
 
       # InsertMany error for collection test: bulk write exception: write errors: [E11000 duplicate key error collection: command-monitoring-tests.test index: _id_ dup key: { _id: 1 }]
       - go.mongodb.org/mongo-driver/mongo/integration/TestCommandMonitoring/bulkWrite.json/A_successful_mixed_bulk_write
