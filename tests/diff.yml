@@ -5,12 +5,14 @@ args: ["-timeout=20s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 9
-      expected_pass: 4
+      expected_fail: 14
+      expected_pass: 6
 
     pass:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/FerretDB
 
@@ -20,6 +22,11 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
@@ -27,12 +34,14 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 9
-      expected_pass: 4
+      expected_fail: 14
+      expected_pass: 6
 
     pass:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
 
@@ -42,6 +51,11 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/Length64/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
