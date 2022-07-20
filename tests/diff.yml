@@ -11,7 +11,7 @@ results:
     pass:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/FerretDB
 
@@ -21,9 +21,9 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
@@ -37,7 +37,7 @@ results:
     pass:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/MongoDB
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/MongoDB
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/MongoDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings/MongoDB
 
@@ -47,9 +47,9 @@ results:
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/Length200/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix
       - github.com/FerretDB/dance/tests/diff/TestCollectionName/ReservedPrefix/FerretDB
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix
-      - github.com/FerretDB/dance/tests/diff/TestDataBaseName/ReservedPrefix/FerretDB
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix
+      - github.com/FerretDB/dance/tests/diff/TestDatabaseName/ReservedPrefix/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages
       - github.com/FerretDB/dance/tests/diff/TestErrorMessages/FerretDB
       - github.com/FerretDB/dance/tests/diff/TestNullStrings
