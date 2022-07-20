@@ -23,7 +23,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func TestDataBaseName(t *testing.T) {
+func TestDatabaseName(t *testing.T) {
 	t.Parallel()
 
 	collectionName := strings.Repeat("a", 10)
