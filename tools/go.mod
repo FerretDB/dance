@@ -2,6 +2,9 @@ module github.com/FerretDB/dance/tools
 
 go 1.18
 
+// TODO https://github.com/FerretDB/FerretDB/issues/781
+replace github.com/golangci/golangci-lint => github.com/FerretDB/golangci-lint v1.47.3-0.20220721122035-23d2b5ae3f6c
+
 require (
 	github.com/BurntSushi/go-sumtype v0.0.0-20190304192233-fcb4a6205bdc
 	github.com/go-task/task/v3 v3.14.0
