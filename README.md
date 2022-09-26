@@ -14,6 +14,6 @@ but their number goes down over time.
 
 Dance also includes one additional set of integration tests (called `diff`) that is written by FerretDB developers.
 It highlights the known differences between FerretDB and MongoDB,
-as [noted in the former's documentation](https://github.com/FerretDB/FerretDB#known-differences).
+as [noted in documentation](https://docs.ferretdb.io/docs/diff/).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for running instructions.
