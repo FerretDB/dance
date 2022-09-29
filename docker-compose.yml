@@ -39,7 +39,7 @@ services:
   mongodb:
     build:
       context: ./build/deps
-      dockerfile: mongo5.Dockerfile
+      dockerfile: mongo6.Dockerfile
     command: --setParameter enableTestCommands=1
     container_name: dance_mongodb
     restart: unless-stopped
@@ -53,7 +53,7 @@ services:
   mongosh:
     build:
       context: ./build/deps
-      dockerfile: mongo5.Dockerfile
+      dockerfile: mongo6.Dockerfile
     container_name: dance_mongosh
     restart: unless-stopped
     environment:
