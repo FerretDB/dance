@@ -42,7 +42,7 @@ type Results struct {
 	MongoDB  *TestsConfig
 }
 
-// Loadconfig loads and validates configuration from file.
+// LoadConfig loads and validates configuration from file.
 func LoadConfig(path string) (*Config, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -53,7 +53,7 @@ func LoadConfig(path string) (*Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var cf ConfigFile
+	var cf ConfigYAML
 	if err = d.Decode(&cf); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
@@ -88,11 +88,13 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
 		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
 	} {
-		t.FerretDB.TestNames = append(t.FerretDB.TestNames, t.Common.TestNames...)
-		t.FerretDB.OutRegex = append(t.FerretDB.OutRegex, t.Common.OutRegex...)
+		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
+		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.FerretDB.OutputRegexPattern = append(t.FerretDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 
-		t.MongoDB.TestNames = append(t.MongoDB.TestNames, t.Common.TestNames...)
-		t.MongoDB.OutRegex = append(t.MongoDB.OutRegex, t.Common.OutRegex...)
+		t.MongoDB.Names = append(t.MongoDB.Names, t.Common.Names...)
+		t.MongoDB.NameRegexPattern = append(t.MongoDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.MongoDB.OutputRegexPattern = append(t.MongoDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 	}
 
 	if common.Default != "" {

@@ -32,36 +32,36 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateFilled": {
 			in: &Results{
 				Common: &TestsConfig{
-					Pass: Tests{TestNames: []string{"a", "b"}},
-					Skip: Tests{TestNames: []string{"c", "d"}},
-					Fail: Tests{TestNames: []string{"e", "f"}},
+					Pass: Tests{Names: []string{"a", "b"}},
+					Skip: Tests{Names: []string{"c", "d"}},
+					Fail: Tests{Names: []string{"e", "f"}},
 				},
 				FerretDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"1", "2"}},
-					Skip: Tests{TestNames: []string{"3", "4"}},
-					Fail: Tests{TestNames: []string{"5"}},
+					Pass: Tests{Names: []string{"1", "2"}},
+					Skip: Tests{Names: []string{"3", "4"}},
+					Fail: Tests{Names: []string{"5"}},
 				},
 				MongoDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"A", "B"}},
-					Skip: Tests{TestNames: []string{"C"}},
-					Fail: Tests{TestNames: []string{"D", "E"}},
+					Pass: Tests{Names: []string{"A", "B"}},
+					Skip: Tests{Names: []string{"C"}},
+					Fail: Tests{Names: []string{"D", "E"}},
 				},
 			},
 			expected: &Results{
 				Common: &TestsConfig{
-					Pass: Tests{TestNames: []string{"a", "b"}},
-					Skip: Tests{TestNames: []string{"c", "d"}},
-					Fail: Tests{TestNames: []string{"e", "f"}},
+					Pass: Tests{Names: []string{"a", "b"}},
+					Skip: Tests{Names: []string{"c", "d"}},
+					Fail: Tests{Names: []string{"e", "f"}},
 				},
 				FerretDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"1", "2", "a", "b"}},
-					Skip: Tests{TestNames: []string{"3", "4", "c", "d"}},
-					Fail: Tests{TestNames: []string{"5", "e", "f"}},
+					Pass: Tests{Names: []string{"1", "2", "a", "b"}},
+					Skip: Tests{Names: []string{"3", "4", "c", "d"}},
+					Fail: Tests{Names: []string{"5", "e", "f"}},
 				},
 				MongoDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"A", "B", "a", "b"}},
-					Skip: Tests{TestNames: []string{"C", "c", "d"}},
-					Fail: Tests{TestNames: []string{"D", "E", "e", "f"}},
+					Pass: Tests{Names: []string{"A", "B", "a", "b"}},
+					Skip: Tests{Names: []string{"C", "c", "d"}},
+					Fail: Tests{Names: []string{"D", "E", "e", "f"}},
 				},
 			},
 		},
@@ -75,10 +75,10 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateDuplicatesPass": {
 			in: &Results{
 				Common: &TestsConfig{
-					Pass: Tests{TestNames: []string{"a"}},
+					Pass: Tests{Names: []string{"a"}},
 				},
 				FerretDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"a", "b"}},
+					Pass: Tests{Names: []string{"a", "b"}},
 				},
 				MongoDB: &TestsConfig{},
 			},
@@ -87,10 +87,10 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateDuplicatesSkip": {
 			in: &Results{
 				Common: &TestsConfig{
-					Skip: Tests{TestNames: []string{"a"}},
+					Skip: Tests{Names: []string{"a"}},
 				},
 				FerretDB: &TestsConfig{
-					Skip: Tests{TestNames: []string{"a", "b"}},
+					Skip: Tests{Names: []string{"a", "b"}},
 				},
 				MongoDB: &TestsConfig{},
 			},
@@ -99,10 +99,10 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateDuplicatesFail": {
 			in: &Results{
 				Common: &TestsConfig{
-					Fail: Tests{TestNames: []string{"a"}},
+					Fail: Tests{Names: []string{"a"}},
 				},
 				FerretDB: &TestsConfig{
-					Fail: Tests{TestNames: []string{"a", "b"}},
+					Fail: Tests{Names: []string{"a", "b"}},
 				},
 				MongoDB: &TestsConfig{},
 			},
@@ -111,9 +111,9 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateDuplicatesAll": {
 			in: &Results{
 				FerretDB: &TestsConfig{
-					Pass: Tests{TestNames: []string{"a"}},
-					Skip: Tests{TestNames: []string{"a"}},
-					Fail: Tests{TestNames: []string{"a"}},
+					Pass: Tests{Names: []string{"a"}},
+					Skip: Tests{Names: []string{"a"}},
+					Fail: Tests{Names: []string{"a"}},
 				},
 				MongoDB: &TestsConfig{},
 			},
@@ -211,15 +211,20 @@ func TestFillAndValidate(t *testing.T) {
 				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
 				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
 			} {
-				for _, item := range tests.expected.TestNames {
-					assert.Contains(t, tests.actual.TestNames, item)
+				for _, item := range tests.expected.Names {
+					assert.Contains(t, tests.actual.Names, item)
 				}
-				assert.Equal(t, len(tests.expected.TestNames), len(tests.actual.TestNames))
+				assert.Equal(t, len(tests.expected.Names), len(tests.actual.Names))
 
-				for _, item := range tests.expected.OutRegex {
-					assert.Contains(t, tests.actual.OutRegex, item)
+				for _, item := range tests.expected.NameRegexPattern {
+					assert.Contains(t, tests.actual.NameRegexPattern, item)
 				}
-				assert.Equal(t, len(tests.expected.OutRegex), len(tests.actual.OutRegex))
+				assert.Equal(t, len(tests.expected.NameRegexPattern), len(tests.actual.NameRegexPattern))
+
+				for _, item := range tests.expected.OutputRegexPattern {
+					assert.Contains(t, tests.actual.OutputRegexPattern, item)
+				}
+				assert.Equal(t, len(tests.expected.OutputRegexPattern), len(tests.actual.OutputRegexPattern))
 			}
 		})
 	}
