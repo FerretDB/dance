@@ -9,11 +9,13 @@ args:
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
 # - ./mongo/integration
-# - ./mongo/integration/unified
+  - ./mongo/integration/unified
 
 results:
   common:
     skip:
+      - output_regex: skipping due to environmental constraints.*
+
       # needs replica set
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
@@ -35,7 +37,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
 
       # test requires that connections established by minPoolSize
-      # are immediately used to satisfy check-out requests 
+      # are immediately used to satisfy check-out requests
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
 
       # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
@@ -53,14 +55,17 @@ results:
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
 
+      # skipping for reason: "aggregate comments are string-only"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
+
   ferretdb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 22
+      expected_fail: 23
       expected_skip: 17
-      expected_pass: 675
+      expected_pass: 717
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -94,14 +99,17 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
+      # session commands https://github.com/FerretDB/FerretDB/issues/153
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+
   mongodb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 2
-      expected_skip: 17
-      expected_pass: 695
+      expected_skip: 138
+      expected_pass: 1160
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
