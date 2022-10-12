@@ -36,9 +36,9 @@ func TestDocumentValidation(t *testing.T) {
 	require.NoError(t, err)
 
 	for name, tc := range map[string]struct {
-		doc                 bson.D
 		expectedErrMongoDB  *mongo.CommandError
 		expectedErrFerretDB *mongo.CommandError
+		doc                 bson.D
 	}{
 		"KeyIsNotUTF8": {
 			doc:                bson.D{{"\xF4\x90\x80\x80", int32(12)}}, //  the key is out of range for UTF-8
