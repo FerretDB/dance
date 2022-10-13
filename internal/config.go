@@ -90,10 +90,12 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 	} {
 		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
 		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.FerretDB.NameNotRegexPattern = append(t.FerretDB.NameNotRegexPattern, t.Common.NameNotRegexPattern...)
 		t.FerretDB.OutputRegexPattern = append(t.FerretDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 
 		t.MongoDB.Names = append(t.MongoDB.Names, t.Common.Names...)
 		t.MongoDB.NameRegexPattern = append(t.MongoDB.NameRegexPattern, t.Common.NameRegexPattern...)
+		t.MongoDB.NameNotRegexPattern = append(t.MongoDB.NameNotRegexPattern, t.Common.NameNotRegexPattern...)
 		t.MongoDB.OutputRegexPattern = append(t.MongoDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
 	}
 
