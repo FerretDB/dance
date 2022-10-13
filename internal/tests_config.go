@@ -40,9 +40,10 @@ type TestsConfig struct {
 
 // Tests are the tests from yaml category pass / fail / skip.
 type Tests struct {
-	Names              []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	NameRegexPattern   []string // regex: "mongo.org/.*", the regex for the test name.
-	OutputRegexPattern []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*".
+	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
+	NameNotRegexPattern []string // not_regex: "FerretDB$", the regex for the test name
+	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
 }
 
 type CompareResult struct {
@@ -178,15 +179,26 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedRegex != "" {
-				panic(
-					fmt.Sprintf(
-						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
-						testName,
-						result.Output,
-						matchedRegex,
-						reg,
-					),
-				)
+				panic(fmt.Sprintf(
+					"test %s\n(output: %s)\nmatches more than one name regex: %s, %s",
+					testName, result.Output, matchedRegex, reg,
+				))
+			}
+			matchedStatus = expectedRes.expectedStatus
+			matchedRegex = reg
+		}
+
+		for _, reg := range expectedRes.tests.NameNotRegexPattern {
+			r := regexp.MustCompile(reg)
+
+			if r.MatchString(testName) {
+				continue
+			}
+			if matchedRegex != "" {
+				panic(fmt.Sprintf(
+					"test %s\n(output: %s)\nmatches more than one name not-regex: %s, %s",
+					testName, result.Output, matchedRegex, reg,
+				))
 			}
 			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg
@@ -199,15 +211,10 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 				continue
 			}
 			if matchedRegex != "" {
-				panic(
-					fmt.Sprintf(
-						"test %s\n(output: %s)\nmatch more than one regexps: %s, %s",
-						testName,
-						result.Output,
-						matchedRegex,
-						reg,
-					),
-				)
+				panic(fmt.Sprintf(
+					"test %s\n(output: %s)\nmatches more than one output regex: %s, %s",
+					testName, result.Output, matchedRegex, reg,
+				))
 			}
 			matchedStatus = expectedRes.expectedStatus
 			matchedRegex = reg

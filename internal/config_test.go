@@ -221,6 +221,11 @@ func TestFillAndValidate(t *testing.T) {
 				}
 				assert.Equal(t, len(tests.expected.NameRegexPattern), len(tests.actual.NameRegexPattern))
 
+				for _, item := range tests.expected.NameNotRegexPattern {
+					assert.Contains(t, tests.actual.NameNotRegexPattern, item)
+				}
+				assert.Equal(t, len(tests.expected.NameNotRegexPattern), len(tests.actual.NameNotRegexPattern))
+
 				for _, item := range tests.expected.OutputRegexPattern {
 					assert.Contains(t, tests.actual.OutputRegexPattern, item)
 				}

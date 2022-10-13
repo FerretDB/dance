@@ -125,10 +125,12 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 				switch k {
 				case "regex":
 					arrPointer = &testCategory.outTests.NameRegexPattern
+				case "not_regex":
+					arrPointer = &testCategory.outTests.NameNotRegexPattern
 				case "output_regex":
 					arrPointer = &testCategory.outTests.OutputRegexPattern
 				default:
-					return nil, fmt.Errorf("invalid field name: expected \"regex\" or \"output_regex\", got: %s", k)
+					return nil, fmt.Errorf("invalid field name %q", k)
 				}
 
 				mValue := test[k]
