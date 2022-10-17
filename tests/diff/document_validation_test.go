@@ -38,7 +38,7 @@ func TestDocumentValidation(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `Invalid document, reason: invalid key: "$" (key mustn't contain $).`,
+				Message: `Invalid document, reason: invalid key: "foo$" (key mustn't contain $).`,
 			}
 			AssertEqualError(t, expected, err)
 		})
@@ -69,7 +69,7 @@ func TestDocumentValidation(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `Invalid document, reason: invalid key: "$" (key mustn't contain $).`,
+				Message: `Invalid document, reason: invalid key: "foo$" (key mustn't contain $).`,
 			}
 			AssertEqualError(t, expected, err)
 		})
