@@ -52,7 +52,7 @@ tasks:
     desc: "Run all integration tests"
     dir: tests
     cmds:
-      - go run ../cmd/dance -db={{.DB}} -v {{.TEST}}
+      - go run ../cmd/dance -db={{.DB}} {{.TEST}}
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
