@@ -22,82 +22,62 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// TestDocumentValidation tests validation rules for documents insert and update.
 func TestDocumentValidation(t *testing.T) {
 	t.Parallel()
+
 	ctx, db := setup(t)
 
-	// initiate a collection with a valid document, so we have something to update
-	collection := db.Collection("document-validation")
-	_, err := collection.InsertOne(ctx, bson.D{
-		{"_id", "valid"},
-		{"v", int32(42)},
-	})
-	require.NoError(t, err)
+	t.Run("Insert", func(t *testing.T) {
+		t.Parallel()
 
-	for name, tc := range map[string]struct {
-		expectedErrMongoDB  *mongo.CommandError
-		expectedErrFerretDB *mongo.CommandError
-		doc                 bson.D
-	}{
-		"KeyIsNotUTF8": {
-			doc:                bson.D{{"\xF4\x90\x80\x80", int32(12)}}, //  the key is out of range for UTF-8
-			expectedErrMongoDB: nil,
-			expectedErrFerretDB: &mongo.CommandError{
-				Code:    2,
-				Name:    "BadValue",
-				Message: `Invalid document, reason: invalid key: "\xf4\x90\x80\x80" (not a valid UTF-8 string).`,
-			},
-		},
-		"KeyContains$": {
-			doc:                bson.D{{"v$", int32(12)}},
-			expectedErrMongoDB: nil,
-			expectedErrFerretDB: &mongo.CommandError{
-				Code:    2,
-				Name:    "BadValue",
-				Message: `Invalid document, reason: invalid key: "v$" (key mustn't contain $).`,
-			},
-		},
-	} {
-		name, tc := name, tc
-		t.Run(name, func(t *testing.T) {
+		_, err := db.Collection("validation").InsertOne(ctx, bson.D{{"$", "foo"}})
+
+		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
 
-			t.Run("FerretDB", func(t *testing.T) {
-				_, err := collection.InsertOne(ctx, tc.doc)
-				if tc.expectedErrFerretDB != nil {
-					require.NotNil(t, err)
-					AssertEqualError(t, *tc.expectedErrFerretDB, err)
-				} else {
-					require.Nil(t, err)
-				}
-
-				_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", tc.doc}})
-				if tc.expectedErrFerretDB != nil {
-					require.NotNil(t, err)
-					AssertEqualError(t, *tc.expectedErrFerretDB, err)
-				} else {
-					require.Nil(t, err)
-				}
-			})
-
-			t.Run("MongoDB", func(t *testing.T) {
-				_, err := collection.InsertOne(ctx, tc.doc)
-				if tc.expectedErrMongoDB != nil {
-					require.NotNil(t, err)
-					AssertEqualError(t, *tc.expectedErrMongoDB, err)
-				} else {
-					require.Nil(t, err)
-				}
-
-				_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", tc.doc}})
-				if tc.expectedErrMongoDB != nil {
-					require.NotNil(t, err)
-					AssertEqualError(t, *tc.expectedErrMongoDB, err)
-				} else {
-					require.Nil(t, err)
-				}
-			})
+			expected := mongo.CommandError{
+				Code:    2,
+				Name:    "BadValue",
+				Message: `Invalid document, reason: invalid key: "$" (key mustn't contain $).`,
+			}
+			AssertEqualError(t, expected, err)
 		})
-	}
+
+		t.Run("MongoDB", func(t *testing.T) {
+			t.Parallel()
+
+			require.NoError(t, err)
+		})
+	})
+
+	t.Run("Update", func(t *testing.T) {
+		t.Parallel()
+
+		// initiate a collection with a valid document, so we have something to update
+		collection := db.Collection("validation")
+		_, err := collection.InsertOne(ctx, bson.D{
+			{"_id", "valid"},
+			{"v", int32(42)},
+		})
+		require.NoError(t, err)
+
+		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"$", "foo"}}}})
+
+		t.Run("FerretDB", func(t *testing.T) {
+			t.Parallel()
+
+			expected := mongo.CommandError{
+				Code:    2,
+				Name:    "BadValue",
+				Message: `Invalid document, reason: invalid key: "$" (key mustn't contain $).`,
+			}
+			AssertEqualError(t, expected, err)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			t.Parallel()
+
+			require.NoError(t, err)
+		})
+	})
 }
