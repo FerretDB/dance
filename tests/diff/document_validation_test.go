@@ -30,7 +30,7 @@ func TestDocumentValidation(t *testing.T) {
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := db.Collection("validation").InsertOne(ctx, bson.D{{"$", "foo"}})
+		_, err := db.Collection("validation").InsertOne(ctx, bson.D{{"foo$", "bar"}})
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
@@ -61,7 +61,7 @@ func TestDocumentValidation(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"$", "foo"}}}})
+		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"foo$", "bar"}}}})
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
