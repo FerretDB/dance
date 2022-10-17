@@ -50,10 +50,9 @@ func TestErrorMessages(t *testing.T) {
 	t.Run("MongoDB", func(t *testing.T) {
 		// closing single quote is in the wrong place
 		expected := mongo.CommandError{
-			Code: 14,
-			Name: "TypeMismatch",
-			Message: "BSON field 'getParameter.allParameters' is the wrong type 'string', " +
-				"expected types '[bool, long, int, decimal, double']",
+			Code:    14,
+			Name:    "TypeMismatch",
+			Message: "BSON field 'getParameter.allParameters' is the wrong type 'string', expected types '[bool, long, int, decimal, double]'",
 		}
 		AssertEqualError(t, expected, actual)
 	})
