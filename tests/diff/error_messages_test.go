@@ -41,7 +41,7 @@ func TestErrorMessages(t *testing.T) {
 		expected := mongo.CommandError{
 			Code:    14,
 			Name:    "TypeMismatch",
-			Message: "BSON field 'allParameters' is the wrong type 'string', expected types '[bool, long, int, decimal, double]'",
+			Message: "BSON field 'getParameter.allParameters' is the wrong type 'string', expected types '[bool, long, int, decimal, double]'",
 		}
 		AssertEqualError(t, expected, actual)
 	})
