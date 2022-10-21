@@ -30,14 +30,15 @@ tasks:
   env-up-detach:
     desc: "Start dependencies in docker"
     cmds:
-      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --detach {{.DB}}
+      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --timeout=0 --detach
+        --build {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
 
   env-pull:
     cmds:
-      - docker-compose pull --include-deps --quiet
+      - docker-compose build --pull
 
   env-logs:
     cmds:

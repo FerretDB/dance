@@ -104,6 +104,7 @@ linters:
     - interfacer  # deprecated
     - maligned    # deprecated
     - nlreturn    # too annoying
+    - nosnakecase # deprecated
     - scopelint   # deprecated
     - testpackage # we test internals
     - wsl         # too annoying
