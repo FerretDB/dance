@@ -56,7 +56,7 @@ func TestDocumentValidation(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				_, err := db.Collection("validation").InsertOne(ctx, tc.doc)
+				_, err := db.Collection(name).InsertOne(ctx, tc.doc)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
