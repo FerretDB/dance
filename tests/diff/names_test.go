@@ -30,9 +30,10 @@ func TestDatabaseName(t *testing.T) {
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		dbName := "_ferretdb_xxx"
+		ctx, db := setup(t)
+		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
+
 		t.Run("FerretDB", func(t *testing.T) {
-			ctx, db := setup(t)
-			err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
 			expected := mongo.CommandError{
 				Name:    "InvalidNamespace",
 				Code:    73,
@@ -43,9 +44,6 @@ func TestDatabaseName(t *testing.T) {
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
-			ctx, db := setup(t)
-			db.Client().Database(dbName).Drop(ctx)
-			err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
 			require.NoError(t, err)
 			db.Client().Database(dbName).Drop(ctx)
 		})
