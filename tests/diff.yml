@@ -5,7 +5,7 @@ args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 17
+      expected_fail: 18
       expected_pass: 7
 
     pass:
@@ -17,7 +17,7 @@ results:
   mongodb:
     stats:
       expected_fail: 17
-      expected_pass: 7
+      expected_pass: 8
 
     pass:
       - regex: MongoDB$
