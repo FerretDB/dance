@@ -48,6 +48,27 @@ func TestDatabaseName(t *testing.T) {
 			db.Client().Database(dbName).Drop(ctx)
 		})
 	})
+
+	t.Run("Dash", func(t *testing.T) {
+		dbName := "ferretdb-xxx"
+		ctx, db := setup(t)
+		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
+
+		t.Run("FerretDB", func(t *testing.T) {
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
+			}
+			alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
+			AssertEqualAltError(t, expected, alt, err)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			require.NoError(t, err)
+			db.Client().Database(dbName).Drop(ctx)
+		})
+	})
 }
 
 func TestCollectionName(t *testing.T) {
