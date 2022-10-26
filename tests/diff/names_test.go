@@ -49,7 +49,7 @@ func TestDatabaseName(t *testing.T) {
 		})
 	})
 
-	t.Run("Dash", func(t *testing.T) {
+	t.Run("Dashes", func(t *testing.T) {
 		dbName := "ferretdb-xxx"
 		ctx, db := setup(t)
 		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
@@ -113,18 +113,4 @@ func TestCollectionName(t *testing.T) {
 			require.NoError(t, err)
 		})
 	})
-
-	//	t.Run("Dashes", func(t *testing.T) {
-	//		collection := "ferretdb-xxx"
-	//		ctx, db := setup(t)
-	//		err := db.CreateCollection(ctx, collection)
-	//
-	//		t.Run("FerretDB", func(t *testing.T) {
-	//			require.NoError(t, err)
-	//		})
-	//
-	//		t.Run("MongoDB", func(t *testing.T) {
-	//			require.NoError(t, err)
-	//		})
-	//	})
 }
