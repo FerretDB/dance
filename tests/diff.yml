@@ -16,7 +16,7 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 17
+      expected_fail: 20
       expected_pass: 8
 
     pass:
