@@ -71,7 +71,6 @@ func TestDocumentValidation(t *testing.T) {
 				})
 			})
 		}
-
 	})
 
 	t.Run("Update", func(t *testing.T) {
