@@ -76,14 +76,6 @@ func TestDocumentValidation(t *testing.T) {
 	t.Run("Update", func(t *testing.T) {
 		t.Parallel()
 
-		// initiate a collection with a valid document, so we have something to update
-		collection := db.Collection("update-validation")
-		_, err := collection.InsertOne(ctx, bson.D{
-			{"_id", "valid"},
-			{"v", int32(42)},
-		})
-		require.NoError(t, err)
-
 		for name, tc := range map[string]struct {
 			doc      bson.D
 			expected mongo.CommandError
@@ -109,6 +101,14 @@ func TestDocumentValidation(t *testing.T) {
 
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
+
+				// initiate a collection with a valid document, so we have something to update
+				collection := db.Collection("update-validation" + name)
+				_, err := collection.InsertOne(ctx, bson.D{
+					{"_id", "valid"},
+					{"v", int32(42)},
+				})
+				require.NoError(t, err)
 
 				res := db.RunCommand(
 					ctx,
