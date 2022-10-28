@@ -17,7 +17,7 @@ results:
   mongodb:
     stats:
       expected_fail: 25
-      expected_pass: 11
+      expected_pass: 10
 
     pass:
       - regex: MongoDB$
