@@ -6,7 +6,7 @@ results:
   ferretdb:
     stats:
       expected_fail: 20
-      expected_pass: 9
+      expected_pass: 10
 
     pass:
       - regex: FerretDB$
