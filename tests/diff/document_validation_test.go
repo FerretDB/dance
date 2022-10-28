@@ -97,7 +97,7 @@ func TestDocumentValidation(t *testing.T) {
 				},
 			},
 			"DotSign": {
-				doc: bson.D{{"$set", bson.D{{"foo", bson.D{{"bar.baz", "qaz"}}}}}},
+				doc: bson.D{{"foo.bar", "baz"}},
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
@@ -110,18 +110,21 @@ func TestDocumentValidation(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				_, err = collection.UpdateOne(ctx, bson.D{}, tc.doc)
+				res := db.RunCommand(
+					ctx,
+					bson.D{{"update", "update-" + name}, {"updates", bson.A{tc.doc}}},
+				)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, err)
+					AssertEqualError(t, tc.expected, res.Err())
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.NoError(t, err)
+					require.NoError(t, res.Err())
 				})
 			})
 		}
