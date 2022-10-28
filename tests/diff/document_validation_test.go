@@ -110,29 +110,18 @@ func TestDocumentValidation(t *testing.T) {
 				})
 				require.NoError(t, err)
 
-				res := db.RunCommand(
-					ctx,
-					bson.D{
-						{"update", "update-" + name},
-						{"updates", bson.A{
-							bson.D{
-								{"q", bson.D{}},
-								{"u", tc.doc},
-							},
-						}},
-					},
-				)
+				_, err = collection.UpdateOne(ctx, bson.D{}, tc.doc)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, res.Err())
+					AssertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.NoError(t, res.Err())
+					require.NoError(t, err)
 				})
 			})
 		}
