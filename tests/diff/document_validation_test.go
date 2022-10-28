@@ -112,7 +112,15 @@ func TestDocumentValidation(t *testing.T) {
 
 				res := db.RunCommand(
 					ctx,
-					bson.D{{"update", "update-" + name}, {"updates", bson.A{tc.doc}}},
+					bson.D{
+						{"update", "update-" + name},
+						{"updates", bson.A{
+							bson.D{
+								{"q", bson.D{}},
+								{"u", tc.doc},
+							},
+						}},
+					},
 				)
 
 				t.Run("FerretDB", func(t *testing.T) {
