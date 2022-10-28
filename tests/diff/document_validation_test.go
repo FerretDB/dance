@@ -89,7 +89,7 @@ func TestDocumentValidation(t *testing.T) {
 				},
 			},
 			"DotSign": {
-				doc: bson.D{{"foo.bar", "baz"}},
+				doc: bson.D{{"$set", bson.D{{"foo", bson.D{{"bar.baz", "qaz"}}}}}},
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
