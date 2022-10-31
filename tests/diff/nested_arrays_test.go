@@ -38,7 +38,7 @@ func TestNestedArrays(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `invalid value: { foo: [["bar"]] } (nested arrays are not allowed)`,
+				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not allowed)`,
 			}
 			AssertEqualError(t, expected, err)
 		})
@@ -69,7 +69,7 @@ func TestNestedArrays(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `invalid value: { foo: [["bar"]] } (nested arrays are not allowed)`,
+				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not allowed)`,
 			}
 			AssertEqualError(t, expected, err)
 		})
