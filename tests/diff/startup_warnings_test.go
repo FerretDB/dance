@@ -15,10 +15,11 @@
 package diff
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
-	"testing"
 )
 
 func TestStartupWarnigns(t *testing.T) {
@@ -48,5 +49,4 @@ func TestStartupWarnigns(t *testing.T) {
 		require.Len(t, log, 3)
 		assert.NotContains(t, log[2], "The telemetry state is undecided")
 	})
-
 }
