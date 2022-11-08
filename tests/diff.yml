@@ -6,7 +6,7 @@ results:
   ferretdb:
     stats:
       expected_fail: 24
-      expected_pass: 8
+      expected_pass: 10
 
     pass:
       - regex: FerretDB$
@@ -17,7 +17,7 @@ results:
   mongodb:
     stats:
       expected_fail: 24
-      expected_pass: 8
+      expected_pass: 10
 
     pass:
       - regex: MongoDB$
