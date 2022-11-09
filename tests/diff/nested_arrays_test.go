@@ -22,7 +22,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func TestDocumentValidation(t *testing.T) {
+func TestNestedArrays(t *testing.T) {
 	t.Parallel()
 
 	ctx, db := setup(t)
@@ -30,7 +30,7 @@ func TestDocumentValidation(t *testing.T) {
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := db.Collection("validation").InsertOne(ctx, bson.D{{"foo$", "bar"}})
+		_, err := db.Collection("arrays-insert").InsertOne(ctx, bson.D{{"foo", bson.A{bson.A{"bar"}}}})
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
@@ -38,7 +38,7 @@ func TestDocumentValidation(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not supported)`,
 			}
 			AssertEqualError(t, expected, err)
 		})
@@ -54,14 +54,14 @@ func TestDocumentValidation(t *testing.T) {
 		t.Parallel()
 
 		// initiate a collection with a valid document, so we have something to update
-		collection := db.Collection("validation")
+		collection := db.Collection("arrays-update")
 		_, err := collection.InsertOne(ctx, bson.D{
 			{"_id", "valid"},
 			{"v", int32(42)},
 		})
 		require.NoError(t, err)
 
-		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"foo$", "bar"}}}})
+		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"foo", bson.A{bson.A{"bar"}}}}}})
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
@@ -69,7 +69,7 @@ func TestDocumentValidation(t *testing.T) {
 			expected := mongo.CommandError{
 				Code:    2,
 				Name:    "BadValue",
-				Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not supported)`,
 			}
 			AssertEqualError(t, expected, err)
 		})
