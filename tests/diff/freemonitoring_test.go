@@ -3,6 +3,8 @@ package diff
 import (
 	"testing"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +17,7 @@ func TestFreeMonitoring(t *testing.T) {
 	ctx, db := setup(t)
 	db = db.Client().Database("admin")
 
-	res := db.RunCommand(ctx, bson.D{{"setFreeMonitoring", 1}, {"state", "enable"}})
+	res := db.RunCommand(ctx, bson.D{{"setFreeMonitoring", 1}, {"action", "enable"}})
 	require.NoError(t, res.Err())
 
 	var actual bson.D
@@ -23,7 +25,7 @@ func TestFreeMonitoring(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("MongoDB", func(t *testing.T) {
-		expectedKeys := []string{"state", "message", "ok", "url", "userReminder"}
+		expectedKeys := []string{"message", "url", "userReminder", "ok", "state"}
 		var actualKeys []string
 
 		for k, v := range actual.Map() {
@@ -34,15 +36,16 @@ func TestFreeMonitoring(t *testing.T) {
 			case "message":
 				msg := "To see your monitoring data, navigate to the unique URL below. Anyone you share the URL with " +
 					"will also be able to view this page. You can disable monitoring at any time by running db.disableFreeMonitoring()."
-				assert.Equal(t, "enabled", msg)
+				assert.Equal(t, msg, v)
 			case "ok":
 				assert.Equal(t, float64(1), v)
 			case "url":
 				assert.Regexp(t, "https://cloud.mongodb.com/freemonitoring/cluster/\\w+", v)
-			case "userReminder":
-				assert.Regexp(t, "Free Monitoring URL:\nhttps://cloud.mongodb.com/freemonitoring/cluster/\\w+", v)
 			}
 		}
+
+		slices.Sort(expectedKeys)
+		slices.Sort(actualKeys)
 
 		assert.Equal(t, expectedKeys, actualKeys)
 	})
