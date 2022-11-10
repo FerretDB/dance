@@ -41,10 +41,27 @@ func databaseName(tb testing.TB) string {
 func setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 
+	return setupWithOpts(t, nil)
+}
+
+type setupOpts struct {
+	DatabaseName string
+}
+
+// setupWithOpts returns test context and per-test client connection and database.
+func setupWithOpts(t *testing.T, opts *setupOpts) (context.Context, *mongo.Database) {
+	t.Helper()
+
+	if opts == nil {
+		opts = new(setupOpts)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
+	uri := "mongodb://127.0.0.1:27017"
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	require.NoError(t, err)
 	err = client.Ping(ctx, nil)
 	require.NoError(t, err)
@@ -54,7 +71,13 @@ func setup(t *testing.T) (context.Context, *mongo.Database) {
 		require.NoError(t, err)
 	})
 
-	db := client.Database(databaseName(t))
+	var db *mongo.Database
+	if opts.DatabaseName != "" {
+		db = client.Database(opts.DatabaseName)
+	} else {
+		db = client.Database(databaseName(t))
+	}
+
 	err = db.Drop(context.Background())
 	require.NoError(t, err)
 
