@@ -29,9 +29,9 @@ func TestFreeMonitoring(t *testing.T) {
 		getResponseMongoDB map[string]interface{}
 		getErrorMongoDB    *mongo.CommandError
 	}{
-		"Undecided": {
-			//SetCommand:  &bson.D{{"setFreeMonitoring",1},{"state",""}},
-			//SetResponse: &bson.D{},
+		"Enable": {
+			setCommand:  &bson.D{{"setFreeMonitoring", 1}, {"state", "enable"}},
+			setResponse: &bson.D{},
 
 			getCommand:          &bson.D{{"getFreeMonitoringStatus", 1}},
 			getResponseFerretDB: &bson.D{{"state", "undecided"}, {"message", "monitoring is undecided"}, {"ok", float64(1)}},
@@ -69,7 +69,7 @@ func TestFreeMonitoring(t *testing.T) {
 						return
 					}
 					assert.NoError(t, err)
-					// TODO: response
+
 				}
 
 				if tc.getCommand != nil {
