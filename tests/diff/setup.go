@@ -16,13 +16,12 @@ package diff
 
 import (
 	"context"
-	"strings"
-	"testing"
-	"time"
-
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"strings"
+	"testing"
+	"time"
 )
 
 // databaseName returns a stable database name for that test.
@@ -41,27 +40,10 @@ func databaseName(tb testing.TB) string {
 func setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 
-	return setupWithOpts(t, nil)
-}
-
-type setupOpts struct {
-	DatabaseName string
-}
-
-// setupWithOpts returns test context and per-test client connection and database.
-func setupWithOpts(t *testing.T, opts *setupOpts) (context.Context, *mongo.Database) {
-	t.Helper()
-
-	if opts == nil {
-		opts = new(setupOpts)
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	uri := "mongodb://127.0.0.1:27017"
-
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
 	require.NoError(t, err)
 	err = client.Ping(ctx, nil)
 	require.NoError(t, err)
@@ -71,13 +53,7 @@ func setupWithOpts(t *testing.T, opts *setupOpts) (context.Context, *mongo.Datab
 		require.NoError(t, err)
 	})
 
-	var db *mongo.Database
-	if opts.DatabaseName != "" {
-		db = client.Database(opts.DatabaseName)
-	} else {
-		db = client.Database(databaseName(t))
-	}
-
+	db := client.Database(databaseName(t))
 	err = db.Drop(context.Background())
 	require.NoError(t, err)
 
