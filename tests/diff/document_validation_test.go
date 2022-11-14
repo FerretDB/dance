@@ -39,7 +39,7 @@ func TestDocumentValidation(t *testing.T) {
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid key: "foo$" (key must not contain '$' sign).`,
+					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
 				},
 			},
 			"DotSign": {
@@ -47,7 +47,7 @@ func TestDocumentValidation(t *testing.T) {
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid key: "foo.bar" (key must not contain '.' sign).`,
+					Message: `invalid key: "foo.bar" (key must not contain '.' sign)`,
 				},
 			},
 		} {
@@ -85,7 +85,7 @@ func TestDocumentValidation(t *testing.T) {
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid key: "foo$" (key must not contain '$' sign).`,
+					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
 				},
 			},
 			"DotSign": {
@@ -93,7 +93,7 @@ func TestDocumentValidation(t *testing.T) {
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid key: "foo.bar" (key must not contain '.' sign).`,
+					Message: `invalid key: "bar.baz" (key must not contain '.' sign)`,
 				},
 			},
 		} {
