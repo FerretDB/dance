@@ -13,7 +13,6 @@ import (
 func TestFreeMonitoring(t *testing.T) {
 	t.Parallel()
 
-	//ctx, db := setupWithOpts(t, &setupOpts{DatabaseName: "admin"})
 	ctx, db := setup(t)
 	db = db.Client().Database("admin")
 
@@ -25,6 +24,8 @@ func TestFreeMonitoring(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("MongoDB", func(t *testing.T) {
+		t.Parallel()
+
 		expectedKeys := []string{"message", "url", "userReminder", "ok", "state"}
 		var actualKeys []string
 
@@ -51,8 +52,9 @@ func TestFreeMonitoring(t *testing.T) {
 	})
 
 	t.Run("FerretDB", func(t *testing.T) {
+		t.Parallel()
+
 		expectedRes := bson.D{{"state", "enabled"}, {"message", "monitoring is enabled"}, {"ok", float64(1)}}
 		assert.Equal(t, actual, expectedRes)
 	})
-
 }
