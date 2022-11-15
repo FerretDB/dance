@@ -30,54 +30,100 @@ func TestDocumentValidation(t *testing.T) {
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := db.Collection("validation").InsertOne(ctx, bson.D{{"foo$", "bar"}})
+		for name, tc := range map[string]struct {
+			doc      bson.D
+			expected mongo.CommandError
+		}{
+			"DollarSign": {
+				doc: bson.D{{"foo$", "bar"}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+				},
+			},
+			"DotSign": {
+				doc: bson.D{{"foo.bar", "baz"}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid key: "foo.bar" (key must not contain '.' sign)`,
+				},
+			},
+		} {
+			name, tc := name, tc
 
-		t.Run("FerretDB", func(t *testing.T) {
-			t.Parallel()
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
 
-			expected := mongo.CommandError{
-				Code:    2,
-				Name:    "BadValue",
-				Message: `invalid key: "foo$" (key must not contain '$' sign)`,
-			}
-			AssertEqualError(t, expected, err)
-		})
+				_, err := db.Collection("insert-"+name).InsertOne(ctx, tc.doc)
 
-		t.Run("MongoDB", func(t *testing.T) {
-			t.Parallel()
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
 
-			require.NoError(t, err)
-		})
+					AssertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
+		}
 	})
 
 	t.Run("Update", func(t *testing.T) {
 		t.Parallel()
 
-		// initiate a collection with a valid document, so we have something to update
-		collection := db.Collection("validation")
-		_, err := collection.InsertOne(ctx, bson.D{
-			{"_id", "valid"},
-			{"v", int32(42)},
-		})
-		require.NoError(t, err)
+		for name, tc := range map[string]struct {
+			doc      bson.D
+			expected mongo.CommandError
+		}{
+			"DollarSign": {
+				doc: bson.D{{"$set", bson.D{{"foo$", "bar"}}}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+				},
+			},
+			"DotSign": {
+				doc: bson.D{{"$set", bson.D{{"foo", bson.D{{"bar.baz", "qaz"}}}}}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid key: "bar.baz" (key must not contain '.' sign)`,
+				},
+			},
+		} {
+			name, tc := name, tc
 
-		_, err = collection.UpdateOne(ctx, bson.D{}, bson.D{{"$set", bson.D{{"foo$", "bar"}}}})
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
 
-		t.Run("FerretDB", func(t *testing.T) {
-			t.Parallel()
+				// initiate a collection with a valid document, so we have something to update
+				collection := db.Collection("update-validation" + name)
+				_, err := collection.InsertOne(ctx, bson.D{
+					{"_id", "valid"},
+					{"v", int32(42)},
+				})
+				require.NoError(t, err)
 
-			expected := mongo.CommandError{
-				Code:    2,
-				Name:    "BadValue",
-				Message: `invalid key: "foo$" (key must not contain '$' sign)`,
-			}
-			AssertEqualError(t, expected, err)
-		})
+				_, err = collection.UpdateOne(ctx, bson.D{}, tc.doc)
 
-		t.Run("MongoDB", func(t *testing.T) {
-			t.Parallel()
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
 
-			require.NoError(t, err)
-		})
+					AssertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
+		}
 	})
 }
