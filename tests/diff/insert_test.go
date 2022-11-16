@@ -48,5 +48,4 @@ func TestInsertDuplicateKeys(t *testing.T) {
 
 		require.NoError(t, err)
 	})
-
 }
