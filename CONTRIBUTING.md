@@ -45,5 +45,8 @@ bin/task env-up DB=ferretdb
 ```
 
 That command will start FerretDB from `ferretdb-local` Docker image.
-That image can be built by `bin/task docker-local` command in FerretDB repository checkout.
+
+To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository. 
+To use a pre-built image you must set the `FERRETDB_IMAGE` enviornment variable, e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
+
 As mentioned above, this approach is not recommended.
