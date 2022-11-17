@@ -11,8 +11,6 @@ import (
 func TestDebugError(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := setup(t)
-
 	for name, tc := range map[string]struct {
 		input       string
 		expectedErr *mongo.CommandError
@@ -57,8 +55,10 @@ func TestDebugError(t *testing.T) {
 	} {
 		name, tc := name, tc
 
+		ctx, db := setup(t)
+
 		t.Run(name, func(t *testing.T) {
-			//t.Parallel()
+			t.Parallel()
 			var actual bson.D
 			err := db.RunCommand(ctx, bson.D{{"debugError", tc.input}}).Decode(&actual)
 
@@ -71,6 +71,16 @@ func TestDebugError(t *testing.T) {
 				assert.NoError(t, err)
 
 				assert.Equal(t, tc.expectedRes, actual)
+			})
+
+			t.Run("MongoDB", func(t *testing.T) {
+				expectedErr := mongo.CommandError{
+					Code:    59,
+					Message: "no such command: 'debugError'",
+					Name:    "CommandNotFound",
+				}
+
+				AssertEqualError(t, expectedErr, err)
 			})
 		})
 	}

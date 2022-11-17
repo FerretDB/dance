@@ -100,10 +100,11 @@ func TestDocumentValidation(t *testing.T) {
 			name, tc := name, tc
 
 			t.Run(name, func(t *testing.T) {
-				t.Parallel()
+				// TODO: make them parallel https://github.com/FerretDB/FerretDB/
+				//t.Parallel()
 
 				// initiate a collection with a valid document, so we have something to update
-				collection := db.Collection("update-validation" + name)
+				collection := db.Collection("update-validation-" + name)
 				_, err := collection.InsertOne(ctx, bson.D{
 					{"_id", "valid"},
 					{"v", int32(42)},
