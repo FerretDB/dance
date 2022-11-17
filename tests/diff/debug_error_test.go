@@ -1,3 +1,17 @@
+// Copyright 2021 FerretDB Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package diff
 
 import (
@@ -63,13 +77,11 @@ func TestDebugError(t *testing.T) {
 			err := db.RunCommand(ctx, bson.D{{"debugError", tc.input}}).Decode(&actual)
 
 			t.Run("FerretDB", func(t *testing.T) {
-
 				if tc.expectedErr != nil {
 					AssertEqualError(t, *tc.expectedErr, err)
 					return
 				}
 				assert.NoError(t, err)
-
 				assert.Equal(t, tc.expectedRes, actual)
 			})
 
@@ -84,5 +96,4 @@ func TestDebugError(t *testing.T) {
 			})
 		})
 	}
-
 }

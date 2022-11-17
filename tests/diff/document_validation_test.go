@@ -100,7 +100,7 @@ func TestDocumentValidation(t *testing.T) {
 			name, tc := name, tc
 
 			t.Run(name, func(t *testing.T) {
-				// TODO: make them parallel https://github.com/FerretDB/FerretDB/
+				// TODO: make them run in parallel https://github.com/FerretDB/FerretDB/issues/1488
 				//t.Parallel()
 
 				// initiate a collection with a valid document, so we have something to update
