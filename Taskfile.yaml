@@ -79,3 +79,10 @@ tasks:
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
+
+  # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
+  docs-fmt:
+    desc: "Format and lint documentation"
+    cmds:
+      - docker-compose run --rm textlint --fix --rule one-sentence-per-line "**/*.md" ".github/**/*.md"
+      - docker-compose run --rm markdownlint "**/*.md" "#tests"

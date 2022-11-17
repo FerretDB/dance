@@ -1,19 +1,22 @@
 # Contributing
 
 The dance tool and tests run on the host; macOS, Linux, and Windows are expected to work.
-Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker; Docker Compose configuration is provided for convenience, but not required.
-In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host as it does not involve Docker images building or PostgreSQL restarts.
+Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker; Docker Compose configuration is provided for convenience but not required.
+In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host as it does not involve Docker image building or PostgreSQL restarts.
+Running FerretDB on the host is recommended for that reason.
 
 ## Cloning repository
+
 ```sh
 git clone --recursive
 ```
+
 Remember to use that command to clone this repository with all submodules included.
 
----
 ```sh
 git submodule update --init
 ```
+
 If you've already cloned it without submodules you can use that command
 to include required submodules.
 
@@ -46,7 +49,7 @@ bin/task env-up DB=ferretdb
 
 That command will start FerretDB from `ferretdb-local` Docker image.
 
-To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository. 
+To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository.
 To use a pre-built image you must set the `FERRETDB_IMAGE` environment variable, e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
 
 As mentioned above, this approach is not recommended.
