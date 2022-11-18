@@ -58,6 +58,15 @@ func TestDebugError(t *testing.T) {
 				Message: "ErrorCode(33333)",
 			},
 		},
+		// TODO: https://github.com/FerretDB/dance/issues/249
+		//"panic": {
+		//	input: "panic",
+		//	expectedErr: &mongo.CommandError{
+		//		Code:    0,
+		//		Message: "connection(127.0.0.1:27017[-22]) socket was unexpectedly closed: EOF",
+		//		Labels:  []string{"NetworkError"},
+		//	},
+		//},
 		"string": {
 			input: "foo",
 			expectedErr: &mongo.CommandError{
@@ -69,10 +78,10 @@ func TestDebugError(t *testing.T) {
 	} {
 		name, tc := name, tc
 
-		ctx, db := setup(t)
-
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
+
+			ctx, db := setup(t)
 			var actual bson.D
 			err := db.RunCommand(ctx, bson.D{{"debugError", tc.input}}).Decode(&actual)
 
