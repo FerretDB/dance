@@ -30,14 +30,14 @@ func TestDebugError(t *testing.T) {
 		expectedErr *mongo.CommandError
 		expectedRes bson.D
 	}{
-		//"empty": {
-		//	input: "",
-		//	expectedErr: &mongo.CommandError{
-		//		Code:    1,
-		//		Name:    "InternalError",
-		//		Message: "Unset",
-		//	},
-		//},
+		"empty": {
+			input: "",
+			expectedErr: &mongo.CommandError{
+				Code:    1,
+				Name:    "InternalError",
+				Message: "command failed",
+			},
+		},
 		"ok": {
 			input:       "ok",
 			expectedRes: bson.D{{"ok", float64(1)}},
