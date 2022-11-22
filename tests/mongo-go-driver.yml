@@ -10,6 +10,7 @@ args:
   - ./x/mongo/driver/topology
 # - ./mongo/integration
   - ./mongo/integration/unified
+  - -count=1
 
 results:
   common:
@@ -58,6 +59,16 @@ results:
       # skipping for reason: "aggregate comments are string-only"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
 
+      # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+
+      # test must be skipped: "the \"modifyCollection\" operation is not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
+
+      # skipping because flaky
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
   ferretdb:
     stats:
       unexpected_fail: 0
@@ -70,11 +81,10 @@ results:
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
-
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
@@ -84,12 +94,17 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
 
     fail:
-      # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
+
+      # database/collection names https://github.com/FerretDB/FerretDB/issues/125
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
       # query array inconsistencies
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
 
       # projection https://github.com/FerretDB/FerretDB/issues/80
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
@@ -112,14 +127,13 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 2
-      expected_skip: 138
-      expected_pass: 1160
+      expected_fail: 0
+      expected_skip: 155
+      expected_pass: 1176
     fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+    skip:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
     pass:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
