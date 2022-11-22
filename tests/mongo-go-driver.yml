@@ -63,12 +63,14 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 23
+      expected_fail: 22
       expected_skip: 17
-      expected_pass: 717
+      expected_pass: 709
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
+
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
@@ -85,6 +87,9 @@ results:
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+
+      # query array inconsistencies
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
 
       # projection https://github.com/FerretDB/FerretDB/issues/80
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
