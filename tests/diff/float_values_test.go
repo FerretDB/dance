@@ -35,19 +35,19 @@ func TestFloatValues(t *testing.T) {
 			expected mongo.CommandError
 		}{
 			"NaN": {
-				doc: bson.D{{"foo", math.NaN()}},
+				doc: bson.D{{"_id", "1"}, {"foo", math.NaN()}},
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid value for field "foo": NaN`,
+					Message: `wire.OpMsg.Document: validation failed for { _id: "1", foo: nan.0 } with: NaN is not supported`,
 				},
 			},
 			"Inf": {
-				doc: bson.D{{"foo", math.Copysign(0.0, -1)}},
+				doc: bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}},
 				expected: mongo.CommandError{
 					Code:    2,
 					Name:    "BadValue",
-					Message: `invalid value for field "foo": Infinity`,
+					Message: `wire.OpMsg.Document: validation failed for { _id: "1", foo: -0.0 } with: -0 is not supported`,
 				},
 			},
 		} {
