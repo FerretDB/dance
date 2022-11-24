@@ -3,6 +3,7 @@ runner: gotest
 args:
   - -timeout=5m
   - -parallel=1
+  - -p=1
   - ./examples/...
   - ./mongo
   - ./mongo/gridfs
@@ -131,4 +132,3 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
-      
