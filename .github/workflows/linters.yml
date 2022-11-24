@@ -40,3 +40,6 @@ jobs:
 
       - name: Run linters
         uses: FerretDB/github-actions/linters@main
+
+      - name: Format and lint documentation
+        run: bin/task docs-fmt
