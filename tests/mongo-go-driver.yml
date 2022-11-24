@@ -1,16 +1,15 @@
 ---
 runner: gotest
 args:
-  - -timeout=2m
-  - -shuffle=on
+  - -timeout=5m
+  - -parallel=1
   - ./examples/...
   - ./mongo
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
 # - ./mongo/integration
-  - ./mongo/integration/unified
-  - -count=1
+# - ./mongo/integration/unified
 
 results:
   common:
@@ -55,23 +54,14 @@ results:
 
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-
-      # skipping for reason: "aggregate comments are string-only"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
-
-      # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
-      # - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
-
-      # test must be skipped: "the \"modifyCollection\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
   ferretdb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 22
+      expected_fail: 21
       expected_skip: 17
-      expected_pass: 709
+      expected_pass: 667
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -91,7 +81,6 @@ results:
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
 
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
@@ -123,8 +112,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 155
-      expected_pass: 1176
+      expected_skip: 18
+      expected_pass: 687
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
