@@ -62,7 +62,7 @@ results:
       unexpected_pass: 0
       expected_fail: 21
       expected_skip: 17
-      expected_pass: 667
+      expected_pass: 700
 
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
@@ -132,3 +132,4 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
+      
