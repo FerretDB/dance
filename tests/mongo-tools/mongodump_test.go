@@ -17,11 +17,12 @@ package diff
 import (
 	"bufio"
 	"context"
+	"log"
+	"testing"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/stretchr/testify/require"
-	"log"
-	"testing"
 )
 
 func TestMongodump(t *testing.T) {
