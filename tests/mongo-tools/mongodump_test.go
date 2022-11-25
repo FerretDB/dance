@@ -14,7 +14,9 @@
 
 package diff
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMongodump(t *testing.T) {
 }
