@@ -74,8 +74,17 @@ tasks:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker-compose exec mongosh mongosh mongodb://{{.DB}}:27017/
+        docker-compose exec mongo-tools mongosh mongodb://{{.DB}}:27017/
         --verbose --eval 'disableTelemetry()' --shell
+    preconditions:
+      - sh: "test {{.DB}}"
+        msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
+
+  mongodump:
+    desc: "Run mongodump command against specified DB"
+    cmds:
+      - >
+        docker-compose exec mongo-tools mongodump mongodb://{{.DB}}:27017/ferretdb --verbose
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
