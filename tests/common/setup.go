@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package diff
+package common
 
 import (
 	"context"
@@ -38,7 +38,7 @@ func databaseName(tb testing.TB) string {
 }
 
 // setup returns test context and per-test client connection and database.
-func setup(t *testing.T) (context.Context, *mongo.Database) {
+func Setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

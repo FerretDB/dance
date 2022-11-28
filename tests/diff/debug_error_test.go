@@ -15,6 +15,7 @@
 package diff
 
 import (
+	"github.com/FerretDB/dance/tests/common"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -89,7 +90,7 @@ func TestDebugError(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			ctx, db := setup(t)
+			ctx, db := common.Setup(t)
 			var actual bson.D
 			err := db.RunCommand(ctx, bson.D{{"debugError", tc.input}}).Decode(&actual)
 

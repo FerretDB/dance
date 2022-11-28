@@ -15,6 +15,7 @@
 package diff
 
 import (
+	"github.com/FerretDB/dance/tests/common"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -25,7 +26,7 @@ import (
 func TestNestedArrays(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := setup(t)
+	ctx, db := common.Setup(t)
 
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()

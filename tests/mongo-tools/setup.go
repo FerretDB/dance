@@ -24,10 +24,11 @@ func runCommand(command string, args []string, stdout io.Writer) error {
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if stdout != nil {
 		cmd.Stdout = stdout
+		cmd.Stderr = stdout // TODO "dumping up to 0 collections..." is forwarded to stderr?
 	}
-	cmd.Stderr = os.Stderr
 
 	//cmd.Stderr = bytes.NewBuffer([]byte{})
 

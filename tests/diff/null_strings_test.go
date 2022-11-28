@@ -15,6 +15,7 @@
 package diff
 
 import (
+	"github.com/FerretDB/dance/tests/common"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,7 +25,7 @@ import (
 
 func TestNullStrings(t *testing.T) {
 	t.Parallel()
-	ctx, db := setup(t)
+	ctx, db := common.Setup(t)
 
 	_, err := db.Collection("insert").InsertOne(ctx, bson.D{
 		{"_id", "document"},

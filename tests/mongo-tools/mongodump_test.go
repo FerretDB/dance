@@ -16,18 +16,31 @@ package mongotools
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
+	"github.com/FerretDB/dance/tests/common"
+	"go.mongodb.org/mongo-driver/bson"
+	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMongodump(t *testing.T) {
 	// TODO ensure FerretDB's `task run` and ferretdb_mongodb compatibility
+	ctx, db := common.Setup(t)
+	var err error
+
+	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
+	require.NoError(t, err)
 
 	buffer := bytes.NewBuffer([]byte{})
-	err := runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
-		"mongodb://127.0.0.1:27017/test",
+	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
+		"mongodb://dance_ferretdb:27017/testmongodump",
 		"--verbose",
 	}, buffer)
-	assert.NoError(t, err)
-	t.Log(buffer.String())
+	require.NoError(t, err)
+
+	out := buffer.String()
+	t.Log(out)
+	assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
 }

@@ -15,6 +15,7 @@
 package diff
 
 import (
+	"github.com/FerretDB/dance/tests/common"
 	"math"
 	"testing"
 
@@ -26,7 +27,7 @@ import (
 func TestFloatValues(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := setup(t)
+	ctx, db := common.Setup(t)
 
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
