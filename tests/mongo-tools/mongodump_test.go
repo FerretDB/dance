@@ -15,49 +15,9 @@
 package diff
 
 import (
-	"bufio"
-	"context"
-	"log"
 	"testing"
-
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/client"
-	"github.com/stretchr/testify/require"
 )
 
 func TestMongodump(t *testing.T) {
 	// TODO ensure FerretDB's `task run` and ferretdb_mongodb compatibility
-	cli, err := client.NewEnvClient()
-	require.NoError(t, err)
-
-	ctx := context.Background()
-
-	conf := types.ExecConfig{
-		AttachStdin:  true,
-		AttachStdout: true,
-		AttachStderr: true,
-
-		Cmd: []string{"mongodump", "--uri", "mongodb://dance_ferretdb:27017/test"},
-	}
-
-	id, err := cli.ContainerExecCreate(ctx, "dance_mongosh", conf)
-	require.NoError(t, err)
-
-	resp, err := cli.ContainerExecAttach(ctx, id.ID, types.ExecStartCheck{
-		// TODO Tty
-	})
-	// TODO wait for container
-	require.NoError(t, err)
-
-	err = cli.ContainerExecStart(ctx, id.ID, types.ExecStartCheck{})
-	require.NoError(t, err)
-
-	scanner := bufio.NewScanner(resp.Reader)
-
-	for scanner.Scan() {
-		err = scanner.Err()
-		require.NoError(t, err)
-		log.Printf(scanner.Text())
-	}
-
 }
