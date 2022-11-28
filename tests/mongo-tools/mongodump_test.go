@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package diff
+package mongotools
 
 import (
+	"bytes"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestMongodump(t *testing.T) {
 	// TODO ensure FerretDB's `task run` and ferretdb_mongodb compatibility
+
+	buffer := bytes.NewBuffer([]byte{})
+	err := runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
+		"mongodb://127.0.0.1:27017/test",
+		"--verbose",
+	}, buffer)
+	assert.NoError(t, err)
+	t.Log(buffer.String())
 }
