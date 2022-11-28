@@ -2,25 +2,21 @@
 version: "3.8"
 
 services:
+  # runs if started with `task env-up DB=ferretdb`
   ferretdb:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
     container_name: dance_ferretdb
     restart: unless-stopped
-    depends_on: ["postgres", "mongosh"]
+    depends_on: [ "postgres", "mongosh" ]
     ports:
-      - 127.0.0.1:27017:27017
-    command:
-      [
-        "-test.coverprofile=cover.txt",
-        "--",
-        "--listen-addr=:27017",
-        "--postgresql-url=postgres://user@postgres:5432/dance",
-        "--mode=normal",
-      ]
+      - 27017:27017
+    command: -test.coverprofile=cover.txt
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
 
+  # runs if ferretdb also runs
   postgres:
     build:
       context: ./build/deps
@@ -28,7 +24,7 @@ services:
     container_name: dance_postgres
     restart: unless-stopped
     ports:
-      - 127.0.0.1:5432:5432
+      - 5432:5432
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
@@ -36,6 +32,7 @@ services:
       - POSTGRES_DB=dance
       - POSTGRES_HOST_AUTH_METHOD=trust
 
+  # runs if started with `task env-up DB=mongodb`
   mongodb:
     build:
       context: ./build/deps
@@ -43,19 +40,23 @@ services:
     command: --setParameter enableTestCommands=1
     container_name: dance_mongodb
     restart: unless-stopped
-    depends_on: ["mongosh"]
+    depends_on: [ "mongosh" ]
     ports:
-      - 127.0.0.1:27017:27017
+      - 27017:27017
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
 
+  # for tools; always runs, but no ports are exposed
   mongosh:
     build:
       context: ./build/deps
       dockerfile: mongo6.Dockerfile
+    command: --port 12345 # should not be used
     container_name: dance_mongosh
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
