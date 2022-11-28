@@ -10,7 +10,7 @@ services:
     depends_on: [ "postgres", "mongosh" ]
     ports:
       - 27017:27017
-    command: -test.coverprofile=cover.txt
+    command: -test.coverprofile=cover.txt --
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
