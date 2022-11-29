@@ -16,8 +16,6 @@ package mongotools
 
 import (
 	"bytes"
-	"github.com/FerretDB/dance/tests/common"
-	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 	"testing"
 
@@ -27,11 +25,11 @@ import (
 
 func TestMongodump(t *testing.T) {
 	// TODO ensure FerretDB's `task run` and ferretdb_mongodb compatibility
-	ctx, db := common.Setup(t)
+	//ctx, db := common.Setup(t)
 	var err error
 
-	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
-	require.NoError(t, err)
+	//_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
+	//require.NoError(t, err)
 
 	buffer := bytes.NewBuffer([]byte{})
 	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
