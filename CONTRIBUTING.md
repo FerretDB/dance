@@ -96,9 +96,9 @@ Let's take a look at the following chain of subtests and tests:
 
 ```go
 func TestSomeDiff(t *testing.T) {
-	t.Run("SubtestSomething", func(t *testing.T) {
-		t.Run("FerretDB", func(t *testing.T) {})
-		t.Run("MongoDB", func(t *testing.T) {})
+    t.Run("SubtestSomething", func(t *testing.T) {
+        t.Run("FerretDB", func(t *testing.T) {})
+        t.Run("MongoDB", func(t *testing.T) {})
     })
 }
 ```
@@ -120,12 +120,13 @@ If the numbers are different, dance prints the list of unexpected tests and exit
 ### Developer workflow
 
 A typical developer workflow when working with diff tests is the following:
-- You work with a FerretDB branch on your local machine.
-- For that branch, you have a FerretDB instance running on port `27017` (for example, with FerretDB's `task run` command).
-- When you make a change in the local branch, you stop and start the instance again to have all the changes compiled.
-- Now you can run dance diff tests with `task dance DB=ferretdb TEST=diff` command,
+
+* tYou work with a FerretDB branch on your local machine.
+* For that branch, you have a FerretDB instance running on port `27017` (for example, with FerretDB's `task run` command).
+* When you make a change in the local branch, you stop and start the instance again to have all the changes compiled.
+* Now you can run dance diff tests with `task dance DB=ferretdb TEST=diff` command,
   the tests will be run against the instance available on the port `27017`.
-- If you want to run MongoDB tests, stop the FerretDB instance and run MongoDB instance instead (for example, with dance's
+* If you want to run MongoDB tests, stop the FerretDB instance and run MongoDB instance instead (for example, with dance's
   `task env-up DB=mongodb` command).
-- Now you can run dance diff tests with `task dance DB=mongodb TEST=diff` command,
+* Now you can run dance diff tests with `task dance DB=mongodb TEST=diff` command,
   the tests will be run against the instance available on the port `27017` (which is now MongoDB).
