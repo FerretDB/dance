@@ -91,7 +91,7 @@ Let's take a look at the following chain of subtests and tests:
 ```go
 func TestSomeDiff(t *testing.T) {
 	t.Run("SubtestSomething", func(t *testing.T) {
-        t.Run("FerretDB", func(t *testing.T) {})
+		t.Run("FerretDB", func(t *testing.T) {})
 		t.Run("MongoDB", func(t *testing.T) {})
     })
 }
