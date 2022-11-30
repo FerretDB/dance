@@ -16,11 +16,14 @@ package mongotools
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
+	"context"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/FerretDB/dance/tests/common"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/stretchr/testify/require"
 )
@@ -33,14 +36,15 @@ func TestMongodump(t *testing.T) {
 	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
 	require.NoError(t, err)
 
-	// TODO: collections are not listed
-	//cur, err := db.ListCollections(ctx, bson.D{{}})
-	//require.NoError(t, err)
+	colls := getCollections(t, ctx, db)
 
-	//var res bson.D
-	//cur.Decode(&res)
+	assert.Equal(t, bson.D{}, colls)
 
-	assert.Equal(t, bson.D{}, res)
+	//firstBatch, ok := res.Map()["firstBatch"]
+	//require.True(t, ok)
+
+	//firstBatch, ok = firstBatch.(bson.D)
+	//require.True(t, ok)
 
 	buffer := bytes.NewBuffer([]byte{})
 	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
@@ -60,4 +64,26 @@ func TestMongodump(t *testing.T) {
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
+}
+
+func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []string {
+	t.Helper()
+
+	colls := struct {
+		Cursor struct {
+			FirstBatch []struct {
+				Name string `bson:"name"`
+			} `bson:"firstBatch"`
+		} `bson:"cursor"`
+	}{}
+
+	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&colls)
+	require.NoError(t, err)
+
+	var out []string
+	for _, batch := range colls.Cursor.FirstBatch {
+		out = append(out, batch.Name)
+	}
+
+	return out
 }
