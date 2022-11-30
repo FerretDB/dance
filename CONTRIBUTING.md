@@ -121,7 +121,7 @@ If the numbers are different, dance prints the list of unexpected tests and exit
 
 A typical developer workflow when working with diff tests is the following:
 
-* tYou work with a FerretDB branch on your local machine.
+* You work with a FerretDB branch on your local machine.
 * For that branch, you have a FerretDB instance running on port `27017` (for example, with FerretDB's `task run` command).
 * When you make a change in the local branch, you stop and start the instance again to have all the changes compiled.
 * Now you can run dance diff tests with `task dance DB=ferretdb TEST=diff` command,
