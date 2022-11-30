@@ -43,10 +43,10 @@ func TestMongodump(t *testing.T) {
 	})
 }
 
-func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []string {
-	t.Helper()
+func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
+	dbState := make(map[string][]bson.D)
 
-	colls := struct {
+	doc := struct {
 		Cursor struct {
 			FirstBatch []struct {
 				Name string `bson:"name"`
@@ -54,21 +54,15 @@ func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []str
 		} `bson:"cursor"`
 	}{}
 
-	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&colls)
+	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&doc)
 	require.NoError(t, err)
 
-	var out []string
-	for _, batch := range colls.Cursor.FirstBatch {
-		out = append(out, batch.Name)
+	var collections []string
+	for _, batch := range doc.Cursor.FirstBatch {
+		collections = append(collections, batch.Name)
 	}
 
-	return out
-}
-
-func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
-	dbState := make(map[string][]bson.D)
-
-	for _, coll := range getCollections(t, ctx, db) {
+	for _, coll := range collections {
 		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
 		require.NoError(t, err)
 
@@ -86,8 +80,6 @@ func testMongodump(t *testing.T, setupDB func(context.Context, *mongo.Database))
 
 	// set database state
 	setupDB(ctx, db)
-
-	expectedCollections := getCollections(t, ctx, db)
 
 	expectedState := getDatabaseState(t, ctx, db)
 	t.Log(expectedState)
@@ -117,9 +109,6 @@ func testMongodump(t *testing.T, setupDB func(context.Context, *mongo.Database))
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
-
-	collsRestore := getCollections(t, ctx, db)
-	assert.Equal(t, expectedCollections, collsRestore)
 
 	actualState := getDatabaseState(t, ctx, db)
 
