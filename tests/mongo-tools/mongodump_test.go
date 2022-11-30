@@ -36,9 +36,7 @@ func TestMongodump(t *testing.T) {
 	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
 	require.NoError(t, err)
 
-	colls := getCollections(t, ctx, db)
-
-	assert.Equal(t, bson.D{}, colls)
+	collsDump := getCollections(t, ctx, db)
 
 	//firstBatch, ok := res.Map()["firstBatch"]
 	//require.True(t, ok)
@@ -59,11 +57,16 @@ func TestMongodump(t *testing.T) {
 	//assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
 	buffer.Reset()
 
+	ctx, db = common.Setup(t)
+
 	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongorestore",
-		"mongodb://dance_ferretdb:27017/testmongodump",
+		"mongodb://dance_ferretdb:27017",
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
+
+	collsRestore := getCollections(t, ctx, db)
+	assert.Equal(t, collsDump, collsRestore)
 }
 
 func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []string {
