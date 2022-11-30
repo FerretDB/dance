@@ -59,7 +59,8 @@ As mentioned above, this approach is not recommended.
 Diff tests demonstrate how FerretDB differs from MongoDB.
 
 We write diff tests when we can't write "regular" integration of compat tests because FerretDB behaves differently
-from MongoDB in some cases. If such differences are visible to users, in addition to diff tests, they must be documented
+from MongoDB in some cases.
+If such differences are visible to users, in addition to diff tests, they must be documented
 in the [FerretDB documentation](https://raw.githubusercontent.com/FerretDB/FerretDB/main/website/docs/diff.md),
 please take a look at it for the additional context.
 
@@ -68,21 +69,26 @@ Diff tests are located in the `tests/diff` directory and are regular Go tests.
 Every diff test or subtest should have two subtests - `FerretDB` and `MongoDB`.
 Those subtests usually only contain asserts based on the expected behavior of each database.
 
-For instance, take a look at `tests/diff/document_validation_test.go`. It covers the document validation feature
-and demonstrates how FerretDB validation differs from MongoDB behavior. For example, in case of FerretDB a document is considered
-invalid if it has a key containing the `$` sign. In case of MongoDB such document is considered valid.
+For instance, take a look at `tests/diff/document_validation_test.go`.
+It covers the document validation feature
+and demonstrates how FerretDB validation differs from MongoDB behavior.
+For example, in case of FerretDB a document is considered
+invalid if it has a key containing the `$` sign.
+In case of MongoDB such document is considered valid.
 The subtest `DollarSign` demonstrates this difference: in case of FerretDB we expect to receive a particular error,
 in case of MongoDB we expect to receive no error when we insert such document.
 
 ### Configuration
 
-Configuration of diff tests is stored in the `tests/diff.yml` file. In particular, this file contains the information
+Configuration of diff tests is stored in the `tests/diff.yml` file.
+In particular, this file contains the information
 about expected number of failed and passed tests for each database and what is considered a failed and a passed test.
 
 With the current configuration, we expect that for FerretDB all the subtests that match regular expression `FerretDB$` pass
 and all the subtests that don't match this regular expression fail.
 So, for FerretDB the number of passed tests is equal to the number
-of all the `FerretDB` subtests running. The number of failed tests is calculated hierarchically: the "parental" test
+of all the `FerretDB` subtests running.
+The number of failed tests is calculated hierarchically: the "parental" test
 and all its subtests that don't match the regular expression `FerretDB$` are considered failed.
 For MongoDB, we have a similar configuration.
 
@@ -105,7 +111,8 @@ The number of failed tests is 3 (`MongoDB` subtest, `SubtestSomething`, and fina
 To run diff tests call `task dance DB=ferretdb TEST=diff` command to test FerretDB
 or `task dance DB=mongodb TEST=diff` to test MongoDB.
 
-The `dance` command reads the configuration file and runs the tests. Then it compares
+The `dance` command reads the configuration file and runs the tests.
+Then it compares
 the actual number of passed and failed tests with the number from the configuration file.
 
 If the numbers are different, dance prints the list of unexpected tests and exits with a non-zero code.
