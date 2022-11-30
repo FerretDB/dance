@@ -17,6 +17,8 @@ package mongotools
 import (
 	"bytes"
 	"context"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -29,64 +31,16 @@ import (
 )
 
 func TestMongodump(t *testing.T) {
-	// TODO ensure FerretDB's `task run` and ferretdb_mongodb compatibility
-	ctx, db := common.Setup(t)
-	var err error
-
-	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
-	require.NoError(t, err)
-
-	collsDump := getCollections(t, ctx, db)
-
-	dbDump := make(map[string][]bson.D)
-	for _, coll := range collsDump {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{{"foo", "bar"}})
+	testMongodump(t, func(ctx context.Context, db *mongo.Database) {
+		_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
 		require.NoError(t, err)
 
-		var res []bson.D
-		require.NoError(t, cur.All(ctx, &res))
+		for i := 0; i < 1000; i++ {
+			_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"v", fmt.Sprintf("foo%d", i)}})
+			require.NoError(t, err)
+		}
 
-		dbDump[coll] = res
-	}
-	t.Log(dbDump)
-
-	buffer := bytes.NewBuffer([]byte{})
-	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
-		"mongodb://dance_ferretdb:27017/testmongodump",
-		"--verbose",
-	}, buffer)
-	require.NoError(t, err)
-
-	// We can remove this and just check if changes are applied
-	//out := buffer.String()
-	//t.Log(out)
-	//assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
-	buffer.Reset()
-
-	ctx, db = common.Setup(t)
-
-	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongorestore",
-		"mongodb://dance_ferretdb:27017",
-		"--verbose",
-	}, buffer)
-	require.NoError(t, err)
-
-	collsRestore := getCollections(t, ctx, db)
-	assert.Equal(t, collsDump, collsRestore)
-
-	dbRestore := make(map[string][]bson.D)
-	for _, coll := range collsDump {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
-		require.NoError(t, err)
-
-		var res []bson.D
-		require.NoError(t, cur.All(ctx, &res))
-
-		dbRestore[coll] = res
-	}
-	t.Log(dbRestore)
-
-	assert.Equal(t, dbDump, dbRestore)
+	})
 }
 
 func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []string {
@@ -109,4 +63,67 @@ func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []str
 	}
 
 	return out
+}
+
+func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
+	dbState := make(map[string][]bson.D)
+
+	for _, coll := range getCollections(t, ctx, db) {
+		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
+		require.NoError(t, err)
+
+		var res []bson.D
+		require.NoError(t, cur.All(ctx, &res))
+
+		dbState[coll] = res
+	}
+	return dbState
+}
+
+func testMongodump(t *testing.T, setupDB func(context.Context, *mongo.Database)) {
+	ctx, db := common.Setup(t)
+	dbName := strings.ToLower(t.Name())
+
+	// set database state
+	setupDB(ctx, db)
+
+	expectedCollections := getCollections(t, ctx, db)
+
+	expectedState := getDatabaseState(t, ctx, db)
+	t.Log(expectedState)
+
+	buffer := bytes.NewBuffer([]byte{})
+	err := runCommand("docker", []string{"compose", "exec", "mongosh", "rm", "-f", "-r", "dump"}, buffer)
+	require.NoError(t, err)
+
+	buffer.Reset()
+
+	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
+		"mongodb://dance_ferretdb:27017/" + dbName,
+		"--verbose",
+	}, buffer)
+	require.NoError(t, err)
+
+	// We can remove this and just check if changes are applied
+	//out := buffer.String()
+	//t.Log(out)
+	//assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
+	buffer.Reset()
+
+	ctx, db = common.Setup(t)
+
+	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongorestore",
+		"mongodb://dance_ferretdb:27017",
+		"--verbose",
+	}, buffer)
+	require.NoError(t, err)
+
+	collsRestore := getCollections(t, ctx, db)
+	assert.Equal(t, expectedCollections, collsRestore)
+
+	actualState := getDatabaseState(t, ctx, db)
+
+	t.Log(actualState)
+
+	assert.Equal(t, expectedState, actualState)
 }
