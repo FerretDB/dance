@@ -38,11 +38,17 @@ func TestMongodump(t *testing.T) {
 
 	collsDump := getCollections(t, ctx, db)
 
-	//firstBatch, ok := res.Map()["firstBatch"]
-	//require.True(t, ok)
+	dbDump := make(map[string][]bson.D)
+	for _, coll := range collsDump {
+		cur, err := db.Collection(coll).Find(ctx, bson.D{{"foo", "bar"}})
+		require.NoError(t, err)
 
-	//firstBatch, ok = firstBatch.(bson.D)
-	//require.True(t, ok)
+		var res []bson.D
+		require.NoError(t, cur.All(ctx, &res))
+
+		dbDump[coll] = res
+	}
+	t.Log(dbDump)
 
 	buffer := bytes.NewBuffer([]byte{})
 	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
@@ -67,6 +73,20 @@ func TestMongodump(t *testing.T) {
 
 	collsRestore := getCollections(t, ctx, db)
 	assert.Equal(t, collsDump, collsRestore)
+
+	dbRestore := make(map[string][]bson.D)
+	for _, coll := range collsDump {
+		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
+		require.NoError(t, err)
+
+		var res []bson.D
+		require.NoError(t, cur.All(ctx, &res))
+
+		dbRestore[coll] = res
+	}
+	t.Log(dbRestore)
+
+	assert.Equal(t, dbDump, dbRestore)
 }
 
 func getCollections(t *testing.T, ctx context.Context, db *mongo.Database) []string {
