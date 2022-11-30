@@ -26,8 +26,8 @@ func runCommand(command string, args []string, stdout io.Writer) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if stdout != nil {
-		cmd.Stdout = stdout
-		//cmd.Stderr = stdout // TODO "dumping up to 0 collections..." is forwarded to stderr?
+		//cmd.Stdout = stdout
+		cmd.Stderr = stdout // TODO "dumping up to 0 collections..." is forwarded to stderr?
 	}
 
 	if err := cmd.Run(); err != nil {

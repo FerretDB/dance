@@ -16,12 +16,12 @@ package mongotools
 
 import (
 	"bytes"
-	"github.com/FerretDB/dance/tests/common"
-	"go.mongodb.org/mongo-driver/bson"
-	"strings"
+	"github.com/stretchr/testify/assert"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/FerretDB/dance/tests/common"
+	"go.mongodb.org/mongo-driver/bson"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -33,6 +33,15 @@ func TestMongodump(t *testing.T) {
 	_, err = db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
 	require.NoError(t, err)
 
+	// TODO: collections are not listed
+	//cur, err := db.ListCollections(ctx, bson.D{{}})
+	//require.NoError(t, err)
+
+	//var res bson.D
+	//cur.Decode(&res)
+
+	assert.Equal(t, bson.D{}, res)
+
 	buffer := bytes.NewBuffer([]byte{})
 	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
 		"mongodb://dance_ferretdb:27017/testmongodump",
@@ -40,7 +49,15 @@ func TestMongodump(t *testing.T) {
 	}, buffer)
 	require.NoError(t, err)
 
-	out := buffer.String()
-	t.Log(out)
-	assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
+	// We can remove this and just check if changes are applied
+	//out := buffer.String()
+	//t.Log(out)
+	//assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
+	buffer.Reset()
+
+	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongorestore",
+		"mongodb://dance_ferretdb:27017/testmongodump",
+		"--verbose",
+	}, buffer)
+	require.NoError(t, err)
 }
