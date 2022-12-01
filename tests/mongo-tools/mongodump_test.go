@@ -15,7 +15,6 @@
 package mongotools
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"strings"
@@ -75,88 +74,55 @@ func TestMongodump(t *testing.T) {
 	}
 }
 
-func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
-	dbState := make(map[string][]bson.D)
-
-	doc := struct {
-		Cursor struct {
-			FirstBatch []struct {
-				Name string `bson:"name"`
-			} `bson:"firstBatch"`
-		} `bson:"cursor"`
-	}{}
-
-	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&doc)
-	require.NoError(t, err)
-
-	var collections []string
-	for _, batch := range doc.Cursor.FirstBatch {
-		collections = append(collections, batch.Name)
-	}
-
-	for _, coll := range collections {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
-		require.NoError(t, err)
-
-		var res []bson.D
-		require.NoError(t, cur.All(ctx, &res))
-
-		dbState[coll] = res
-	}
-	return dbState
-}
-
-// runMongodumpTest runs setupDB function to initialize database in a specified way.
-// After that it runs mongodump against database, remove it and run mongorestore to compare
+// runMongodumpTest runs setupDB function which initialize a database in a specified way.
+// After that it runs mongodump against this database, drop it and runs mongorestore to compare
 // database state before and after restoring.
 func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Database)) {
 	t.Helper()
 	ctx, db := common.Setup(t)
+
 	dbName := strings.ToLower(t.Name())
 	dbName = strings.ReplaceAll(dbName, "/", "_")
+
+	dumpPath := "dumps/" + dbName
 
 	// set database state
 	if setupDB != nil {
 		setupDB(ctx, db)
 	}
 
-	// get current database state
+	// get database state before restore
 	expectedState := getDatabaseState(t, ctx, db)
 
 	// cleanup dump directory
-	buffer := bytes.NewBuffer([]byte{})
-	err := runCommand([]string{"rm", "-f", "-r", fmt.Sprintf("dumps/%s", dbName)}, buffer)
+	err := execCommand("rm", "-f", "-r", dumpPath)
 	require.NoError(t, err)
-
-	buffer.Reset()
 
 	// dump a database
-	err = runCommand([]string{"mongodump",
-		"mongodb://dance_ferretdb:27017/" + dbName,
-		"-o", "dumps/" + dbName,
+	err = execCommand("mongodump",
+		"mongodb://dance_ferretdb:27017/"+dbName,
+		"-o", dumpPath,
 		"--verbose",
-	}, buffer)
+	)
 	require.NoError(t, err)
-
-	buffer.Reset()
 
 	// cleanup database
 	ctx, db = common.Setup(t)
 
-	// Create directory if mongodump didn't import anything
-	err = runCommand([]string{"mkdir",
-		"-p", "dumps/" + dbName,
-	}, buffer)
+	// Create directory if mongodump didn't export anything
+	// It's required for mongorestore to not fail
+	err = execCommand("mkdir", "-p", dumpPath)
 	require.NoError(t, err)
 
 	// restore a database based on created dump
-	err = runCommand([]string{"mongorestore",
+	err = execCommand("mongorestore",
 		"mongodb://dance_ferretdb:27017",
-		"--dir", "dumps/" + dbName,
+		"--dir", dumpPath,
 		"--verbose",
-	}, buffer)
+	)
 	require.NoError(t, err)
 
+	// get database state after restore
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, expectedState, actualState)
 }
