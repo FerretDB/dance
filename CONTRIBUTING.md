@@ -131,7 +131,7 @@ If the numbers are different, dance prints the list of unexpected tests and exit
 
 ### Developer workflow
 
-A typical developer workflow when working with diff tests is the following:
+A typical developer workflow when working with diff tests is as follows:
 
 * You work with a FerretDB branch on your local machine.
 * For that branch, you have a FerretDB instance running on port `27017` (for example, with FerretDB's `task run` command).
