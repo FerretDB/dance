@@ -15,12 +15,13 @@
 package diff
 
 import (
-	"github.com/FerretDB/dance/tests/common"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDebugError(t *testing.T) {

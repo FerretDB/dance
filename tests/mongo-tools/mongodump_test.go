@@ -21,12 +21,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/FerretDB/dance/tests/common"
+	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/stretchr/testify/require"
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestMongodump(t *testing.T) {

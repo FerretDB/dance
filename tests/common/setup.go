@@ -37,7 +37,7 @@ func databaseName(tb testing.TB) string {
 	return name
 }
 
-// setup returns test context and per-test client connection and database.
+// Setup returns test context and per-test client connection and database.
 func Setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 

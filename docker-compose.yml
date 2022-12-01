@@ -46,8 +46,6 @@ services:
     depends_on: ["mongosh"]
     ports:
       - 127.0.0.1:27017:27017
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu

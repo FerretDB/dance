@@ -16,12 +16,13 @@ package diff
 
 import (
 	"fmt"
-	"github.com/FerretDB/dance/tests/common"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDatabaseName(t *testing.T) {

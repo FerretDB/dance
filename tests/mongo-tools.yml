@@ -3,22 +3,14 @@ runner: gotest
 args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
 
 results:
+  common:
+    stats:
+      expected_pass: 5
+    pass:
+      - regex: TestMongoDump(/\w+)*
+
   ferretdb:
     stats:
-      expected_pass: 1
-
-    pass:
-      - regex: FerretDB$
-
-    fail:
-      - not_regex: FerretDB$
 
   mongodb:
     stats:
-      expected_pass: 1
-
-    pass:
-      - regex: MongoDB$
-
-    fail:
-      - not_regex: MongoDB$
