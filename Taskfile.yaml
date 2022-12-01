@@ -25,12 +25,12 @@ tasks:
     desc: "Start environment"
     deps: [env-up-detach]
     cmds:
-      - docker-compose logs --follow
+      - docker compose logs --follow
 
   env-up-detach:
     desc: "Start dependencies in docker"
     cmds:
-      - docker-compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --timeout=0 --detach
+      - docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --timeout=0 --detach
         --build {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
@@ -38,16 +38,16 @@ tasks:
 
   env-pull:
     cmds:
-      - docker-compose build --pull
+      - docker compose build --pull
 
   env-logs:
     cmds:
-      - docker-compose logs --no-color
+      - docker compose logs --no-color
 
   env-down:
     desc: "Stop environment"
     cmds:
-      - docker-compose down --remove-orphans --volumes
+      - docker compose down --remove-orphans --volumes
 
   dance:
     desc: "Run all integration tests"
@@ -68,13 +68,13 @@ tasks:
   psql:
     desc: "Run psql"
     cmds:
-      - docker-compose exec postgres psql -U postgres -d ferretdb
+      - docker compose exec postgres psql -U postgres -d ferretdb
 
   mongosh:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker-compose exec mongosh mongosh mongodb://{{.DB}}:27017/
+        docker compose exec mongosh mongosh mongodb://{{.DB}}:27017/
         --verbose --eval 'disableTelemetry()' --shell
     preconditions:
       - sh: "test {{.DB}}"
@@ -84,5 +84,5 @@ tasks:
   docs-fmt:
     desc: "Format and lint documentation"
     cmds:
-      - docker-compose run --rm textlint --fix --rule one-sentence-per-line "**/*.md" ".github/**/*.md"
-      - docker-compose run --rm markdownlint "**/*.md" "#tests"
+      - docker compose run --rm textlint --fix --rule one-sentence-per-line "**/*.md" ".github/**/*.md"
+      - docker compose run --rm markdownlint "**/*.md" "#tests"
