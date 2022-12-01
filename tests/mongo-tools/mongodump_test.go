@@ -99,7 +99,7 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 
 	// dump a database
 	err = execCommand("mongodump",
-		"mongodb://host-gateway:27017/"+dbName,
+		"mongodb://host.docker.internal:27017/"+dbName,
 		"-o", dumpPath,
 		"--verbose",
 	)
@@ -115,7 +115,7 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 
 	// restore a database based on created dump
 	err = execCommand("mongorestore",
-		"mongodb://host-gateway:27017",
+		"mongodb://host.docker.internal:27017",
 		"--dir", dumpPath,
 		"--verbose",
 	)
