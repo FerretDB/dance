@@ -31,7 +31,7 @@ import (
 )
 
 func TestMongodump(t *testing.T) {
-	testMongodump(t, func(ctx context.Context, db *mongo.Database) {
+	runMongodumpTest(t, func(ctx context.Context, db *mongo.Database) {
 		_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
 		require.NoError(t, err)
 
@@ -74,45 +74,46 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 	return dbState
 }
 
-func testMongodump(t *testing.T, setupDB func(context.Context, *mongo.Database)) {
+// runMongodumpTest runs setupDB function to initialize database in a specified way.
+// After that it runs mongodump against database, remove it and run mongorestore to compare
+// database state before and after restoring.
+func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Database)) {
+	t.Helper()
 	ctx, db := common.Setup(t)
 	dbName := strings.ToLower(t.Name())
 
 	// set database state
 	setupDB(ctx, db)
 
+	// get current database state
 	expectedState := getDatabaseState(t, ctx, db)
-	t.Log(expectedState)
 
+	// cleanup dump directory
 	buffer := bytes.NewBuffer([]byte{})
-	err := runCommand("docker", []string{"compose", "exec", "mongosh", "rm", "-f", "-r", "dump"}, buffer)
+	err := runCommand([]string{"rm", "-f", "-r", fmt.Sprintf("dump/%s", dbName)}, buffer)
 	require.NoError(t, err)
 
 	buffer.Reset()
 
-	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongodump",
+	// dump a database
+	err = runCommand([]string{"mongodump",
 		"mongodb://dance_ferretdb:27017/" + dbName,
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
 
-	// We can remove this and just check if changes are applied
-	//out := buffer.String()
-	//t.Log(out)
-	//assert.Equal(t, "dumping up to 1 collections in parallel\n", strings.Split(out, "\t")[1])
 	buffer.Reset()
 
+	// cleanup database
 	ctx, db = common.Setup(t)
 
-	err = runCommand("docker", []string{"compose", "exec", "mongosh", "mongorestore",
+	// restore a database based on created dump
+	err = runCommand([]string{"mongorestore",
 		"mongodb://dance_ferretdb:27017",
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
 
 	actualState := getDatabaseState(t, ctx, db)
-
-	t.Log(actualState)
-
 	assert.Equal(t, expectedState, actualState)
 }

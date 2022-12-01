@@ -14,12 +14,14 @@ func setupMongoContainer(t *testing.T) {
 	t.Helper()
 }
 
-// runCommand runs command with given arguments.
-func runCommand(command string, args []string, stdout io.Writer) error {
-	bin, err := exec.LookPath(command)
+// runCommand runs command on docker mongosh container.
+func runCommand(command []string, stdout io.Writer) error {
+	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return err
 	}
+
+	args := append([]string{"compose", "exec", "mongosh"}, command...)
 	cmd := exec.Command(bin, args...)
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
