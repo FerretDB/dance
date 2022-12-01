@@ -61,7 +61,7 @@ Diff tests demonstrate how FerretDB differs from MongoDB.
 We write diff tests when we can't write "regular" integration or compat tests because FerretDB behaves differently
 from MongoDB in some cases.
 If such differences are visible to users, in addition to diff tests, they must be documented
-in the [FerretDB documentation](https://raw.githubusercontent.com/FerretDB/FerretDB/main/website/docs/diff.md),
+in the [FerretDB documentation](https://docs.ferretdb.io/diff/),
 please take a look at it for the additional context.
 
 Diff tests are located in the `tests/diff` directory and are regular Go tests.
