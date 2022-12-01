@@ -57,6 +57,9 @@ services:
     container_name: dance_mongosh
     restart: unless-stopped
     command: -port=12345
+    user: 1000:1000
+    volumes:
+      - ./dumps:/dumps
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
