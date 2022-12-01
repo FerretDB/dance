@@ -1,8 +1,7 @@
 # Contributing
 
 The dance tool and tests run on the host; macOS, Linux, and Windows are expected to work.
-Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker;
-Docker Compose configuration is provided for convenience but required if you want to run `mongo-tools` tests.
+Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker; Docker Compose configuration is provided for convenience but not required.
 In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host as it does not involve Docker image building or PostgreSQL restarts.
 Running FerretDB on the host is recommended for that reason.
 
