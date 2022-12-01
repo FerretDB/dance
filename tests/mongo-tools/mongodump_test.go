@@ -31,16 +31,48 @@ import (
 )
 
 func TestMongodump(t *testing.T) {
-	runMongodumpTest(t, func(ctx context.Context, db *mongo.Database) {
-		_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
-		require.NoError(t, err)
+	t.Parallel()
 
-		for i := 0; i < 1000; i++ {
-			_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"v", fmt.Sprintf("foo%d", i)}})
-			require.NoError(t, err)
-		}
+	for name, tc := range map[string]struct {
+		setupFun func(ctx context.Context, db *mongo.Database)
+	}{
+		"Empty": {},
+		"SingleDocument": {
+			setupFun: func(ctx context.Context, db *mongo.Database) {
+				_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"foo", "bar"}})
+				require.NoError(t, err)
+			},
+		},
+		"ManyDocuments": {
+			setupFun: func(ctx context.Context, db *mongo.Database) {
+				for i := 0; i < 500; i++ {
+					var value any = i
 
-	})
+					if i%2 == 0 {
+						value = fmt.Sprintf("foo%d", i)
+					}
+
+					_, err := db.Collection("mongodump").InsertOne(ctx, bson.D{{"v", value}})
+					require.NoError(t, err)
+				}
+			},
+		},
+		"ManyCollections": {
+			setupFun: func(ctx context.Context, db *mongo.Database) {
+				for i := 0; i < 100; i++ {
+					_, err := db.Collection(fmt.Sprintf("mongodump%d", i)).InsertOne(ctx, bson.D{{"v", i}})
+					require.NoError(t, err)
+				}
+			},
+		},
+	} {
+		name, tc := name, tc
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			runMongodumpTest(t, tc.setupFun)
+		})
+	}
 }
 
 func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
@@ -81,16 +113,19 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 	t.Helper()
 	ctx, db := common.Setup(t)
 	dbName := strings.ToLower(t.Name())
+	dbName = strings.ReplaceAll(dbName, "/", "_")
 
 	// set database state
-	setupDB(ctx, db)
+	if setupDB != nil {
+		setupDB(ctx, db)
+	}
 
 	// get current database state
 	expectedState := getDatabaseState(t, ctx, db)
 
 	// cleanup dump directory
 	buffer := bytes.NewBuffer([]byte{})
-	err := runCommand([]string{"rm", "-f", "-r", fmt.Sprintf("dump/%s", dbName)}, buffer)
+	err := runCommand([]string{"rm", "-f", "-r", fmt.Sprintf("dumps/%s", dbName)}, buffer)
 	require.NoError(t, err)
 
 	buffer.Reset()
@@ -98,6 +133,7 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 	// dump a database
 	err = runCommand([]string{"mongodump",
 		"mongodb://dance_ferretdb:27017/" + dbName,
+		"-o", "dumps/" + dbName,
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
@@ -107,9 +143,16 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 	// cleanup database
 	ctx, db = common.Setup(t)
 
+	// Create directory if mongodump didn't import anything
+	err = runCommand([]string{"mkdir",
+		"-p", "dumps/" + dbName,
+	}, buffer)
+	require.NoError(t, err)
+
 	// restore a database based on created dump
 	err = runCommand([]string{"mongorestore",
 		"mongodb://dance_ferretdb:27017",
+		"--dir", "dumps/" + dbName,
 		"--verbose",
 	}, buffer)
 	require.NoError(t, err)
