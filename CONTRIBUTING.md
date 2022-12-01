@@ -75,22 +75,22 @@ Let's take a look at the following example:
 func TestDollarSign(t *testing.T) {
     t.Run("Insert", func(t *testing.T) {
         _, err := db.Collection("collection").InsertOne(ctx,  bson.D{{"foo$", "bar"}})
-		
+
         t.Run("FerretDB", func(t *testing.T) {
-			expected := mongo.CommandError{
+            expected := mongo.CommandError{
                 Code:    2,
                 Name:    "BadValue",
                 Message: `invalid key: "foo$" (key must not contain '$' sign)`,
             }
             AssertEqualError(t, expected, err)
         })
-		
+
         t.Run("MongoDB", func(t *testing.T) {
             require.NoError(t, err)
         })
     })
-	
-	/* Further subtests */
+
+    /* Further subtests */
 }
 ```
 
