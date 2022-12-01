@@ -74,7 +74,7 @@ tasks:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker compose exec mongosh mongosh mongodb://{{.DB}}:27017/
+        docker compose run mongosh --rm mongosh mongodb://{{.DB}}:27017/
         --verbose --eval 'disableTelemetry()' --shell
     preconditions:
       - sh: "test {{.DB}}"
