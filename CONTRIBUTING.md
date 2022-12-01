@@ -92,19 +92,31 @@ The number of failed tests is calculated hierarchically: the "parental" test
 and all its subtests that don't match the regular expression `FerretDB$` are considered failed.
 For MongoDB, we have a similar configuration.
 
-Let's take a look at the following chain of subtests and tests:
+Let's take a look at the following example:
 
 ```go
-func TestSomeDiff(t *testing.T) {
-    t.Run("SubtestSomething", func(t *testing.T) {
-        t.Run("FerretDB", func(t *testing.T) {})
-        t.Run("MongoDB", func(t *testing.T) {})
+func TestDollarSign(t *testing.T) {
+    t.Run("Insert", func(t *testing.T) {
+        _, err := db.Collection("collection").InsertOne(ctx,  bson.D{{"foo$", "bar"}})
+		
+        t.Run("FerretDB", func(t *testing.T) {
+			expected := mongo.CommandError{
+                Code:    2,
+                Name:    "BadValue",
+                Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+            }
+            AssertEqualError(t, expected, err)
+        })
+		
+        t.Run("MongoDB", func(t *testing.T) {
+            require.NoError(t, err)
+        })
     })
 }
 ```
 
-In this example, for FerretDB, the number of passed tests is 1.
-The number of failed tests is 3 (`MongoDB` subtest, `SubtestSomething`, and finally `TestSomeDiff`).
+In this example, for FerretDB, the number of passed tests is 1 (for `FerretDB` subtest).
+The number of failed tests is 3 (`MongoDB` subtest, `Insert`, and finally `TestDollarSign`).
 
 ### How it works?
 
