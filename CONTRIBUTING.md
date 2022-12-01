@@ -58,7 +58,7 @@ As mentioned above, this approach is not recommended.
 
 Diff tests demonstrate how FerretDB differs from MongoDB.
 
-We write diff tests when we can't write "regular" integration of compat tests because FerretDB behaves differently
+We write diff tests when we can't write "regular" integration or compat tests because FerretDB behaves differently
 from MongoDB in some cases.
 If such differences are visible to users, in addition to diff tests, they must be documented
 in the [FerretDB documentation](https://raw.githubusercontent.com/FerretDB/FerretDB/main/website/docs/diff.md),
