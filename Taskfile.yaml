@@ -27,11 +27,6 @@ tasks:
     cmds:
       - docker compose logs --follow
 
-  env-mongosh:
-    desc: "Start mongosh container"
-    cmds:
-      - docker compose up mongosh -d
-
   env-up-detach:
     desc: "Start dependencies in docker"
     cmds:
@@ -57,7 +52,6 @@ tasks:
   dance:
     desc: "Run all integration tests"
     dir: tests
-    deps: [env-mongosh]
     cmds:
       - go run ../cmd/dance -db={{.DB}} {{.TEST}}
     preconditions:
@@ -78,7 +72,6 @@ tasks:
 
   mongosh:
     desc: "Run mongo shell"
-    deps: [env-mongosh]
     cmds:
       - >
         docker compose exec mongosh mongosh mongodb://{{.DB}}:27017/
