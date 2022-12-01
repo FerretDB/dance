@@ -66,31 +66,8 @@ please take a look at it for the additional context.
 
 Diff tests are located in the `tests/diff` directory and are regular Go tests.
 
-Every diff test or subtest should have two subtests - `FerretDB` and `MongoDB`.
+Currently, every diff test or subtest should have at least two subtests - `FerretDB` and `MongoDB`.
 Those subtests usually only contain asserts based on the expected behavior of each database.
-
-For instance, take a look at `tests/diff/document_validation_test.go`.
-It covers the document validation feature
-and demonstrates how FerretDB validation differs from MongoDB behavior.
-For example, in case of FerretDB a document is considered
-invalid if it has a key containing the `$` sign.
-In case of MongoDB such document is considered valid.
-The subtest `DollarSign` demonstrates this difference: in case of FerretDB we expect to receive a particular error,
-in case of MongoDB we expect to receive no error when we insert such document.
-
-### Configuration
-
-Configuration of diff tests is stored in the `tests/diff.yml` file.
-In particular, this file contains the information
-about expected number of failed and passed tests for each database and what is considered a failed and a passed test.
-
-With the current configuration, we expect that for FerretDB all the subtests that match regular expression `FerretDB$` pass
-and all the subtests that don't match this regular expression fail.
-So, for FerretDB the number of passed tests is equal to the number
-of all the `FerretDB` subtests running.
-The number of failed tests is calculated hierarchically: the "parental" test
-and all its subtests that don't match the regular expression `FerretDB$` are considered failed.
-For MongoDB, we have a similar configuration.
 
 Let's take a look at the following example:
 
@@ -112,10 +89,33 @@ func TestDollarSign(t *testing.T) {
             require.NoError(t, err)
         })
     })
+	
+	/* Further subtests */
 }
 ```
 
-In this example, for FerretDB, the number of passed tests is 1 (for `FerretDB` subtest).
+It works with document validation feature for the `foo$` field key
+and demonstrates how FerretDB validation differs from MongoDB behavior.
+In case of FerretDB a document is considered  invalid if it has a key containing the `$` sign.
+In case of MongoDB such document is considered valid.
+The subtest `Insert` demonstrates this difference: in case of FerretDB we expect to receive a particular error,
+in case of MongoDB we expect to receive no error when we insert such document.
+
+### Configuration
+
+Configuration of diff tests is stored in the `tests/diff.yml` file.
+In particular, this file contains the information
+about expected number of failed and passed tests for each database and what is considered a failed and a passed test.
+
+With the current configuration, we expect that for FerretDB all the subtests that match regular expression `FerretDB$` pass
+and all the subtests that don't match this regular expression fail.
+So, for FerretDB the number of passed tests is equal to the number
+of all the `FerretDB` subtests running.
+The number of failed tests is calculated hierarchically: the "parental" test
+and all its subtests that don't match the regular expression `FerretDB$` are considered failed.
+For MongoDB, we have a similar configuration.
+
+In the example above (`TestDollarSign`), for FerretDB, the number of passed tests is 1 (for `FerretDB` subtest).
 The number of failed tests is 3 (`MongoDB` subtest, `Insert`, and finally `TestDollarSign`).
 
 ### How it works?
