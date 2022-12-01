@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     depends_on: ["postgres", "mongosh"]
     ports:
-      - 127.0.0.1:27017:27017
+      - :27017:27017
     command:
       [
         "-test.coverprofile=cover.txt",
@@ -45,7 +45,7 @@ services:
     restart: unless-stopped
     depends_on: ["mongosh"]
     ports:
-      - 127.0.0.1:27017:27017
+      - :27017:27017
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
