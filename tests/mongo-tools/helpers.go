@@ -35,7 +35,7 @@ func runDockerComposeCommand(command string, args ...string) error {
 		return err
 	}
 
-	dockerArgs := append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
+	dockerArgs := append([]string{"compose", "run", "--rm", "mongosh", "sudo", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
