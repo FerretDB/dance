@@ -16,13 +16,18 @@ package mongotools
 
 import (
 	"context"
+	"crypto/sha256"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"testing"
 
+	"github.com/pmezard/go-difflib/difflib"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -81,4 +86,36 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 	}
 
 	return dbState
+}
+
+func compareFiles(t *testing.T, file1, file2 *os.File) {
+	t.Helper()
+	h := sha256.New()
+
+	_, err := io.Copy(h, file1)
+	require.NoError(t, err)
+
+	hash1 := h.Sum(nil)
+
+	h.Reset()
+
+	_, err = io.Copy(h, file1)
+	require.NoError(t, err)
+
+	hash2 := h.Sum(nil)
+
+	if assert.Equal(t, hash1, hash2) {
+		return
+	}
+
+	content1, err := ioutil.ReadAll(file1)
+	require.NoError(t, err)
+
+	content2, err := ioutil.ReadAll(file2)
+	require.NoError(t, err)
+
+	difflib.NewMatcher(
+		difflib.SplitLines(string(content1)),
+		difflib.SplitLines(string(content2)),
+	)
 }

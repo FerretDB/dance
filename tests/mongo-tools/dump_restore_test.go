@@ -21,7 +21,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/FerretDB/dance/tests/common"
 )
@@ -29,14 +28,20 @@ import (
 func TestDumpRestore(t *testing.T) {
 	ctx, db := common.Setup(t)
 
-	// TODO restart existing dump from https://github.com/mcampo2/mongodb-sample-databases instead
-	_, err := db.Collection("test").InsertOne(ctx, bson.D{{"foo", "bar"}})
-	require.NoError(t, err)
-
 	localRoot := filepath.Join("..", "..", "dumps")
 	containerRoot := "/dumps/"
 
 	expectedState := getDatabaseState(t, ctx, db)
+
+	// restore a database from preprepared dump
+	err := runDockerComposeCommand(
+		"mongorestore",
+		"--dir", filepath.Join("/sample-dumps/", "sample_analytics"),
+		"--db", db.Name(),
+		"--verbose",
+		"mongodb://host.docker.internal:27017/",
+	)
+	require.NoError(t, err)
 
 	// pre-create directories to avoid permission issues
 	err = os.Chmod(localRoot, 0o777)
