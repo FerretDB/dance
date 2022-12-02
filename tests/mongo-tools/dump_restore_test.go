@@ -40,7 +40,7 @@ func TestDumpRestore(t *testing.T) {
 
 	err = os.RemoveAll(filepath.Join(localRoot, db.Name()))
 	require.NoError(t, err)
-	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o755)
+	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o777)
 	require.NoError(t, err)
 
 	// dump a database
