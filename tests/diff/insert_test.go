@@ -20,12 +20,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestInsertDuplicateKeys(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := setup(t)
+	ctx, db := common.Setup(t)
 
 	doc := bson.D{{"_id", "duplicate_keys"}, {"foo", "bar"}, {"foo", "baz"}}
 

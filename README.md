@@ -7,6 +7,8 @@ It runs integration tests of various software that uses MongoDB
 (such as [MongoDB Go driver](https://github.com/mongodb/mongo-go-driver))
 against both MongoDB and FerretDB,
 and compares results with ones expected by tests configurations.
+It also runs [mongo tooling](https://github.com/mongodb/mongo-tools) such as `mongodump` against both of them,
+to make sure that we provide various functionalities and provide the best user experience.
 It is expected that most or all tests pass when run against MongoDB,
 so we mark a few or none tests as expected failures or skips in configuration.
 More tests fail (and are marked as expected failures in tests configuration) when run against FerretDB,
