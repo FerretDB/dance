@@ -58,11 +58,11 @@ results:
   ferretdb:
     stats:
       unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
-      expected_fail: 14
-      expected_skip: 14
-      expected_pass: 608
+      unexpected_skip: 7
+      unexpected_pass: 542
+      expected_fail: 0
+      expected_skip: 153
+      expected_pass: 749
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
