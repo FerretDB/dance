@@ -1,0 +1,14 @@
+---
+runner: gotest
+args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:

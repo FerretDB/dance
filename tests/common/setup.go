@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package diff
+package common
 
 import (
 	"context"
@@ -25,8 +25,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// databaseName returns a stable database name for that test.
-func databaseName(tb testing.TB) string {
+// DatabaseName returns a stable database name for that test.
+func DatabaseName(tb testing.TB) string {
 	tb.Helper()
 
 	name := strings.ToLower(tb.Name())
@@ -37,8 +37,8 @@ func databaseName(tb testing.TB) string {
 	return name
 }
 
-// setup returns test context and per-test client connection and database.
-func setup(t *testing.T) (context.Context, *mongo.Database) {
+// Setup returns test context and per-test client connection and database.
+func Setup(t *testing.T) (context.Context, *mongo.Database) {
 	t.Helper()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -54,7 +54,7 @@ func setup(t *testing.T) (context.Context, *mongo.Database) {
 		require.NoError(t, err)
 	})
 
-	db := client.Database(databaseName(t))
+	db := client.Database(DatabaseName(t))
 	err = db.Drop(context.Background())
 	require.NoError(t, err)
 
