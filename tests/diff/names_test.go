@@ -21,6 +21,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDatabaseName(t *testing.T) {
@@ -30,7 +32,7 @@ func TestDatabaseName(t *testing.T) {
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		dbName := "_ferretdb_xxx"
-		ctx, db := setup(t)
+		ctx, db := common.Setup(t)
 		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
 
 		t.Run("FerretDB", func(t *testing.T) {
@@ -55,7 +57,7 @@ func TestCollectionName(t *testing.T) {
 
 	t.Run("Length200", func(t *testing.T) {
 		collection := strings.Repeat("a", 200)
-		ctx, db := setup(t)
+		ctx, db := common.Setup(t)
 		dbName := db.Name()
 		err := db.CreateCollection(ctx, collection)
 
@@ -75,7 +77,7 @@ func TestCollectionName(t *testing.T) {
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		collection := "_ferretdb_xxx"
-		ctx, db := setup(t)
+		ctx, db := common.Setup(t)
 		dbName := db.Name()
 		err := db.CreateCollection(ctx, collection)
 
