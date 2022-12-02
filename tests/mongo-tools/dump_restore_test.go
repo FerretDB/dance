@@ -44,6 +44,8 @@ func TestDumpRestore(t *testing.T) {
 	require.NoError(t, err)
 	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o777)
 	require.NoError(t, err)
+	err = os.Chmod(filepath.Join(localRoot, db.Name()), 0o777)
+	require.NoError(t, err)
 
 	err = runDockerComposeCommand(
 		"ls", "-la", "/", "/dumps",
