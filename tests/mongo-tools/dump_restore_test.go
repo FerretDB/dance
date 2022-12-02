@@ -33,21 +33,21 @@ func TestDumpRestore(t *testing.T) {
 	_, err := db.Collection("test").InsertOne(ctx, bson.D{{"foo", "bar"}})
 	require.NoError(t, err)
 
-	localPath := filepath.Join("..", "..", "dumps")
-	containerPath := "/dumps/"
+	localRoot := filepath.Join("..", "..", "dumps")
+	containerRoot := "/dumps/"
 
-	// get database state before restore
 	expectedState := getDatabaseState(t, ctx, db)
 
-	// cleanup dump directory
-	err = os.RemoveAll(localPath)
+	err = os.RemoveAll(filepath.Join(localRoot, db.Name()))
+	require.NoError(t, err)
+	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o755)
 	require.NoError(t, err)
 
 	// dump a database
 	err = runDockerComposeCommand(
 		"mongodump",
+		"--out", containerRoot,
 		"--db", db.Name(),
-		"--out", containerPath,
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
 	)
@@ -56,15 +56,11 @@ func TestDumpRestore(t *testing.T) {
 	// cleanup database
 	ctx, db = common.Setup(t)
 
-	// Create directory if mongodump didn't export anything
-	// It's required for mongorestore to not fail
-	err = os.MkdirAll(localPath, 0o7777)
-	require.NoError(t, err)
-
 	// restore a database based on created dump
 	err = runDockerComposeCommand(
 		"mongorestore",
-		"--dir", containerPath,
+		"--dir", filepath.Join(containerRoot, db.Name()),
+		"--db", db.Name(),
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
 	)
