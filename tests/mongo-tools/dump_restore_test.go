@@ -38,18 +38,14 @@ func TestDumpRestore(t *testing.T) {
 
 	expectedState := getDatabaseState(t, ctx, db)
 
+	// pre-create directories to avoid permission issues
 	err = os.Chmod(localRoot, 0o777)
 	require.NoError(t, err)
 	err = os.RemoveAll(filepath.Join(localRoot, db.Name()))
 	require.NoError(t, err)
-	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o777)
+	err = os.Mkdir(filepath.Join(localRoot, db.Name()), 0o777) // 0o777 is typically downgraded to 0o755 by umask
 	require.NoError(t, err)
-	err = os.Chmod(filepath.Join(localRoot, db.Name()), 0o777)
-	require.NoError(t, err)
-
-	err = runDockerComposeCommand(
-		"ls", "-la", "/", "/dumps",
-	)
+	err = os.Chmod(filepath.Join(localRoot, db.Name()), 0o777) // fix after umask
 	require.NoError(t, err)
 
 	// dump a database
