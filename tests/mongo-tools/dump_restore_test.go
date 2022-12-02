@@ -38,9 +38,16 @@ func TestDumpRestore(t *testing.T) {
 
 	expectedState := getDatabaseState(t, ctx, db)
 
+	err = os.Chmod(localRoot, 0o777)
+	require.NoError(t, err)
 	err = os.RemoveAll(filepath.Join(localRoot, db.Name()))
 	require.NoError(t, err)
 	err = os.MkdirAll(filepath.Join(localRoot, db.Name()), 0o777)
+	require.NoError(t, err)
+
+	err = runDockerComposeCommand(
+		"ls", "-la", "/", "/dumps",
+	)
 	require.NoError(t, err)
 
 	// dump a database
