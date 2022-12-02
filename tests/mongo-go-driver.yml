@@ -10,7 +10,7 @@ args:
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
 # - ./mongo/integration
-# - ./mongo/integration/unified
+  - ./mongo/integration/unified
 
 results:
   common:
