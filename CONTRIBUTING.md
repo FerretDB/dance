@@ -1,58 +1,87 @@
 # Contributing
 
-The dance tool and tests run on the host; macOS, Linux, and Windows are expected to work.
-Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker; Docker Compose configuration is provided for convenience but not required.
-In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host as it does not involve Docker image building or PostgreSQL restarts.
-Running FerretDB on the host is recommended for that reason.
+This document describes how to run and develop dance tools and tests.
 
-## Cloning repository
+## Types of tests
 
+You can find tests in the `tests` directory. We support tests of different types:
+
+* `mongo-go-driver` - to test compatibility with the MongoDB Go driver;
+* `diff` - to demonstrate FerretDB-specific differences;
+* `mongo-tools` - to test compatibility with the tools (like dump and restore).
+
+## How to roll out dance locally
+
+Clone this repository with all submodules included:
 ```sh
 git clone --recursive
 ```
 
-Remember to use that command to clone this repository with all submodules included.
-
+If you have already cloned the repo without submodules you can run this command to include required submodules:
 ```sh
 git submodule update --init
 ```
 
-If you've already cloned it without submodules you can use that command
-to include required submodules.
+## Local environment
 
-## Running tests
+The dance tool and tests run on the host; macOS, Linux, and Windows are expected to work.
+Databases under test (FerretDB and MongoDB) may be running on the host or inside Docker.
+Docker Compose configuration is provided for convenience but not required.
+
+In particular, the FerretDB development cycle (fix-compile-run-dance) is faster with it running on the host 
+as it does not involve Docker image building or PostgreSQL restarts.
+Running FerretDB on the host is recommended for that reason.
+
+## Development cycle
+
+In principle, `dance` can work with any DB instance running on the port `27017`.
+
+### Running FerretDB
+
+An example of a typical workflow:
+
+* You work with a FerretDB branch on your local machine.
+* For that branch, you have a FerretDB instance running on port `27017` (for example, with [FerretDB](https://github.com/FerretDB/FerretDB)'s `bin/task run` command).
+* When you make a change in the local branch, you stop and start the instance again to have all the changes compiled.
+* Now you can run dance tests against FerretDB. For example, to only run diff tests call `bin/task dance DB=ferretdb TEST=diff`.
+
+If you can't run FerretDB on the host, it's possible to start it from `ferretdb-local` Docker image.
+As mentioned above, this approach is not recommended under normal circumstances.
+
+The process is as follows:
+
+* To build a local image use the `bin/task docker-local` command in your local 
+  [FerretDB](https://github.com/FerretDB/FerretDB) branch.
+* Alternatively, to use a pre-built image you must set the `FERRETDB_IMAGE` environment variable, 
+  e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
+* Now you can run the necessary containers with dance's `bin/task env-up DB=ferretdb` command.
+* FerretDB will be available on port `27017` on the docker container.
+* To run tests, use the `bin/task dance DB=ferretdb` command as usual.
+
+### Running MongoDB
+
+* If you want to run MongoDB tests, stop the FerretDB instance (if any) and run MongoDB instance instead.
+* For example, run the `bin/task env-up DB=mongodb` command to start MongoDB container.
+* Now you can run dance diff tests with `bin/task dance DB=mongodb TEST=diff` command,
+  the tests will be run against the instance available on the port `27017` (which is now MongoDB).
+* Please note that the command `bin/task dance DB=ferretdb` would run tests against that MongoDB instance, 
+  but results would be compared with expected results for FerretDB. In short, that would be wrong.
+
+## How to run tests
+
+To run the tests use the following command:
 
 ```sh
 bin/task dance DB=ferretdb TEST=mongo-go-driver
 ```
 
-That command will run `mongo-go-driver` tests against FerretDB.
-`DB` environment variable should have the value `ferretdb` or `mongodb`.
-It defines what tests are expected to pass and fail.
+In this example we run `mongo-go-driver` tests against FerretDB:
+
+* The `DB` environment variable should have the value `ferretdb` or `mongodb`. 
+  It defines what tests are expected to pass and fail. 
 For example, see [mongo-go-driver tests configuration](https://github.com/FerretDB/dance/blob/main/tests/mongo-go-driver.yml) (fields under `results.ferretdb` and `results.mongodb`).
 `TEST` environment variable should have the value `mongo-go-driver`, or be empty.
 It defines what test configuration to run; empty value runs all configurations.
-
-## Starting environment with Docker Compose
-
-```sh
-bin/task env-up DB=mongodb
-```
-
-That command will start MongoDB in Docker container.
-Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
-In short, that would be wrong.
-
-```sh
-bin/task env-up DB=ferretdb
-```
-
-That command will start FerretDB from `ferretdb-local` Docker image.
-
-To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository.
-To use a pre-built image you must set the `FERRETDB_IMAGE` environment variable, e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
-
-As mentioned above, this approach is not recommended.
 
 ## How to write diff tests
 
@@ -129,16 +158,3 @@ the actual number of passed and failed tests with the number from the configurat
 
 If the numbers are different, dance prints the list of unexpected tests and exits with a non-zero code.
 
-### Developer workflow
-
-A typical developer workflow when working with diff tests is as follows:
-
-* You work with a FerretDB branch on your local machine.
-* For that branch, you have a FerretDB instance running on port `27017` (for example, with FerretDB's `task run` command).
-* When you make a change in the local branch, you stop and start the instance again to have all the changes compiled.
-* Now you can run dance diff tests with `task dance DB=ferretdb TEST=diff` command,
-  the tests will be run against the instance available on the port `27017`.
-* If you want to run MongoDB tests, stop the FerretDB instance and run MongoDB instance instead (for example, with dance's
-  `task env-up DB=mongodb` command).
-* Now you can run dance diff tests with `task dance DB=mongodb TEST=diff` command,
-  the tests will be run against the instance available on the port `27017` (which is now MongoDB).
