@@ -1,0 +1,76 @@
+// Copyright 2021 FerretDB Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package mongotools
+
+import (
+	"os"
+	"path/filepath"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/FerretDB/dance/tests/common"
+)
+
+func TestDumpRestore(t *testing.T) {
+	ctx, db := common.Setup(t)
+
+	// TODO restart existing dump from https://github.com/mcampo2/mongodb-sample-databases instead
+	_, err := db.Collection("test").InsertOne(ctx, bson.D{{"foo", "bar"}})
+	require.NoError(t, err)
+
+	localPath := filepath.Join("..", "..", "dumps")
+	containerPath := "/dumps/"
+
+	// get database state before restore
+	expectedState := getDatabaseState(t, ctx, db)
+
+	// cleanup dump directory
+	err = os.RemoveAll(localPath)
+	require.NoError(t, err)
+
+	// dump a database
+	err = runDockerComposeCommand(
+		"mongodump",
+		"--db", db.Name(),
+		"--out", containerPath,
+		"--verbose",
+		"mongodb://host.docker.internal:27017/",
+	)
+	require.NoError(t, err)
+
+	// cleanup database
+	ctx, db = common.Setup(t)
+
+	// Create directory if mongodump didn't export anything
+	// It's required for mongorestore to not fail
+	err = os.MkdirAll(localPath, 0o7777)
+	require.NoError(t, err)
+
+	// restore a database based on created dump
+	err = runDockerComposeCommand(
+		"mongorestore",
+		"--dir", containerPath,
+		"--verbose",
+		"mongodb://host.docker.internal:27017/",
+	)
+	require.NoError(t, err)
+
+	// get database state after restore
+	actualState := getDatabaseState(t, ctx, db)
+	assert.Equal(t, expectedState, actualState)
+}

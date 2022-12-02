@@ -28,7 +28,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// runDockerComposeCommand runs command with args on mongosh container.
+// runDockerComposeCommand runs command with args inside mongosh container.
 func runDockerComposeCommand(command string, args ...string) error {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
