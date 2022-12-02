@@ -19,7 +19,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -108,14 +107,18 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 		return
 	}
 
-	content1, err := ioutil.ReadAll(file1)
+	content1, err := io.ReadAll(file1)
 	require.NoError(t, err)
 
-	content2, err := ioutil.ReadAll(file2)
+	content2, err := io.ReadAll(file2)
 	require.NoError(t, err)
 
 	difflib.NewMatcher(
 		difflib.SplitLines(string(content1)),
 		difflib.SplitLines(string(content2)),
 	)
+}
+
+func compareDirs(t *testing.T, dir1 string, dir2 string) {
+	// TODO walkDir and compare all files with compareFiles
 }
