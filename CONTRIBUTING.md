@@ -66,7 +66,7 @@ please take a look at it for the additional context.
 
 Diff tests are located in the `tests/diff` directory and are regular Go tests.
 
-Currently, every diff test or subtest should have at least two subtests - `FerretDB` and `MongoDB`.
+Currently, every diff test or subtest should have two subtests - `FerretDB` and `MongoDB`.
 Those subtests usually only contain asserts based on the expected behavior of each database.
 
 Let's take a look at the following example:
