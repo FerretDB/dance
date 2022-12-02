@@ -74,11 +74,8 @@ tasks:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker compose run mongosh --rm mongosh mongodb://{{.DB}}:27017/
+        docker compose run --rm mongosh mongosh mongodb://host.docker.internal:27017/
         --verbose --eval 'disableTelemetry()' --shell
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
