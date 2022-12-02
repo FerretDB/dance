@@ -56,7 +56,7 @@ The process is as follows:
   e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
 * Now you can run the necessary containers with dance's `bin/task env-up DB=ferretdb` command.
 * FerretDB will be available on port `27017` on the docker container.
-* To run tests, use the `bin/task dance DB=ferretdb` command as usual.
+* To run tests, use the `bin/task dance DB=ferretdb` command as usual (see "How to run tests" section).
 
 ### Running MongoDB
 
@@ -75,13 +75,32 @@ To run the tests use the following command:
 bin/task dance DB=ferretdb TEST=mongo-go-driver
 ```
 
-In this example we run `mongo-go-driver` tests against FerretDB:
+In this example we run `mongo-go-driver` tests against FerretDB.
+
+Possible parameters:
 
 * The `DB` environment variable should have the value `ferretdb` or `mongodb`. 
   It defines what tests are expected to pass and fail. 
 For example, see [mongo-go-driver tests configuration](https://github.com/FerretDB/dance/blob/main/tests/mongo-go-driver.yml) (fields under `results.ferretdb` and `results.mongodb`).
-`TEST` environment variable should have the value `mongo-go-driver`, or be empty.
-It defines what test configuration to run; empty value runs all configurations.
+* The `TEST` environment variable should have one of the values `mongo-go-driver`, `diff`, `mongo-tools` or be empty.
+It defines what test configuration to run. Empty value runs all configurations.
+
+### How to configure tests
+
+Configuration of tests is stored in the `tests/*.yml` files (one file per each type of tests).
+In particular, these files contain the information about expected number of failed, skipped and passed tests
+for each database, what is considered a failed and a passed test and which tests are skipped.
+
+### How it works?
+
+To run diff tests call `task dance DB=ferretdb TEST=diff` command to test FerretDB
+or `task dance DB=mongodb TEST=diff` to test MongoDB.
+
+The `dance` command reads the configuration file and runs the tests.
+Then it compares
+the actual number of passed and failed tests with the number from the configuration file.
+
+If the numbers are different, dance prints the list of unexpected tests and exits with a non-zero code.
 
 ## How to write diff tests
 
@@ -130,11 +149,7 @@ In case of MongoDB such document is considered valid.
 The subtest `Insert` demonstrates this difference: in case of FerretDB we expect to receive a particular error,
 in case of MongoDB we expect to receive no error when we insert such document.
 
-### Configuration
-
-Configuration of diff tests is stored in the `tests/diff.yml` file.
-In particular, this file contains the information
-about expected number of failed and passed tests for each database and what is considered a failed and a passed test.
+### Configuration for diff tests
 
 With the current configuration, we expect that for FerretDB all the subtests that match regular expression `FerretDB$` pass
 and all the subtests that don't match this regular expression fail.
@@ -146,15 +161,3 @@ For MongoDB, we have a similar configuration.
 
 In the example above (`TestDollarSign`), for FerretDB, the number of passed tests is 1 (for `FerretDB` subtest).
 The number of failed tests is 3 (`MongoDB` subtest, `Insert`, and finally `TestDollarSign`).
-
-### How it works?
-
-To run diff tests call `task dance DB=ferretdb TEST=diff` command to test FerretDB
-or `task dance DB=mongodb TEST=diff` to test MongoDB.
-
-The `dance` command reads the configuration file and runs the tests.
-Then it compares
-the actual number of passed and failed tests with the number from the configuration file.
-
-If the numbers are different, dance prints the list of unexpected tests and exits with a non-zero code.
-
