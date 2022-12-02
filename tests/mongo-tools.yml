@@ -6,8 +6,6 @@ results:
   common:
     stats:
       expected_pass: 5
-    pass:
-      - regex: TestMongoDump(/\w+)*
 
   ferretdb:
     stats:

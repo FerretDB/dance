@@ -25,8 +25,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// databaseName returns a stable database name for that test.
-func databaseName(tb testing.TB) string {
+// DatabaseName returns a stable database name for that test.
+func DatabaseName(tb testing.TB) string {
 	tb.Helper()
 
 	name := strings.ToLower(tb.Name())
@@ -54,7 +54,7 @@ func Setup(t *testing.T) (context.Context, *mongo.Database) {
 		require.NoError(t, err)
 	})
 
-	db := client.Database(databaseName(t))
+	db := client.Database(DatabaseName(t))
 	err = db.Drop(context.Background())
 	require.NoError(t, err)
 

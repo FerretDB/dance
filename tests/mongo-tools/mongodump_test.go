@@ -17,7 +17,8 @@ package mongotools
 import (
 	"context"
 	"fmt"
-	"strings"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -80,10 +81,10 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 	t.Helper()
 	ctx, db := common.Setup(t)
 
-	dbName := strings.ToLower(t.Name())
-	dbName = strings.ReplaceAll(dbName, "/", "_")
+	dbName := common.DatabaseName(t)
 
-	dumpPath := "dumps/" + dbName
+	localPath := filepath.Join("..", "..", "dumps", dbName)
+	containerPath := "/dumps/" + dbName
 
 	// set database state
 	if setupDB != nil {
@@ -94,13 +95,14 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 	expectedState := getDatabaseState(t, ctx, db)
 
 	// cleanup dump directory
-	err := execCommand("rm", "-f", "-r", dumpPath)
+	err := os.RemoveAll(localPath)
 	require.NoError(t, err)
 
 	// dump a database
-	err = execCommand("mongodump",
+	err = runDockerComposeCommand(
+		"mongodump",
 		"mongodb://host.docker.internal:27017/"+dbName,
-		"-o", dumpPath,
+		"-o", containerPath,
 		"--verbose",
 	)
 	require.NoError(t, err)
@@ -110,13 +112,14 @@ func runMongodumpTest(t *testing.T, setupDB func(context.Context, *mongo.Databas
 
 	// Create directory if mongodump didn't export anything
 	// It's required for mongorestore to not fail
-	err = execCommand("mkdir", "-p", dumpPath)
+	err = os.MkdirAll(localPath, 0o7777)
 	require.NoError(t, err)
 
 	// restore a database based on created dump
-	err = execCommand("mongorestore",
-		"mongodb://host.docker.internal:27017",
-		"--dir", dumpPath,
+	err = runDockerComposeCommand(
+		"mongorestore",
+		"mongodb://host.docker.internal:27017/",
+		"--dir", containerPath,
 		"--verbose",
 	)
 	require.NoError(t, err)

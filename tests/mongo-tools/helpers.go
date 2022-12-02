@@ -28,8 +28,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// execCommand runs command with args on mongosh container.
-func execCommand(command string, args ...string) error {
+// runDockerComposeCommand runs command with args on mongosh container.
+func runDockerComposeCommand(command string, args ...string) error {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return err
