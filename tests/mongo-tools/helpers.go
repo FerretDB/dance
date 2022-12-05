@@ -19,9 +19,11 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -120,5 +122,23 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 }
 
 func compareDirs(t *testing.T, dir1 string, dir2 string) {
-	// TODO walkDir and compare all files with compareFiles
+	filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
+		comparePath := strings.Replace(path, dir1, dir2, 1)
+
+		if d.IsDir() {
+			// TODO check if both contains dir
+			return nil
+		}
+
+		file1, err := os.OpenFile(path, os.O_RDONLY, 0o666)
+		require.NoError(t, err)
+
+		// assume that dir2 has the file
+		file2, err := os.OpenFile(comparePath, os.O_RDONLY, 0o666)
+		assert.NoError(t, err)
+
+		compareFiles(t, file1, file2)
+
+		return nil
+	})
 }

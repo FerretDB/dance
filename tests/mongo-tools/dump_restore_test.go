@@ -31,12 +31,14 @@ func TestDumpRestore(t *testing.T) {
 	localRoot := filepath.Join("..", "..", "dumps")
 	containerRoot := "/dumps/"
 
+	sampleDump := "sample_analytics"
+
 	expectedState := getDatabaseState(t, ctx, db)
 
 	// restore a database from preprepared dump
 	err := runDockerComposeCommand(
 		"mongorestore",
-		"--dir", filepath.Join("/sample-dumps/", "sample_analytics"),
+		"--dir", filepath.Join("/sample-dumps/", sampleDump),
 		"--db", db.Name(),
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
@@ -79,4 +81,6 @@ func TestDumpRestore(t *testing.T) {
 	// get database state after restore
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, expectedState, actualState)
+
+	compareDirs(t, filepath.Join("..", "..", "mongodb-sample-databases", sampleDump), filepath.Join(localRoot, db.Name()))
 }
