@@ -10,7 +10,7 @@ args:
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
 # - ./mongo/integration
-# - ./mongo/integration/unified
+  - ./mongo/integration/unified
 
 results:
   common:
@@ -61,8 +61,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 14
-      expected_skip: 17
-      expected_pass: 707
+      expected_skip: 14
+      expected_pass: 608
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
@@ -111,12 +111,26 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 18
-      expected_pass: 720
+      expected_skip: 160
+      expected_pass: 1291
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+
+      # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-errorResponse.json/findOneAndUpdate_document_validation_errInfo_is_accessible
+
+      # skipping for reason: "aggregate comments are string-only"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
+
+      # execution failed: test must be skipped: "the deprecated disableMD5 file option is not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_0_sans_MD5
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_1_sans_MD5
+
+      # execution failed: test must be skipped: "the deprecated contentType file option is not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload.json/upload_when_contentType_is_provided
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
