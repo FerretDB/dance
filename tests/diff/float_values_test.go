@@ -76,11 +76,13 @@ func TestFloatValues(t *testing.T) {
 		}
 	})
 
-	t.Run("Update", func(t *testing.T) {
-		// TODO https://github.com/FerretDB/dance/issues/266
-	})
+	// TODO https://github.com/FerretDB/dance/issues/266
+	/*t.Run("Update", func(t *testing.T) {
 
-	t.Run("FindAndModify", func(t *testing.T) {
-		t.Skip("https://github.com/FerretDB/dance/issues/266")
-	})
+	})*/
+
+	// TODO https://github.com/FerretDB/dance/issues/266
+	/*t.Run("FindAndModify", func(t *testing.T) {
+
+	})*/
 }
