@@ -15,6 +15,7 @@
 package diff
 
 import (
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -50,6 +51,22 @@ func TestDocumentValidation(t *testing.T) {
 					Code:    2,
 					Name:    "BadValue",
 					Message: `invalid key: "foo.bar" (key must not contain '.' sign)`,
+				},
+			},
+			"Inf": {
+				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(1)}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid value: { "foo": +Inf } (infinity values are not allowed)`,
+				},
+			},
+			"NegativeInf": {
+				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(-1)}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid value: { "foo": -Inf } (infinity values are not allowed)`,
 				},
 			},
 		} {
