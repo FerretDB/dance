@@ -5,8 +5,9 @@ args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
 results:
   ferretdb:
     stats:
-      expected_fail: 52
+      expected_fail: 53
       expected_pass: 22
+      expected_skip: 2
 
     pass:
       - regex: FerretDB$
@@ -14,13 +15,24 @@ results:
     fail:
       - not_regex: FerretDB$
 
+    # https://github.com/FerretDB/dance/issues/266
+    skip:
+      - github.com/FerretDB/dance/tests/diff/TestFloatValues/FindAndModify
+      - github.com/FerretDB/dance/tests/diff/TestFloatValues/Update
+
   mongodb:
     stats:
-      expected_fail: 52
+      expected_fail: 53
       expected_pass: 22
+      expected_skip: 2
 
     pass:
       - regex: MongoDB$
 
     fail:
       - not_regex: MongoDB$
+
+    # https://github.com/FerretDB/dance/issues/266
+    skip:
+      - github.com/FerretDB/dance/tests/diff/TestFloatValues/FindAndModify
+      - github.com/FerretDB/dance/tests/diff/TestFloatValues/Update
