@@ -31,50 +31,54 @@ func TestDumpRestore(t *testing.T) {
 	localRoot := filepath.Join("..", "..", "dumps")
 	containerRoot := "/dumps/"
 
-	sampleDump := "sample_analytics"
-
-	expectedState := getDatabaseState(t, ctx, db)
+	dbName := "sample_analytics"
 
 	// restore a database from preprepared dump
 	err := runDockerComposeCommand(
 		"mongorestore",
-		"--dir", filepath.Join("/sample-dumps/", sampleDump),
-		"--db", db.Name(),
+		//"--nsFrom="+dbName+".*",
+		//"--nsTo="+dbName+".*",
+		"--nsInclude", dbName+".*",
 		"--verbose",
-		"mongodb://host.docker.internal:27017/",
+		"--uri", "mongodb://host.docker.internal:27017/",
+		filepath.Join("/sample-dumps/dump/"),
 	)
 	require.NoError(t, err)
 
 	// pre-create directories to avoid permission issues
 	err = os.Chmod(localRoot, 0o777)
 	require.NoError(t, err)
-	err = os.RemoveAll(filepath.Join(localRoot, db.Name()))
+	err = os.RemoveAll(filepath.Join(localRoot, dbName))
 	require.NoError(t, err)
-	err = os.Mkdir(filepath.Join(localRoot, db.Name()), 0o777) // 0o777 is typically downgraded to 0o755 by umask
+	err = os.Mkdir(filepath.Join(localRoot, dbName), 0o777) // 0o777 is typically downgraded to 0o755 by umask
 	require.NoError(t, err)
-	err = os.Chmod(filepath.Join(localRoot, db.Name()), 0o777) // fix after umask
+	err = os.Chmod(filepath.Join(localRoot, dbName), 0o777) // fix after umask
 	require.NoError(t, err)
 
 	// dump a database
 	err = runDockerComposeCommand(
 		"mongodump",
 		"--out", containerRoot,
-		"--db", db.Name(),
+		"--db", dbName,
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
 	)
 	require.NoError(t, err)
 
+	db = db.Client().Database(dbName)
+	expectedState := getDatabaseState(t, ctx, db)
+
 	// cleanup database
-	ctx, db = common.Setup(t)
+	err = db.Drop(ctx)
+	require.NoError(t, err)
 
 	// restore a database based on created dump
 	err = runDockerComposeCommand(
 		"mongorestore",
-		"--dir", filepath.Join(containerRoot, db.Name()),
-		"--db", db.Name(),
+		"--nsInclude", dbName+".*",
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
+		filepath.Join(containerRoot),
 	)
 	require.NoError(t, err)
 
@@ -82,5 +86,5 @@ func TestDumpRestore(t *testing.T) {
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, expectedState, actualState)
 
-	compareDirs(t, filepath.Join("..", "..", "mongodb-sample-databases", sampleDump), filepath.Join(localRoot, db.Name()))
+	compareDirs(t, filepath.Join("..", "..", "mongodb-sample-databases", dbName), filepath.Join(localRoot, db.Name()))
 }
