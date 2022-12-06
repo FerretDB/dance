@@ -100,7 +100,7 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 
 	h.Reset()
 
-	_, err = io.Copy(h, file1)
+	_, err = io.Copy(h, file2)
 	require.NoError(t, err)
 
 	hash2 := h.Sum(nil)
@@ -108,6 +108,8 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 	if assert.Equal(t, hash1, hash2) {
 		return
 	}
+
+	t.Log(file1.Name(), file2.Name())
 
 	content1, err := io.ReadAll(file1)
 	require.NoError(t, err)

@@ -40,6 +40,7 @@ func TestDumpRestore(t *testing.T) {
 		"--nsInclude", dbName+".*",
 		"--verbose",
 		"--uri", "mongodb://host.docker.internal:27017/",
+		"--noIndexRestore",
 		filepath.Join("/sample-dumps/"),
 	)
 	require.NoError(t, err)
