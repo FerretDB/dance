@@ -56,7 +56,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./dumps:/dumps
-      - ./mongodb-sample-databases:/sample-dumps
+      - ./sample-dump:/sample-dumps
 
   # for documentation
   textlint:

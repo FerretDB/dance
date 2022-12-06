@@ -19,7 +19,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/FerretDB/dance/tests/common"
@@ -31,7 +30,7 @@ func TestDumpRestore(t *testing.T) {
 	localRoot := filepath.Join("..", "..", "dumps")
 	containerRoot := "/dumps/"
 
-	dbName := "sample_analytics"
+	dbName := "sample_geospatial"
 
 	// restore a database from preprepared dump
 	err := runDockerComposeCommand(
@@ -41,7 +40,7 @@ func TestDumpRestore(t *testing.T) {
 		"--nsInclude", dbName+".*",
 		"--verbose",
 		"--uri", "mongodb://host.docker.internal:27017/",
-		filepath.Join("/sample-dumps/dump/"),
+		filepath.Join("/sample-dumps/"),
 	)
 	require.NoError(t, err)
 
@@ -84,7 +83,7 @@ func TestDumpRestore(t *testing.T) {
 
 	// get database state after restore
 	actualState := getDatabaseState(t, ctx, db)
-	assert.Equal(t, expectedState, actualState)
+	require.Equal(t, expectedState, actualState)
 
-	compareDirs(t, filepath.Join("..", "..", "mongodb-sample-databases", dbName), filepath.Join(localRoot, db.Name()))
+	compareDirs(t, filepath.Join("..", "..", "sample-dump", dbName), filepath.Join(localRoot, db.Name()))
 }
