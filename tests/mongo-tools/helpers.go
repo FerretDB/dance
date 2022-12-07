@@ -24,6 +24,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -33,6 +34,28 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
+// ...
+func compareDatabaseStates(t *testing.T, expectedState, actualState map[string][]bson.D) {
+	for collection, expectedDocs := range expectedState {
+		actualDocs, ok := actualState[collection]
+		require.True(t, ok)
+
+		// TODO: check for keys with reflect.MapKeys
+
+		for i, expectedDoc := range expectedDocs {
+			for j, actualDoc := range actualDocs {
+				// TODO: compare order vvv
+				if reflect.DeepEqual(expectedDoc.Map(), actualDoc.Map()) {
+					// print expected document if not equal
+					require.Equal(t, i, j, "Document order doesn't match: ", i, j)
+					break
+				}
+			}
+			//t.Fatalf()
+		}
+	}
+}
 
 // runDockerComposeCommand runs command with args inside mongosh container.
 func runDockerComposeCommand(command string, args ...string) error {

@@ -1,1 +1,1 @@
-{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"ab8681db1a7340bebae6c4b15b331f1d","collectionName":"shipwrecks","type":"collection"}
+{"indexes":[{"v":{"$numberDouble":"2.0"},"key":{"_id":{"$numberDouble":"1.0"}},"name":"_id_"}],"collectionName":"shipwrecks","type":"collection"}

@@ -77,7 +77,7 @@ func TestDumpRestore(t *testing.T) {
 	err = db.Drop(ctx)
 	require.NoError(t, err)
 
-	// restore a database based on created dump
+	//// restore a database based on created dump
 	err = runDockerComposeCommand(
 		"mongorestore",
 		"--nsInclude", dbName+".*",
@@ -91,7 +91,71 @@ func TestDumpRestore(t *testing.T) {
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, len(expectedState), len(actualState))
 
-	require.Equal(t, expectedState, actualState)
+	compareDatabaseStates(t, expectedState, actualState)
 
 	compareDirs(t, filepath.Join("..", "..", "sample-dump", dbName), filepath.Join(localRoot, db.Name()))
 }
+
+// #
+// - data restored from mongodb is the same in ferretdb
+//   - NOTE: the order of documents may be different
+//   - because of that, the dump file differs
+//
+// - dump file from ferretdb is the same every time on the same database
+//   - that would prove that dumping/restoring process is correct
+
+// To make sure that above requirements are met we want to (step by step):
+// - restore the data from the prepared dump
+// - get the current database state (from mongo driver)
+// - dump the data
+// - drop the database and restore from a last dump
+// - compare current state of database with the previous one <- proves that the restoring and dumping process works **on restored data from prepared dump that COULD be invalid**
+// - compare old dump file with a new one <- proves that the first restore was for sure valid (it didn't omit any data)
+
+// TODO: make a note about 3yo json dumps
+
+// if we need to compare mongodb data to ferretdb data we need to:
+// (let's remember that dump file from mongodb is a source of truth in case of data consistency)
+// - restore prepared dump
+// - dump it again
+// - compare dumps (if they're the same, the data is either
+//
+// comparing data with mongo driver after the first restore and the second one is not sufficient, because
+// it will allow data inconcistency on the first dump and compare the INVALID data with the second dump
+//
+// The above approach is not possible, due to ferretdb documents order (which is for now different than mongodb and I'm not sure do we have fixing that in plans)
+// - to resolve this issue, we need another source of truth for FerretDB
+// - we know that FerretDB dump will store documents in the same order
+// - so if we somehow prepare FerretDB dump that is valid with mongodb dump, we are sure that everything is proceed correctly
+// - this, is possible by manually running tests on mongodb dump and ferretdb dump of the mongodb dump and storing both of them in sample directory.
+//   - the data is restored from mongodb dump
+//   - expectedState value is set to database state after mongodb dump
+//   - we clear the db
+//   - the data is restored from ferretdb dump
+//   - actualState value is set to database state after ferretdb dump
+//   - we compare both of states
+//   - they are not the same because of different order of documents in collections
+//   - to prove above sentence the test is running inefficient o(n2) loops that checks if the specified document occures in a same collection at the same index
+//     - if it is, then we are sure that the order for specified documents sequence is the same
+//	   - if it has a different index then we now that the document exists in collection but the order is not the same as in mongo,
+//     - if one of above statements is correct, that means that the data in ferretdb dump is the same as in mongodb and it differs ONLY
+//     by an order.
+
+// First step: seed the data
+// - use db specific dump file
+
+// First step: seed the data
+// - Find an existent dump file [a b c]
+// - Call restore for that file [a b c] != [a x c]
+// Result: DB state seed [ a x c ]
+// -----
+// Second step: check if the dumps of FerretDB itself are idempotent
+// Dump1
+// Restore1
+// Result: DB state 1
+// Dump2
+// Restore2
+// Result: DB state 2
+// Compare Dump1 == Dump2
+// Compare DB state 1 == DB state 2
+// DB state seed == DB state 1 ???
