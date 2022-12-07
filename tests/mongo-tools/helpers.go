@@ -128,10 +128,11 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 // compareDirs compares two directories and their files recursively.
 func compareDirs(t *testing.T, dir1, dir2 string) {
 	err := filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
+		assert.NoError(t, err)
 		comparePath := strings.Replace(path, dir1, dir2, 1)
 
 		if d.IsDir() {
-			_, err := os.Stat(comparePath)
+			_, err = os.Stat(comparePath)
 			assert.NoError(t, err)
 			return nil
 		}
@@ -149,6 +150,5 @@ func compareDirs(t *testing.T, dir1, dir2 string) {
 		compareFiles(t, file1, file2)
 		return nil
 	})
-
 	require.NoError(t, err)
 }
