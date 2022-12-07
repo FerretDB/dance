@@ -2,6 +2,3 @@
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
-[submodule "mongodb-sample-databases"]
-	path = mongodb-sample-databases
-	url = https://github.com/mcampo2/mongodb-sample-databases
