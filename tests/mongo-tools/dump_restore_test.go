@@ -15,6 +15,7 @@
 package mongotools
 
 import (
+	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
@@ -31,9 +32,14 @@ func TestDumpRestore(t *testing.T) {
 	containerRoot := "/dumps/"
 
 	dbName := "sample_geospatial"
+	db = db.Client().Database(dbName)
+
+	// cleanup database
+	err := db.Drop(ctx)
+	require.NoError(t, err)
 
 	// restore a database from preprepared dump
-	err := runDockerComposeCommand(
+	err = runDockerComposeCommand(
 		"mongorestore",
 		//"--nsFrom="+dbName+".*",
 		//"--nsTo="+dbName+".*",
@@ -44,6 +50,8 @@ func TestDumpRestore(t *testing.T) {
 		filepath.Join("/sample-dumps/"),
 	)
 	require.NoError(t, err)
+
+	expectedState := getDatabaseState(t, ctx, db)
 
 	// pre-create directories to avoid permission issues
 	err = os.Chmod(localRoot, 0o777)
@@ -65,9 +73,6 @@ func TestDumpRestore(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	db = db.Client().Database(dbName)
-	expectedState := getDatabaseState(t, ctx, db)
-
 	// cleanup database
 	err = db.Drop(ctx)
 	require.NoError(t, err)
@@ -84,6 +89,8 @@ func TestDumpRestore(t *testing.T) {
 
 	// get database state after restore
 	actualState := getDatabaseState(t, ctx, db)
+	assert.Equal(t, len(expectedState), len(actualState))
+
 	require.Equal(t, expectedState, actualState)
 
 	compareDirs(t, filepath.Join("..", "..", "sample-dump", dbName), filepath.Join(localRoot, db.Name()))
