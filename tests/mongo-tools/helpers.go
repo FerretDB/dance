@@ -56,8 +56,8 @@ func runDockerComposeCommand(command string, args ...string) error {
 	return nil
 }
 
-// getDatabaseState gets all documents from each collection in provided database and puts
-// them into a map keyed with collection names.
+// getDatabaseState gets all documents from each collection in provided database,
+//sorts them by _id and puts into a map keyed with collection names.
 func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
 	dbState := make(map[string][]bson.D)
 

@@ -28,8 +28,11 @@ import (
 func TestDumpRestore(t *testing.T) {
 	ctx, db := common.Setup(t)
 
-	localRoot := filepath.Join("..", "..", "dumps")
-	containerRoot := "/dumps/"
+	localActualPath := filepath.Join("..", "..", "dumps", "actual")
+	containerActualPath := "/dumps/"
+
+	localExpectedPath := filepath.Join("..", "..", "dumps", "expected")
+	containerExpectedPath := "/sample-dumps/"
 
 	dbName := "sample_geospatial"
 	db = db.Client().Database(dbName)
@@ -45,26 +48,26 @@ func TestDumpRestore(t *testing.T) {
 		"--verbose",
 		"--uri", "mongodb://host.docker.internal:27017/",
 		"--noIndexRestore",
-		filepath.Join("/sample-dumps/"),
+		containerExpectedPath,
 	)
 	require.NoError(t, err)
 
 	expectedState := getDatabaseState(t, ctx, db)
 
 	// pre-create directories to avoid permission issues
-	err = os.Chmod(localRoot, 0o777)
+	err = os.Chmod(localActualPath, 0o777)
 	require.NoError(t, err)
-	err = os.RemoveAll(filepath.Join(localRoot, dbName))
+	err = os.RemoveAll(filepath.Join(localActualPath, dbName))
 	require.NoError(t, err)
-	err = os.Mkdir(filepath.Join(localRoot, dbName), 0o777) // 0o777 is typically downgraded to 0o755 by umask
+	err = os.Mkdir(filepath.Join(localActualPath, dbName), 0o777) // 0o777 is typically downgraded to 0o755 by umask
 	require.NoError(t, err)
-	err = os.Chmod(filepath.Join(localRoot, dbName), 0o777) // fix after umask
+	err = os.Chmod(filepath.Join(localActualPath, dbName), 0o777) // fix after umask
 	require.NoError(t, err)
 
 	// dump a database
 	err = runDockerComposeCommand(
 		"mongodump",
-		"--out", containerRoot,
+		"--out", containerActualPath,
 		"--db", dbName,
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
@@ -81,7 +84,7 @@ func TestDumpRestore(t *testing.T) {
 		"--nsInclude", dbName+".*",
 		"--verbose",
 		"mongodb://host.docker.internal:27017/",
-		filepath.Join(containerRoot),
+		containerActualPath,
 	)
 	require.NoError(t, err)
 
@@ -92,5 +95,5 @@ func TestDumpRestore(t *testing.T) {
 	assert.Equal(t, expectedState, actualState)
 
 	// compare dump files and
-	compareDirs(t, filepath.Join("..", "..", "sample-dump", dbName), filepath.Join(localRoot, db.Name()))
+	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName))
 }

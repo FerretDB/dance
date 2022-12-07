@@ -55,8 +55,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./dumps:/dumps
-      - ./sample-dump:/sample-dumps
+      - ./dumps/actual:/dumps
+      - ./dumps/expected:/sample-dumps
 
   # for documentation
   textlint:
