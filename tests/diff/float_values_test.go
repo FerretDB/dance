@@ -45,7 +45,7 @@ func TestFloatValues(t *testing.T) {
 					Message: `wire.OpMsg.Document: validation failed for { _id: "1", foo: nan.0 } with: NaN is not supported`,
 				},
 			},
-			"Inf": {
+			"NegativeZero": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}},
 				expected: mongo.CommandError{
 					Code:    2,
@@ -75,4 +75,14 @@ func TestFloatValues(t *testing.T) {
 			})
 		}
 	})
+
+	// TODO https://github.com/FerretDB/dance/issues/266
+	/*t.Run("Update", func(t *testing.T) {
+
+	})*/
+
+	// TODO https://github.com/FerretDB/dance/issues/266
+	/*t.Run("FindAndModify", func(t *testing.T) {
+
+	})*/
 }
