@@ -24,7 +24,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
 
@@ -35,28 +34,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-// ...
-func compareDatabaseStates(t *testing.T, expectedState, actualState map[string][]bson.D) {
-	for collection, expectedDocs := range expectedState {
-		actualDocs, ok := actualState[collection]
-		require.True(t, ok)
-
-		// TODO: check for keys with reflect.MapKeys
-
-		for i, expectedDoc := range expectedDocs {
-			for j, actualDoc := range actualDocs {
-				// TODO: compare order vvv
-				if reflect.DeepEqual(expectedDoc.Map(), actualDoc.Map()) {
-					// print expected document if not equal
-					require.Equal(t, i, j, "Document order doesn't match: ", i, j)
-					break
-				}
-			}
-			//t.Fatalf()
-		}
-	}
-}
 
 // runDockerComposeCommand runs command with args inside mongosh container.
 func runDockerComposeCommand(command string, args ...string) error {
@@ -113,6 +90,8 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 	return dbState
 }
 
+// compareFiles takes two files and checks if they have a same content.
+// If they don't, it prints a short diff view.
 func compareFiles(t *testing.T, file1, file2 *os.File) {
 	t.Helper()
 	h := sha256.New()
@@ -129,11 +108,10 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 
 	hash2 := h.Sum(nil)
 
-	if assert.Equal(t, hash1, hash2) {
+	// compare hashes of both files
+	if assert.Equal(t, hash1, hash2, "Checksum of following files is different:", file1.Name(), file2.Name()) {
 		return
 	}
-
-	t.Log(file1.Name(), file2.Name())
 
 	content1, err := io.ReadAll(file1)
 	require.NoError(t, err)
@@ -147,8 +125,9 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 	)
 }
 
-func compareDirs(t *testing.T, dir1 string, dir2 string) {
-	filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
+// compareDirs compares two directories and their files recursively.
+func compareDirs(t *testing.T, dir1, dir2 string) {
+	err := filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
 		comparePath := strings.Replace(path, dir1, dir2, 1)
 
 		if d.IsDir() {
@@ -159,12 +138,16 @@ func compareDirs(t *testing.T, dir1 string, dir2 string) {
 		file1, err := os.OpenFile(path, os.O_RDONLY, 0o666)
 		require.NoError(t, err)
 
-		// assume that dir2 has the file
+		defer file1.Close()
+
 		file2, err := os.OpenFile(comparePath, os.O_RDONLY, 0o666)
 		assert.NoError(t, err)
 
-		compareFiles(t, file1, file2)
+		defer file2.Close()
 
+		compareFiles(t, file1, file2)
 		return nil
 	})
+
+	require.NoError(t, err)
 }

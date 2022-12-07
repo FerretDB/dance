@@ -38,11 +38,9 @@ func TestDumpRestore(t *testing.T) {
 	err := db.Drop(ctx)
 	require.NoError(t, err)
 
-	// restore a database from preprepared dump
+	// restore a database from a sample dump
 	err = runDockerComposeCommand(
 		"mongorestore",
-		//"--nsFrom="+dbName+".*",
-		//"--nsTo="+dbName+".*",
 		"--nsInclude", dbName+".*",
 		"--verbose",
 		"--uri", "mongodb://host.docker.internal:27017/",
@@ -77,7 +75,7 @@ func TestDumpRestore(t *testing.T) {
 	err = db.Drop(ctx)
 	require.NoError(t, err)
 
-	//// restore a database based on created dump
+	// restore a database based on created dump
 	err = runDockerComposeCommand(
 		"mongorestore",
 		"--nsInclude", dbName+".*",
@@ -87,11 +85,12 @@ func TestDumpRestore(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	// get database state after restore
+	// get database state after restore and compare it
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, len(expectedState), len(actualState))
 
-	compareDatabaseStates(t, expectedState, actualState)
+	assert.Equal(t, expectedState, actualState)
 
+	// compare dump files and
 	compareDirs(t, filepath.Join("..", "..", "sample-dump", dbName), filepath.Join(localRoot, db.Name()))
 }
