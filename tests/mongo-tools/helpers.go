@@ -57,7 +57,7 @@ func runDockerComposeCommand(command string, args ...string) error {
 }
 
 // getDatabaseState gets all documents from each collection in provided database,
-//sorts them by _id and puts into a map keyed with collection names.
+// sorts them by _id and puts into a map keyed with collection names.
 func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
 	dbState := make(map[string][]bson.D)
 
@@ -131,7 +131,8 @@ func compareDirs(t *testing.T, dir1, dir2 string) {
 		comparePath := strings.Replace(path, dir1, dir2, 1)
 
 		if d.IsDir() {
-			// TODO check if both contains dir
+			_, err := os.Stat(comparePath)
+			assert.NoError(t, err)
 			return nil
 		}
 

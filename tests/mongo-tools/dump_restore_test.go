@@ -15,10 +15,11 @@
 package mongotools
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/stretchr/testify/require"
 
@@ -90,8 +91,6 @@ func TestDumpRestore(t *testing.T) {
 
 	// get database state after restore and compare it
 	actualState := getDatabaseState(t, ctx, db)
-	assert.Equal(t, len(expectedState), len(actualState))
-
 	assert.Equal(t, expectedState, actualState)
 
 	// compare dump files and
