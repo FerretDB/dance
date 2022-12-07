@@ -33,6 +33,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // ...
@@ -100,7 +101,7 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 	}
 
 	for _, coll := range collections {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
+		cur, err := db.Collection(coll).Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 		require.NoError(t, err)
 
 		var res []bson.D
