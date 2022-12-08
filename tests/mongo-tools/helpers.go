@@ -110,7 +110,7 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 	hash2 := h.Sum(nil)
 
 	// compare hashes of both files
-	if assert.Equal(t, hash1, hash2, "Checksum of following files is different:", file1.Name(), file2.Name()) {
+	if assert.Equal(t, hash1, hash2, "Checksums of following files are different:", file1.Name(), file2.Name()) {
 		return
 	}
 
