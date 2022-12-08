@@ -24,6 +24,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -126,10 +127,23 @@ func compareFiles(t *testing.T, file1, file2 *os.File) {
 }
 
 // compareDirs compares two directories and their files recursively.
-func compareDirs(t *testing.T, dir1, dir2 string) {
+// It ignores paths based on regex expressions under ignorePathRegs.
+func compareDirs(t *testing.T, dir1, dir2 string, ignorePathRegs ...string) {
+	var regexps []*regexp.Regexp
+	for _, reg := range ignorePathRegs {
+		regexps = append(regexps, regexp.MustCompile(reg))
+	}
+
 	err := filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
 		assert.NoError(t, err)
 		comparePath := strings.Replace(path, dir1, dir2, 1)
+
+		// skip all ignored paths
+		for _, reg := range regexps {
+			if reg.MatchString(path) {
+				return nil
+			}
+		}
 
 		if d.IsDir() {
 			_, err = os.Stat(comparePath)
