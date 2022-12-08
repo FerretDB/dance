@@ -92,6 +92,6 @@ func TestDumpRestore(t *testing.T) {
 	actualState := getDatabaseState(t, ctx, db)
 	assert.Equal(t, expectedState, actualState)
 
-	// compare dump files and
+	// compare dump files
 	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), "*.metadata.json")
 }
