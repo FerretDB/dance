@@ -60,9 +60,9 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 14
+      expected_fail: 13
       expected_skip: 14
-      expected_pass: 608
+      expected_pass: 609
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
@@ -70,6 +70,7 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
@@ -87,7 +88,6 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
       # query array inconsistencies
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
 
       # # projection https://github.com/FerretDB/FerretDB/issues/80
