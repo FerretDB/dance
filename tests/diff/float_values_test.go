@@ -40,17 +40,19 @@ func TestFloatValues(t *testing.T) {
 			"NaN": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.NaN()}},
 				expected: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { _id: "1", foo: nan.0 } with: NaN is not supported`,
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { insert: "insert-NaN", ordered: true, ` +
+						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
 				},
 			},
 			"NegativeZero": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}},
 				expected: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { _id: "1", foo: -0.0 } with: -0 is not supported`,
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { insert: "insert-NegativeZero", ordered: true, ` +
+						`$db: "testfloatvalues", documents: [ { _id: "1", foo: -0.0 } ] } with: -0 is not supported`,
 				},
 			},
 		} {
