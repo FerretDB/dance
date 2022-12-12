@@ -141,6 +141,7 @@ func compareDirs(t *testing.T, dir1, dir2 string, ignorePathRegs ...string) {
 		// skip all ignored paths
 		for _, reg := range regexps {
 			if reg.MatchString(path) {
+				t.Logf("Skipping comparison of %s", path)
 				return nil
 			}
 		}
