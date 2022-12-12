@@ -29,10 +29,10 @@ func TestDumpRestore(t *testing.T) {
 	ctx, db := common.Setup(t)
 
 	localActualPath := filepath.Join("..", "..", "dumps", "actual")
-	containerActualPath := "/dumps/"
+	containerActualPath := "/dumps/actual"
 
 	localExpectedPath := filepath.Join("..", "..", "dumps", "expected")
-	containerExpectedPath := "/sample-dumps/"
+	containerExpectedPath := "/dumps/expected"
 
 	dbName := "sample_geospatial"
 	db = db.Client().Database(dbName)
