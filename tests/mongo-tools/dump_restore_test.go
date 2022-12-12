@@ -28,14 +28,14 @@ import (
 func TestDumpRestore(t *testing.T) {
 	ctx, db := common.Setup(t)
 
-	localActualPath := filepath.Join("..", "..", "dumps", "actual")
-	containerActualPath := "/dumps/actual"
-
-	localExpectedPath := filepath.Join("..", "..", "dumps", "expected")
-	containerExpectedPath := "/dumps/expected"
-
 	dbName := "sample_geospatial"
 	db = db.Client().Database(dbName)
+
+	localActualPath := filepath.Join("..", "..", "dumps", "actual")
+	containerActualPath := filepath.Join("/dumps", "actual")
+
+	containerExpectedPath := filepath.Join("/dumps", "mongodb-sample-databases", "dump")
+	localExpectedPath := filepath.Join("..", "..", containerExpectedPath)
 
 	// cleanup database
 	err := db.Drop(ctx)
