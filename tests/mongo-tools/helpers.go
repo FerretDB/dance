@@ -128,6 +128,9 @@ func compareFiles(t *testing.T, path, comparePath string) {
 		return
 	}
 
+	_, err = file1.Seek(0, io.SeekStart)
+	require.NoError(t, err)
+
 	content1, err := io.ReadAll(file1)
 	require.NoError(t, err)
 
@@ -166,7 +169,7 @@ func compareDirs(t *testing.T, dir1, dir2 string, ignorePathRegs ...string) {
 			return nil
 		}
 
-		compareFiles(t, file1, file2)
+		compareFiles(t, path, comparePath)
 		return nil
 	})
 	require.NoError(t, err)
