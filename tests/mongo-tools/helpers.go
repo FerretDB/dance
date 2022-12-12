@@ -97,7 +97,7 @@ func compareFiles(t *testing.T, path, comparePath string) {
 	t.Helper()
 	h := sha256.New()
 
-	file1, err := os.OpenFile(path, os.O_RDONLY, 0o666)
+	file1, err := os.Open(path)
 	require.NoError(t, err)
 
 	defer file1.Close()
@@ -106,7 +106,7 @@ func compareFiles(t *testing.T, path, comparePath string) {
 		return
 	}
 
-	file2, err := os.OpenFile(comparePath, os.O_RDONLY, 0o666)
+	file2, err := os.Open(comparePath)
 	require.NoError(t, err)
 
 	defer file2.Close()
