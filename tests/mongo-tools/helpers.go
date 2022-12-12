@@ -102,7 +102,7 @@ func compareFiles(t *testing.T, path, comparePath string) {
 
 	defer file1.Close()
 
-	if assert.FileExists(t, comparePath) {
+	if !assert.FileExists(t, comparePath) {
 		return
 	}
 
@@ -137,10 +137,15 @@ func compareFiles(t *testing.T, path, comparePath string) {
 	content2, err := io.ReadAll(file2)
 	require.NoError(t, err)
 
-	difflib.NewMatcher(
-		difflib.SplitLines(string(content1)),
-		difflib.SplitLines(string(content2)),
-	)
+	diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
+		A:        difflib.SplitLines(string(content1)),
+		FromFile: path,
+		B:        difflib.SplitLines(string(content2)),
+		ToFile:   comparePath,
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, diff)
+	//t.Log(diff)
 }
 
 // compareDirs compares two directories and their files recursively.
