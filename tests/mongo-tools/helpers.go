@@ -91,13 +91,27 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 	return dbState
 }
 
-// compareFiles takes two files and checks if they have a same content.
+// compareFiles takes two file paths and checks if they have the same content.
 // If they don't, it prints a short diff view.
-func compareFiles(t *testing.T, file1, file2 *os.File) {
+func compareFiles(t *testing.T, path, comparePath string) {
 	t.Helper()
 	h := sha256.New()
 
-	_, err := io.Copy(h, file1)
+	file1, err := os.OpenFile(path, os.O_RDONLY, 0o666)
+	require.NoError(t, err)
+
+	defer file1.Close()
+
+	if assert.FileExists(t, comparePath) {
+		return
+	}
+
+	file2, err := os.OpenFile(comparePath, os.O_RDONLY, 0o666)
+	require.NoError(t, err)
+
+	defer file2.Close()
+
+	_, err = io.Copy(h, file1)
 	require.NoError(t, err)
 
 	hash1 := h.Sum(nil)
@@ -151,16 +165,6 @@ func compareDirs(t *testing.T, dir1, dir2 string, ignorePathRegs ...string) {
 			assert.NoError(t, err)
 			return nil
 		}
-
-		file1, err := os.OpenFile(path, os.O_RDONLY, 0o666)
-		require.NoError(t, err)
-
-		defer file1.Close()
-
-		file2, err := os.OpenFile(comparePath, os.O_RDONLY, 0o666)
-		assert.NoError(t, err)
-
-		defer file2.Close()
 
 		compareFiles(t, file1, file2)
 		return nil
