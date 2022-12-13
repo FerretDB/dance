@@ -2,3 +2,7 @@
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
+[submodule "mongo"]
+	path = tests/mongo
+	url = https://github.com/mongodb/mongo.git
+	branch = master
