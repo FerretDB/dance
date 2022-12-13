@@ -37,11 +37,10 @@ func TestDumpRestore(t *testing.T) {
 	localActualPath := filepath.Join("..", "..", "dumps", "actual")
 	containerActualPath := filepath.Join("/dumps", "actual")
 
-	containerExpectedPath := filepath.Join("/dumps", "expected", "dump")
+	containerExpectedPath := filepath.Join("/dumps", "expected")
 	localExpectedPath := filepath.Join("..", "..", containerExpectedPath)
 
 	containerSourcePath := filepath.Join("/dumps", "mongodb-sample-databases", "dump")
-	localSourcePath := filepath.Join("..", "..", containerSourcePath)
 
 	// pre-create directories to avoid permission issues
 	err = os.Chmod(localActualPath, 0o777)
@@ -65,7 +64,7 @@ func TestDumpRestore(t *testing.T) {
 	require.NoError(t, err)
 
 	// restore a database from a sample dump
-	mongorestore(t, dbName, localSourcePath)
+	mongorestore(t, dbName, containerSourcePath)
 
 	expectedState := getDatabaseState(t, ctx, db)
 
