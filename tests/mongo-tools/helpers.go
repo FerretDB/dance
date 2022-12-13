@@ -28,7 +28,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -92,7 +91,6 @@ func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map
 }
 
 // compareFiles takes two file paths and checks if they have the same content.
-// If they don't, it prints a short diff view.
 func compareFiles(t *testing.T, path, comparePath string) {
 	t.Helper()
 	h := sha256.New()
@@ -137,15 +135,7 @@ func compareFiles(t *testing.T, path, comparePath string) {
 	content2, err := io.ReadAll(file2)
 	require.NoError(t, err)
 
-	diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
-		A:        difflib.SplitLines(string(content1)),
-		FromFile: path,
-		B:        difflib.SplitLines(string(content2)),
-		ToFile:   comparePath,
-	})
-	require.NoError(t, err)
-	require.NotEmpty(t, diff)
-	//t.Log(diff)
+	require.Equal(t, content1, content2)
 }
 
 // compareDirs compares two directories and their files recursively.

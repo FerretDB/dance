@@ -90,6 +90,9 @@ func TestDumpRestore(t *testing.T) {
 	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), `\\*.metadata.json`)
 }
 
+// mongorestore runs mongorestore utility to restore specified db from the dump
+// stored in provided path on docker container.
+// In case of any error it fails the test.
 func mongorestore(t *testing.T, db, path string) {
 	err := runDockerComposeCommand(
 		"mongorestore",
@@ -102,6 +105,9 @@ func mongorestore(t *testing.T, db, path string) {
 	require.NoError(t, err)
 }
 
+// mongodump runs mongodump utility to dump specified db and stores
+// it in provided path on docker container.
+// In case of any error it fails the test.
 func mongodump(t *testing.T, db, path string) {
 	err := runDockerComposeCommand(
 		"mongodump",
