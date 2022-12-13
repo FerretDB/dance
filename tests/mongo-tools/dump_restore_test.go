@@ -19,9 +19,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/FerretDB/dance/tests/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDumpRestore(t *testing.T) {
