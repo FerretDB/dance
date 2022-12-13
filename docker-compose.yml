@@ -57,6 +57,18 @@ services:
     volumes:
       - ./dumps:/dumps
 
+  mongo:
+    build:
+      dockerfile: mongo.Dockerfile
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # TODO: volumes - test them.
+    volumes:
+      - ./tests/mongo:/mongo
+
   # for documentation
   textlint:
     build:
