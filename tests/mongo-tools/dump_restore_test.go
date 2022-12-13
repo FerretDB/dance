@@ -30,62 +30,56 @@ func TestDumpRestore(t *testing.T) {
 	dbName := "sample_geospatial"
 	db = db.Client().Database(dbName)
 
-	localActualPath := filepath.Join("..", "..", "dumps", "actual")
-	containerActualPath := filepath.Join("/dumps", "actual")
-
-	containerExpectedPath := filepath.Join("/dumps", "mongodb-sample-databases", "dump")
-	localExpectedPath := filepath.Join("..", "..", containerExpectedPath)
-
 	// cleanup database
 	err := db.Drop(ctx)
 	require.NoError(t, err)
 
-	// restore a database from a sample dump
-	err = runDockerComposeCommand(
-		"mongorestore",
-		"--nsInclude", dbName+".*",
-		"--verbose",
-		"--uri", "mongodb://host.docker.internal:27017/",
-		"--noIndexRestore",
-		containerExpectedPath,
-	)
-	require.NoError(t, err)
+	localActualPath := filepath.Join("..", "..", "dumps", "actual")
+	containerActualPath := filepath.Join("/dumps", "actual")
 
-	expectedState := getDatabaseState(t, ctx, db)
+	containerExpectedPath := filepath.Join("/dumps", "expected", "dump")
+	localExpectedPath := filepath.Join("..", "..", containerExpectedPath)
+
+	containerSourcePath := filepath.Join("/dumps", "mongodb-sample-databases", "dump")
+	localSourcePath := filepath.Join("..", "..", containerSourcePath)
 
 	// pre-create directories to avoid permission issues
 	err = os.Chmod(localActualPath, 0o777)
 	require.NoError(t, err)
+	err = os.Chmod(localExpectedPath, 0o777)
+	require.NoError(t, err)
+
 	err = os.RemoveAll(filepath.Join(localActualPath, dbName))
 	require.NoError(t, err)
+	err = os.RemoveAll(filepath.Join(localExpectedPath, dbName))
+	require.NoError(t, err)
+
 	err = os.Mkdir(filepath.Join(localActualPath, dbName), 0o777) // 0o777 is typically downgraded to 0o755 by umask
 	require.NoError(t, err)
+	err = os.Mkdir(filepath.Join(localExpectedPath, dbName), 0o777)
+	require.NoError(t, err)
+
 	err = os.Chmod(filepath.Join(localActualPath, dbName), 0o777) // fix after umask
 	require.NoError(t, err)
-
-	// dump a database
-	err = runDockerComposeCommand(
-		"mongodump",
-		"--out", containerActualPath,
-		"--db", dbName,
-		"--verbose",
-		"mongodb://host.docker.internal:27017/",
-	)
+	err = os.Chmod(filepath.Join(localExpectedPath, dbName), 0o777)
 	require.NoError(t, err)
+
+	// restore a database from a sample dump
+	mongorestore(t, dbName, localSourcePath)
+
+	expectedState := getDatabaseState(t, ctx, db)
+
+	// "bootstrap" the expected dump from restored database
+	mongodump(t, dbName, containerExpectedPath)
 
 	// cleanup database
-	err = db.Drop(ctx)
-	require.NoError(t, err)
+	require.NoError(t, db.Drop(ctx))
 
-	// restore a database based on created dump
-	err = runDockerComposeCommand(
-		"mongorestore",
-		"--nsInclude", dbName+".*",
-		"--verbose",
-		"mongodb://host.docker.internal:27017/",
-		containerActualPath,
-	)
-	require.NoError(t, err)
+	// restore a database from the expected dump
+	mongorestore(t, dbName, containerExpectedPath)
+
+	// dump a database
+	mongodump(t, dbName, containerActualPath)
 
 	// get database state after restore and compare it
 	actualState := getDatabaseState(t, ctx, db)
@@ -94,4 +88,27 @@ func TestDumpRestore(t *testing.T) {
 	// compare dump files. Metadata files are not compared because they
 	// contain different uuid field on every dump
 	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), `\\*.metadata.json`)
+}
+
+func mongorestore(t *testing.T, db, path string) {
+	err := runDockerComposeCommand(
+		"mongorestore",
+		"--nsInclude", db+".*",
+		"--noIndexRestore",
+		"--verbose",
+		"mongodb://host.docker.internal:27017/",
+		path,
+	)
+	require.NoError(t, err)
+}
+
+func mongodump(t *testing.T, db, path string) {
+	err := runDockerComposeCommand(
+		"mongodump",
+		"--db", db,
+		"--out", path,
+		"--verbose",
+		"mongodb://host.docker.internal:27017/",
+	)
+	require.NoError(t, err)
 }
