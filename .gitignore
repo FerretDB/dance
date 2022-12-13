@@ -1,4 +1,5 @@
 /bin/
 /dumps/actual/
+/dumps/expected/
 /vendor/
 cover.txt
