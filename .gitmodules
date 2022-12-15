@@ -6,6 +6,7 @@
 	path = tests/mongo
 	url = https://github.com/mongodb/mongo.git
 	branch = master
-[submodule "dumps/mongodb-sample-databases"]
+[submodule "mongodb-sample-databases"]
 	path = dumps/mongodb-sample-databases
-	url = https://github.com/mcampo2/mongodb-sample-databases
+	url = https://github.com/mcampo2/mongodb-sample-databases.git
+	branch = master
