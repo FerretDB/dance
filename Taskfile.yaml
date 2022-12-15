@@ -61,9 +61,15 @@ tasks:
   lint:
     desc: "Run linters"
     cmds:
-      - bin/golangci-lint run --config=.golangci.yml
-      - bin/golangci-lint run --config=.golangci-new.yml --new-from-rev=main
-      - bin/go-consistent -pedantic ./cmd/... ./internal/...
+      - >
+        bin/golangci-lint run --config=.golangci.yml
+        ./cmd/... ./internal/... ./tests/diff/... ./tests/mongo-tools/...
+      - >
+        bin/golangci-lint run --config=.golangci-new.yml
+        ./cmd/... ./internal/... ./tests/diff/... ./tests/mongo-tools/...
+      - >
+        bin/go-consistent -pedantic
+        ./cmd/... ./internal/... ./tests/diff/... ./tests/mongo-tools/...
 
   psql:
     desc: "Run psql"
