@@ -1,6 +1,6 @@
 ---
 runner: gotest
-args: ["-timeout=2m", "-shuffle=on", "-race", "./..."]
+args: ["-timeout=3m", "-shuffle=on", "-race", "./..."]
 
 results:
   common:
