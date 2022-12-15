@@ -87,7 +87,7 @@ func TestDumpRestore(t *testing.T) {
 
 	// compare dump files. Metadata files are not compared because they
 	// contain different uuid field on every dump
-	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), `\\*.metadata.json`)
+	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), "*.metadata.json")
 }
 
 // mongorestore runs mongorestore utility to restore specified db from the dump

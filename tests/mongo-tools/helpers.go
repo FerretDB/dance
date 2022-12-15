@@ -24,7 +24,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 
@@ -126,7 +125,13 @@ func compareFiles(t *testing.T, path, comparePath string) {
 		return
 	}
 
+	// reset file offsets and compares the content of both of them to show
+	// a more detailed output
+
 	_, err = file1.Seek(0, io.SeekStart)
+	require.NoError(t, err)
+
+	_, err = file2.Seek(0, io.SeekStart)
 	require.NoError(t, err)
 
 	content1, err := io.ReadAll(file1)
@@ -139,20 +144,22 @@ func compareFiles(t *testing.T, path, comparePath string) {
 }
 
 // compareDirs compares two directories and their files recursively.
-// It ignores paths based on regex expressions under ignorePathRegs.
-func compareDirs(t *testing.T, dir1, dir2 string, ignorePathRegs ...string) {
-	var regexps []*regexp.Regexp
-	for _, reg := range ignorePathRegs {
-		regexps = append(regexps, regexp.MustCompile(reg))
-	}
-
+// It ignores files based on globs provided in ignoredFiles.
+func compareDirs(t *testing.T, dir1, dir2 string, ignoredFiles ...string) {
 	err := filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
-		assert.NoError(t, err)
+		if err != nil {
+			return err
+		}
+
 		comparePath := strings.Replace(path, dir1, dir2, 1)
 
 		// skip all ignored paths
-		for _, reg := range regexps {
-			if reg.MatchString(path) {
+		for _, pattern := range ignoredFiles {
+			var ignore bool
+			ignore, err = filepath.Match(pattern, d.Name())
+			require.NoError(t, err)
+
+			if ignore {
 				t.Logf("Skipping comparison of %s", path)
 				return nil
 			}
