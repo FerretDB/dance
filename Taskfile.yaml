@@ -74,6 +74,7 @@ tasks:
     desc: "Run legacy mongo shell"
     cmds:
       - docker compose run --rm mongo mongo mongodb://host.docker.internal:27017/ {{.CLI_ARGS}}
+
   mongosh:
     desc: "Run mongo shell"
     cmds:
