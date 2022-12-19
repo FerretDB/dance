@@ -70,11 +70,10 @@ tasks:
     cmds:
       - docker compose exec postgres psql -U postgres -d ferretdb
 
-  # TODO use -- and pass jstest files as an argument.
   mongo:
-    desc: "Run mongo legacy shell"
+    desc: "Run legacy mongo shell"
     cmds:
-      - docker compose run --rm mongo mongo mongodb://host.docker.internal:27017/ --verbose
+      - docker compose run --rm mongo mongo mongodb://host.docker.internal:27017/ {{.CLI_ARGS}}
   mongosh:
     desc: "Run mongo shell"
     cmds:
