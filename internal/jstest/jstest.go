@@ -21,11 +21,13 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/FerretDB/dance/internal"
 )
 
 const uri = "mongodb://host.docker.internal:27017"
 
-func Run(ctx context.Context, args []string) error {
+func Run(ctx context.Context, args []string) *internal.TestResults {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -36,7 +38,21 @@ func Run(ctx context.Context, args []string) error {
 		}
 	}
 
-	return runCommand("mongo", uri, strings.Join(files, " "))
+	ts := &internal.TestResults{}
+	ts.TestResults = make(map[string]internal.TestResult)
+	for _, f := range files {
+		err := runCommand("mongo", uri, f)
+		ts.TestResults[f] = internal.TestResult{}
+		if err != nil {
+			ts.TestResults[f] = internal.TestResult{
+				Status: internal.Fail,
+				Output: "whatever..",
+			}
+			continue
+		}
+
+	}
+	return ts
 }
 
 // runCommand runs command with args inside the mongo container.
