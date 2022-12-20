@@ -22,12 +22,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	// "github.com/FerretDB/dance/internal"
 )
 
 const uri = "mongodb://host.docker.internal:27017"
 
 func Run(ctx context.Context, args []string) error {
+	// TODO https://github.com/FerretDB/dance/issues/20
+	_ = ctx
+
 	// bad
 	files := []string{}
 	for _, f := range args {
@@ -40,42 +42,14 @@ func Run(ctx context.Context, args []string) error {
 			}
 
 			for _, m := range matches {
-				i := strings.LastIndex(m, "/jstests")
+				i := strings.LastIndex(m, "/tests")
 				m = m[i+1:]
 				files = append(files, m)
 			}
 		}
 	}
 
-	// builds the --eval statement
-	var sb strings.Builder
-	sb.WriteRune('"')
-	sb.WriteString("load")
-	sb.WriteRune('(')
-	for i, f := range files {
-		sb.WriteString("'" + f + "'")
-		if i == len(files)-1 {
-			break
-		}
-		sb.WriteRune(',')
-	}
-	sb.WriteRune(')')
-	sb.WriteRune('"')
-
-	// try
-	err := runCommand("mongo", uri, sb.String())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// try to pass each .js file to mongo
-	for _, f := range files {
-		err := runCommand("mongo", uri, f)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	return runCommand("mongo", uri, strings.Join(files, " "))
 }
 
 // runCommand runs command with args inside the mongo container.
@@ -85,9 +59,6 @@ func runCommand(command string, args ...string) error {
 		return err
 	}
 
-	// the input device is not a TTY
-	// with -T the errors are hidden.
-	// the command works manually, exec.Command() obfuscates output or breaks input.
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 
