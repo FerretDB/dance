@@ -64,7 +64,7 @@ func TestFloatValues(t *testing.T) {
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, err)
+					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {

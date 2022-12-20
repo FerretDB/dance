@@ -95,7 +95,7 @@ func TestDebugError(t *testing.T) {
 
 			t.Run("FerretDB", func(t *testing.T) {
 				if tc.expectedErr != nil {
-					AssertEqualError(t, *tc.expectedErr, err)
+					assertEqualError(t, *tc.expectedErr, err)
 					return
 				}
 				assert.NoError(t, err)
@@ -109,7 +109,7 @@ func TestDebugError(t *testing.T) {
 					Name:    "CommandNotFound",
 				}
 
-				AssertEqualError(t, expectedErr, err)
+				assertEqualError(t, expectedErr, err)
 			})
 		})
 	}

@@ -40,7 +40,7 @@ func TestDatabaseName(t *testing.T) {
 				Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
 			}
 			alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
-			AssertEqualAltError(t, expected, alt, err)
+			assertEqualAltError(t, expected, alt, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -65,7 +65,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -85,7 +85,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {

@@ -40,7 +40,7 @@ func TestInsertDuplicateKeys(t *testing.T) {
 			Message: `invalid key: "foo" (duplicate keys are not allowed)`,
 		}
 
-		AssertEqualError(t, expected, err)
+		assertEqualError(t, expected, err)
 	})
 
 	t.Run("MongoDB", func(t *testing.T) {

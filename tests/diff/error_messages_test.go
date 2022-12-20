@@ -43,7 +43,7 @@ func TestErrorMessages(t *testing.T) {
 			Name:    "TypeMismatch",
 			Message: "BSON field 'allParameters' is the wrong type 'string', expected types '[bool, long, int, decimal, double]'",
 		}
-		AssertEqualError(t, expected, actual)
+		assertEqualError(t, expected, actual)
 	})
 
 	t.Run("MongoDB", func(t *testing.T) {
@@ -54,6 +54,6 @@ func TestErrorMessages(t *testing.T) {
 			Message: "BSON field 'getParameter.allParameters' is the wrong type 'string', " +
 				"expected types '[bool, long, int, decimal, double']",
 		}
-		AssertEqualError(t, expected, actual)
+		assertEqualError(t, expected, actual)
 	})
 }

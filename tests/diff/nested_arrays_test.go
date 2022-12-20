@@ -40,7 +40,7 @@ func TestNestedArrays(t *testing.T) {
 				Name:    "BadValue",
 				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not supported)`,
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -71,7 +71,7 @@ func TestNestedArrays(t *testing.T) {
 				Name:    "BadValue",
 				Message: `invalid value: { "foo": [ [ "bar" ] ] } (nested arrays are not supported)`,
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
