@@ -1,0 +1,18 @@
+---
+runner: jstest
+args:
+  # - --quiet
+  - jstests/core/basic*.js
+  # uncaught exception: TypeError: TestData is undefined
+  - jstests/auth/auth1.js 
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:
