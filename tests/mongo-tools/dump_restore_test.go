@@ -21,12 +21,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDumpRestore(t *testing.T) {
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 
 	dbName := "sample_geospatial"
 	db = db.Client().Database(dbName)

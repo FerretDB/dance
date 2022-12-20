@@ -21,14 +21,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestErrorMessages(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 	db = db.Client().Database("admin")
 
 	var doc bson.D

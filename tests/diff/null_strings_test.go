@@ -20,13 +20,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestNullStrings(t *testing.T) {
 	t.Parallel()
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 
 	_, err := db.Collection("insert").InsertOne(ctx, bson.D{
 		{"_id", "document"},

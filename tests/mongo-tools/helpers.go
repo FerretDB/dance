@@ -26,6 +26,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -33,6 +34,42 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+// databaseName returns a stable database name for that test.
+func databaseName(tb testing.TB) string {
+	tb.Helper()
+
+	name := strings.ToLower(tb.Name())
+	name = strings.ReplaceAll(name, "/", "_")
+	name = strings.ReplaceAll(name, " ", "_")
+
+	require.Less(tb, len(name), 64)
+	return name
+}
+
+// setup returns test context and per-test client connection and database.
+func setup(t *testing.T) (context.Context, *mongo.Database) {
+	t.Helper()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
+	require.NoError(t, err)
+	err = client.Ping(ctx, nil)
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		err = client.Disconnect(ctx)
+		require.NoError(t, err)
+	})
+
+	db := client.Database(databaseName(t))
+	err = db.Drop(context.Background())
+	require.NoError(t, err)
+
+	return context.Background(), db
+}
 
 // runDockerComposeCommand runs command with args inside mongosh container.
 func runDockerComposeCommand(command string, args ...string) error {
