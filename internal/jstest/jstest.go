@@ -28,7 +28,6 @@ import (
 const uri = "mongodb://host.docker.internal:27017"
 
 func Run(ctx context.Context, args []string) error {
-
 	// bad
 	files := []string{}
 	for _, f := range args {
@@ -89,7 +88,7 @@ func runCommand(command string, args ...string) error {
 	// the input device is not a TTY
 	// with -T the errors are hidden.
 	// the command works manually, exec.Command() obfuscates output or breaks input.
-	dockerArgs := append([]string{"compose", "run", "-T", "--rm", "mongo", command}, args...)
+	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 
 	cmd.Stdout = os.Stdout
