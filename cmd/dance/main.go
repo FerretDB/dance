@@ -126,6 +126,11 @@ func main() {
 			runRes, err = gotest.Run(ctx, dir, config.Args, *vF)
 		case "jstest":
 			err = jstest.Run(ctx, config.Args)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			return
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}
