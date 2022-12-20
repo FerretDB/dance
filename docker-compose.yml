@@ -59,6 +59,7 @@ services:
     volumes:
       - ./dumps:/dumps
 
+  # legacy mongo shell
   mongo:
     build:
       context: ./build/deps
@@ -70,7 +71,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./tests/mongo:/mongo
+      - ./tests/mongo:/tests/mongo
 
   # for documentation
   textlint:
