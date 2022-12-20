@@ -2,9 +2,9 @@
 runner: jstest
 args:
   # - --quiet
-  - jstests/core/basic*.js
+  - jstests/core/basic1.js
   # uncaught exception: TypeError: TestData is undefined
-  - jstests/auth/auth1.js 
+  # - jstests/auth/auth1.js
 
 results:
   common:

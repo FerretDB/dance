@@ -95,6 +95,7 @@ func runCommand(command string, args ...string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
+	log.Printf("Running %q", strings.Join(dockerArgs, " "))
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
 	}
