@@ -20,7 +20,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 )
 
@@ -30,22 +29,10 @@ func Run(ctx context.Context, args []string) error {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	// bad
 	files := []string{}
 	for _, f := range args {
 		if strings.HasSuffix(f, ".js") {
-			wd, _ := os.Getwd()
-			ff := filepath.Join(wd, "mongo", f)
-			matches, err := filepath.Glob(ff)
-			if err != nil {
-				return err
-			}
-
-			for _, m := range matches {
-				i := strings.LastIndex(m, "/tests")
-				m = m[i+1:]
-				files = append(files, m)
-			}
+			files = append(files, f)
 		}
 	}
 
