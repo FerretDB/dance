@@ -52,8 +52,8 @@ func TestDumpRestore(t *testing.T) {
 		t.Run(tc.name0, func(t *testing.T) {
 			t.Parallel()
 
-			name1 := tc.name0 + "_1"
-			name2 := tc.name0 + "_2"
+			name1 := tc.name0 + "_dump1"
+			name2 := tc.name0 + "_dump2"
 
 			// pre-create directory to avoid permission issues
 			recreateDir(t, filepath.Join(localTestsRoot, name1))
