@@ -19,8 +19,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"io/fs"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -28,191 +26,122 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// databaseName returns a stable database name for that test.
-func databaseName(tb testing.TB) string {
+// setup returns test context and per-test client connection.
+func setup(tb testing.TB) (context.Context, *mongo.Client) {
 	tb.Helper()
-
-	// database names are always lowercase
-	name := strings.ToLower(tb.Name())
-
-	name = strings.ReplaceAll(name, "/", "-")
-	name = strings.ReplaceAll(name, " ", "_")
-	name = strings.ReplaceAll(name, "$", "_")
-
-	require.Less(tb, len(name), 64)
-	return name
-}
-
-// setup returns test context and per-test client connection and database.
-func setup(t *testing.T) (context.Context, *mongo.Database) {
-	t.Helper()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
-	require.NoError(t, err)
+	require.NoError(tb, err)
 	err = client.Ping(ctx, nil)
-	require.NoError(t, err)
+	require.NoError(tb, err)
 
-	t.Cleanup(func() {
+	tb.Cleanup(func() {
 		err = client.Disconnect(ctx)
-		require.NoError(t, err)
+		require.NoError(tb, err)
 	})
 
-	db := client.Database(databaseName(t))
-	err = db.Drop(context.Background())
-	require.NoError(t, err)
-
-	return context.Background(), db
+	return context.Background(), client
 }
 
 // runDockerComposeCommand runs command with args inside mongosh container.
-func runDockerComposeCommand(command string, args ...string) error {
+func runDockerComposeCommand(tb testing.TB, command string, args ...string) {
+	tb.Helper()
+
 	bin, err := exec.LookPath("docker")
-	if err != nil {
-		return err
-	}
+	require.NoError(tb, err)
 
-	dockerArgs := append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
-	cmd := exec.Command(bin, dockerArgs...)
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
+	args = append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
+	cmd := exec.Command(bin, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
-	}
-
-	return nil
+	tb.Logf("Running %s", strings.Join(cmd.Args, " "))
+	err = cmd.Run()
+	require.NoError(tb, err)
 }
 
-// getDatabaseState gets all documents from each collection in provided database,
-// sorts them by _id and puts into a map keyed with collection names.
-func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
-	dbState := make(map[string][]bson.D)
+// recreateDir removes and creates directory with 0o777 permissions.
+func recreateDir(tb testing.TB, dir string) {
+	tb.Helper()
 
-	doc := struct {
-		Cursor struct {
-			FirstBatch []struct {
-				Name string `bson:"name"`
-			} `bson:"firstBatch"`
-		} `bson:"cursor"`
-	}{}
+	err := os.RemoveAll(dir)
+	require.NoError(tb, err)
 
-	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&doc)
-	require.NoError(t, err)
+	// 0o777 is typically downgraded to 0o755 by umask
+	err = os.Mkdir(dir, 0o777)
+	require.NoError(tb, err)
 
-	var collections []string
-	for _, batch := range doc.Cursor.FirstBatch {
-		collections = append(collections, batch.Name)
-	}
+	// fix after umask
+	err = os.Chmod(dir, 0o777)
+	require.NoError(tb, err)
+}
+
+// getDocumentsCount returns a map of collection names and their document counts.
+func getDocumentsCount(tb testing.TB, ctx context.Context, db *mongo.Database) map[string]int {
+	tb.Helper()
+
+	res := make(map[string]int)
+
+	collections, err := db.ListCollectionNames(ctx, bson.D{})
+	require.NoError(tb, err)
 
 	for _, coll := range collections {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
-		require.NoError(t, err)
+		// It's not possible to use CountDocuments because it uses aggregation pipeline
+		// that are not supported by FerretDB yet.
+		var doc bson.D
+		err := db.RunCommand(ctx, bson.D{
+			{"count", coll},
+			{"query", bson.D{}},
+		}).Decode(&doc)
 
-		var res []bson.D
-		require.NoError(t, cur.All(ctx, &res))
+		require.NoError(tb, err)
 
-		dbState[coll] = res
+		res[coll] = int(doc.Map()["n"].(int32))
 	}
 
-	return dbState
+	return res
 }
 
-// compareFiles takes two file paths and checks if they have the same content.
-func compareFiles(t *testing.T, path, comparePath string) {
-	t.Helper()
+// hashFile returns SHA-256 hash of the file.
+func hashFile(tb testing.TB, path string) string {
+	tb.Helper()
+
+	f, err := os.Open(path)
+	require.NoError(tb, err)
+
+	defer f.Close()
+
 	h := sha256.New()
+	_, err = io.Copy(h, f)
+	require.NoError(tb, err)
 
-	file1, err := os.Open(path)
-	require.NoError(t, err)
-
-	defer file1.Close()
-
-	if !assert.FileExists(t, comparePath) {
-		return
-	}
-
-	file2, err := os.Open(comparePath)
-	require.NoError(t, err)
-
-	defer file2.Close()
-
-	_, err = io.Copy(h, file1)
-	require.NoError(t, err)
-
-	hash1 := h.Sum(nil)
-
-	h.Reset()
-
-	_, err = io.Copy(h, file2)
-	require.NoError(t, err)
-
-	hash2 := h.Sum(nil)
-
-	// compare hashes of both files
-	if assert.Equal(t, hash1, hash2, "Checksums of following files are different:", file1.Name(), file2.Name()) {
-		return
-	}
-
-	// reset file offsets and compares the content of both of them to show
-	// a more detailed output
-
-	_, err = file1.Seek(0, io.SeekStart)
-	require.NoError(t, err)
-
-	_, err = file2.Seek(0, io.SeekStart)
-	require.NoError(t, err)
-
-	content1, err := io.ReadAll(file1)
-	require.NoError(t, err)
-
-	content2, err := io.ReadAll(file2)
-	require.NoError(t, err)
-
-	require.Equal(t, content1, content2)
+	return fmt.Sprintf("%064x", h.Sum(nil))
 }
 
-// compareDirs compares two directories and their files recursively.
-// It ignores files based on globs provided in ignoredFiles.
-func compareDirs(t *testing.T, dir1, dir2 string, ignoredFiles ...string) {
-	err := filepath.WalkDir(dir1, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
+// getDirectory returns a map of file names and their hashes.
+//
+// Directory must not contain subdirectories.
+func getDirectory(tb testing.TB, dir string) map[string]string {
+	tb.Helper()
 
-		comparePath := strings.Replace(path, dir1, dir2, 1)
+	entries, err := os.ReadDir(dir)
+	require.NoError(tb, err)
 
-		// skip all ignored paths
-		for _, pattern := range ignoredFiles {
-			var ignore bool
-			ignore, err = filepath.Match(pattern, d.Name())
-			require.NoError(t, err)
+	res := make(map[string]string)
+	for _, entry := range entries {
+		require.False(tb, entry.IsDir())
 
-			if ignore {
-				t.Logf("Skipping comparison of %s", path)
-				return nil
-			}
-		}
+		res[entry.Name()] = hashFile(tb, filepath.Join(dir, entry.Name()))
+	}
 
-		if d.IsDir() {
-			_, err = os.Stat(comparePath)
-			assert.NoError(t, err)
-			return nil
-		}
-
-		compareFiles(t, path, comparePath)
-		return nil
-	})
-	require.NoError(t, err)
+	return res
 }

@@ -15,7 +15,6 @@
 package mongotools
 
 import (
-	"os"
 	"path/filepath"
 	"testing"
 
@@ -24,95 +23,114 @@ import (
 )
 
 func TestDumpRestore(t *testing.T) {
-	ctx, db := setup(t)
+	t.Parallel()
 
-	dbName := "sample_geospatial"
-	db = db.Client().Database(dbName)
+	containerDump0Path := "/dumps/mongodb-sample-databases/dump"
+	localDump1Path := filepath.Join("..", "..", "dumps", "dump1")
+	containerDump1Path := "/dumps/dump1"
+	localDump2Path := filepath.Join("..", "..", "dumps", "dump2")
+	containerDump2Path := "/dumps/dump2"
 
-	// cleanup database
-	err := db.Drop(ctx)
-	require.NoError(t, err)
+	type testCase struct {
+		db0            string
+		documentsCount map[string]int // collection name -> document count
+	}
 
-	localActualPath := filepath.Join("..", "..", "dumps", "actual")
-	containerActualPath := filepath.Join("/dumps", "actual")
+	for _, tc := range []testCase{{
+		db0: "sample_geospatial",
+		documentsCount: map[string]int{
+			"shipwrecks": 11095,
+		},
+	}, {
+		db0: "sample_analytics",
+		documentsCount: map[string]int{
+			"accounts":     1746,
+			"customers":    500,
+			"transactions": 1746,
+		},
+	}} {
+		tc := tc
+		t.Run(tc.db0, func(t *testing.T) {
+			t.Parallel()
 
-	containerExpectedPath := filepath.Join("/dumps", "expected")
-	localExpectedPath := filepath.Join("..", "..", containerExpectedPath)
+			// pre-create directories to avoid permission issues
+			db1 := tc.db0 + "_dump1"
+			db2 := tc.db0 + "_dump2"
+			recreateDir(t, filepath.Join(localDump1Path, db1))
+			recreateDir(t, filepath.Join(localDump2Path, db2))
 
-	containerSourcePath := filepath.Join("/dumps", "mongodb-sample-databases", "dump")
+			ctx, client := setup(t)
 
-	// pre-create directories to avoid permission issues
-	err = os.Chmod(localActualPath, 0o777)
-	require.NoError(t, err)
-	err = os.Chmod(localExpectedPath, 0o777)
-	require.NoError(t, err)
+			// dump0 -> db1 -> dump1
+			t.Run("dump1", func(t *testing.T) {
+				db := client.Database(db1)
+				require.NoError(t, db.Drop(ctx))
+				t.Cleanup(func() { require.NoError(t, db.Drop(ctx)) })
 
-	err = os.RemoveAll(filepath.Join(localActualPath, dbName))
-	require.NoError(t, err)
-	err = os.RemoveAll(filepath.Join(localExpectedPath, dbName))
-	require.NoError(t, err)
+				mongorestore(t, tc.db0, containerDump0Path, db1)
+				actualCount := getDocumentsCount(t, ctx, db)
+				assert.Equal(t, tc.documentsCount, actualCount)
 
-	err = os.Mkdir(filepath.Join(localActualPath, dbName), 0o777) // 0o777 is typically downgraded to 0o755 by umask
-	require.NoError(t, err)
-	err = os.Mkdir(filepath.Join(localExpectedPath, dbName), 0o777)
-	require.NoError(t, err)
+				mongodump(t, db1, containerDump1Path)
 
-	err = os.Chmod(filepath.Join(localActualPath, dbName), 0o777) // fix after umask
-	require.NoError(t, err)
-	err = os.Chmod(filepath.Join(localExpectedPath, dbName), 0o777)
-	require.NoError(t, err)
+				// we can't compare dump1 files because dump0 was made with an older tool
+			})
 
-	// restore a database from a sample dump
-	mongorestore(t, dbName, containerSourcePath)
+			// dump1 -> db2 -> dump2
+			t.Run("dump2", func(t *testing.T) {
+				db := client.Database(db2)
+				require.NoError(t, db.Drop(ctx))
+				t.Cleanup(func() { require.NoError(t, db.Drop(ctx)) })
 
-	expectedState := getDatabaseState(t, ctx, db)
+				mongorestore(t, db1, containerDump1Path, db2)
+				actualCount := getDocumentsCount(t, ctx, db)
+				assert.Equal(t, tc.documentsCount, actualCount)
 
-	// "bootstrap" the expected dump from restored database
-	mongodump(t, dbName, containerExpectedPath)
+				mongodump(t, db2, containerDump2Path)
 
-	// cleanup database
-	require.NoError(t, db.Drop(ctx))
-
-	// restore a database from the expected dump
-	mongorestore(t, dbName, containerExpectedPath)
-
-	// dump a database
-	mongodump(t, dbName, containerActualPath)
-
-	// get database state after restore and compare it
-	actualState := getDatabaseState(t, ctx, db)
-	assert.Equal(t, expectedState, actualState)
-
-	// compare dump files. Metadata files are not compared because they
-	// contain different uuid field on every dump
-	compareDirs(t, filepath.Join(localExpectedPath, dbName), filepath.Join(localActualPath, dbName), "*.metadata.json")
+				// now we can
+				expectedDir := getDirectory(t, filepath.Join(localDump1Path, db1))
+				actualDir := getDirectory(t, filepath.Join(localDump2Path, db2))
+				assert.Equal(t, expectedDir, actualDir)
+			})
+		})
+	}
 }
 
-// mongorestore runs mongorestore utility to restore specified db from the dump
-// stored in provided path on docker container.
-// In case of any error it fails the test.
-func mongorestore(t *testing.T, db, path string) {
-	err := runDockerComposeCommand(
+// mongorestore restores database <db> from <root>/<db> directory as <newDB>.
+func mongorestore(t *testing.T, db, root, newDB string) {
+	t.Helper()
+
+	runDockerComposeCommand(
+		t,
 		"mongorestore",
-		"--nsInclude", db+".*",
-		"--noIndexRestore",
-		"--verbose",
+		"--verbose=2",
+		"--nsInclude="+db+".*",
+		"--nsFrom="+db+".*",
+		"--nsTo="+newDB+".*",
+		"--objcheck",
+		"--drop",
+		"--noIndexRestore", // not supported by FerretDB yet
+		"--numParallelCollections=10",
+		"--numInsertionWorkersPerCollection=10",
+		"--stopOnError",
+		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
 		"mongodb://host.docker.internal:27017/",
-		path,
+		root,
 	)
-	require.NoError(t, err)
 }
 
-// mongodump runs mongodump utility to dump specified db and stores
-// it in provided path on docker container.
-// In case of any error it fails the test.
-func mongodump(t *testing.T, db, path string) {
-	err := runDockerComposeCommand(
+// mongodump dumps database <db> into <root>/<db> directory.
+func mongodump(t *testing.T, db, root string) {
+	t.Helper()
+
+	runDockerComposeCommand(
+		t,
 		"mongodump",
-		"--db", db,
-		"--out", path,
-		"--verbose",
+		"--verbose=2",
+		"--db="+db,
+		"--out="+root,
+		"--numParallelCollections=10",
 		"mongodb://host.docker.internal:27017/",
 	)
-	require.NoError(t, err)
 }
