@@ -30,16 +30,9 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	files := []string{}
-	for _, f := range args {
-		if strings.HasSuffix(f, ".js") {
-			files = append(files, f)
-		}
-	}
-
 	ts := &internal.TestResults{}
 	ts.TestResults = make(map[string]internal.TestResult)
-	for _, f := range files {
+	for _, f := range args {
 		output, err := runCommand("mongo", "--verbose", "--norc", uri, f)
 		if err != nil {
 			if !strings.Contains(err.Error(), "exit status") {
