@@ -25,24 +25,22 @@ import (
 func TestDumpRestore(t *testing.T) {
 	t.Parallel()
 
-	containerDump0Path := "/dumps/mongodb-sample-databases/dump"
-	localDump1Path := filepath.Join("..", "..", "dumps", "dump1")
-	containerDump1Path := "/dumps/dump1"
-	localDump2Path := filepath.Join("..", "..", "dumps", "dump2")
-	containerDump2Path := "/dumps/dump2"
+	containerSourceRoot := "/dumps/mongodb-sample-databases/dump"
+	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
+	containerTestsRoot := "/dumps/tests"
 
 	type testCase struct {
-		db0            string
+		name0          string
 		documentsCount map[string]int // collection name -> document count
 	}
 
 	for _, tc := range []testCase{{
-		db0: "sample_geospatial",
+		name0: "sample_geospatial",
 		documentsCount: map[string]int{
 			"shipwrecks": 11095,
 		},
 	}, {
-		db0: "sample_analytics",
+		name0: "sample_analytics",
 		documentsCount: map[string]int{
 			"accounts":     1746,
 			"customers":    500,
@@ -50,49 +48,40 @@ func TestDumpRestore(t *testing.T) {
 		},
 	}} {
 		tc := tc
-		t.Run(tc.db0, func(t *testing.T) {
+		t.Run(tc.name0, func(t *testing.T) {
 			t.Parallel()
 
-			// pre-create directories to avoid permission issues
-			db1 := tc.db0 + "_dump1"
-			db2 := tc.db0 + "_dump2"
-			recreateDir(t, filepath.Join(localDump1Path, db1))
-			recreateDir(t, filepath.Join(localDump2Path, db2))
+			name1 := tc.name0 + "_1"
+			name2 := tc.name0 + "_2"
+
+			// pre-create directory to avoid permission issues
+			recreateDir(t, filepath.Join(localTestsRoot, name1))
 
 			ctx, client := setup(t)
 
-			// dump0 -> db1 -> dump1
-			t.Run("dump1", func(t *testing.T) {
-				db := client.Database(db1)
-				require.NoError(t, db.Drop(ctx))
-				t.Cleanup(func() { require.NoError(t, db.Drop(ctx)) })
+			db1 := client.Database(name1)
+			t.Cleanup(func() { require.NoError(t, db1.Drop(ctx)) })
 
-				mongorestore(t, tc.db0, containerDump0Path, db1)
-				actualCount := getDocumentsCount(t, ctx, db)
-				assert.Equal(t, tc.documentsCount, actualCount)
+			db2 := client.Database(name2)
+			t.Cleanup(func() { require.NoError(t, db2.Drop(ctx)) })
 
-				mongodump(t, db1, containerDump1Path)
+			// source dump -> db1
+			mongorestore(t, tc.name0, containerSourceRoot, name1)
+			actualCount := getDocumentsCount(t, ctx, db1)
+			assert.Equal(t, tc.documentsCount, actualCount)
 
-				// we can't compare dump1 files because dump0 was made with an older tool
-			})
+			// db1 -> test dump
+			mongodump(t, name1, containerTestsRoot)
 
-			// dump1 -> db2 -> dump2
-			t.Run("dump2", func(t *testing.T) {
-				db := client.Database(db2)
-				require.NoError(t, db.Drop(ctx))
-				t.Cleanup(func() { require.NoError(t, db.Drop(ctx)) })
+			// test dump -> db2
+			mongorestore(t, name1, containerTestsRoot, name2)
+			actualCount = getDocumentsCount(t, ctx, db2)
+			assert.Equal(t, tc.documentsCount, actualCount)
 
-				mongorestore(t, db1, containerDump1Path, db2)
-				actualCount := getDocumentsCount(t, ctx, db)
-				assert.Equal(t, tc.documentsCount, actualCount)
+			compareDatabases(t, ctx, db1, db2)
 
-				mongodump(t, db2, containerDump2Path)
-
-				// now we can
-				expectedDir := getDirectory(t, filepath.Join(localDump1Path, db1))
-				actualDir := getDirectory(t, filepath.Join(localDump2Path, db2))
-				assert.Equal(t, expectedDir, actualDir)
-			})
+			// we can't compare bson dump files because `mongodump` queries documents in natural order,
+			// but we don't support it
 		})
 	}
 }

@@ -16,12 +16,8 @@ package mongotools
 
 import (
 	"context"
-	"crypto/sha256"
-	"fmt"
-	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -30,6 +26,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/exp/slices"
 )
 
 // setup returns test context and per-test client connection.
@@ -111,37 +108,53 @@ func getDocumentsCount(tb testing.TB, ctx context.Context, db *mongo.Database) m
 	return res
 }
 
-// hashFile returns SHA-256 hash of the file.
-func hashFile(tb testing.TB, path string) string {
+// compareDatabases checks if databases have the same collections and documents.
+func compareDatabases(tb testing.TB, ctx context.Context, expected, actual *mongo.Database) {
 	tb.Helper()
 
-	f, err := os.Open(path)
+	collections, err := expected.ListCollectionNames(ctx, bson.D{})
 	require.NoError(tb, err)
+	slices.Sort(collections)
 
-	defer f.Close()
-
-	h := sha256.New()
-	_, err = io.Copy(h, f)
+	actualCollections, err := actual.ListCollectionNames(ctx, bson.D{})
 	require.NoError(tb, err)
+	slices.Sort(actualCollections)
 
-	return fmt.Sprintf("%064x", h.Sum(nil))
+	require.Equal(tb, collections, actualCollections)
+
+	for _, coll := range collections {
+		compareCollections(tb, ctx, expected.Collection(coll), actual.Collection(coll))
+	}
 }
 
-// getDirectory returns a map of file names and their hashes.
-//
-// Directory must not contain subdirectories.
-func getDirectory(tb testing.TB, dir string) map[string]string {
+// compareCollections checks if collections have the same documents.
+func compareCollections(tb testing.TB, ctx context.Context, expected, actual *mongo.Collection) {
 	tb.Helper()
 
-	entries, err := os.ReadDir(dir)
+	expectedCur, err := expected.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 	require.NoError(tb, err)
+	defer expectedCur.Close(ctx)
 
-	res := make(map[string]string)
-	for _, entry := range entries {
-		require.False(tb, entry.IsDir())
+	actualCur, err := actual.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
+	require.NoError(tb, err)
+	defer actualCur.Close(ctx)
 
-		res[entry.Name()] = hashFile(tb, filepath.Join(dir, entry.Name()))
+	for expectedCur.Next(ctx) {
+		require.True(tb, actualCur.Next(ctx))
+
+		var expectedDoc bson.D
+		err := expectedCur.Decode(&expectedDoc)
+		require.NoError(tb, err)
+
+		var actualDoc bson.D
+		err = actualCur.Decode(&actualDoc)
+		require.NoError(tb, err)
+
+		require.Equal(tb, expectedDoc, actualDoc)
 	}
 
-	return res
+	require.False(tb, actualCur.Next(ctx))
+
+	require.NoError(tb, expectedCur.Err())
+	require.NoError(tb, actualCur.Err())
 }

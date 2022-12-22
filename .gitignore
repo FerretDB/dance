@@ -1,5 +1,4 @@
 /bin/
-/dumps/dump1/
-/dumps/dump2/
+/dumps/tests/
 /vendor/
 cover.txt
