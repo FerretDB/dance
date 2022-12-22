@@ -18,7 +18,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"strings"
 
@@ -27,7 +26,7 @@ import (
 
 const uri = "mongodb://host.docker.internal:27017"
 
-func Run(ctx context.Context, args []string) *internal.TestResults {
+func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -41,37 +40,52 @@ func Run(ctx context.Context, args []string) *internal.TestResults {
 	ts := &internal.TestResults{}
 	ts.TestResults = make(map[string]internal.TestResult)
 	for _, f := range files {
-		err := runCommand("mongo", uri, f)
-		ts.TestResults[f] = internal.TestResult{}
+		output, err := runCommand("mongo", "--verbose", "--norc", uri, f)
+		if err != nil {
+			if !strings.Contains(err.Error(), "exit status") {
+				return nil, err
+			}
+		}
+
+		if err == nil {
+			ts.TestResults[f] = internal.TestResult{
+				Status: internal.Pass,
+				Output: string(output),
+			}
+			continue
+		}
 		if err != nil {
 			ts.TestResults[f] = internal.TestResult{
 				Status: internal.Fail,
-				Output: "whatever..",
+				Output: string(output),
 			}
 			continue
 		}
 
+		ts.TestResults[f] = internal.TestResult{
+			Status: internal.Unknown,
+			Output: string(output),
+		}
+
 	}
-	return ts
+	return ts, nil
 }
 
-// runCommand runs command with args inside the mongo container.
-func runCommand(command string, args ...string) error {
+// runCommand runs command with args inside the mongo container and returns the combined output.
+func runCommand(command string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
 	log.Printf("Running %q", strings.Join(dockerArgs, " "))
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
+	stdoutStderr, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
 	}
 
-	return nil
+	return stdoutStderr, nil
 }
