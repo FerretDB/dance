@@ -45,11 +45,12 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 				Status: internal.Pass,
 				Output: string(output),
 			}
-		} else {
-			ts.TestResults[f] = internal.TestResult{
-				Status: internal.Fail,
-				Output: string(output),
-			}
+			continue
+		}
+
+		ts.TestResults[f] = internal.TestResult{
+			Status: internal.Fail,
+			Output: string(output),
 		}
 	}
 	return ts, nil
