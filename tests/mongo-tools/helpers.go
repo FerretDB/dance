@@ -133,10 +133,12 @@ func compareCollections(tb testing.TB, ctx context.Context, expected, actual *mo
 
 	expectedCur, err := expected.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 	require.NoError(tb, err)
+
 	defer expectedCur.Close(ctx)
 
 	actualCur, err := actual.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
 	require.NoError(tb, err)
+
 	defer actualCur.Close(ctx)
 
 	for expectedCur.Next(ctx) {

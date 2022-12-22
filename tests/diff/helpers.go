@@ -38,6 +38,7 @@ func databaseName(tb testing.TB) string {
 	name = strings.ReplaceAll(name, "$", "_")
 
 	require.Less(tb, len(name), 64)
+
 	return name
 }
 

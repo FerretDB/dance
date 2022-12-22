@@ -29,6 +29,7 @@ func TestDumpRestore(t *testing.T) {
 	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
 	containerTestsRoot := "/dumps/tests"
 
+	//nolint:vet // for readability
 	type testCase struct {
 		name0          string
 		documentsCount map[string]int // collection name -> document count
