@@ -16,15 +16,12 @@ package jstest
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os/exec"
 	"strings"
 
 	"github.com/FerretDB/dance/internal"
 )
-
-const uri = "mongodb://host.docker.internal:27017"
 
 func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
@@ -35,7 +32,7 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	for _, testName := range args {
 		output, err := runCommand("mongo", testName)
 		if err != nil {
-			if !strings.Contains(err.Error(), "exit status") {
+			if _, ok := err.(*exec.ExitError); !ok {
 				return nil, err
 			}
 		}
@@ -64,15 +61,10 @@ func runCommand(command string, args ...string) ([]byte, error) {
 		return nil, err
 	}
 
-	args = append([]string{"--verbose", "--norc", uri}, args...)
+	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/"}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 
-	log.Printf("Running %q", strings.Join(dockerArgs, " "))
-	stdoutStderr, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
-	}
-
-	return stdoutStderr, nil
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+	return cmd.CombinedOutput()
 }
