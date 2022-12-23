@@ -70,6 +70,14 @@ tasks:
     cmds:
       - docker compose exec postgres psql -U postgres -d ferretdb
 
+  mongo:
+    desc: "Run legacy MongoDB shell (`mongo`) with test script"
+    cmds:
+      - >
+        docker compose run --rm mongo
+        'mongodb://host.docker.internal:27017/'
+        {{.CLI_ARGS}}
+
   mongosh:
     desc: "Run mongo shell"
     cmds:
