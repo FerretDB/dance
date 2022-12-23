@@ -111,8 +111,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 161
-      expected_pass: 1294
+      expected_skip: 164
+      expected_pass: 1291
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
