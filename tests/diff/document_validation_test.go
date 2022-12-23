@@ -21,14 +21,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDocumentValidation(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
@@ -80,7 +78,7 @@ func TestDocumentValidation(t *testing.T) {
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, err)
+					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
@@ -120,7 +118,7 @@ func TestDocumentValidation(t *testing.T) {
 
 			t.Run(name, func(t *testing.T) {
 				// TODO: make them run in parallel https://github.com/FerretDB/FerretDB/issues/1488
-				//t.Parallel()
+				// t.Parallel()
 
 				// initiate a collection with a valid document, so we have something to update
 				collection := db.Collection("update-validation-" + name)
@@ -135,7 +133,7 @@ func TestDocumentValidation(t *testing.T) {
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, err)
+					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {

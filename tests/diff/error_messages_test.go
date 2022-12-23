@@ -21,14 +21,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestErrorMessages(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 	db = db.Client().Database("admin")
 
 	var doc bson.D
@@ -45,7 +43,7 @@ func TestErrorMessages(t *testing.T) {
 			Name:    "TypeMismatch",
 			Message: "BSON field 'allParameters' is the wrong type 'string', expected types '[bool, long, int, decimal, double]'",
 		}
-		AssertEqualError(t, expected, actual)
+		assertEqualError(t, expected, actual)
 	})
 
 	t.Run("MongoDB", func(t *testing.T) {
@@ -56,6 +54,6 @@ func TestErrorMessages(t *testing.T) {
 			Message: "BSON field 'getParameter.allParameters' is the wrong type 'string', " +
 				"expected types '[bool, long, int, decimal, double']",
 		}
-		AssertEqualError(t, expected, actual)
+		assertEqualError(t, expected, actual)
 	})
 }

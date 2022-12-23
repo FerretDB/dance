@@ -21,8 +21,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDatabaseName(t *testing.T) {
@@ -32,7 +30,7 @@ func TestDatabaseName(t *testing.T) {
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		dbName := "_ferretdb_xxx"
-		ctx, db := common.Setup(t)
+		ctx, db := setup(t)
 		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
 
 		t.Run("FerretDB", func(t *testing.T) {
@@ -42,7 +40,7 @@ func TestDatabaseName(t *testing.T) {
 				Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
 			}
 			alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
-			AssertEqualAltError(t, expected, alt, err)
+			assertEqualAltError(t, expected, alt, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -57,7 +55,7 @@ func TestCollectionName(t *testing.T) {
 
 	t.Run("Length200", func(t *testing.T) {
 		collection := strings.Repeat("a", 200)
-		ctx, db := common.Setup(t)
+		ctx, db := setup(t)
 		dbName := db.Name()
 		err := db.CreateCollection(ctx, collection)
 
@@ -67,7 +65,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
@@ -77,7 +75,7 @@ func TestCollectionName(t *testing.T) {
 
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		collection := "_ferretdb_xxx"
-		ctx, db := common.Setup(t)
+		ctx, db := setup(t)
 		dbName := db.Name()
 		err := db.CreateCollection(ctx, collection)
 
@@ -87,7 +85,7 @@ func TestCollectionName(t *testing.T) {
 				Code:    73,
 				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
 			}
-			AssertEqualError(t, expected, err)
+			assertEqualError(t, expected, err)
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {

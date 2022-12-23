@@ -1,12 +1,14 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 # Order is important; the last matching pattern takes the most precedence.
 
-*              @AlekSi
+*                    @FerretDB/specops
 
-/cmd/          @FerretDB/leads
-/internal/     @FerretDB/leads
-/tests/        @FerretDB/leads
+/cmd/                @FerretDB/leads @FerretDB/specops
+/internal/           @FerretDB/leads @FerretDB/specops
 
-/build/        @AlekSi
-go.mod         @AlekSi
-go.sum         @AlekSi
+/tests/diff/         @FerretDB/leads
+/tests/mongo-tools/  @FerretDB/leads
+
+/build/              @FerretDB/specops
+go.mod               @FerretDB/specops
+go.sum               @FerretDB/specops

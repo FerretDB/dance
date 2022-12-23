@@ -20,8 +20,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestDebugError(t *testing.T) {
@@ -91,13 +89,13 @@ func TestDebugError(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			ctx, db := common.Setup(t)
+			ctx, db := setup(t)
 			var actual bson.D
 			err := db.RunCommand(ctx, bson.D{{"debugError", tc.input}}).Decode(&actual)
 
 			t.Run("FerretDB", func(t *testing.T) {
 				if tc.expectedErr != nil {
-					AssertEqualError(t, *tc.expectedErr, err)
+					assertEqualError(t, *tc.expectedErr, err)
 					return
 				}
 				assert.NoError(t, err)
@@ -111,7 +109,7 @@ func TestDebugError(t *testing.T) {
 					Name:    "CommandNotFound",
 				}
 
-				AssertEqualError(t, expectedErr, err)
+				assertEqualError(t, expectedErr, err)
 			})
 		})
 	}

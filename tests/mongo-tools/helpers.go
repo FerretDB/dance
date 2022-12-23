@@ -16,69 +16,147 @@ package mongotools
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/exp/slices"
 )
 
+// setup returns test context and per-test client connection.
+func setup(tb testing.TB) (context.Context, *mongo.Client) {
+	tb.Helper()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
+	require.NoError(tb, err)
+	err = client.Ping(ctx, nil)
+	require.NoError(tb, err)
+
+	tb.Cleanup(func() {
+		err = client.Disconnect(ctx)
+		require.NoError(tb, err)
+	})
+
+	return context.Background(), client
+}
+
 // runDockerComposeCommand runs command with args inside mongosh container.
-func runDockerComposeCommand(command string, args ...string) error {
+func runDockerComposeCommand(tb testing.TB, command string, args ...string) {
+	tb.Helper()
+
 	bin, err := exec.LookPath("docker")
-	if err != nil {
-		return err
-	}
+	require.NoError(tb, err)
 
-	dockerArgs := append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
-	cmd := exec.Command(bin, dockerArgs...)
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
+	args = append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
+	cmd := exec.Command(bin, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%s failed: %s", strings.Join(dockerArgs, " "), err)
-	}
-
-	return nil
+	tb.Logf("Running %s", strings.Join(cmd.Args, " "))
+	err = cmd.Run()
+	require.NoError(tb, err)
 }
 
-// getDatabaseState gets all documents from each collection in provided database and puts
-// them into a map keyed with collection names.
-func getDatabaseState(t *testing.T, ctx context.Context, db *mongo.Database) map[string][]bson.D {
-	dbState := make(map[string][]bson.D)
+// recreateDir removes and creates directory with 0o777 permissions.
+func recreateDir(tb testing.TB, dir string) {
+	tb.Helper()
 
-	doc := struct {
-		Cursor struct {
-			FirstBatch []struct {
-				Name string `bson:"name"`
-			} `bson:"firstBatch"`
-		} `bson:"cursor"`
-	}{}
+	err := os.RemoveAll(dir)
+	require.NoError(tb, err)
 
-	err := db.RunCommand(ctx, bson.D{{"listCollections", 1}}).Decode(&doc)
-	require.NoError(t, err)
+	// 0o777 is typically downgraded to 0o755 by umask
+	err = os.Mkdir(dir, 0o777)
+	require.NoError(tb, err)
 
-	var collections []string
-	for _, batch := range doc.Cursor.FirstBatch {
-		collections = append(collections, batch.Name)
-	}
+	// fix after umask
+	err = os.Chmod(dir, 0o777)
+	require.NoError(tb, err)
+}
+
+// getDocumentsCount returns a map of collection names and their document counts.
+func getDocumentsCount(tb testing.TB, ctx context.Context, db *mongo.Database) map[string]int {
+	tb.Helper()
+
+	res := make(map[string]int)
+
+	collections, err := db.ListCollectionNames(ctx, bson.D{})
+	require.NoError(tb, err)
 
 	for _, coll := range collections {
-		cur, err := db.Collection(coll).Find(ctx, bson.D{{}})
-		require.NoError(t, err)
+		// It's not possible to use CountDocuments because it uses aggregation pipeline
+		// that are not supported by FerretDB yet.
+		var doc bson.D
+		err := db.RunCommand(ctx, bson.D{
+			{"count", coll},
+			{"query", bson.D{}},
+		}).Decode(&doc)
 
-		var res []bson.D
-		require.NoError(t, cur.All(ctx, &res))
+		require.NoError(tb, err)
 
-		dbState[coll] = res
+		res[coll] = int(doc.Map()["n"].(int32))
 	}
 
-	return dbState
+	return res
+}
+
+// compareDatabases checks if databases have the same collections and documents.
+func compareDatabases(tb testing.TB, ctx context.Context, expected, actual *mongo.Database) {
+	tb.Helper()
+
+	collections, err := expected.ListCollectionNames(ctx, bson.D{})
+	require.NoError(tb, err)
+	slices.Sort(collections)
+
+	actualCollections, err := actual.ListCollectionNames(ctx, bson.D{})
+	require.NoError(tb, err)
+	slices.Sort(actualCollections)
+
+	require.Equal(tb, collections, actualCollections)
+
+	for _, coll := range collections {
+		compareCollections(tb, ctx, expected.Collection(coll), actual.Collection(coll))
+	}
+}
+
+// compareCollections checks if collections have the same documents.
+func compareCollections(tb testing.TB, ctx context.Context, expected, actual *mongo.Collection) {
+	tb.Helper()
+
+	expectedCur, err := expected.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
+	require.NoError(tb, err)
+
+	defer expectedCur.Close(ctx)
+
+	actualCur, err := actual.Find(ctx, bson.D{}, options.Find().SetSort(bson.D{{"_id", 1}}))
+	require.NoError(tb, err)
+
+	defer actualCur.Close(ctx)
+
+	for expectedCur.Next(ctx) {
+		require.True(tb, actualCur.Next(ctx))
+
+		var expectedDoc bson.D
+		err := expectedCur.Decode(&expectedDoc)
+		require.NoError(tb, err)
+
+		var actualDoc bson.D
+		err = actualCur.Decode(&actualDoc)
+		require.NoError(tb, err)
+
+		require.Equal(tb, expectedDoc, actualDoc)
+	}
+
+	require.False(tb, actualCur.Next(ctx))
+
+	require.NoError(tb, expectedCur.Err())
+	require.NoError(tb, actualCur.Err())
 }

@@ -21,14 +21,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-
-	"github.com/FerretDB/dance/tests/common"
 )
 
 func TestFloatValues(t *testing.T) {
 	t.Parallel()
 
-	ctx, db := common.Setup(t)
+	ctx, db := setup(t)
 
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
@@ -66,7 +64,7 @@ func TestFloatValues(t *testing.T) {
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					AssertEqualError(t, tc.expected, err)
+					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
