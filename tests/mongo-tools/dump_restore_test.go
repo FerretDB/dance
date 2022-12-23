@@ -81,8 +81,14 @@ func TestDumpRestore(t *testing.T) {
 
 			compareDatabases(t, ctx, db1, db2)
 
-			// we can't compare bson dump files because `mongodump` queries documents in natural order,
-			// but we don't support it
+			// It is tempting to `mongodump` database again and compare BSON files of dump1 and dump2.
+			// It will even work for a small database if we are lucky.
+			// Unfortunately (but not surprisingly), `mongodump` gets documents by sending a `find` command without sorting.
+			// In such a case, we (as well as any other database) return data in "natural order" – how it lies on the disk.
+			// For FerretDB with PostgreSQL, that order is not stable.
+			//
+			// In theory, we could parse BSON files, get documents, sort them and then compare –
+			// but that's almost the same as comparing using `compareDatabases`.
 		})
 	}
 }
