@@ -32,8 +32,8 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 
 	ts := &internal.TestResults{}
 	ts.TestResults = make(map[string]internal.TestResult)
-	for _, f := range args {
-		output, err := runCommand("mongo", "--verbose", "--norc", uri, f)
+	for _, testName := range args {
+		output, err := runCommand("mongo", testName)
 		if err != nil {
 			if !strings.Contains(err.Error(), "exit status") {
 				return nil, err
@@ -41,14 +41,14 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 		}
 
 		if err == nil {
-			ts.TestResults[f] = internal.TestResult{
+			ts.TestResults[testName] = internal.TestResult{
 				Status: internal.Pass,
 				Output: string(output),
 			}
 			continue
 		}
 
-		ts.TestResults[f] = internal.TestResult{
+		ts.TestResults[testName] = internal.TestResult{
 			Status: internal.Fail,
 			Output: string(output),
 		}
@@ -56,13 +56,15 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	return ts, nil
 }
 
-// runCommand runs command with args inside the mongo container and returns the combined output.
+// runCommand runs command with args inside the mongo container and returns the
+// combined output.
 func runCommand(command string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
 	}
 
+	args = append([]string{"--verbose", "--norc", uri}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
 
