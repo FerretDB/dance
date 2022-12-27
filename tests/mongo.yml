@@ -1,8 +1,8 @@
 ---
 runner: jstest
 args:
-  - mongo/jstests/core/basic*.js
-  - mongo/jstests/auth/auth1.js
+  - tests/mongo/jstests/core/basic*.js
+  - tests/mongo/jstests/auth/auth1.js
 
 results:
   ferretdb:
