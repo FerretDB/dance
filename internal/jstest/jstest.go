@@ -24,7 +24,8 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+// Run
+func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
