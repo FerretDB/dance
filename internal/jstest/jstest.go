@@ -17,7 +17,9 @@ package jstest
 import (
 	"context"
 	"log"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/FerretDB/dance/internal"
@@ -29,7 +31,23 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 
 	ts := &internal.TestResults{}
 	ts.TestResults = make(map[string]internal.TestResult)
-	for _, testName := range args {
+
+	files := []string{}
+	for _, f := range args {
+		dir, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+
+		matches, err := filepath.Glob(filepath.Join(dir, f))
+		if err != nil {
+			return nil, err
+		}
+
+		files = append(files, matches...)
+	}
+
+	for _, testName := range files {
 		output, err := runCommand("mongo", testName)
 		if err != nil {
 			if _, ok := err.(*exec.ExitError); !ok {
