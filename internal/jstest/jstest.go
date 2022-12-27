@@ -33,6 +33,7 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	ts.TestResults = make(map[string]internal.TestResult)
 
 	files := []string{}
+
 	for _, f := range args {
 		dir, err := os.Getwd()
 		if err != nil {
@@ -64,6 +65,7 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 				Status: internal.Pass,
 				Output: string(output),
 			}
+
 			continue
 		}
 
@@ -72,6 +74,7 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 			Output: string(output),
 		}
 	}
+
 	return ts, nil
 }
 
@@ -88,5 +91,6 @@ func runCommand(command string, args ...string) ([]byte, error) {
 	cmd := exec.Command(bin, dockerArgs...)
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
 	return cmd.CombinedOutput()
 }
