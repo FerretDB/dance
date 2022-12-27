@@ -35,6 +35,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	for _, f := range args {
 		i := strings.LastIndex(f, dir)
+
 		matches, err := filepath.Glob(f[i:])
 		if err != nil {
 			return nil, err
