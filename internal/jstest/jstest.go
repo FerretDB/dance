@@ -17,7 +17,6 @@ package jstest
 import (
 	"context"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -25,7 +24,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -35,20 +34,14 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 	files := []string{}
 
 	for _, f := range args {
-		dir, err := os.Getwd()
-		if err != nil {
-			return nil, err
-		}
-
-		matches, err := filepath.Glob(filepath.Join(dir, f))
+		i := strings.LastIndex(f, dir)
+		matches, err := filepath.Glob(f[i:])
 		if err != nil {
 			return nil, err
 		}
 
 		for _, m := range matches {
-			i := strings.LastIndex(m, "/tests/")
-			m = m[i+1:]
-			files = append(files, m)
+			files = append(files, filepath.Join("tests", m))
 		}
 	}
 
