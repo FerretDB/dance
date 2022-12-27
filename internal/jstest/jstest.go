@@ -44,7 +44,11 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 			return nil, err
 		}
 
-		files = append(files, matches...)
+		for _, m := range matches {
+			i := strings.LastIndex(m, "/tests/")
+			m = m[i+1:]
+			files = append(files, m)
+		}
 	}
 
 	for _, testName := range files {
