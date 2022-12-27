@@ -1,15 +1,14 @@
 ---
 runner: jstest
 args:
-  - tests/mongo/jstests/core/basic1.js
-  - tests/mongo/jstests/core/basic2.js
-  - tests/mongo/jstests/auth/auth1.js
+  - mongo/jstests/core/basic*.js
+  - mongo/jstests/auth/auth1.js
 
 results:
   ferretdb:
     stats:
       expected_fail: 2
-      expected_pass: 1
+      expected_pass: 7
     fail:
       # https://github.com/FerretDB/FerretDB/issues/161
       - tests/mongo/jstests/core/basic1.js
@@ -18,6 +17,6 @@ results:
   mongodb:
     stats:
       expected_fail: 1
-      expected_pass: 2
+      expected_pass: 8
     fail:
       - tests/mongo/jstests/auth/auth1.js
