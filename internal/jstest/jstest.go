@@ -19,31 +19,40 @@ import (
 	"log"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
+
+	"golang.org/x/exp/maps"
 
 	"github.com/FerretDB/dance/internal"
 )
 
-func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	ts := &internal.TestResults{}
-	ts.TestResults = make(map[string]internal.TestResult)
-
-	files := []string{}
-
+	// remove duplicates if globs match same files
+	filesM := make(map[string]struct{})
 	for _, f := range args {
 		matches, err := filepath.Glob(f)
 		if err != nil {
 			return nil, err
 		}
 
-		files = append(files, matches...)
+		for _, m := range matches {
+			filesM[m] = struct{}{}
+		}
+	}
+
+	files := maps.Keys(filesM)
+	sort.Strings(files)
+
+	res := &internal.TestResults{
+		TestResults: make(map[string]internal.TestResult),
 	}
 
 	for _, testName := range files {
-		output, err := runCommand("mongo", testName)
+		output, err := runCommand(dir, "mongo", testName)
 		if err != nil {
 			if _, ok := err.(*exec.ExitError); !ok {
 				return nil, err
@@ -51,7 +60,7 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 		}
 
 		if err == nil {
-			ts.TestResults[testName] = internal.TestResult{
+			res.TestResults[testName] = internal.TestResult{
 				Status: internal.Pass,
 				Output: string(output),
 			}
@@ -59,18 +68,18 @@ func Run(ctx context.Context, args []string) (*internal.TestResults, error) {
 			continue
 		}
 
-		ts.TestResults[testName] = internal.TestResult{
+		res.TestResults[testName] = internal.TestResult{
 			Status: internal.Fail,
 			Output: string(output),
 		}
 	}
 
-	return ts, nil
+	return res, nil
 }
 
 // runCommand runs command with args inside the mongo container and returns the
 // combined output.
-func runCommand(command string, args ...string) ([]byte, error) {
+func runCommand(dir, command string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
@@ -79,6 +88,7 @@ func runCommand(command string, args ...string) ([]byte, error) {
 	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/"}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
 	cmd := exec.Command(bin, dockerArgs...)
+	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
