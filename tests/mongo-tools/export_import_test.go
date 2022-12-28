@@ -24,33 +24,35 @@ import (
 func TestExportImport(t *testing.T) {
 	t.Parallel()
 
+	localSourceRoot := "/dumps/mongodb-sample-databases/"
 	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
 
 	type testCase struct {
-		name0          string
-		dbName         string
+		coll0          string
+		db0            string
 		documentsCount int // document count
 	}
 
 	for _, tc := range []testCase{{
-		name0:          "shipwrecks.json",
-		dbName:         "sample_geospatial",
+		coll0:          "shipwrecks",
+		db0:            "sample_geospatial",
 		documentsCount: 11095,
 	}, {
-		name0:          "accounts.json",
-		dbName:         "sample_analytics",
+		coll0:          "accounts",
+		db0:            "sample_analytics",
 		documentsCount: 1746,
 	}} {
 		tc := tc
-		t.Run(tc.name0, func(t *testing.T) {
+		name0 := tc.db0 + "-" + tc.coll0
+		t.Run(name0, func(t *testing.T) {
 
-			ctx, client := setup(t)
-
-			name1 := tc.dbName + tc.name0 + "_dump1"
-			name2 := tc.dbName + tc.name0 + "_dump2"
+			name1 := name0 + "_dump1"
+			name2 := name0 + "_dump2"
 
 			// pre-create directory to avoid permission issues
 			recreateDir(t, filepath.Join(localTestsRoot, name1))
+
+			ctx, client := setup(t)
 
 			db1 := client.Database(name1)
 			t.Cleanup(func() { require.NoError(t, db1.Drop(ctx)) })
@@ -58,8 +60,11 @@ func TestExportImport(t *testing.T) {
 			db2 := client.Database(name2)
 			t.Cleanup(func() { require.NoError(t, db2.Drop(ctx)) })
 
+			path0 := filepath.Join(localSourceRoot, name0, tc.coll0+".json")
+			t.Log(path0)
+
 			// source file -> db1
-			mongoimport(t, "", tc.dbName, tc.name0)
+			mongoimport(t, path0, tc.db0, tc.coll0)
 		})
 	}
 
