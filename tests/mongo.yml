@@ -2,13 +2,18 @@
 runner: jstest
 args:
   - mongo/jstests/core/basic*.js
+  - mongo/jstests/core/all*.js
+  - mongo/jstests/core/array[1-4].js
+  - mongo/jstests/core/arrayfind[1-9].js
+  - mongo/jstests/core/find_and_modify.js
+  - mongo/jstests/core/find_and_modify[2-4].js
   - mongo/jstests/auth/auth1.js
 
 results:
   ferretdb:
     stats:
-      expected_fail: 2
-      expected_pass: 7
+      expected_fail: 18
+      expected_pass: 10
     fail:
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/basic1.js
@@ -17,6 +22,6 @@ results:
   mongodb:
     stats:
       expected_fail: 1
-      expected_pass: 8
+      expected_pass: 29
     fail:
       - mongo/jstests/auth/auth1.js
