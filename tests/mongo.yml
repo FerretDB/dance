@@ -12,14 +12,20 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 6
+      expected_fail: 9
       expected_pass: 10
     fail:
-      # known differences: we don't supported nested arrays
+      # known differences; we don't supported nested arrays
       - mongo/jstests/core/all.js
       - mongo/jstests/core/all2.js
       - mongo/jstests/core/all4.js
       - mongo/jstests/core/all5.js
+      - mongo/jstests/core/array1.js
+      - mongo/jstests/core/arrayfind1.js
+      - mongo/jstests/core/arrayfind2.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1710
+      - mongo/jstests/core/arrayfind3.js
 
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/basic1.js
