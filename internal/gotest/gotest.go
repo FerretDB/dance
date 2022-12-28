@@ -25,6 +25,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
+// Run runs Go tests.
 func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx

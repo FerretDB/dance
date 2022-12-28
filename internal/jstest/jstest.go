@@ -27,12 +27,14 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
+// Run runs jstests.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	// remove duplicates if globs match same files
 	filesM := make(map[string]struct{})
+
+	// remove duplicates if globs match same files
 	for _, f := range args {
 		matches, err := filepath.Glob(f)
 		if err != nil {
