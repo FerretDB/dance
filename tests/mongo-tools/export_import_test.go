@@ -65,6 +65,14 @@ func TestExportImport(t *testing.T) {
 
 			// source file -> db1
 			mongoimport(t, path0, tc.db0, tc.coll0)
+
+			path1 := filepath.Join(localSourceRoot, name1, tc.coll0+".json")
+
+			// db1 -> test file
+			mongoexport(t, path1, tc.db0, tc.coll0)
+
+			// test file -> db2
+			mongoimport(t, path1, tc.db0, tc.coll0)
 		})
 	}
 
