@@ -26,8 +26,8 @@ func TestDumpRestore(t *testing.T) {
 	t.Parallel()
 
 	containerSourceRoot := "/dumps/mongodb-sample-databases/dump"
-	localTestsRoot := filepath.Join("..", "..", "dumps", "mongoexport_tests")
-	containerTestsRoot := "/dumps/mongoexport_tests"
+	localTestsRoot := filepath.Join("..", "..", "dumps", "mongodump_tests")
+	containerTestsRoot := "/dumps/mongodump_tests"
 
 	//nolint:vet // for readability
 	type testCase struct {
