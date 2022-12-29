@@ -5,7 +5,7 @@ args: ["-timeout=3m", "-shuffle=on", "-race", "-v", "./..."]
 results:
   common:
     stats:
-      expected_pass: 3
+      expected_pass: 6
 
   ferretdb:
     stats:

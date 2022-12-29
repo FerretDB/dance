@@ -25,7 +25,8 @@ import (
 func TestExportImport(t *testing.T) {
 	t.Parallel()
 
-	localSourceRoot := "/dumps/mongodb-sample-databases/"
+	containerSourceRoot := "/dumps/mongodb-sample-databases/"
+	containerTestsRoot := "/dumps/tests"
 	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
 
 	type testCase struct {
@@ -51,8 +52,8 @@ func TestExportImport(t *testing.T) {
 			dbName1 := databaseName(t) + "_dump1"
 			dbName2 := databaseName(t) + "_dump2"
 
-			sourceFile := filepath.Join(localSourceRoot, tc.db, tc.coll+".json")
-			testFile := filepath.Join(localTestsRoot, dbName1, tc.coll+".json")
+			sourceFile := filepath.Join(containerSourceRoot, tc.db, tc.coll+".json")
+			testFile := filepath.Join(containerTestsRoot, dbName1, tc.coll+".json")
 
 			// pre-create directory to avoid permission issues
 			recreateDir(t, filepath.Join(localTestsRoot, dbName1))
