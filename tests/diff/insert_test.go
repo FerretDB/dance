@@ -49,3 +49,37 @@ func TestInsertDuplicateKeys(t *testing.T) {
 		require.NoError(t, err)
 	})
 }
+
+func TestInsertArrays(t *testing.T) {
+	t.Parallel()
+
+	ctx, db := setup(t)
+
+	doc := bson.D{{"_id", bson.A{"foo"}}}
+
+	_, err := db.Collection("insert-arrays").InsertOne(ctx, doc)
+
+	t.Run("FerretDB", func(t *testing.T) {
+		t.Parallel()
+
+		expected := mongo.CommandError{
+			Code:    2,
+			Name:    "BadValue",
+			Message: `The '_id' value cannot be of type array`,
+		}
+
+		assertEqualError(t, expected, err)
+	})
+
+	t.Run("MongoDB", func(t *testing.T) {
+		t.Parallel()
+
+		expected := mongo.CommandError{
+			Code:    2,
+			Name:    "BadValue",
+			Message: `The '_id' value cannot be of type array`,
+		}
+
+		assertEqualError(t, expected, err)
+	})
+}
