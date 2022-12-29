@@ -26,8 +26,8 @@ func TestExportImport(t *testing.T) {
 	t.Parallel()
 
 	containerSourceRoot := "/dumps/mongodb-sample-databases/"
-	containerTestsRoot := "/dumps/tests"
-	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
+	containerTestsRoot := "/dumps/mongodump_tests"
+	localTestsRoot := filepath.Join("..", "..", "dumps", "mongodump_tests")
 
 	type testCase struct {
 		coll           string // target collection
