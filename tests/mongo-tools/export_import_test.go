@@ -46,7 +46,6 @@ func TestExportImport(t *testing.T) {
 			documentsCount: 1746,
 		},
 	} {
-
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
 			dbName1 := databaseName(t) + "_dump1"
@@ -82,7 +81,6 @@ func TestExportImport(t *testing.T) {
 			compareDatabases(t, ctx, db1, db2)
 		})
 	}
-
 }
 
 // mongoimport imports collection from <file> file as <db>/<coll>.
@@ -103,6 +101,7 @@ func mongoimport(t *testing.T, file, db, coll string) {
 	)
 }
 
+// mongoexport exports collection from <db>/<coll> to the <file> file.
 func mongoexport(t *testing.T, file, db, coll string) {
 	t.Helper()
 
