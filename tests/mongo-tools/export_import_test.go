@@ -49,8 +49,8 @@ func TestExportImport(t *testing.T) {
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
-			dbName1 := databaseName(t) + "_dump1"
-			dbName2 := databaseName(t) + "_dump2"
+			dbName1 := tc.db + "_export1"
+			dbName2 := tc.db + "_export2"
 
 			sourceFile := filepath.Join(containerSourceRoot, tc.db, tc.coll+".json")
 			testFile := filepath.Join(containerTestsRoot, dbName1, tc.coll+".json")
