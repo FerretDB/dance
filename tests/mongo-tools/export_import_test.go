@@ -18,6 +18,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,26 +29,28 @@ func TestExportImport(t *testing.T) {
 	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
 
 	type testCase struct {
-		coll0          string
-		db0            string
+		coll           string
+		db             string
 		documentsCount int // document count
 	}
 
-	for _, tc := range []testCase{{
-		coll0:          "shipwrecks",
-		db0:            "sample_geospatial",
-		documentsCount: 11095,
-	}, {
-		coll0:          "accounts",
-		db0:            "sample_analytics",
-		documentsCount: 1746,
-	}} {
-		tc := tc
-		name0 := tc.db0 + "-" + tc.coll0
-		t.Run(name0, func(t *testing.T) {
+	for name, tc := range map[string]testCase{
+		"Shipwrecks": {
+			coll:           "shipwrecks",
+			db:             "sample_geospatial",
+			documentsCount: 11095,
+		},
+		"accounts": {
+			coll:           "accounts",
+			db:             "sample_analytics",
+			documentsCount: 1746,
+		},
+	} {
 
-			name1 := name0 + "_dump1"
-			name2 := name0 + "_dump2"
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			name1 := name + "_dump1"
+			name2 := name + "_dump2"
 
 			// pre-create directory to avoid permission issues
 			recreateDir(t, filepath.Join(localTestsRoot, name1))
@@ -60,19 +63,26 @@ func TestExportImport(t *testing.T) {
 			db2 := client.Database(name2)
 			t.Cleanup(func() { require.NoError(t, db2.Drop(ctx)) })
 
-			path0 := filepath.Join(localSourceRoot, name0, tc.coll0+".json")
-			t.Log(path0)
+			sourceFile := filepath.Join(localSourceRoot, tc.db, tc.coll+".json")
+			testFile := filepath.Join(localTestsRoot, name1, tc.coll+".json")
+
+			t.Log(db1.Name(), sourceFile)
+			t.Log(db2.Name(), testFile)
 
 			// source file -> db1
-			mongoimport(t, path0, tc.db0, tc.coll0)
-
-			path1 := filepath.Join(localSourceRoot, name1, tc.coll0+".json")
+			mongoimport(t, sourceFile, db1.Name(), tc.coll)
+			actualCount := getDocumentsCount(t, ctx, db1)
+			assert.Equal(t, tc.documentsCount, actualCount[tc.coll])
 
 			// db1 -> test file
-			mongoexport(t, path1, tc.db0, tc.coll0)
+			mongoexport(t, testFile, db1.Name(), tc.coll)
 
 			// test file -> db2
-			mongoimport(t, path1, tc.db0, tc.coll0)
+			mongoimport(t, testFile, db2.Name(), tc.coll)
+			actualCount = getDocumentsCount(t, ctx, db2)
+			assert.Equal(t, tc.documentsCount, actualCount[tc.coll])
+
+			compareDatabases(t, ctx, db1, db2)
 		})
 	}
 
@@ -106,7 +116,7 @@ func mongoexport(t *testing.T, file, db, coll string) {
 		"--db="+db,
 		"--collection="+coll,
 		"--out="+file,
-		"--sort='{x:1}'",
+		"--sort={x:1}",
 		"mongodb://host.docker.internal:27017/",
 	)
 }
