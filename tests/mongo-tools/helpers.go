@@ -49,6 +49,22 @@ func setup(tb testing.TB) (context.Context, *mongo.Client) {
 	return context.Background(), client
 }
 
+// databaseName returns a stable database name for that test.
+func databaseName(tb testing.TB) string {
+	tb.Helper()
+
+	// database names are always lowercase
+	name := strings.ToLower(tb.Name())
+
+	name = strings.ReplaceAll(name, "/", "-")
+	name = strings.ReplaceAll(name, " ", "_")
+	name = strings.ReplaceAll(name, "$", "_")
+
+	require.Less(tb, len(name), 64)
+
+	return name
+}
+
 // runDockerComposeCommand runs command with args inside mongosh container.
 func runDockerComposeCommand(tb testing.TB, command string, args ...string) {
 	tb.Helper()

@@ -29,9 +29,9 @@ func TestExportImport(t *testing.T) {
 	localTestsRoot := filepath.Join("..", "..", "dumps", "tests")
 
 	type testCase struct {
-		coll           string
-		db             string
-		documentsCount int // document count
+		coll           string // target collection
+		db             string // target database
+		documentsCount int    // document count
 	}
 
 	for name, tc := range map[string]testCase{
@@ -40,7 +40,7 @@ func TestExportImport(t *testing.T) {
 			db:             "sample_geospatial",
 			documentsCount: 11095,
 		},
-		"accounts": {
+		"Accounts": {
 			coll:           "accounts",
 			db:             "sample_analytics",
 			documentsCount: 1746,
@@ -49,8 +49,8 @@ func TestExportImport(t *testing.T) {
 
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
-			dbName1 := name + "_dump1"
-			dbName2 := name + "_dump2"
+			dbName1 := databaseName(t) + "_dump1"
+			dbName2 := databaseName(t) + "_dump2"
 
 			sourceFile := filepath.Join(localSourceRoot, tc.db, tc.coll+".json")
 			testFile := filepath.Join(localTestsRoot, dbName1, tc.coll+".json")
