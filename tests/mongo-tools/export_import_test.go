@@ -15,6 +15,7 @@
 package mongotools
 
 import (
+	"fmt"
 	"path/filepath"
 	"testing"
 
@@ -49,8 +50,10 @@ func TestExportImport(t *testing.T) {
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
-			dbName1 := tc.db + "_export1"
-			dbName2 := tc.db + "_export2"
+			t.Parallel()
+
+			dbName1 := fmt.Sprintf("%s_%s_export1", tc.db, tc.coll)
+			dbName2 := fmt.Sprintf("%s_%s_export2", tc.db, tc.coll)
 
 			sourceFile := filepath.Join(containerSourceRoot, tc.db, tc.coll+".json")
 			testFile := filepath.Join(containerTestsRoot, dbName1, tc.coll+".json")
