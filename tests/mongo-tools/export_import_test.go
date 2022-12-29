@@ -49,36 +49,33 @@ func TestExportImport(t *testing.T) {
 
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
-			name1 := name + "_dump1"
-			name2 := name + "_dump2"
+			dbName1 := name + "_dump1"
+			dbName2 := name + "_dump2"
+
+			sourceFile := filepath.Join(localSourceRoot, tc.db, tc.coll+".json")
+			testFile := filepath.Join(localTestsRoot, dbName1, tc.coll+".json")
 
 			// pre-create directory to avoid permission issues
-			recreateDir(t, filepath.Join(localTestsRoot, name1))
+			recreateDir(t, filepath.Join(localTestsRoot, dbName1))
 
 			ctx, client := setup(t)
 
-			db1 := client.Database(name1)
+			db1 := client.Database(dbName1)
 			t.Cleanup(func() { require.NoError(t, db1.Drop(ctx)) })
 
-			db2 := client.Database(name2)
+			db2 := client.Database(dbName2)
 			t.Cleanup(func() { require.NoError(t, db2.Drop(ctx)) })
 
-			sourceFile := filepath.Join(localSourceRoot, tc.db, tc.coll+".json")
-			testFile := filepath.Join(localTestsRoot, name1, tc.coll+".json")
-
-			t.Log(db1.Name(), sourceFile)
-			t.Log(db2.Name(), testFile)
-
 			// source file -> db1
-			mongoimport(t, sourceFile, db1.Name(), tc.coll)
+			mongoimport(t, sourceFile, dbName1, tc.coll)
 			actualCount := getDocumentsCount(t, ctx, db1)
 			assert.Equal(t, tc.documentsCount, actualCount[tc.coll])
 
 			// db1 -> test file
-			mongoexport(t, testFile, db1.Name(), tc.coll)
+			mongoexport(t, testFile, dbName1, tc.coll)
 
 			// test file -> db2
-			mongoimport(t, testFile, db2.Name(), tc.coll)
+			mongoimport(t, testFile, dbName2, tc.coll)
 			actualCount = getDocumentsCount(t, ctx, db2)
 			assert.Equal(t, tc.documentsCount, actualCount[tc.coll])
 
