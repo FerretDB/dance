@@ -118,7 +118,7 @@ func assertEqualAltError(t testing.TB, expected mongo.CommandError, altMessage s
 func unsetRaw(t testing.TB, err error) error {
 	t.Helper()
 
-	switch err := err.(type) {
+	switch err := err.(type) { //nolint:errorlint // simple check is enough
 	case mongo.CommandError:
 		err.Raw = nil
 		return err
@@ -129,12 +129,15 @@ func unsetRaw(t testing.TB, err error) error {
 		}
 
 		wes := make([]mongo.WriteError, len(err.WriteErrors))
+
 		for i, we := range err.WriteErrors {
 			we.Raw = nil
 			wes[i] = we
 		}
+
 		err.WriteErrors = wes
 		err.Raw = nil
+
 		return err
 
 	default:
