@@ -1,4 +1,5 @@
 /bin/
-/dumps/tests/
+/dumps/mongoexport_tests/
+/dumps/mongodump_tests/
 /vendor/
 cover.txt
