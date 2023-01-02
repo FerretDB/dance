@@ -17,6 +17,7 @@ package diff
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -34,13 +35,13 @@ func TestInsertDuplicateKeys(t *testing.T) {
 	t.Run("FerretDB", func(t *testing.T) {
 		t.Parallel()
 
-		expected := mongo.CommandError{
+		expected := mongo.WriteException{WriteErrors: []mongo.WriteError{{
+			Index:   0,
 			Code:    2,
-			Name:    "BadValue",
 			Message: `invalid key: "foo" (duplicate keys are not allowed)`,
-		}
+		}}}
 
-		assertEqualError(t, expected, err)
+		assert.Equal(t, expected, unsetRaw(t, err))
 	})
 
 	t.Run("MongoDB", func(t *testing.T) {
