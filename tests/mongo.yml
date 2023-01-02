@@ -7,14 +7,18 @@ args:
   - mongo/jstests/core/basic*.js
   - mongo/jstests/core/find_and_modify.js
   - mongo/jstests/core/find_and_modify[2-4].js
+  - mongo/jstests/core/uniqueness.js
+  - mongo/jstests/core/unset*.js
+  - mongo/jstests/core/update[2-9].js
 
 results:
   ferretdb:
     stats:
-      expected_fail: 19
-      expected_pass: 10
+      expected_fail: 21
+      expected_pass: 16
     fail:
-      # known differences; we don't support nested arrays
+      # https://docs.ferretdb.io/diff/
+      # 3. FerretDB does not support nested arrays.
       - mongo/jstests/core/all.js
       - mongo/jstests/core/all2.js
       - mongo/jstests/core/all4.js
@@ -26,6 +30,9 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/1724
       - mongo/jstests/core/arrayfind5.js
+
+      # https://github.com/FerretDB/FerretDB/issues/161
+      - mongo/jstests/core/basic1.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
       # https://github.com/FerretDB/FerretDB/issues/731
@@ -41,8 +48,17 @@ results:
       - mongo/jstests/core/find_and_modify3.js
       - mongo/jstests/core/find_and_modify4.js
 
-      # https://github.com/FerretDB/FerretDB/issues/161
-      - mongo/jstests/core/basic1.js
+      # https://github.com/FerretDB/FerretDB/issues/1384
+      - mongo/jstests/core/uniqueness.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1242
+      - mongo/jstests/core/unset2.js
+
+      # https://github.com/FerretDB/FerretDB/issues/503
+      - mongo/jstests/core/update8.js
+
+      # https://github.com/FerretDB/FerretDB/issues/503
+      - mongo/jstests/core/update9.js
 
   mongodb:
     stats:
