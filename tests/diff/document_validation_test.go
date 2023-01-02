@@ -18,6 +18,7 @@ import (
 	"math"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,39 +34,37 @@ func TestDocumentValidation(t *testing.T) {
 
 		for name, tc := range map[string]struct {
 			doc      bson.D
-			expected mongo.CommandError
+			expected mongo.WriteException
 		}{
 			"DollarSign": {
 				doc: bson.D{{"foo$", "bar"}},
-				expected: mongo.CommandError{
+				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
+					Index:   0,
 					Code:    2,
-					Name:    "BadValue",
 					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
-				},
+				}}},
 			},
 			"DotSign": {
 				doc: bson.D{{"foo.bar", "baz"}},
-				expected: mongo.CommandError{
+				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
+					Index:   0,
 					Code:    2,
-					Name:    "BadValue",
 					Message: `invalid key: "foo.bar" (key must not contain '.' sign)`,
-				},
+				}}},
 			},
 			"Inf": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(1)}},
-				expected: mongo.CommandError{
+				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
 					Code:    2,
-					Name:    "BadValue",
 					Message: `invalid value: { "foo": +Inf } (infinity values are not allowed)`,
-				},
+				}}},
 			},
 			"NegativeInf": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(-1)}},
-				expected: mongo.CommandError{
+				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
 					Code:    2,
-					Name:    "BadValue",
 					Message: `invalid value: { "foo": -Inf } (infinity values are not allowed)`,
-				},
+				}}},
 			},
 		} {
 			name, tc := name, tc
@@ -78,7 +77,7 @@ func TestDocumentValidation(t *testing.T) {
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					assertEqualError(t, tc.expected, err)
+					assert.Equal(t, tc.expected, unsetRaw(t, err))
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
@@ -117,8 +116,7 @@ func TestDocumentValidation(t *testing.T) {
 			name, tc := name, tc
 
 			t.Run(name, func(t *testing.T) {
-				// TODO: make them run in parallel https://github.com/FerretDB/FerretDB/issues/1488
-				// t.Parallel()
+				t.Parallel()
 
 				// initiate a collection with a valid document, so we have something to update
 				collection := db.Collection("update-validation-" + name)
