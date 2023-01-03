@@ -82,8 +82,8 @@ results:
       - mongo/jstests/core/updateh.js
   mongodb:
     stats:
-      expected_fail: 0
-      expected_pass: 52
+      expected_fail: 1
+      expected_pass: 51
     fail:
       # TODO investigate parallel shell issue.
       - mongo/jstests/core/updatef.js
