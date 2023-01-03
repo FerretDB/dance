@@ -10,12 +10,13 @@ args:
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/unset*.js
   - mongo/jstests/core/update[2-9].js
+  - mongo/jstests/core/update[a-z].js
 
 results:
   ferretdb:
     stats:
-      expected_fail: 21
-      expected_pass: 16
+      expected_fail: 32
+      expected_pass: 20
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -42,7 +43,7 @@ results:
       - mongo/jstests/core/arrayfind8.js
       - mongo/jstests/core/arrayfind9.js
 
-      # https://github.com/FerretDB/FerretDB/issues/1727
+      # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/find_and_modify.js
       - mongo/jstests/core/find_and_modify2.js
       - mongo/jstests/core/find_and_modify3.js
@@ -56,12 +57,31 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/503
       - mongo/jstests/core/update8.js
+      - mongo/jstests/core/updatec.js
+      - mongo/jstests/core/updatea.js
+      - mongo/jstests/core/updatei.js
+      - mongo/jstests/core/updatej.js
 
       # https://github.com/FerretDB/FerretDB/issues/503
+      # https://github.com/FerretDB/FerretDB/issues/1736
       - mongo/jstests/core/update9.js
 
+      # https://github.com/FerretDB/FerretDB/issues/1742
+      - mongo/jstests/core/updateb.js
+      - mongo/jstests/core/updatel.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1744
+      - mongo/jstests/core/updatee.js
+
+      # TODO investigate parallel shell issue.
+      - mongo/jstests/core/updatef.js
+
+      # https://docs.ferretdb.io/diff/
+      # 5. Document restrictions:
+      # document keys must not contain $ or . signs;
+      - mongo/jstests/core/updateh.js
   mongodb:
     stats:
       expected_fail: 0
-      expected_pass: 29
+      expected_pass: 51
     fail:
