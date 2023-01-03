@@ -73,7 +73,7 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/1744
       - mongo/jstests/core/updatee.js
 
-      # TODO investigate parallel shell issue.
+      # https://github.com/FerretDB/dance/issues/304
       - mongo/jstests/core/updatef.js
 
       # https://docs.ferretdb.io/diff/
@@ -85,5 +85,5 @@ results:
       expected_fail: 1
       expected_pass: 51
     fail:
-      # TODO investigate parallel shell issue.
+      # https://github.com/FerretDB/dance/issues/304
       - mongo/jstests/core/updatef.js
