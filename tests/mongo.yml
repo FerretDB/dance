@@ -2,6 +2,7 @@
 runner: jstest
 args:
   - mongo/jstests/core/all*.js
+  - mongo/jstests/core/auth[1-2].js
   - mongo/jstests/core/array[1-4].js
   - mongo/jstests/core/arrayfind[1-9].js
   - mongo/jstests/core/basic*.js
@@ -15,7 +16,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 32
+      expected_fail: 34
       expected_pass: 20
     fail:
       # https://docs.ferretdb.io/diff/
@@ -42,6 +43,13 @@ results:
       - mongo/jstests/core/arrayfind7.js
       - mongo/jstests/core/arrayfind8.js
       - mongo/jstests/core/arrayfind9.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1492
+      - mongo/jstests/core/auth1.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1750
+      # logout deprecated since version 5.0.
+      - mongo/jstests/core/auth2.js
 
       # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/find_and_modify.js
@@ -83,7 +91,7 @@ results:
   mongodb:
     stats:
       expected_fail: 1
-      expected_pass: 51
+      expected_pass: 53
     fail:
       # https://github.com/FerretDB/dance/issues/304
       - mongo/jstests/core/updatef.js
