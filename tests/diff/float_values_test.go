@@ -77,9 +77,29 @@ func TestFloatValues(t *testing.T) {
 	})
 
 	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("Update", func(t *testing.T) {
+	t.Run("Update", func(t *testing.T) {
+		t.Parallel()
 
-	})*/
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			update   bson.D
+			opts     bson.D
+			expected mongo.CommandError
+		}{
+			"NaN": {
+				filter: nil,
+				update: nil,
+				opts:   nil,
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", upsert: true, ` +
+						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
+				},
+			},
+		} {
+		}
+	})
 
 	// TODO https://github.com/FerretDB/dance/issues/266
 	/*t.Run("FindAndModify", func(t *testing.T) {
