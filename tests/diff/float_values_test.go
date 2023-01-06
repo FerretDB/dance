@@ -21,6 +21,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func TestFloatValues(t *testing.T) {
@@ -83,13 +84,13 @@ func TestFloatValues(t *testing.T) {
 		for name, tc := range map[string]struct {
 			filter   bson.D
 			update   bson.D
-			opts     bson.D
+			opts     options.UpdateOptions
 			expected mongo.CommandError
 		}{
 			"NaN": {
 				filter: nil,
 				update: nil,
-				opts:   nil,
+				opts:   options.UpdateOptions{},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
@@ -98,6 +99,25 @@ func TestFloatValues(t *testing.T) {
 				},
 			},
 		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				_, err := db.Collection("update-"+name).UpdateOne(ctx, tc.filter, tc.update, &tc.opts)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					assertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
 		}
 	})
 
