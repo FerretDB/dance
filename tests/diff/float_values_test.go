@@ -77,6 +77,7 @@ func TestFloatValues(t *testing.T) {
 	t.Run("Update", func(t *testing.T) {
 		t.Parallel()
 
+		// to set UpdateOptions.Upsert.
 		boolPointer := func(b bool) *bool {
 			return &b
 		}
@@ -200,7 +201,6 @@ func TestFloatValues(t *testing.T) {
 				// to return error
 				var update any
 
-				// FindOneAndUpdate executes a findAndModify command
 				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update, &tc.opts).Decode(update)
 
 				t.Run("FerretDB", func(t *testing.T) {
