@@ -77,7 +77,6 @@ func TestFloatValues(t *testing.T) {
 		}
 	})
 
-	// TODO https://github.com/FerretDB/dance/issues/266
 	t.Run("Update", func(t *testing.T) {
 		t.Parallel()
 
@@ -88,20 +87,18 @@ func TestFloatValues(t *testing.T) {
 			expected mongo.CommandError
 		}{
 			"NaN": {
-				filter: bson.D{},
+				filter: bson.D{{"_id", "1"}},
 				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
 				opts:   options.UpdateOptions{},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", upsert: false, ` +
-						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", ordered: true, ` +
+						`$db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: nan.0 } } } ] } with: NaN is not supported`,
 				},
 			},
 		} {
 			name, tc := name, tc
-
-			*tc.opts.Upsert = false
 
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
@@ -123,8 +120,46 @@ func TestFloatValues(t *testing.T) {
 		}
 	})
 
-	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("FindAndModify", func(t *testing.T) {
+	t.Run("FindAndModify", func(t *testing.T) {
+		t.Parallel()
 
-	})*/
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			update   bson.D
+			opts     options.FindOneAndUpdateOptions
+			expected mongo.CommandError
+		}{
+			"NaN": {
+				filter: bson.D{{"_id", "1"}},
+				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
+				opts:   *options.FindOneAndUpdate(),
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NaN", ` +
+						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN is not supported`,
+				},
+			},
+		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				// FindOneAndUpdate executes a findAndModify command
+				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update, &tc.opts)
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					assertEqualError(t, tc.expected, err.Err())
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err.Err())
+				})
+			})
+		}
+	})
 }
