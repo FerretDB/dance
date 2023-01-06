@@ -119,7 +119,8 @@ func TestFloatValues(t *testing.T) {
 					Code: 2,
 					Name: "BadValue",
 					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZero", ordered: ` +
-						`true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } } } ] } with: -0 is not supported`,
+						`true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } } } ] } ` +
+						`with: -0 is not supported`,
 				},
 			},
 			"NegativeZeroWithUpsert": {
@@ -129,8 +130,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZeroWithUpsert", ordered: ` +
-						`true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } }, upsert: true } ] } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZeroWithUpsert", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } }, ` +
+						`upsert: true } ] } with: -0 is not supported`,
 				},
 			},
 		} {
