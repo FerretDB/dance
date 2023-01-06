@@ -88,18 +88,20 @@ func TestFloatValues(t *testing.T) {
 			expected mongo.CommandError
 		}{
 			"NaN": {
-				filter: nil,
-				update: nil,
+				filter: bson.D{},
+				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
 				opts:   options.UpdateOptions{},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", upsert: true, ` +
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", upsert: false, ` +
 						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
 				},
 			},
 		} {
 			name, tc := name, tc
+
+			*tc.opts.Upsert = false
 
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
