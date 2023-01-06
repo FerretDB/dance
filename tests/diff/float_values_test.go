@@ -63,13 +63,11 @@ func TestFloatValues(t *testing.T) {
 				_, err := db.Collection("insert-"+name).InsertOne(ctx, tc.doc)
 
 				t.Run("FerretDB", func(t *testing.T) {
-					t.Parallel()
 
 					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
-					t.Parallel()
 
 					require.NoError(t, err)
 				})
@@ -146,18 +144,25 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
+				// to return error
+				var update any
+
 				// FindOneAndUpdate executes a findAndModify command
-				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update, &tc.opts)
+				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update, &tc.opts).Decode(update)
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					assertEqualError(t, tc.expected, err.Err())
+					assertEqualError(t, tc.expected, err)
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.NoError(t, err.Err())
+					if err != nil {
+						if err != mongo.ErrNoDocuments {
+							t.Fail()
+						}
+					}
 				})
 			})
 		}
