@@ -165,13 +165,11 @@ func TestFloatValues(t *testing.T) {
 		for name, tc := range map[string]struct {
 			filter   bson.D
 			update   bson.D
-			opts     options.FindOneAndUpdateOptions
 			expected mongo.CommandError
 		}{
 			"NaN": {
 				filter: bson.D{{"_id", "1"}},
 				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
-				opts:   *options.FindOneAndUpdate(),
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
@@ -183,7 +181,6 @@ func TestFloatValues(t *testing.T) {
 			"NegativeZero": {
 				filter: bson.D{{"_id", "1"}},
 				update: bson.D{{"$set", bson.D{{"foo", math.Copysign(0.0, -1)}}}},
-				opts:   options.FindOneAndUpdateOptions{},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
@@ -201,7 +198,7 @@ func TestFloatValues(t *testing.T) {
 				// to return error
 				var update any
 
-				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update, &tc.opts).Decode(update)
+				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
