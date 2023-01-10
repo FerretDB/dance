@@ -15,10 +15,10 @@
 package diff
 
 import (
-	"errors"
 	"math"
 	"testing"
 
+	"github.com/AlekSi/pointer"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -77,11 +77,6 @@ func TestFloatValues(t *testing.T) {
 	t.Run("Update", func(t *testing.T) {
 		t.Parallel()
 
-		// to set UpdateOptions.Upsert.
-		boolPointer := func(b bool) *bool {
-			return &b
-		}
-
 		for name, tc := range map[string]struct {
 			filter   bson.D
 			update   bson.D
@@ -95,21 +90,23 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: ` +
-						`"update-NaN", ordered: true, $db: "testfloatvalues", updates: ` +
-						`[ { q: { _id: "1" }, u: { $set: { foo: nan.0 } } } ] } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { updat` +
+						`e: "update-NaN", ordered: true, $db: "testfloatvalues",` +
+						` updates: [ { q: { _id: "1" }, u: { $set: { foo: nan.0 ` +
+						`} } } ] } with: NaN is not supported`,
 				},
 			},
 			"NaNWithUpsert": {
 				filter: bson.D{{"_id", "1"}},
 				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
-				opts:   options.UpdateOptions{Upsert: boolPointer(true)},
+				opts:   options.UpdateOptions{Upsert: pointer.ToBool(true)},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaNWithUpsert", ` +
-						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: nan.0 } }, ` +
-						`upsert: true } ] } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { updat` +
+						`e: "update-NaNWithUpsert", ordered: true, $db: "testflo` +
+						`atvalues", updates: [ { q: { _id: "1" }, u: { $set: { f` +
+						`oo: nan.0 } }, upsert: true } ] } with: NaN is not supported`,
 				},
 			},
 			"NegativeZero": {
@@ -119,21 +116,23 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZero", ordered: ` +
-						`true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } } } ] } ` +
-						`with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { updat` +
+						`e: "update-NegativeZero", ordered: true, $db: "testfloa` +
+						`tvalues", updates: [ { q: { _id: "1" }, u: { $set: { fo` +
+						`o: -0.0 } } } ] } with: -0 is not supported`,
 				},
 			},
 			"NegativeZeroWithUpsert": {
 				filter: bson.D{{"_id", "1"}},
 				update: bson.D{{"$set", bson.D{{"foo", math.Copysign(0.0, -1)}}}},
-				opts:   options.UpdateOptions{Upsert: boolPointer(true)},
+				opts:   options.UpdateOptions{Upsert: pointer.ToBool(true)},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZeroWithUpsert", ` +
-						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, u: { $set: { foo: -0.0 } }, ` +
-						`upsert: true } ] } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { updat` +
+						`e: "update-NegativeZeroWithUpsert", ordered: true, $db:` +
+						` "testfloatvalues", updates: [ { q: { _id: "1" }, u: { ` +
+						`$set: { foo: -0.0 } }, upsert: true } ] } with: -0 is not supported`,
 				},
 			},
 		} {
@@ -142,7 +141,13 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				_, err := db.Collection("update-"+name).UpdateOne(ctx, tc.filter, tc.update, &tc.opts)
+				coll := "update-" + name
+				_, err := db.Collection(coll).InsertOne(ctx, tc.filter)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				_, err = db.Collection(coll).UpdateOne(ctx, tc.filter, tc.update, &tc.opts)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
@@ -173,9 +178,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { findAndModify: ` +
-						`"findAndModify-NaN", query: { _id: "1" }, update: { $set: { foo: nan.0 } }, ` +
-						`$db: "testfloatvalues" } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { findA` +
+						`ndModify: "findAndModify-NaN", query: { _id: "1" }, upd` +
+						`ate: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN is not supported`,
 				},
 			},
 			"NegativeZero": {
@@ -184,9 +189,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { findAndModify: ` +
-						`"findAndModify-NegativeZero", query: { _id: "1" }, update: { $set: { foo: ` +
-						`-0.0 } }, $db: "testfloatvalues" } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { findA` +
+						`ndModify: "findAndModify-NegativeZero", query: { _id: "` +
+						`1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 is not supported`,
 				},
 			},
 		} {
@@ -195,10 +200,16 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
+				coll := "update-" + name
+				_, err := db.Collection(coll).InsertOne(ctx, tc.filter)
+				if err != nil {
+					t.Fatal(err)
+				}
+
 				// to return error
 				var update any
 
-				err := db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
+				err = db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
@@ -209,11 +220,7 @@ func TestFloatValues(t *testing.T) {
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					if err != nil {
-						if !errors.Is(err, mongo.ErrNoDocuments) {
-							t.Fail()
-						}
-					}
+					require.NoError(t, err)
 				})
 			})
 		}
