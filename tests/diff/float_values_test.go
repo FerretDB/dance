@@ -85,4 +85,53 @@ func TestFloatValues(t *testing.T) {
 	/*t.Run("FindAndModify", func(t *testing.T) {
 
 	})*/
+
+	t.Run("FindAndModify", func(t *testing.T) {
+		t.Parallel()
+
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			update   bson.D
+			expected mongo.CommandError
+		}{
+			"MulMaxFloat64": {
+				filter: bson.D{{"_id", "1"}},
+				update: bson.D{{"$mul", bson.D{{"v", math.MaxFloat64}}}},
+				expected: mongo.CommandError{
+					Code:    2,
+					Name:    "BadValue",
+					Message: `invalid value: { "v": +Inf } (infinity values are not allowed)`,
+				},
+			},
+		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				// initiate a collection with a valid document, so we have something to update
+				collection := db.Collection("find-and-modify-" + name)
+				_, err := collection.InsertOne(ctx, bson.D{
+					{"_id", "1"},
+					{"v", int32(42)},
+				})
+				require.NoError(t, err)
+
+				var update any
+				err = collection.FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					assertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
+		}
+	})
 }
