@@ -200,7 +200,7 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				coll := "update-" + name
+				coll := "findAndModify-" + name
 				_, err := db.Collection(coll).InsertOne(ctx, tc.filter)
 				if err != nil {
 					t.Fatal(err)
@@ -209,7 +209,7 @@ func TestFloatValues(t *testing.T) {
 				// to return error
 				var update any
 
-				err = db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
+				err = db.Collection("findAndModify-"+name).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(&update)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
