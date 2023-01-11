@@ -175,7 +175,8 @@ func TestFloatValues(t *testing.T) {
 					Code: 2,
 					Name: "BadValue",
 					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NaN", ` +
-						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN is not supported`,
+						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN ` +
+						`is not supported`,
 				},
 			},
 			"NegativeZero": {
@@ -185,7 +186,8 @@ func TestFloatValues(t *testing.T) {
 					Code: 2,
 					Name: "BadValue",
 					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NegativeZero", ` +
-						`query: { _id: "1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 is not supported`,
+						`query: { _id: "1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 ` +
+						`is not supported`,
 				},
 			},
 		} {
