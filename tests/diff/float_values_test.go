@@ -90,10 +90,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { updat` +
-						`e: "update-NaN", ordered: true, $db: "testfloatvalues",` +
-						` updates: [ { q: { _id: "1" }, u: { $set: { foo: nan.0 ` +
-						`} } } ] } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: nan.0 } } } ] } with: NaN is not supported`,
 				},
 			},
 			"NaNWithUpsert": {
@@ -103,10 +102,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { updat` +
-						`e: "update-NaNWithUpsert", ordered: true, $db: "testflo` +
-						`atvalues", updates: [ { q: { _id: "1" }, u: { $set: { f` +
-						`oo: nan.0 } }, upsert: true } ] } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaNWithUpsert", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: nan.0 } }, upsert: true } ] } with: NaN is not supported`,
 				},
 			},
 			"NegativeZero": {
@@ -116,10 +114,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { updat` +
-						`e: "update-NegativeZero", ordered: true, $db: "testfloa` +
-						`tvalues", updates: [ { q: { _id: "1" }, u: { $set: { fo` +
-						`o: -0.0 } } } ] } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZero", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: -0.0 } } } ] } with: -0 is not supported`,
 				},
 			},
 			"NegativeZeroWithUpsert": {
@@ -129,10 +126,9 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { updat` +
-						`e: "update-NegativeZeroWithUpsert", ordered: true, $db:` +
-						` "testfloatvalues", updates: [ { q: { _id: "1" }, u: { ` +
-						`$set: { foo: -0.0 } }, upsert: true } ] } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZeroWithUpsert", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: -0.0 } }, upsert: true } ] } with: -0 is not supported`,
 				},
 			},
 		} {
@@ -178,9 +174,8 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { findA` +
-						`ndModify: "findAndModify-NaN", query: { _id: "1" }, upd` +
-						`ate: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NaN", ` +
+						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN is not supported`,
 				},
 			},
 			"NegativeZero": {
@@ -189,9 +184,8 @@ func TestFloatValues(t *testing.T) {
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { findA` +
-						`ndModify: "findAndModify-NegativeZero", query: { _id: "` +
-						`1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 is not supported`,
+					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NegativeZero", ` +
+						`query: { _id: "1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 is not supported`,
 				},
 			},
 		} {
