@@ -86,7 +86,7 @@ func TestFloatValues(t *testing.T) {
 
 	})*/
 
-	t.Run("FindAndModify", func(t *testing.T) {
+	t.Run("UpdateOne", func(t *testing.T) {
 		t.Parallel()
 
 		for name, tc := range map[string]struct {
@@ -96,8 +96,8 @@ func TestFloatValues(t *testing.T) {
 			expected mongo.CommandError
 		}{
 			"MulMaxFloat64": {
-				filter: bson.D{{"_id", "1"}},
-				insert: bson.D{{"_id", "1"}, {"v", int32(42)}},
+				filter: bson.D{{"_id", "number"}},
+				insert: bson.D{{"_id", "number"}, {"v", int32(42)}},
 				update: bson.D{{"$mul", bson.D{{"v", math.MaxFloat64}}}},
 				expected: mongo.CommandError{
 					Code:    2,
@@ -111,12 +111,11 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				collection := db.Collection("update-mul-" + name)
+				collection := db.Collection("update-one-" + name)
 				_, err := collection.InsertOne(ctx, tc.insert)
 				require.NoError(t, err)
 
-				var update bson.D
-				err = collection.FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(update)
+				_, err = collection.UpdateOne(ctx, tc.filter, tc.update)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
