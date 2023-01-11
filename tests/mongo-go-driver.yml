@@ -9,7 +9,7 @@ args:
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
-# - ./mongo/integration
+  - ./mongo/integration
   - ./mongo/integration/unified
 
 results:
