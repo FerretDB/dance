@@ -111,8 +111,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 164
-      expected_pass: 1291
+      expected_skip: 329
+      expected_pass: 2152
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
@@ -131,6 +131,91 @@ results:
 
       # execution failed: test must be skipped: "the deprecated contentType file option is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload.json/upload_when_contentType_is_provided
+
+      # skipping due to known failure: failpoints and timeouts together cause failures; see GODRIVER-2123
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/minPoolSize-error.json/Network_error_on_minPoolSize_background_creation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/find-network-timeout-error.json/Ignore_network_timeout_error_on_find
+      
+      # operation mapReduce not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_succeeds_with_retry_on
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_on
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_off
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/read-write-concern/operation/default-write-concern-3.4.json/MapReduce_omits_default_write_concern
+
+      # operation listIndexNames not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      # operation listDatabaseObjects not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      # operation listCollectionObjects not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      # count has been deprecated
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_NotWritablePrimary_when_retryReads_is_false
+      
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
