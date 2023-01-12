@@ -16,8 +16,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 34
-      expected_pass: 20
+      expected_fail: 33
+      expected_pass: 21
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -81,17 +81,12 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/1744
       - mongo/jstests/core/updatee.js
 
-      # https://github.com/FerretDB/dance/issues/304
-      - mongo/jstests/core/updatef.js
-
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/updateh.js
   mongodb:
     stats:
-      expected_fail: 1
+      expected_fail: 0
       expected_pass: 53
     fail:
-      # https://github.com/FerretDB/dance/issues/304
-      - mongo/jstests/core/updatef.js

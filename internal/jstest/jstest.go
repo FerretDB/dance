@@ -18,6 +18,7 @@ import (
 	"context"
 	"log"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -34,6 +35,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	filesM := make(map[string]struct{})
 
+	prefix := "/tests"
+
 	// remove duplicates if globs match same files
 	for _, f := range args {
 		matches, err := filepath.Glob(f)
@@ -42,7 +45,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}
 
 		for _, m := range matches {
-			filesM[m] = struct{}{}
+			filesM[path.Join(prefix, m)] = struct{}{}
 		}
 	}
 
@@ -60,6 +63,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 				return nil, err
 			}
 		}
+
+		// to avoid unexpected results
+		testName = strings.TrimPrefix(testName, prefix+"/")
 
 		if err == nil {
 			res.TestResults[testName] = internal.TestResult{
