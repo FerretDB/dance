@@ -100,9 +100,10 @@ func TestFloatValues(t *testing.T) {
 				insert: bson.D{{"_id", "number"}, {"v", int32(42)}},
 				update: bson.D{{"$mul", bson.D{{"v", math.MaxFloat64}}}},
 				expected: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
-					Message: `invalid value: { "v": +Inf } (infinity values are not allowed)`,
+					Code: 2,
+					Name: "BadValue",
+					Message: `update produces invalid value: { "v": +Inf }` +
+						` (update operations that produce infinity values are not allowed)`,
 				},
 			},
 		} {
