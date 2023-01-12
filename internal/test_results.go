@@ -19,6 +19,7 @@ import "strings"
 // status represents single test status.
 type status string
 
+// status values.
 const (
 	Pass     status = "pass"
 	Skip     status = "skip"
