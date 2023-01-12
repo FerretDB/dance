@@ -31,11 +31,12 @@ import (
 //
 // May contain prefixes; the longest prefix wins.
 type TestsConfig struct {
-	Default status
-	Stats   *Stats
-	Pass    Tests
-	Skip    Tests
-	Fail    Tests
+	Default  status
+	Stats    *Stats
+	Pass     Tests
+	Skip     Tests
+	Fail     Tests
+	Unstable Tests
 }
 
 // Tests are the tests from yaml category pass / fail / skip.
@@ -94,6 +95,9 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testResOutput := testRes.IndentedOutput()
 
 		switch expectedRes {
+		case Unstable:
+			// WIP
+			continue
 		case Pass:
 			switch testRes.Status {
 			case Pass:
@@ -258,6 +262,7 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 		{Pass, tc.Pass},
 		{Skip, tc.Skip},
 		{Fail, tc.Fail},
+		{Unstable, tc.Unstable},
 	} {
 		for _, t := range tcat.tests.Names {
 			if _, ok := res[t]; ok {

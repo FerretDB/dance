@@ -87,6 +87,7 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		{&common.Skip, &ferretdb.Skip, &mongodb.Skip},
 		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
 		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
+		{&common.Unstable, &ferretdb.Unstable, &mongodb.Unstable},
 	} {
 		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
 		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)

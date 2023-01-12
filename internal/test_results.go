@@ -20,10 +20,11 @@ import "strings"
 type status string
 
 const (
-	Pass    status = "pass"
-	Skip    status = "skip"
-	Fail    status = "fail"
-	Unknown status = "unknown"
+	Pass     status = "pass"
+	Skip     status = "skip"
+	Fail     status = "fail"
+	Unstable status = "unstable"
+	Unknown  status = "unknown"
 )
 
 var knownStatuses = map[status]struct{}{
