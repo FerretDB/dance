@@ -94,9 +94,9 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 		testResOutput := testRes.IndentedOutput()
 
+		//nolint:exhaustive // unnecessary
 		switch expectedRes {
 		case Unstable:
-			// WIP
 			continue
 		case Pass:
 			switch testRes.Status {
