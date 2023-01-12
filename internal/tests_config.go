@@ -94,7 +94,6 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 		testResOutput := testRes.IndentedOutput()
 
-		//nolint:exhaustive // unnecessary
 		switch expectedRes {
 		case Unstable:
 			continue
@@ -106,6 +105,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.UnexpectedFail[test] = testResOutput
+			case Unstable:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
@@ -119,6 +120,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.ExpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.UnexpectedFail[test] = testResOutput
+			case Unstable:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
@@ -132,6 +135,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.ExpectedFail[test] = testResOutput
+			case Unstable:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
