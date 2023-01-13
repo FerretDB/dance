@@ -63,12 +63,12 @@ type ResultsYAML struct {
 //
 // To gain a data the struct should be first converted to TestsConfig with TestsConfigYAML.Convert() function.
 type TestsConfigYAML struct {
-	Default  status `yaml:"default"`
-	Stats    *Stats `yaml:"stats"`
-	Pass     []any  `yaml:"pass"`
-	Skip     []any  `yaml:"skip"`
-	Fail     []any  `yaml:"fail"`
-	Unstable []any  `yaml:"unstable"`
+	Default status `yaml:"default"`
+	Stats   *Stats `yaml:"stats"`
+	Pass    []any  `yaml:"pass"`
+	Skip    []any  `yaml:"skip"`
+	Fail    []any  `yaml:"fail"`
+	Ignore  []any  `yaml:"ignore"`
 }
 
 // Convert validates yaml and converts ConfigYAML to the
@@ -112,7 +112,7 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 		{ftc.Pass, &tc.Pass},
 		{ftc.Skip, &tc.Skip},
 		{ftc.Fail, &tc.Fail},
-		{ftc.Unstable, &tc.Unstable},
+		{ftc.Ignore, &tc.Ignore},
 	} {
 		for _, test := range testCategory.yamlTests {
 			switch test := test.(type) {

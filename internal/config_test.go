@@ -32,10 +32,10 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateFilled": {
 			in: &Results{
 				Common: &TestsConfig{
-					Pass:     Tests{Names: []string{"a", "b"}},
-					Skip:     Tests{Names: []string{"c", "d"}},
-					Fail:     Tests{Names: []string{"e", "f"}},
-					Unstable: Tests{Names: []string{"g", "h"}},
+					Pass:   Tests{Names: []string{"a", "b"}},
+					Skip:   Tests{Names: []string{"c", "d"}},
+					Fail:   Tests{Names: []string{"e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
 				},
 				FerretDB: &TestsConfig{
 					Pass: Tests{Names: []string{"1", "2"}},
@@ -43,30 +43,30 @@ func TestFillAndValidate(t *testing.T) {
 					Fail: Tests{Names: []string{"5"}},
 				},
 				MongoDB: &TestsConfig{
-					Pass:     Tests{Names: []string{"A", "B"}},
-					Skip:     Tests{Names: []string{"C"}},
-					Fail:     Tests{Names: []string{"D", "E"}},
-					Unstable: Tests{Names: []string{"x", "z"}},
+					Pass:   Tests{Names: []string{"A", "B"}},
+					Skip:   Tests{Names: []string{"C"}},
+					Fail:   Tests{Names: []string{"D", "E"}},
+					Ignore: Tests{Names: []string{"x", "z"}},
 				},
 			},
 			expected: &Results{
 				Common: &TestsConfig{
-					Pass:     Tests{Names: []string{"a", "b"}},
-					Skip:     Tests{Names: []string{"c", "d"}},
-					Fail:     Tests{Names: []string{"e", "f"}},
-					Unstable: Tests{Names: []string{"g", "h"}},
+					Pass:   Tests{Names: []string{"a", "b"}},
+					Skip:   Tests{Names: []string{"c", "d"}},
+					Fail:   Tests{Names: []string{"e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
 				},
 				FerretDB: &TestsConfig{
-					Pass:     Tests{Names: []string{"1", "2", "a", "b"}},
-					Skip:     Tests{Names: []string{"3", "4", "c", "d"}},
-					Fail:     Tests{Names: []string{"5", "e", "f"}},
-					Unstable: Tests{Names: []string{"g", "h"}},
+					Pass:   Tests{Names: []string{"1", "2", "a", "b"}},
+					Skip:   Tests{Names: []string{"3", "4", "c", "d"}},
+					Fail:   Tests{Names: []string{"5", "e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
 				},
 				MongoDB: &TestsConfig{
-					Pass:     Tests{Names: []string{"A", "B", "a", "b"}},
-					Skip:     Tests{Names: []string{"C", "c", "d"}},
-					Fail:     Tests{Names: []string{"D", "E", "e", "f"}},
-					Unstable: Tests{Names: []string{"g", "h", "x", "z"}},
+					Pass:   Tests{Names: []string{"A", "B", "a", "b"}},
+					Skip:   Tests{Names: []string{"C", "c", "d"}},
+					Fail:   Tests{Names: []string{"D", "E", "e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h", "x", "z"}},
 				},
 			},
 		},
@@ -116,10 +116,10 @@ func TestFillAndValidate(t *testing.T) {
 		"FillAndValidateDuplicatesAll": {
 			in: &Results{
 				FerretDB: &TestsConfig{
-					Pass:     Tests{Names: []string{"a"}},
-					Skip:     Tests{Names: []string{"a"}},
-					Fail:     Tests{Names: []string{"a"}},
-					Unstable: Tests{Names: []string{"a"}},
+					Pass:   Tests{Names: []string{"a"}},
+					Skip:   Tests{Names: []string{"a"}},
+					Fail:   Tests{Names: []string{"a"}},
+					Ignore: Tests{Names: []string{"a"}},
 				},
 				MongoDB: &TestsConfig{},
 			},
@@ -212,12 +212,12 @@ func TestFillAndValidate(t *testing.T) {
 				{tc.expected.FerretDB.Pass, tc.in.FerretDB.Pass},
 				{tc.expected.FerretDB.Skip, tc.in.FerretDB.Skip},
 				{tc.expected.FerretDB.Fail, tc.in.FerretDB.Fail},
-				{tc.expected.FerretDB.Unstable, tc.in.FerretDB.Unstable},
+				{tc.expected.FerretDB.Ignore, tc.in.FerretDB.Ignore},
 
 				{tc.expected.MongoDB.Pass, tc.in.MongoDB.Pass},
 				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
 				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
-				{tc.expected.MongoDB.Unstable, tc.in.MongoDB.Unstable},
+				{tc.expected.MongoDB.Ignore, tc.in.MongoDB.Ignore},
 			} {
 				for _, item := range tests.expected.Names {
 					assert.Contains(t, tests.actual.Names, item)
