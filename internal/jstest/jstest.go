@@ -17,8 +17,8 @@ package jstest
 import (
 	"context"
 	"log"
+	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -35,8 +35,12 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	filesM := make(map[string]struct{})
 
-	prefix := "/tests"
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
 
+	os.Chdir("../")
 	// remove duplicates if globs match same files
 	for _, f := range args {
 		matches, err := filepath.Glob(f)
@@ -45,7 +49,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}
 
 		for _, m := range matches {
-			filesM[path.Join(prefix, m)] = struct{}{}
+			filesM[m] = struct{}{}
 		}
 	}
 
@@ -56,6 +60,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
+	os.Chdir(cwd)
 	for _, testName := range files {
 		output, err := runCommand(dir, "mongo", testName)
 		if err != nil {
@@ -63,9 +68,6 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 				return nil, err
 			}
 		}
-
-		// to avoid unexpected results
-		testName = strings.TrimPrefix(testName, prefix+"/")
 
 		if err == nil {
 			res.TestResults[testName] = internal.TestResult{
