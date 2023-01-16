@@ -93,7 +93,7 @@ func TestFloatValues(t *testing.T) {
 		expected := math.Copysign(0.0, +1)
 
 		// testify require equates -0 == 0 so this passes for both -0 and 0.
-		require.Equal(t, 0, actual)
+		require.Equal(t, expected, actual)
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
@@ -104,7 +104,7 @@ func TestFloatValues(t *testing.T) {
 		t.Run("MongoDB", func(t *testing.T) {
 			t.Parallel()
 
-			require.Equal(t, math.Signbit(expected), math.Signbit(actual))
+			require.NotEqual(t, math.Signbit(expected), math.Signbit(actual))
 		})
 	})
 
@@ -225,7 +225,7 @@ func TestFloatValues(t *testing.T) {
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.Equal(t, math.Signbit(expected), math.Signbit(actual))
+					require.NotEqual(t, math.Signbit(expected), math.Signbit(actual))
 				})
 			})
 		}
