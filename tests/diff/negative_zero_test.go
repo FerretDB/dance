@@ -66,7 +66,7 @@ func TestNegativeZero(t *testing.T) {
 		})
 	})
 
-	t.Run("UpdateOneNegativeZero", func(t *testing.T) {
+	t.Run("UpdateOne", func(t *testing.T) {
 		t.Parallel()
 
 		for name, tc := range map[string]struct {

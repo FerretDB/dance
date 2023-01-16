@@ -37,7 +37,7 @@ func TestUpdateProduceInfinity(t *testing.T) {
 			update   bson.D
 			expected mongo.CommandError
 		}{
-			"Mul": {
+			"MulInf": {
 				filter: bson.D{{"_id", "number"}},
 				insert: bson.D{{"_id", "number"}, {"v", int32(42)}},
 				update: bson.D{{"$mul", bson.D{{"v", math.MaxFloat64}}}},
