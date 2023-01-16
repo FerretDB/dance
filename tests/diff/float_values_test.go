@@ -44,15 +44,6 @@ func TestFloatValues(t *testing.T) {
 						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
 				},
 			},
-			"NegativeZero": {
-				doc: bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}},
-				expected: mongo.CommandError{
-					Code: 2,
-					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { insert: "insert-NegativeZero", ordered: true, ` +
-						`$db: "testfloatvalues", documents: [ { _id: "1", foo: -0.0 } ] } with: -0 is not supported`,
-				},
-			},
 		} {
 			name, tc := name, tc
 
@@ -74,6 +65,34 @@ func TestFloatValues(t *testing.T) {
 				})
 			})
 		}
+	})
+
+	t.Run("InsertNegativeZero", func(t *testing.T) {
+		t.Parallel()
+
+		filter := bson.D{{"_id", "1"}}
+		doc := bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}}
+		expected := bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, 1)}}
+
+		collection := db.Collection("insert-negative-zero")
+		_, err := collection.InsertOne(ctx, doc)
+		require.NoError(t, err)
+
+		var actual bson.D
+		err = collection.FindOne(ctx, filter).Decode(&actual)
+		require.NoError(t, err)
+
+		t.Run("FerretDB", func(t *testing.T) {
+			t.Parallel()
+
+			require.EqualValues(t, actual, expected)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			t.Parallel()
+
+			require.EqualValues(t, actual, expected)
+		})
 	})
 
 	// TODO https://github.com/FerretDB/dance/issues/266
@@ -128,6 +147,59 @@ func TestFloatValues(t *testing.T) {
 					t.Parallel()
 
 					require.NoError(t, err)
+				})
+			})
+		}
+	})
+
+	t.Run("UpdateOneNegativeZero", func(t *testing.T) {
+		t.Parallel()
+
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			insert   bson.D
+			update   bson.D
+			expected bson.D
+		}{
+			"ZeroMulNegative": {
+				filter:   bson.D{{"_id", "number"}},
+				insert:   bson.D{{"_id", "number"}, {"v", int32(0)}},
+				update:   bson.D{{"$mul", bson.D{{"v", float64(-1)}}}},
+				expected: bson.D{{"_id", "number"}, {"v", math.Copysign(0, +1)}},
+			},
+			"NegativeMulZero": {
+				filter:   bson.D{{"_id", "number"}},
+				insert:   bson.D{{"_id", "number"}, {"v", int64(-1)}},
+				update:   bson.D{{"$mul", bson.D{{"v", float64(0)}}}},
+				expected: bson.D{{"_id", "number"}, {"v", math.Copysign(0, +1)}},
+			},
+		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				collection := db.Collection("update-negative-zero-" + name)
+				_, err := collection.InsertOne(ctx, tc.insert)
+				require.NoError(t, err)
+
+				_, err = collection.UpdateOne(ctx, tc.filter, tc.update)
+				require.NoError(t, err)
+
+				var actual bson.D
+				err = collection.FindOne(ctx, tc.filter).Decode(&actual)
+				require.NoError(t, err)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.Equal(t, tc.expected, actual)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.Equal(t, tc.expected, actual)
 				})
 			})
 		}
