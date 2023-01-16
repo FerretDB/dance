@@ -36,6 +36,7 @@ type TestsConfig struct {
 	Pass    Tests
 	Skip    Tests
 	Fail    Tests
+	Ignore  Tests
 }
 
 // Tests are the tests from yaml category pass / fail / skip.
@@ -94,6 +95,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testResOutput := testRes.IndentedOutput()
 
 		switch expectedRes {
+		case Ignore:
+			continue
 		case Pass:
 			switch testRes.Status {
 			case Pass:
@@ -102,6 +105,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.UnexpectedFail[test] = testResOutput
+			case Ignore:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
@@ -115,6 +120,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.ExpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.UnexpectedFail[test] = testResOutput
+			case Ignore:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
@@ -128,6 +135,8 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.UnexpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.ExpectedFail[test] = testResOutput
+			case Ignore:
+				fallthrough
 			case Unknown:
 				fallthrough
 			default:
@@ -258,6 +267,7 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 		{Pass, tc.Pass},
 		{Skip, tc.Skip},
 		{Fail, tc.Fail},
+		{Ignore, tc.Ignore},
 	} {
 		for _, t := range tcat.tests.Names {
 			if _, ok := res[t]; ok {

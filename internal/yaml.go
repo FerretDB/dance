@@ -68,6 +68,7 @@ type TestsConfigYAML struct {
 	Pass    []any  `yaml:"pass"`
 	Skip    []any  `yaml:"skip"`
 	Fail    []any  `yaml:"fail"`
+	Ignore  []any  `yaml:"ignore"`
 }
 
 // Convert validates yaml and converts ConfigYAML to the
@@ -101,7 +102,7 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 		return nil, nil
 	}
 
-	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}}
+	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}, Tests{}}
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
@@ -111,6 +112,7 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 		{ftc.Pass, &tc.Pass},
 		{ftc.Skip, &tc.Skip},
 		{ftc.Fail, &tc.Fail},
+		{ftc.Ignore, &tc.Ignore},
 	} {
 		for _, test := range testCategory.yamlTests {
 			switch test := test.(type) {
