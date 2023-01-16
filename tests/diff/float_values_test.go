@@ -72,26 +72,39 @@ func TestFloatValues(t *testing.T) {
 
 		filter := bson.D{{"_id", "1"}}
 		doc := bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, -1)}}
-		expected := bson.D{{"_id", "1"}, {"foo", math.Copysign(0.0, 1)}}
 
 		collection := db.Collection("insert-negative-zero")
 		_, err := collection.InsertOne(ctx, doc)
 		require.NoError(t, err)
 
-		var actual bson.D
-		err = collection.FindOne(ctx, filter).Decode(&actual)
+		var res bson.D
+		err = collection.FindOne(ctx, filter).Decode(&res)
 		require.NoError(t, err)
+
+		var actual float64
+		for _, e := range res {
+			if e.Key == "foo" {
+				var ok bool
+				actual, ok = e.Value.(float64)
+				require.True(t, ok)
+			}
+		}
+
+		expected := math.Copysign(0.0, +1)
+
+		// testify require equates -0 == 0 so this passes for both -0 and 0.
+		require.Equal(t, 0, actual)
 
 		t.Run("FerretDB", func(t *testing.T) {
 			t.Parallel()
 
-			require.EqualValues(t, actual, expected)
+			require.Equal(t, math.Signbit(expected), math.Signbit(actual))
 		})
 
 		t.Run("MongoDB", func(t *testing.T) {
 			t.Parallel()
 
-			require.EqualValues(t, actual, expected)
+			require.Equal(t, math.Signbit(expected), math.Signbit(actual))
 		})
 	})
 
@@ -156,22 +169,19 @@ func TestFloatValues(t *testing.T) {
 		t.Parallel()
 
 		for name, tc := range map[string]struct {
-			filter   bson.D
-			insert   bson.D
-			update   bson.D
-			expected bson.D
+			insert any
+			update any
+			id     string
 		}{
 			"ZeroMulNegative": {
-				filter:   bson.D{{"_id", "number"}},
-				insert:   bson.D{{"_id", "number"}, {"v", int32(0)}},
-				update:   bson.D{{"$mul", bson.D{{"v", float64(-1)}}}},
-				expected: bson.D{{"_id", "number"}, {"v", math.Copysign(0, +1)}},
+				id:     "zero",
+				insert: int32(0),
+				update: float64(-1),
 			},
 			"NegativeMulZero": {
-				filter:   bson.D{{"_id", "number"}},
-				insert:   bson.D{{"_id", "number"}, {"v", int64(-1)}},
-				update:   bson.D{{"$mul", bson.D{{"v", float64(0)}}}},
-				expected: bson.D{{"_id", "number"}, {"v", math.Copysign(0, +1)}},
+				id:     "negative",
+				insert: int64(-1),
+				update: float64(0),
 			},
 		} {
 			name, tc := name, tc
@@ -179,27 +189,43 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
+				filter := bson.D{{"_id", tc.id}}
+
 				collection := db.Collection("update-negative-zero-" + name)
-				_, err := collection.InsertOne(ctx, tc.insert)
+				_, err := collection.InsertOne(ctx, bson.D{{"_id", tc.id}, {"v", tc.insert}})
 				require.NoError(t, err)
 
-				_, err = collection.UpdateOne(ctx, tc.filter, tc.update)
+				_, err = collection.UpdateOne(ctx, filter, bson.D{{"$mul", bson.D{{"v", tc.update}}}})
 				require.NoError(t, err)
 
-				var actual bson.D
-				err = collection.FindOne(ctx, tc.filter).Decode(&actual)
+				var res bson.D
+				err = collection.FindOne(ctx, filter).Decode(&res)
 				require.NoError(t, err)
+
+				var actual float64
+				for _, e := range res {
+					if e.Key == "v" {
+						var ok bool
+						actual, ok = e.Value.(float64)
+						require.True(t, ok)
+					}
+				}
+
+				expected := math.Copysign(0.0, +1)
+
+				// testify require equates -0 == 0 so this passes for both -0 and 0.
+				require.Equal(t, expected, actual)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.Equal(t, tc.expected, actual)
+					require.Equal(t, math.Signbit(expected), math.Signbit(actual))
 				})
 
 				t.Run("MongoDB", func(t *testing.T) {
 					t.Parallel()
 
-					require.Equal(t, tc.expected, actual)
+					require.Equal(t, math.Signbit(expected), math.Signbit(actual))
 				})
 			})
 		}
