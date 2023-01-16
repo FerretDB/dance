@@ -14,6 +14,12 @@ args:
 
 results:
   common:
+    ignore:
+      # indicates flaky tests that should be ignored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -111,8 +117,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 329
-      expected_pass: 2152
+      expected_skip: 402
+      expected_pass: 1849
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
@@ -177,6 +183,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_HostNotFound
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_two_NotWritablePrimary_errors
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_ShutdownInProgress
 
       # operation listCollectionObjects not implemented
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_succeeds_on_second_attempt
