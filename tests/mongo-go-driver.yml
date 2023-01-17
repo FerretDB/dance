@@ -102,7 +102,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
     fail:
       # https://github.com/FerretDB/FerretDB/issues/1777
-      # InvalidNamespace - collection names are generated from sub-tests which contain invalid characters.
+      # InvalidNamespace - collection names are generated from sub-tests which contain an invalid character '/'.
       - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsDetails/JSON_Schema_validation
       - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/estimated_document_count/options
       - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/exhaust_cursor
