@@ -23,25 +23,29 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func TestFloatValues(t *testing.T) {
+func TestUpdateProduceInfinity(t *testing.T) {
 	t.Parallel()
 
 	ctx, db := setup(t)
 
-	t.Run("Insert", func(t *testing.T) {
+	t.Run("UpdateOne", func(t *testing.T) {
 		t.Parallel()
 
 		for name, tc := range map[string]struct {
-			doc      bson.D
+			filter   bson.D
+			insert   bson.D
+			update   bson.D
 			expected mongo.CommandError
 		}{
-			"NaN": {
-				doc: bson.D{{"_id", "1"}, {"foo", math.NaN()}},
+			"MulInf": {
+				filter: bson.D{{"_id", "number"}},
+				insert: bson.D{{"_id", "number"}, {"v", int32(42)}},
+				update: bson.D{{"$mul", bson.D{{"v", math.MaxFloat64}}}},
 				expected: mongo.CommandError{
 					Code: 2,
 					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { insert: "insert-NaN", ordered: true, ` +
-						`$db: "testfloatvalues", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
+					Message: `update produces invalid value: { "v": +Inf }` +
+						` (update operations that produce infinity values are not allowed)`,
 				},
 			},
 		} {
@@ -50,7 +54,11 @@ func TestFloatValues(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				t.Parallel()
 
-				_, err := db.Collection("insert-"+name).InsertOne(ctx, tc.doc)
+				collection := db.Collection("update-one-" + name)
+				_, err := collection.InsertOne(ctx, tc.insert)
+				require.NoError(t, err)
+
+				_, err = collection.UpdateOne(ctx, tc.filter, tc.update)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
@@ -66,14 +74,4 @@ func TestFloatValues(t *testing.T) {
 			})
 		}
 	})
-
-	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("Update", func(t *testing.T) {
-
-	})*/
-
-	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("FindAndModify", func(t *testing.T) {
-
-	})*/
 }
