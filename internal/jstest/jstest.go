@@ -17,7 +17,6 @@ package jstest
 import (
 	"context"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
@@ -35,12 +34,6 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	filesM := make(map[string]struct{})
 
-	cwd, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
-	os.Chdir("../")
 	// remove duplicates if globs match same files
 	for _, f := range args {
 		matches, err := filepath.Glob(f)
@@ -60,9 +53,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	os.Chdir(cwd)
+	volume := "tests"
 	for _, testName := range files {
-		output, err := runCommand(dir, "mongo", testName)
+		output, err := runCommand(dir, "mongo", filepath.Join(volume, testName))
 		if err != nil {
 			if _, ok := err.(*exec.ExitError); !ok {
 				return nil, err
