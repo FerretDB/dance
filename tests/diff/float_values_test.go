@@ -98,30 +98,6 @@ func TestFloatValues(t *testing.T) {
 						`u: { $set: { foo: nan.0 } }, upsert: true } ] } with: NaN is not supported`,
 				},
 			},
-			"NegativeZero": {
-				filter: bson.D{{"_id", "1"}},
-				update: bson.D{{"$set", bson.D{{"foo", math.Copysign(0.0, -1)}}}},
-				opts:   options.UpdateOptions{},
-				expected: mongo.CommandError{
-					Code: 2,
-					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZero", ` +
-						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
-						`u: { $set: { foo: -0.0 } } } ] } with: -0 is not supported`,
-				},
-			},
-			"NegativeZeroWithUpsert": {
-				filter: bson.D{{"_id", "1"}},
-				update: bson.D{{"$set", bson.D{{"foo", math.Copysign(0.0, -1)}}}},
-				opts:   options.UpdateOptions{Upsert: pointer.ToBool(true)},
-				expected: mongo.CommandError{
-					Code: 2,
-					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { update: "update-NegativeZeroWithUpsert", ` +
-						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
-						`u: { $set: { foo: -0.0 } }, upsert: true } ] } with: -0 is not supported`,
-				},
-			},
 		} {
 			name, tc := name, tc
 
@@ -167,17 +143,6 @@ func TestFloatValues(t *testing.T) {
 					Name: "BadValue",
 					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NaN", ` +
 						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN ` +
-						`is not supported`,
-				},
-			},
-			"NegativeZero": {
-				filter: bson.D{{"_id", "1"}},
-				update: bson.D{{"$set", bson.D{{"foo", math.Copysign(0.0, -1)}}}},
-				expected: mongo.CommandError{
-					Code: 2,
-					Name: "BadValue",
-					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NegativeZero", ` +
-						`query: { _id: "1" }, update: { $set: { foo: -0.0 } }, $db: "testfloatvalues" } with: -0 ` +
 						`is not supported`,
 				},
 			},
