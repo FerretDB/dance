@@ -158,10 +158,8 @@ func TestFloatValues(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				// to return error
-				var update any
-
-				err = db.Collection(coll).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(&update)
+				var res bson.D
+				err = db.Collection(coll).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(&res)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
