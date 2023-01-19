@@ -18,9 +18,11 @@ import (
 	"math"
 	"testing"
 
+	"github.com/AlekSi/pointer"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func TestFloatValues(t *testing.T) {
@@ -53,6 +55,64 @@ func TestFloatValues(t *testing.T) {
 				_, err := db.Collection("insert-"+name).InsertOne(ctx, tc.doc)
 
 				t.Run("FerretDB", func(t *testing.T) {
+					assertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					require.NoError(t, err)
+				})
+			})
+		}
+	})
+
+	t.Run("Update", func(t *testing.T) {
+		t.Parallel()
+
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			update   bson.D
+			opts     options.UpdateOptions
+			expected mongo.CommandError
+		}{
+			"NaN": {
+				filter: bson.D{{"_id", "1"}},
+				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
+				opts:   options.UpdateOptions{},
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaN", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: nan.0 } } } ] } with: NaN is not supported`,
+				},
+			},
+			"NaNWithUpsert": {
+				filter: bson.D{{"_id", "1"}},
+				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
+				opts:   options.UpdateOptions{Upsert: pointer.ToBool(true)},
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { update: "update-NaNWithUpsert", ` +
+						`ordered: true, $db: "testfloatvalues", updates: [ { q: { _id: "1" }, ` +
+						`u: { $set: { foo: nan.0 } }, upsert: true } ] } with: NaN is not supported`,
+				},
+			},
+		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				coll := "update-" + name
+				_, err := db.Collection(coll).InsertOne(ctx, tc.filter)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				_, err = db.Collection(coll).UpdateOne(ctx, tc.filter, tc.update, &tc.opts)
+
+				t.Run("FerretDB", func(t *testing.T) {
 					t.Parallel()
 
 					assertEqualError(t, tc.expected, err)
@@ -67,13 +127,52 @@ func TestFloatValues(t *testing.T) {
 		}
 	})
 
-	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("Update", func(t *testing.T) {
+	t.Run("FindAndModify", func(t *testing.T) {
+		t.Parallel()
 
-	})*/
+		for name, tc := range map[string]struct {
+			filter   bson.D
+			update   bson.D
+			expected mongo.CommandError
+		}{
+			"NaN": {
+				filter: bson.D{{"_id", "1"}},
+				update: bson.D{{"$set", bson.D{{"foo", math.NaN()}}}},
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { findAndModify: "findAndModify-NaN", ` +
+						`query: { _id: "1" }, update: { $set: { foo: nan.0 } }, $db: "testfloatvalues" } with: NaN ` +
+						`is not supported`,
+				},
+			},
+		} {
+			name, tc := name, tc
 
-	// TODO https://github.com/FerretDB/dance/issues/266
-	/*t.Run("FindAndModify", func(t *testing.T) {
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
 
-	})*/
+				coll := "findAndModify-" + name
+				_, err := db.Collection(coll).InsertOne(ctx, tc.filter)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				var res bson.D
+				err = db.Collection(coll).FindOneAndUpdate(ctx, tc.filter, tc.update).Decode(&res)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					assertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
+		}
+	})
 }
