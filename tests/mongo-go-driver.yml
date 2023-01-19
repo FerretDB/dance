@@ -9,11 +9,17 @@ args:
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
-# - ./mongo/integration
+  - ./mongo/integration
   - ./mongo/integration/unified
 
 results:
   common:
+    ignore:
+      # indicates flaky tests that should be ignored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -60,9 +66,12 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 13
-      expected_skip: 14
-      expected_pass: 612
+      expected_fail: 269
+      expected_skip: 44
+      expected_pass: 624
+    ignore:
+      # returns unknown result.
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
@@ -79,9 +88,218 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_and_delete_with_batches
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unacknowledged_write
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_with_batches
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20_wrong_msg
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/1777
+      # InvalidNamespace - collection names are generated from sub-tests which contain an invalid character '/'.
+      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsDetails/JSON_Schema_validation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/estimated_document_count/options
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/exhaust_cursor
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/getMore_commands_are_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/invalid_identifier_error
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/killCursors_commands_are_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/limit_and_batch_size
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/limit_and_batch_size_and_skip
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/negative_limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/not_found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find/unset_batch_size_does_not_surpass_limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/maps_for_sorted_opts
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/maps_for_sorted_opts/multikey_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/maps_for_sorted_opts/multikey_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/maps_for_sorted_opts/single_key_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/maps_for_sorted_opts/single_key_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/not_found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one/options
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/found_ignore_result
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/maps_for_sorted_opts
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/maps_for_sorted_opts/multikey_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/maps_for_sorted_opts/multikey_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/maps_for_sorted_opts/single_key_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/maps_for_sorted_opts/single_key_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/not_found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/found_ignore_result
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/maps_for_sorted_opts
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/maps_for_sorted_opts/multikey_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/maps_for_sorted_opts/multikey_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/maps_for_sorted_opts/single_key_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/maps_for_sorted_opts/single_key_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/not_found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/empty_update
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/found_ignore_result
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/maps_for_sorted_opts
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/maps_for_sorted_opts/multikey_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/maps_for_sorted_opts/multikey_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/maps_for_sorted_opts/single_key_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/maps_for_sorted_opts/single_key_sort
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/not_found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch/disconnected
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/Custom
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/getMore_commands_are_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/index_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/killCursors_commands_are_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/multikey_map_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/options
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/single_key_map_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/success
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/correct_model_in_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_write_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_write_errors/ordered
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_write_errors/unordered
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/deleteMany/multi_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/deleteMany/one_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/deleteOne/multi_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/deleteOne/one_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/replaceOne/multi_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/replaceOne/one_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/map_hint/updateMany/multi_key
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unordered_upsertID_index
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_write_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_write_errors/ordered
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_write_errors/unordered
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/count_documents
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/count_documents/multikey_map_hint
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/count_documents/success
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many/found
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many/multikey_map_index
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
+      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone
+      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/no_custom_standalone_error
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/RTT90_is_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/RTT90_used_to_prevent_sending_requests
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/app_name_is_always_sent
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/causal_consistency
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/causal_consistency/default
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/causal_consistency/false
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/causal_consistency/true
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect/nil_context
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/no_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/options
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/empty
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/non-empty
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/options
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/minPoolSize
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/minimum_RTT_is_monitored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/minimum_RTT_used_to_prevent_sending_requests
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/default_read_preference
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/invalid_host
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/registry_passed_to_cursors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate-collation.json/Aggregate_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate-out.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate-out.json/Aggregate_with_$out
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate-out.json/Aggregate_with_$out_and_batch_size_of_0
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/aggregate.json/Aggregate_with_multiple_stages
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite-arrayFilters.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite-arrayFilters.json/BulkWrite_with_arrayFilters
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite-collation.json/BulkWrite_with_delete_operations_and_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite-collation.json/BulkWrite_with_update_operations_and_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_continue-on-error_behavior_with_unordered_(duplicate_key_in_requests)
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_continue-on-error_behavior_with_unordered_(preexisting_duplicate_key)
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_deleteMany_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_deleteOne_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_insertOne_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_mixed_ordered_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_mixed_unordered_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_replaceOne_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_updateMany_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/bulkWrite.json/BulkWrite_with_updateOne_operations
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-collation.json/Count_documents_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-collation.json/Deprecated_count_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-empty.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-empty.json/Count_documents_with_empty_collection
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-empty.json/Deprecated_count_with_empty_collection
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count-empty.json/Estimated_document_count_with_empty_collection
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Count_documents_with_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Count_documents_with_skip_and_limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Count_documents_without_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Deprecated_count_with_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Deprecated_count_with_skip_and_limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Deprecated_count_without_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/count.json/Estimated_document_count
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteMany-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteMany-collation.json/DeleteMany_when_many_documents_match_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteMany.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteMany.json/DeleteMany_when_many_documents_match
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteMany.json/DeleteMany_when_no_document_matches
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne-collation.json/DeleteOne_when_many_documents_matches_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne.json/DeleteOne_when_many_documents_match
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne.json/DeleteOne_when_no_documents_match
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/deleteOne.json/DeleteOne_when_one_document_matches
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/distinct-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/distinct-collation.json/Distinct_with_a_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/distinct.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/distinct.json/Distinct_with_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/distinct.json/Distinct_without_a_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find-collation.json/Find_with_a_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find.json/Find_with_filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find.json/Find_with_filter,_sort,_skip,_and_limit
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/find.json/Find_with_limit,_sort,_and_batchsize
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete-collation.json/FindOneAndDelete_when_one_document_matches_with_collation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete.json/FindOneAndDelete_when_many_documents_match
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete.json/FindOneAndDelete_when_no_documents_match
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndDelete.json/FindOneAndDelete_when_one_document_matches
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-collation.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-collation.json/FindOneAndReplace_when_one_document_matches_with_collation_returning_the_document_after_modification
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-upsert.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-upsert.json/FindOneAndReplace_when_no_documents_match_without_id_specified_with_upsert_returning_the_document_before_modification
+
+
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      
+      # uses write concern and sets ErrorLabels and tries to insert invalid fields etc.
+      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsDetails
 
       # database/collection names https://github.com/FerretDB/FerretDB/issues/125
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
@@ -111,8 +329,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 164
-      expected_pass: 1291
+      expected_skip: 403
+      expected_pass: 1849
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
@@ -131,6 +349,94 @@ results:
 
       # execution failed: test must be skipped: "the deprecated contentType file option is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload.json/upload_when_contentType_is_provided
+
+      # skipping due to known failure: failpoints and timeouts together cause failures; see GODRIVER-2123
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/minPoolSize-error.json/Network_error_on_minPoolSize_background_creation
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/find-network-timeout-error.json/Ignore_network_timeout_error_on_find
+      
+      # operation mapReduce not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_succeeds_with_retry_on
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_on
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_off
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/read-write-concern/operation/default-write-concern-3.4.json/MapReduce_omits_default_write_concern
+
+      # operation listIndexNames not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames.json/ListIndexNames_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listIndexNames-serverErrors.json/ListIndexNames_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      # operation listDatabaseObjects not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects.json/ListDatabaseObjects_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listDatabaseObjects-serverErrors.json/ListDatabaseObjects_succeeds_after_ShutdownInProgress
+
+      # operation listCollectionObjects not implemented
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects.json/ListCollectionObjects_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/listCollectionObjects-serverErrors.json/ListCollectionObjects_fails_after_NotWritablePrimary_when_retryReads_is_false
+
+      # count has been deprecated
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_succeeds_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_succeeds_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_fails_on_second_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count.json/Count_fails_on_first_attempt
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_SocketException
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotWritablePrimary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_NetworkTimeout
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_InterruptedDueToReplStateChange
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostUnreachable
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostNotFound
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_two_NotWritablePrimary_errors
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_NotWritablePrimary_when_retryReads_is_false
+      
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
