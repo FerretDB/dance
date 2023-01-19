@@ -73,7 +73,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./tests/mongo:/mongo
+      - ./tests/mongo:/tests/mongo
 
   # for documentation
   textlint:

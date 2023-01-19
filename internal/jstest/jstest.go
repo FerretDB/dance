@@ -53,8 +53,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
+	volume := "tests"
 	for _, testName := range files {
-		output, err := runCommand(dir, "mongo", testName)
+		output, err := runCommand(dir, "mongo", filepath.Join(volume, testName))
 		if err != nil {
 			if _, ok := err.(*exec.ExitError); !ok {
 				return nil, err
