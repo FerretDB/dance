@@ -16,8 +16,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 33
-      expected_pass: 21
+      expected_fail: 30
+      expected_pass: 24
 
     fail:
       # https://docs.ferretdb.io/diff/
@@ -66,9 +66,6 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/503
       - mongo/jstests/core/update8.js
-      - mongo/jstests/core/updatec.js
-      - mongo/jstests/core/updatea.js
-      - mongo/jstests/core/updatei.js
       - mongo/jstests/core/updatej.js
 
       # https://github.com/FerretDB/FerretDB/issues/503
