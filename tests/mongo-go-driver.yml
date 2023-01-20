@@ -20,6 +20,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
+
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -61,17 +62,17 @@ results:
 
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
   ferretdb:
     stats:
-      unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
       expected_fail: 269
       expected_skip: 44
       expected_pass: 624
+
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
+
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
@@ -100,6 +101,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
+
     fail:
       # https://github.com/FerretDB/FerretDB/issues/1777
       # InvalidNamespace - collection names are generated from sub-tests which contain an invalid character '/'.
@@ -294,10 +296,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-upsert.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestCrudSpec/findOneAndReplace-upsert.json/FindOneAndReplace_when_no_documents_match_without_id_specified_with_upsert_returning_the_document_before_modification
 
-
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-      
+
       # uses write concern and sets ErrorLabels and tries to insert invalid fields etc.
       - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsDetails
 
@@ -323,15 +324,12 @@ results:
 
       # session commands https://github.com/FerretDB/FerretDB/issues/153
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+
   mongodb:
     stats:
-      unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
-      expected_fail: 0
       expected_skip: 403
       expected_pass: 1849
-    fail:
+
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
@@ -353,7 +351,7 @@ results:
       # skipping due to known failure: failpoints and timeouts together cause failures; see GODRIVER-2123
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/minPoolSize-error.json/Network_error_on_minPoolSize_background_creation
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/find-network-timeout-error.json/Ignore_network_timeout_error_on_find
-      
+
       # operation mapReduce not implemented
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_succeeds_with_retry_on
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_on
@@ -436,7 +434,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostNotFound
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_two_NotWritablePrimary_errors
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_NotWritablePrimary_when_retryReads_is_false
-      
+
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples

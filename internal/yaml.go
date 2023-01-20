@@ -20,22 +20,11 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-// Stats represent the expected/actual amount of
-// failed, skipped and passed tests.
-type Stats struct {
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	UnexpectedFail int `yaml:"unexpected_fail"`
-	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
-	ExpectedFail   int `yaml:"expected_fail"`
-	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
-}
-
-// Structs and their internal equivalents:
-// - ConfigYAML -> Config
-// - ResultsYAML -> Results
-// - TestsConfigYAML -> TestsConfig.
+// YAML structs and their internal equivalents:
+// - ConfigYAML -> Config;
+// - ResultsYAML -> Results;
+// - TestsConfigYAML -> TestsConfig;
+// - StatsYAML -> Stats.
 
 // ConfigYAML is a yaml tests representation of the Config struct.
 //
@@ -63,12 +52,19 @@ type ResultsYAML struct {
 //
 // To gain a data the struct should be first converted to TestsConfig with TestsConfigYAML.Convert() function.
 type TestsConfigYAML struct {
-	Default status `yaml:"default"`
-	Stats   *Stats `yaml:"stats"`
-	Pass    []any  `yaml:"pass"`
-	Skip    []any  `yaml:"skip"`
-	Fail    []any  `yaml:"fail"`
-	Ignore  []any  `yaml:"ignore"`
+	Default status     `yaml:"default"`
+	Stats   *StatsYAML `yaml:"stats"`
+	Pass    []any      `yaml:"pass"`
+	Skip    []any      `yaml:"skip"`
+	Fail    []any      `yaml:"fail"`
+	Ignore  []any      `yaml:"ignore"`
+}
+
+// StatsYAML is a yaml representation of the Stats struct.
+type StatsYAML struct {
+	ExpectedFail int `yaml:"expected_fail"`
+	ExpectedSkip int `yaml:"expected_skip"`
+	ExpectedPass int `yaml:"expected_pass"`
 }
 
 // Convert validates yaml and converts ConfigYAML to the
@@ -102,7 +98,12 @@ func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
 		return nil, nil
 	}
 
-	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}, Tests{}}
+	stats := &Stats{
+		ExpectedFail: ftc.Stats.ExpectedFail,
+		ExpectedSkip: ftc.Stats.ExpectedSkip,
+		ExpectedPass: ftc.Stats.ExpectedPass,
+	}
+	tc := TestsConfig{ftc.Default, stats, Tests{}, Tests{}, Tests{}, Tests{}}
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file

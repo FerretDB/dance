@@ -39,7 +39,21 @@ type TestsConfig struct {
 	Ignore  Tests
 }
 
-// Tests are the tests from yaml category pass / fail / skip.
+// Stats represent the expected/actual amount of
+// failed, skipped and passed tests.
+type Stats struct {
+	UnexpectedRest int
+	UnexpectedFail int
+	UnexpectedSkip int
+	UnexpectedPass int
+
+	// YAML tags make it easier to copy diff output into YAML config files.
+	ExpectedFail int `yaml:"expected_fail"`
+	ExpectedSkip int `yaml:"expected_skip"`
+	ExpectedPass int `yaml:"expected_pass"`
+}
+
+// Tests are the tests from yaml category pass/fail/skip/ignore.
 type Tests struct {
 	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
@@ -158,6 +172,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
+
 	// special case: zero in expected_pass means "don't check"
 	if tc.Stats.ExpectedPass == 0 {
 		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass

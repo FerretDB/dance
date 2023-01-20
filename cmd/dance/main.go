@@ -20,12 +20,14 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/pmezard/go-difflib/difflib"
+	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -159,13 +161,13 @@ func main() {
 			logResult("Expectedly passed", compareRes.ExpectedPass)
 		}
 
-		log.Printf("Unexpected/unknown results: %d.", len(compareRes.UnexpectedRest))
-		log.Printf("Unexpectedly failed: %d.", len(compareRes.UnexpectedFail))
-		log.Printf("Unexpectedly skipped: %d.", len(compareRes.UnexpectedSkip))
-		log.Printf("Unexpectedly passed: %d.", len(compareRes.UnexpectedPass))
-		log.Printf("Expectedly failed: %d.", len(compareRes.ExpectedFail))
-		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
-		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
+		log.Printf("Unexpected/unknown results: %d.", compareRes.Stats.UnexpectedRest)
+		log.Printf("Unexpectedly failed: %d.", compareRes.Stats.UnexpectedFail)
+		log.Printf("Unexpectedly skipped: %d.", compareRes.Stats.UnexpectedSkip)
+		log.Printf("Unexpectedly passed: %d.", compareRes.Stats.UnexpectedPass)
+		log.Printf("Expectedly failed: %d.", compareRes.Stats.ExpectedFail)
+		log.Printf("Expectedly skipped: %d.", compareRes.Stats.ExpectedSkip)
+		log.Printf("Expectedly passed: %d.", compareRes.Stats.ExpectedPass)
 
 		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
 		if err != nil {
@@ -188,6 +190,22 @@ func main() {
 		}
 		if diff != "" {
 			log.Fatalf("\nUnexpected stats:\n%s", diff)
+		}
+
+		totalRun := compareRes.Stats.ExpectedFail + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
+		msg := fmt.Sprintf(
+			"%.2f%% (%d/%d) tests passed.",
+			float64(compareRes.Stats.ExpectedPass)/float64(totalRun)*100,
+			compareRes.Stats.ExpectedPass,
+			totalRun,
+		)
+		log.Print(msg)
+
+		// Make percentage more visible on GitHub Actions.
+		// https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+		if os.Getenv("GITHUB_ACTIONS") == "true" {
+			action := githubactions.New()
+			action.Noticef("%s", msg)
 		}
 	}
 }

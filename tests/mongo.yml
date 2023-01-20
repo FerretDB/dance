@@ -18,6 +18,7 @@ results:
     stats:
       expected_fail: 33
       expected_pass: 21
+
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -85,8 +86,7 @@ results:
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/updateh.js
+
   mongodb:
     stats:
-      expected_fail: 0
       expected_pass: 54
-    fail:
