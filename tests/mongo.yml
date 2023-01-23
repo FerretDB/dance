@@ -16,8 +16,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 33
-      expected_pass: 21
+      expected_fail: 30
+      expected_pass: 24
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -63,14 +63,10 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/1242
       - mongo/jstests/core/query/unset/unset2.js
 
-      # https://github.com/FerretDB/FerretDB/issues/503
+      # https://github.com/FerretDB/FerretDB/issues/1855
       - mongo/jstests/core/write/update/update8.js
-      - mongo/jstests/core/write/update/updatec.js
-      - mongo/jstests/core/write/update/updatea.js
-      - mongo/jstests/core/write/update/updatei.js
       - mongo/jstests/core/write/update/updatej.js
 
-      # https://github.com/FerretDB/FerretDB/issues/503
       # https://github.com/FerretDB/FerretDB/issues/1736
       - mongo/jstests/core/write/update/update9.js
 
