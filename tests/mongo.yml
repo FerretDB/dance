@@ -1,17 +1,17 @@
 ---
 runner: jstest
 args:
-  - mongo/jstests/core/all*.js
-  - mongo/jstests/core/auth[1-2].js
-  - mongo/jstests/core/array[1-4].js
-  - mongo/jstests/core/arrayfind[1-9].js
-  - mongo/jstests/core/basic*.js
-  - mongo/jstests/core/find_and_modify.js
-  - mongo/jstests/core/find_and_modify[2-4].js
+  - mongo/jstests/core/administrative/auth[1-2].js
+  - mongo/jstests/core/query/all/all*.js
+  - mongo/jstests/core/query/basic*.js
   - mongo/jstests/core/uniqueness.js
-  - mongo/jstests/core/unset*.js
-  - mongo/jstests/core/update[2-9].js
-  - mongo/jstests/core/update[a-z].js
+  - mongo/jstests/core/query/unset/unset*.js
+  - mongo/jstests/core/query/array/array[1-4].js
+  - mongo/jstests/core/query/array/arrayfind[1-9].js
+  - mongo/jstests/core/write/find_and_modify/find_and_modify.js
+  - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
+  - mongo/jstests/core/write/update/update[2-9].js
+  - mongo/jstests/core/write/update/update[a-z].js
 
 results:
   ferretdb:
@@ -22,67 +22,66 @@ results:
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
-      - mongo/jstests/core/all.js
-      - mongo/jstests/core/all2.js
-      - mongo/jstests/core/all4.js
-      - mongo/jstests/core/all5.js
-      - mongo/jstests/core/array1.js
-      - mongo/jstests/core/arrayfind1.js
-      - mongo/jstests/core/arrayfind2.js
-      - mongo/jstests/core/arrayfind4.js
+      - mongo/jstests/core/query/all/all.js
+      - mongo/jstests/core/query/all/all2.js
+      - mongo/jstests/core/query/all/all4.js
+      - mongo/jstests/core/query/all/all5.js
+      - mongo/jstests/core/query/array/array1.js
+      - mongo/jstests/core/query/array/arrayfind1.js
+      - mongo/jstests/core/query/array/arrayfind2.js
+      - mongo/jstests/core/query/array/arrayfind4.js
 
       # https://github.com/FerretDB/FerretDB/issues/1724
-      - mongo/jstests/core/arrayfind5.js
+      - mongo/jstests/core/query/array/arrayfind5.js
 
       # https://github.com/FerretDB/FerretDB/issues/161
-      - mongo/jstests/core/basic1.js
+      - mongo/jstests/core/query/basic1.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
       # https://github.com/FerretDB/FerretDB/issues/731
-      - mongo/jstests/core/arrayfind3.js
-      - mongo/jstests/core/arrayfind6.js
-      - mongo/jstests/core/arrayfind7.js
-      - mongo/jstests/core/arrayfind8.js
-      - mongo/jstests/core/arrayfind9.js
+      - mongo/jstests/core/query/array/arrayfind3.js
+      - mongo/jstests/core/query/array/arrayfind6.js
+      - mongo/jstests/core/query/array/arrayfind7.js
+      - mongo/jstests/core/query/array/arrayfind8.js
+      - mongo/jstests/core/query/array/arrayfind9.js
 
       # https://github.com/FerretDB/FerretDB/issues/1492
-      - mongo/jstests/core/auth1.js
+      - mongo/jstests/core/administrative/auth1.js
 
       # https://github.com/FerretDB/FerretDB/issues/1750
       # logout deprecated since version 5.0.
-      - mongo/jstests/core/auth2.js
+      - mongo/jstests/core/administrative/auth2.js
 
       # https://github.com/FerretDB/FerretDB/issues/1745
-      - mongo/jstests/core/find_and_modify.js
-      - mongo/jstests/core/find_and_modify2.js
-      - mongo/jstests/core/find_and_modify3.js
-      - mongo/jstests/core/find_and_modify4.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
 
       # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/core/uniqueness.js
 
       # https://github.com/FerretDB/FerretDB/issues/1242
-      - mongo/jstests/core/unset2.js
+      - mongo/jstests/core/query/unset/unset2.js
 
-      # https://github.com/FerretDB/FerretDB/issues/503
-      - mongo/jstests/core/update8.js
-      - mongo/jstests/core/updatej.js
+      # https://github.com/FerretDB/FerretDB/issues/1855
+      - mongo/jstests/core/write/update/update8.js
+      - mongo/jstests/core/write/update/updatej.js
 
-      # https://github.com/FerretDB/FerretDB/issues/503
       # https://github.com/FerretDB/FerretDB/issues/1736
-      - mongo/jstests/core/update9.js
+      - mongo/jstests/core/write/update/update9.js
 
       # https://github.com/FerretDB/FerretDB/issues/1742
-      - mongo/jstests/core/updateb.js
-      - mongo/jstests/core/updatel.js
+      - mongo/jstests/core/write/update/updateb.js
+      - mongo/jstests/core/write/update/updatel.js
 
       # https://github.com/FerretDB/FerretDB/issues/1744
-      - mongo/jstests/core/updatee.js
+      - mongo/jstests/core/write/update/updatee.js
 
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
-      - mongo/jstests/core/updateh.js
+      - mongo/jstests/core/write/update/updateh.js
 
   mongodb:
     stats:
