@@ -1,6 +1,9 @@
 ---
 version: "3"
 
+vars:
+  REPLSET: postgres mongodb_replset init_mongodb_replset
+
 tasks:
   init-tools:
     dir: tools
@@ -40,9 +43,17 @@ tasks:
     cmds:
       - docker compose build --pull
 
+  env-repl:
+    desc: "A minimal environment for testing a single-node replica set"
+    cmds:
+      - >
+        docker compose up --remove-orphans --renew-anon-volumes --timeout=0 --detach --build {{.REPLSET}}
+      - task: env-logs
+
   env-logs:
     cmds:
-      - docker compose logs --no-color
+      - docker compose ps --all
+      - docker compose logs --follow
 
   env-down:
     desc: "Stop environment"
