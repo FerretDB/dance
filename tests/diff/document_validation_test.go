@@ -34,14 +34,14 @@ func TestDocumentValidation(t *testing.T) {
 
 		for name, tc := range map[string]struct {
 			doc      bson.D
-			expected mongo.WriteException
+			expected error
 		}{
 			"DollarSign": {
-				doc: bson.D{{"foo$", "bar"}},
+				doc: bson.D{{"$foo", "bar"}},
 				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
 					Index:   0,
 					Code:    2,
-					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
+					Message: `invalid key: "$foo" (key must not start with '$' sign)`,
 				}}},
 			},
 			"DotSign": {
@@ -52,19 +52,28 @@ func TestDocumentValidation(t *testing.T) {
 					Message: `invalid key: "foo.bar" (key must not contain '.' sign)`,
 				}}},
 			},
-			"Inf": {
+			"Infinity": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(1)}},
 				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
 					Code:    2,
 					Message: `invalid value: { "foo": +Inf } (infinity values are not allowed)`,
 				}}},
 			},
-			"NegativeInf": {
+			"NegativeInfinity": {
 				doc: bson.D{{"_id", "1"}, {"foo", math.Inf(-1)}},
 				expected: mongo.WriteException{WriteErrors: []mongo.WriteError{{
 					Code:    2,
 					Message: `invalid value: { "foo": -Inf } (infinity values are not allowed)`,
 				}}},
+			},
+			"NaN": {
+				doc: bson.D{{"_id", "1"}, {"foo", math.NaN()}},
+				expected: mongo.CommandError{
+					Code: 2,
+					Name: "BadValue",
+					Message: `wire.OpMsg.Document: validation failed for { insert: "insert-NaN", ordered: true, ` +
+						`$db: "testdocumentvalidation", documents: [ { _id: "1", foo: nan.0 } ] } with: NaN is not supported`,
+				},
 			},
 		} {
 			name, tc := name, tc
@@ -96,14 +105,6 @@ func TestDocumentValidation(t *testing.T) {
 			doc      bson.D
 			expected mongo.CommandError
 		}{
-			"DollarSign": {
-				doc: bson.D{{"$set", bson.D{{"foo$", "bar"}}}},
-				expected: mongo.CommandError{
-					Code:    2,
-					Name:    "BadValue",
-					Message: `invalid key: "foo$" (key must not contain '$' sign)`,
-				},
-			},
 			"DotSign": {
 				doc: bson.D{{"$set", bson.D{{"foo", bson.D{{"bar.baz", "qaz"}}}}}},
 				expected: mongo.CommandError{

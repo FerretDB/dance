@@ -82,8 +82,9 @@ func main() {
 		stop()
 	}()
 
-	log.Printf("Waiting for port 27017 to be up...")
-	if err := waitForPort(ctx, 27017); err != nil {
+	const port = 27017
+	log.Printf("Waiting for port %d to be up...", port)
+	if err := waitForPort(ctx, port); err != nil {
 		log.Fatal(err)
 	}
 
