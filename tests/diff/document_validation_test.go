@@ -32,7 +32,7 @@ func TestDocumentValidation(t *testing.T) {
 	t.Run("Insert", func(t *testing.T) {
 		t.Parallel()
 
-		for name, tc := range map[string]struct {
+		for name, tc := range map[string]struct { //nolint:govet // we don't care about alignment there
 			doc      bson.D
 			expected error
 		}{
