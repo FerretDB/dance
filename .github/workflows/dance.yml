@@ -75,12 +75,14 @@ jobs:
         run: |
           bin/task env-logs > /tmp/compose-logs.txt
 
+      # TODO zip logs https://github.com/FerretDB/FerretDB/issues/2086
       - name: Upload logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
           path: /tmp/compose-logs.txt
+          retention-days: 1
 
       - name: Check dirty
         run: |
