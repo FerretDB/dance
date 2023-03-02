@@ -1,13 +1,13 @@
 module github.com/FerretDB/dance
 
-go 1.19
+go 1.20
 
 require (
 	github.com/AlekSi/pointer v1.2.0
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/stretchr/testify v1.8.1
-	go.mongodb.org/mongo-driver v1.10.4
-	golang.org/x/exp v0.0.0-20230213192124-5e25df0256eb
+	github.com/stretchr/testify v1.8.2
+	go.mongodb.org/mongo-driver v1.11.2
+	golang.org/x/exp v0.0.0-20230224173230-c95f2b4c22f2
 	golang.org/x/sys v0.5.0
 	gopkg.in/yaml.v3 v3.0.1
 )

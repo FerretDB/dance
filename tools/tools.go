@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build go1.18
-// +build go1.18
+//go:build go1.20
+// +build go1.20
 
 package tools
 
@@ -30,7 +30,7 @@ import (
 )
 
 // Check that `go` in $PATH have the right version.
-// Catches problems like `/some/path/go generate` invocations where `/some/path/go` is 1.18+
+// Catches problems like `/some/path/go generate` invocations where `/some/path/go` is 1.20+
 // (that's checked by the build tags above), but just `go` in $PATH (typically something like `/usr/bin/go`)
 // is an earlier version.
 
