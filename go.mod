@@ -1,6 +1,6 @@
 module github.com/FerretDB/dance
 
-go 1.19
+go 1.20
 
 require (
 	github.com/AlekSi/pointer v1.2.0
