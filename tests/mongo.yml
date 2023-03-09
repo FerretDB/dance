@@ -2,7 +2,7 @@
 runner: jstest
 args:
   - mongo/jstests/core/administrative/auth[1-2].js
-  - mongo/jstests/core/query/all/all*.js
+  - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/query/unset/unset*.js
@@ -16,12 +16,11 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 29
-      expected_pass: 25
+      expected_fail: 27
+      expected_pass: 26
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
-      - mongo/jstests/core/query/all/all.js
       - mongo/jstests/core/query/all/all2.js
       - mongo/jstests/core/query/all/all4.js
       - mongo/jstests/core/query/all/all5.js
@@ -71,9 +70,6 @@ results:
       - mongo/jstests/core/write/update/updateb.js
       - mongo/jstests/core/write/update/updatel.js
 
-      # https://github.com/FerretDB/FerretDB/issues/1744
-      - mongo/jstests/core/write/update/updatee.js
-
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
@@ -81,5 +77,5 @@ results:
   mongodb:
     stats:
       expected_fail: 0
-      expected_pass: 54
+      expected_pass: 53
     fail:
