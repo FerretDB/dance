@@ -17,6 +17,7 @@ package mongotools
 import (
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,6 +25,8 @@ import (
 )
 
 func TestExportImport(t *testing.T) {
+	runtime.GOMAXPROCS(1) // test with 1 to avoid scheduling goroutines on each CPU.
+
 	t.Parallel()
 
 	containerSourceRoot := "/dumps/mongodb-sample-databases/"
