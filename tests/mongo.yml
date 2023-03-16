@@ -8,6 +8,8 @@ args:
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/array/array[1-4].js
   - mongo/jstests/core/query/array/arrayfind[1-9].js
+  - mongo/jstests/core/query/distinct/distinct_array1.js
+  - mongo/jstests/core/query/distinct/distinct[1-4].js
   - mongo/jstests/core/write/find_and_modify/find_and_modify.js
   - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
   - mongo/jstests/core/write/update/update[2-9].js
@@ -16,8 +18,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 29
-      expected_pass: 25
+      expected_fail: 32
+      expected_pass: 27
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -57,6 +59,15 @@ results:
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
 
+      # https://jira.mongodb.org/browse/SERVER-14832
+      - mongo/jstests/core/query/distinct/distinct_array1.js
+
+      # query should also be null
+      - mongo/jstests/core/query/distinct/distinct1.js
+
+      # our error code is wrong it should be ErrorCodes.TypeMismatch
+      - mongo/jstests/core/query/distinct/distinct4.js
+
       # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/core/uniqueness.js
 
@@ -80,6 +91,8 @@ results:
       - mongo/jstests/core/write/update/updateh.js
   mongodb:
     stats:
-      expected_fail: 0
+      expected_fail: 1
       expected_pass: 54
     fail:
+      # https://jira.mongodb.org/browse/SERVER-14832
+      - mongo/jstests/core/query/distinct/distinct_array1.js
