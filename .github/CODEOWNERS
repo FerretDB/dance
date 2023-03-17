@@ -6,9 +6,10 @@
 /cmd/                @FerretDB/leads @FerretDB/specops
 /internal/           @FerretDB/leads @FerretDB/specops
 
+/tests/              @b1ron
 /tests/diff/         @FerretDB/leads
 /tests/mongo-tools/  @FerretDB/leads
 
-/build/              @FerretDB/specops
-go.mod               @FerretDB/specops
-go.sum               @FerretDB/specops
+/build/              @AlekSi
+go.mod               @AlekSi
+go.sum               @AlekSi

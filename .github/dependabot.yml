@@ -4,6 +4,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     labels: [deps]
+    assignees: [AlekSi]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -11,6 +12,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/build/deps"
     labels: [deps]
+    assignees: [AlekSi]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -18,6 +20,7 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     labels: [deps]
+    assignees: [AlekSi]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -25,6 +28,7 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/tools"
     labels: [deps]
+    assignees: [AlekSi]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -32,6 +36,7 @@ updates:
   - package-ecosystem: "gitsubmodule"
     directory: "/"
     labels: [deps]
+    assignees: [b1ron]
     schedule:
       interval: "weekly"
       day: "thursday"
