@@ -107,8 +107,8 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		"--objcheck",
 		"--drop",
 		"--noIndexRestore", // not supported by FerretDB yet
-		"--numParallelCollections=10",
-		"--numInsertionWorkersPerCollection=10",
+		"--numParallelCollections=4",
+		"--numInsertionWorkersPerCollection=4",
 		"--stopOnError",
 		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
 		"mongodb://host.docker.internal:27017/",
