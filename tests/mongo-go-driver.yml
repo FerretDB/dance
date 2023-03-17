@@ -20,6 +20,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -297,7 +298,7 @@ results:
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-      
+
       # uses write concern and sets ErrorLabels and tries to insert invalid fields etc.
       - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsDetails
 
@@ -353,7 +354,7 @@ results:
       # skipping due to known failure: failpoints and timeouts together cause failures; see GODRIVER-2123
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/minPoolSize-error.json/Network_error_on_minPoolSize_background_creation
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/server-discovery-and-monitoring/integration/find-network-timeout-error.json/Ignore_network_timeout_error_on_find
-      
+
       # operation mapReduce not implemented
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_succeeds_with_retry_on
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/mapReduce.json/MapReduce_fails_with_retry_on
@@ -436,7 +437,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_succeeds_after_HostNotFound
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_two_NotWritablePrimary_errors
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_NotWritablePrimary_when_retryReads_is_false
-      
+
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
