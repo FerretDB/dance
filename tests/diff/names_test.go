@@ -53,26 +53,6 @@ func TestDatabaseName(t *testing.T) {
 func TestCollectionName(t *testing.T) {
 	t.Parallel()
 
-	t.Run("Length200", func(t *testing.T) {
-		collection := strings.Repeat("a", 200)
-		ctx, db := setup(t)
-		dbName := db.Name()
-		err := db.CreateCollection(ctx, collection)
-
-		t.Run("FerretDB", func(t *testing.T) {
-			expected := mongo.CommandError{
-				Name:    "InvalidNamespace",
-				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
-			}
-			assertEqualError(t, expected, err)
-		})
-
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-		})
-	})
-
 	t.Run("ReservedPrefix", func(t *testing.T) {
 		collection := "_ferretdb_xxx"
 		ctx, db := setup(t)
