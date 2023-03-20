@@ -330,8 +330,8 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 403
-      expected_pass: 1849
+      expected_skip: 416
+      expected_pass: 1892
     fail:
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
@@ -438,6 +438,10 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_two_NotWritablePrimary_errors
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/count-serverErrors.json/Count_fails_after_NotWritablePrimary_when_retryReads_is_false
 
+      # the waitQueueSize client option is not supported
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueMultiple_should_be_included_in_connection_pool_created_message_when_specified
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueSize_should_be_included_in_connection_pool_created_message_when_specified
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueTimeoutMS_should_be_included_in_connection_pool_created_message_when_specified
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
