@@ -54,9 +54,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	}
 
 	type item struct {
-		f   string
-		out []byte
-		err error
+		file string
+		out  []byte
+		err  error
 	}
 
 	var volume = "tests"
@@ -65,7 +65,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	for _, f := range files {
 		go func(f string) {
 			var it item
-			it.f = f
+			it.file = f
 			it.out, it.err = runCommand(dir, "mongo", filepath.Join(volume, f))
 			ch <- it
 		}(f)
@@ -80,14 +80,14 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}
 
 		if it.err != nil {
-			res.TestResults[it.f] = internal.TestResult{
+			res.TestResults[it.file] = internal.TestResult{
 				Status: internal.Fail,
 				Output: string(it.out),
 			}
 			continue
 		}
 
-		res.TestResults[it.f] = internal.TestResult{
+		res.TestResults[it.file] = internal.TestResult{
 			Status: internal.Pass,
 			Output: string(it.out),
 		}
