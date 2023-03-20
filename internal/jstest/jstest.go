@@ -53,38 +53,44 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
+	type item struct {
+		f   string
+		out []byte
+		err error
+	}
+
 	var volume = "tests"
 
-	ch := make(chan struct{}, len(files))
-	for _, testName := range files {
-		go func(testName string) {
-			output, err := runCommand(dir, "mongo", filepath.Join(volume, testName))
-			if err != nil {
-				if _, ok := err.(*exec.ExitError); !ok {
-					panic(err)
-				}
-			}
-
-			if err == nil {
-				res.TestResults[testName] = internal.TestResult{
-					Status: internal.Pass,
-					Output: string(output),
-				}
-				ch <- struct{}{}
-			}
-
-			if err != nil {
-				res.TestResults[testName] = internal.TestResult{
-					Status: internal.Fail,
-					Output: string(output),
-				}
-				ch <- struct{}{}
-			}
-		}(testName)
+	ch := make(chan item, len(files))
+	for _, f := range files {
+		go func(f string) {
+			var it item
+			it.f = f
+			it.out, it.err = runCommand(dir, "mongo", filepath.Join(volume, f))
+			ch <- it
+		}(f)
 	}
 
 	for range files {
-		<-ch
+		it := <-ch
+		if it.err != nil {
+			if _, ok := it.err.(*exec.ExitError); !ok {
+				return nil, it.err
+			}
+		}
+
+		if it.err != nil {
+			res.TestResults[it.f] = internal.TestResult{
+				Status: internal.Fail,
+				Output: string(it.out),
+			}
+			continue
+		}
+
+		res.TestResults[it.f] = internal.TestResult{
+			Status: internal.Pass,
+			Output: string(it.out),
+		}
 	}
 
 	return res, nil
