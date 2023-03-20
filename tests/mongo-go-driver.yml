@@ -20,7 +20,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+      # - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     skip:
       - output_regex: skipping due to environmental constraints.*
 
