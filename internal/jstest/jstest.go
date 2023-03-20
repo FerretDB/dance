@@ -55,8 +55,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	type item struct {
 		file string
-		out  []byte
 		err  error
+		out  []byte
 	}
 
 	var volume = "tests"
