@@ -87,4 +87,4 @@ jobs:
       - name: Check dirty
         run: |
           git status
-          git diff --exit-code
+          git diff --submodule=diff --exit-code
