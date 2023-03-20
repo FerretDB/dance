@@ -10,6 +10,7 @@ args:
   - mongo/jstests/core/query/array/arrayfind[1-9].js
   - mongo/jstests/core/query/distinct/distinct_array1.js
   - mongo/jstests/core/query/distinct/distinct[1-4].js
+  - mongo/jstests/core/query/elemmatch/elemmatch*.js
   - mongo/jstests/core/write/find_and_modify/find_and_modify.js
   - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
   - mongo/jstests/core/write/update/update[2-9].js
@@ -18,7 +19,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 32
+      expected_fail: 36
       expected_pass: 27
     fail:
       # https://docs.ferretdb.io/diff/
@@ -46,6 +47,16 @@ results:
       - mongo/jstests/core/query/array/arrayfind8.js
       - mongo/jstests/core/query/array/arrayfind9.js
 
+      # $elemMatch: support for $or not implemented yet
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
+
+      # projection of $elemMatch is not supported
+      - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
+
+      # https://github.com/FerretDB/dance/issues/295
+      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
+
       # https://github.com/FerretDB/FerretDB/issues/1492
       - mongo/jstests/core/administrative/auth1.js
 
@@ -62,10 +73,10 @@ results:
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
 
-      # query should also be null
+      # https://github.com/FerretDB/FerretDB/issues/2236
       - mongo/jstests/core/query/distinct/distinct1.js
 
-      # our error code is wrong it should be ErrorCodes.TypeMismatch
+      # https://github.com/FerretDB/FerretDB/issues/2231
       - mongo/jstests/core/query/distinct/distinct4.js
 
       # https://github.com/FerretDB/FerretDB/issues/1384
