@@ -62,6 +62,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	var volume = "tests"
 
 	ch := make(chan item, len(files))
+
 	for _, f := range files {
 		go func(f string) {
 			var it item
