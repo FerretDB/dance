@@ -106,8 +106,9 @@ results:
       - mongo/jstests/core/write/update/updateh.js
   mongodb:
     stats:
-      expected_fail: 1
-      expected_pass: 54
+      expected_fail: 2
+      expected_pass: 68
     fail:
-      # https://jira.mongodb.org/browse/SERVER-14832
-      - mongo/jstests/core/query/distinct/distinct_array1.js
+      # https://github.com/FerretDB/dance/issues/295
+      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
