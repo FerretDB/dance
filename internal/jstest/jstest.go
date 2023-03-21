@@ -16,6 +16,7 @@ package jstest
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os/exec"
 	"path/filepath"
@@ -87,7 +88,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	for it := range ch {
 		if it.err != nil {
-			if _, ok := it.err.(*exec.ExitError); !ok {
+			var exitErr *exec.ExitError
+			if !errors.As(it.err, &exitErr) {
 				return nil, it.err
 			}
 		}
