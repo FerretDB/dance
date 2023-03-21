@@ -80,11 +80,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}(f)
 	}
 
-	// closer
-	go func() {
-		wg.Wait()
-		close(ch)
-	}()
+	wg.Wait()
+
+	close(ch)
 
 	for it := range ch {
 		if it.err != nil {
@@ -92,9 +90,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 			if !errors.As(it.err, &exitErr) {
 				return nil, it.err
 			}
-		}
 
-		if it.err != nil {
 			res.TestResults[it.file] = internal.TestResult{
 				Status: internal.Fail,
 				Output: string(it.out),
