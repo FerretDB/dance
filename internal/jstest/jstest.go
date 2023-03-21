@@ -61,19 +61,19 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	var volume = "tests"
 
-	ch := make(chan item, len(files))
+	ch := make(chan *item, len(files))
 
 	for _, f := range files {
 		go func(f string) {
-			var it item
-			it.file = f
+			it := &item{
+				file: f,
+			}
 			it.out, it.err = runCommand(dir, "mongo", filepath.Join(volume, f))
 			ch <- it
 		}(f)
 	}
 
-	for range files {
-		it := <-ch
+	for it := range ch {
 		if it.err != nil {
 			if _, ok := it.err.(*exec.ExitError); !ok {
 				return nil, it.err
