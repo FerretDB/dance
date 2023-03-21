@@ -84,7 +84,8 @@ jobs:
           path: /tmp/compose-logs.txt
           retention-days: 1
 
+      # ignore `go mod tidy` being applied to the Go driver, etc
       - name: Check dirty
         run: |
-          git status
-          git diff --exit-code
+          git status --ignore-submodules=none
+          git diff --ignore-submodules=all --exit-code
