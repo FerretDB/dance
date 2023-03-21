@@ -3,6 +3,7 @@ runner: jstest
 args:
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/cursor/cursor[1-7].js
+  - mongo/jstests/core/cursor/getmore.js
   - mongo/jstests/core/query/all/all*.js
   - mongo/jstests/core/query/basic*.js
   - mongo/jstests/core/uniqueness.js
