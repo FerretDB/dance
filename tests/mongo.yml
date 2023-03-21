@@ -21,8 +21,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 27
-      expected_pass: 26
+      expected_fail: 35
+      expected_pass: 35
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -34,7 +34,7 @@ results:
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind4.js
 
-      # https://github.com/FerretDB/FerretDB/issues/1724
+      # TODO: create a new issue for this use of $elemMatch.
       - mongo/jstests/core/query/array/arrayfind5.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
@@ -64,7 +64,7 @@ results:
       # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
 
-      # TODO: create a new issue for each elemmatch.
+      # TODO: create a new issue for each $elemMatch.
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
