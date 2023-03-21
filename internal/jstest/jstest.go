@@ -61,7 +61,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	var volume = "tests"
+	volume := "tests"
 
 	ch := make(chan *item, len(files))
 
