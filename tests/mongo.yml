@@ -49,13 +49,10 @@ results:
       - mongo/jstests/core/query/array/arrayfind8.js
       - mongo/jstests/core/query/array/arrayfind9.js
 
+      # TODO: create a new issue for each elemmatch.
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
-
-      # projection of $elemMatch is not supported
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
-
-      # https://github.com/FerretDB/dance/issues/295
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
 
