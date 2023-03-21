@@ -21,6 +21,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 
 	"golang.org/x/exp/maps"
 
@@ -63,8 +64,13 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	ch := make(chan *item, len(files))
 
+	var wg sync.WaitGroup
 	for _, f := range files {
+		wg.Add(1)
+
 		go func(f string) {
+			defer wg.Done()
+
 			it := &item{
 				file: f,
 			}
@@ -72,6 +78,12 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 			ch <- it
 		}(f)
 	}
+
+	// closer
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
 
 	for it := range ch {
 		if it.err != nil {
