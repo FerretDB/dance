@@ -2,8 +2,8 @@
 runner: jstest
 args:
   - mongo/jstests/core/administrative/auth[1-2].js
-  - mongo/jstests/core/cursor/cursor[1-7].js
-  - mongo/jstests/core/cursor/getmore.js
+  - mongo/jstests/core/query/cursor/cursor*.js
+  - mongo/jstests/core/query/cursor/getmore.js
   - mongo/jstests/core/query/all/all*.js
   - mongo/jstests/core/query/basic*.js
   - mongo/jstests/core/uniqueness.js
@@ -21,8 +21,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 36
-      expected_pass: 27
+      expected_fail: 34
+      expected_pass: 29
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -40,6 +40,9 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
+
+      # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/query/cursor/cursora.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
       # https://github.com/FerretDB/FerretDB/issues/731
