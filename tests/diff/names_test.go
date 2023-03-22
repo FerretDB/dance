@@ -28,68 +28,66 @@ func TestDatabaseName(t *testing.T) {
 
 	collectionName := strings.Repeat("a", 10)
 
-	t.Run("ReservedPrefix", func(t *testing.T) {
-		dbName := "_ferretdb_xxx"
-		ctx, db := setup(t)
-		err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
+	testCases := map[string]string{
+		"ReservedPrefix":     "_ferretdb_xxx",
+		"NonLatin":           "データベース",
+		"Space":              "data base",
+		"Dot":                "database.test",
+		"Dollar":             "database$",
+		"StartingWithNumber": "1database",
+		"CapitalLetter":      "Database",
+		"TooLong":            strings.Repeat("a", 64),
+	}
 
-		t.Run("FerretDB", func(t *testing.T) {
-			expected := mongo.CommandError{
-				Name:    "InvalidNamespace",
-				Code:    73,
-				Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
-			}
-			alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
-			assertEqualAltError(t, expected, alt, err)
-		})
+	for name, dbName := range testCases {
+		t.Run(name, func(t *testing.T) {
+			ctx, db := setup(t)
+			err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
 
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-			db.Client().Database(dbName).Drop(ctx)
+			t.Run("FerretDB", func(t *testing.T) {
+				expected := mongo.CommandError{
+					Name:    "InvalidNamespace",
+					Code:    73,
+					Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
+				}
+				alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
+				assertEqualAltError(t, expected, alt, err)
+			})
+
+			t.Run("MongoDB", func(t *testing.T) {
+				require.NoError(t, err)
+				db.Client().Database(dbName).Drop(ctx)
+			})
 		})
-	})
+	}
 }
 
 func TestCollectionName(t *testing.T) {
 	t.Parallel()
 
-	t.Run("ReservedPrefix", func(t *testing.T) {
-		collection := "_ferretdb_xxx"
-		ctx, db := setup(t)
-		dbName := db.Name()
-		err := db.CreateCollection(ctx, collection)
+	testCases := map[string]string{
+		"ReservedPrefix": "_ferretdb_xxx",
+		"NonUTF-8":       "Ä°nanÃ§",
+	}
 
-		t.Run("FerretDB", func(t *testing.T) {
-			expected := mongo.CommandError{
-				Name:    "InvalidNamespace",
-				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
-			}
-			assertEqualError(t, expected, err)
+	for name, collection := range testCases {
+		t.Run(name, func(t *testing.T) {
+			ctx, db := setup(t)
+			dbName := db.Name()
+			err := db.CreateCollection(ctx, collection)
+
+			t.Run("FerretDB", func(t *testing.T) {
+				expected := mongo.CommandError{
+					Name:    "InvalidNamespace",
+					Code:    73,
+					Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
+				}
+				assertEqualError(t, expected, err)
+			})
+
+			t.Run("MongoDB", func(t *testing.T) {
+				require.NoError(t, err)
+			})
 		})
-
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-		})
-	})
-
-	t.Run("NonUTF-8", func(t *testing.T) {
-		collection := "Ä°nanÃ§"
-		ctx, db := setup(t)
-		dbName := db.Name()
-		err := db.CreateCollection(ctx, collection)
-
-		t.Run("FerretDB", func(t *testing.T) {
-			expected := mongo.CommandError{
-				Name:    "InvalidNamespace",
-				Code:    73,
-				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
-			}
-			assertEqualError(t, expected, err)
-		})
-
-		t.Run("MongoDB", func(t *testing.T) {
-			require.NoError(t, err)
-		})
-	})
+	}
 }
