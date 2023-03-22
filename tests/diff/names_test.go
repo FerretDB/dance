@@ -72,4 +72,24 @@ func TestCollectionName(t *testing.T) {
 			require.NoError(t, err)
 		})
 	})
+
+	t.Run("NonUTF-8", func(t *testing.T) {
+		collection := "Ä°nanÃ§"
+		ctx, db := setup(t)
+		dbName := db.Name()
+		err := db.CreateCollection(ctx, collection)
+
+		t.Run("FerretDB", func(t *testing.T) {
+			expected := mongo.CommandError{
+				Name:    "InvalidNamespace",
+				Code:    73,
+				Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
+			}
+			assertEqualError(t, expected, err)
+		})
+
+		t.Run("MongoDB", func(t *testing.T) {
+			require.NoError(t, err)
+		})
+	})
 }
