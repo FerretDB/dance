@@ -5,7 +5,7 @@ args:
   - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
   - mongo/jstests/core/query/cursor/cursor*.js
-  - mongo/jstests/core/query/cursor/getmore.js
+  - mongo/jstests/core/query/cursor/getmore*.js
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/array/array[1-4].js
