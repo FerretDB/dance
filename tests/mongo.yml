@@ -37,7 +37,7 @@ results:
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind4.js
 
-      # TODO: create a new issue for this use of $elemMatch.
+      # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind5.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
@@ -74,7 +74,11 @@ results:
       # TODO: create a new issue for each $elemMatch.
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1710
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
+
+      # https://github.com/FerretDB/dance/issues/295
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
 
