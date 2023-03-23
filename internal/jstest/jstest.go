@@ -16,11 +16,13 @@ package jstest
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 
 	"golang.org/x/exp/maps"
 
@@ -53,27 +55,52 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
+	type item struct {
+		file string
+		err  error
+		out  []byte
+	}
+
 	volume := "tests"
-	for _, testName := range files {
-		output, err := runCommand(dir, "mongo", filepath.Join(volume, testName))
-		if err != nil {
-			if _, ok := err.(*exec.ExitError); !ok {
-				return nil, err
-			}
-		}
 
-		if err == nil {
-			res.TestResults[testName] = internal.TestResult{
-				Status: internal.Pass,
-				Output: string(output),
+	ch := make(chan *item, len(files))
+
+	var wg sync.WaitGroup
+	for _, f := range files {
+		wg.Add(1)
+
+		go func(f string) {
+			defer wg.Done()
+
+			it := &item{
+				file: f,
+			}
+			it.out, it.err = runCommand(dir, "mongo", filepath.Join(volume, f))
+			ch <- it
+		}(f)
+	}
+
+	wg.Wait()
+
+	close(ch)
+
+	for it := range ch {
+		if it.err != nil {
+			var exitErr *exec.ExitError
+			if !errors.As(it.err, &exitErr) {
+				return nil, it.err
 			}
 
+			res.TestResults[it.file] = internal.TestResult{
+				Status: internal.Fail,
+				Output: string(it.out),
+			}
 			continue
 		}
 
-		res.TestResults[testName] = internal.TestResult{
-			Status: internal.Fail,
-			Output: string(output),
+		res.TestResults[it.file] = internal.TestResult{
+			Status: internal.Pass,
+			Output: string(it.out),
 		}
 	}
 
