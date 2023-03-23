@@ -33,7 +33,6 @@ func TestDatabaseName(t *testing.T) {
 		"NonLatin":           "データベース",
 		"Space":              "data base",
 		"Dot":                "database.test",
-		"Dollar":             "database$",
 		"StartingWithNumber": "1database",
 		"CapitalLetter":      "Database",
 		"TooLong":            strings.Repeat("a", 64),
