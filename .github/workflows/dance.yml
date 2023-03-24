@@ -24,6 +24,7 @@ jobs:
   dance:
     name: dance
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'no ci')
 
@@ -73,7 +74,7 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          bin/task env-logs > /tmp/compose-logs.txt
+          bin/task env-logs-collect > /tmp/compose-logs.txt
 
       # TODO zip logs https://github.com/FerretDB/FerretDB/issues/2086
       - name: Upload logs
