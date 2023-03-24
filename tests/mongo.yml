@@ -61,7 +61,7 @@ results:
       # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/query/cursor/cursora.js
 
-      # https://github.com/FerretDB/dance/issues/295
+      # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
 
       # https://github.com/FerretDB/FerretDB/issues/2283
@@ -125,9 +125,6 @@ results:
       - mongo/jstests/auth/list_sessions.js
   mongodb:
     stats:
-      expected_fail: 2
-      expected_pass: 68
+      expected_fail: 0
+      expected_pass: 70
     fail:
-      # https://github.com/FerretDB/dance/issues/295
-      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
