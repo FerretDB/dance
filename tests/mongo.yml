@@ -119,12 +119,14 @@ results:
       # TODO: investigate as well. session related.
       - mongo/jstests/readonly/getmore.js
 
-      # TODO: investigate as well. https://github.com/FerretDB/dance/issues/294
+      # https://github.com/FerretDB/dance/issues/294
       - mongo/jstests/auth/getMore.js
 
       - mongo/jstests/auth/list_sessions.js
   mongodb:
     stats:
-      expected_fail: 0
+      expected_fail: 1
       expected_pass: 70
     fail:
+    # https://github.com/FerretDB/dance/issues/294
+    -  mongo/jstests/auth/getMore.js
