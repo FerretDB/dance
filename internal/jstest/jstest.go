@@ -75,7 +75,11 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 			}
 
 			// we set working_dir so use a relative path here instead
-			rel, _ := filepath.Rel("mongo", f)
+			rel, err := filepath.Rel("mongo", f)
+			if err != nil {
+				panic(err)
+			}
+
 			it.out, it.err = runCommand(dir, "mongo", rel)
 			ch <- it
 		}(f)
