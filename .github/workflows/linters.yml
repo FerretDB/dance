@@ -24,6 +24,7 @@ jobs:
   linters:
     name: linters
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'no ci')
 

@@ -55,6 +55,11 @@ tasks:
       - docker compose ps --all
       - docker compose logs --follow
 
+  env-logs-collect:
+    cmds:
+      - docker compose ps --all
+      - docker compose logs
+
   env-down:
     desc: "Stop environment"
     cmds:
