@@ -66,7 +66,7 @@ func TestCollectionName(t *testing.T) {
 
 	testCases := map[string]string{
 		"ReservedPrefix": "_ferretdb_xxx",
-		"NonUTF-8":       "Ä°nanÃ§",
+		"NonUTF-8":       string([]byte{0xff, 0xfe, 0xfd}),
 	}
 
 	for name, collection := range testCases {
