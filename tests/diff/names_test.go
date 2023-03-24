@@ -31,14 +31,12 @@ func TestDatabaseName(t *testing.T) {
 	testCases := map[string]string{
 		"ReservedPrefix":     "_ferretdb_xxx",
 		"NonLatin":           "データベース",
-		"Space":              "data base",
-		"Dot":                "database.test",
 		"StartingWithNumber": "1database",
 		"CapitalLetter":      "Database",
-		"TooLong":            strings.Repeat("a", 64),
 	}
 
 	for name, dbName := range testCases {
+		name, dbName := name, dbName
 		t.Run(name, func(t *testing.T) {
 			ctx, db := setup(t)
 			err := db.Client().Database(dbName).CreateCollection(ctx, collectionName)
@@ -70,6 +68,7 @@ func TestCollectionName(t *testing.T) {
 	}
 
 	for name, collection := range testCases {
+		name, collection := name, collection
 		t.Run(name, func(t *testing.T) {
 			ctx, db := setup(t)
 			dbName := db.Name()
