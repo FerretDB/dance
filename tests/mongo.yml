@@ -64,14 +64,14 @@ results:
       # https://github.com/FerretDB/dance/issues/295
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
 
-      # TODO: investigate as well. https://github.com/FerretDB/dance/issues/295
+      # https://github.com/FerretDB/FerretDB/issues/2283
+      # https://github.com/FerretDB/FerretDB/issues/2284
       - mongo/jstests/core/query/awaitdata_getmore_cmd.js
 
       # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
 
-      # TODO: create a new issue for each $elemMatch.
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
 
