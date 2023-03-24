@@ -126,7 +126,7 @@ results:
   mongodb:
     stats:
       expected_fail: 1
-      expected_pass: 70
+      expected_pass: 74
     fail:
     # https://github.com/FerretDB/dance/issues/294
     -  mongo/jstests/auth/getMore.js
