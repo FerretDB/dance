@@ -4,10 +4,18 @@ args:
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
+  - mongo/jstests/core/query/cursor/cursor*.js
+  - mongo/jstests/core/query/cursor/getmore*.js
+  - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+  - mongo/jstests/readonly/getmore.js
+  - mongo/jstests/auth/getMore.js
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/array/array[1-4].js
   - mongo/jstests/core/query/array/arrayfind[1-9].js
+  - mongo/jstests/core/query/distinct/distinct_array1.js
+  - mongo/jstests/core/query/distinct/distinct[1-4].js
+  - mongo/jstests/core/query/elemmatch/elemmatch*.js
   - mongo/jstests/core/write/find_and_modify/find_and_modify.js
   - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
   - mongo/jstests/core/write/update/update[2-9].js
@@ -16,8 +24,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 27
-      expected_pass: 26
+      expected_fail: 40
+      expected_pass: 35
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -29,11 +37,8 @@ results:
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind4.js
 
-      # https://github.com/FerretDB/FerretDB/issues/1724
+      # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind5.js
-
-      # https://github.com/FerretDB/FerretDB/issues/161
-      - mongo/jstests/core/query/basic1.js
 
       # https://github.com/FerretDB/FerretDB/issues/1710
       # https://github.com/FerretDB/FerretDB/issues/731
@@ -50,11 +55,47 @@ results:
       # logout deprecated since version 5.0.
       - mongo/jstests/core/administrative/auth2.js
 
+      # https://github.com/FerretDB/FerretDB/issues/161
+      - mongo/jstests/core/query/basic1.js
+
+      # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/query/cursor/cursora.js
+
+      # https://github.com/FerretDB/FerretDB/issues/2286
+      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
+
+      # https://github.com/FerretDB/FerretDB/issues/2283
+      # https://github.com/FerretDB/FerretDB/issues/2284
+      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+
+      # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
+      - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
+      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
+
+      # https://github.com/FerretDB/FerretDB/issues/730
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1710
+      - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
+
+      # https://github.com/FerretDB/dance/issues/295
+      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
+
       # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/write/find_and_modify/find_and_modify.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
+
+      # https://jira.mongodb.org/browse/SERVER-14832
+      - mongo/jstests/core/query/distinct/distinct_array1.js
+
+      # https://github.com/FerretDB/FerretDB/issues/2236
+      - mongo/jstests/core/query/distinct/distinct1.js
+
+      # https://github.com/FerretDB/FerretDB/issues/2231
+      - mongo/jstests/core/query/distinct/distinct4.js
 
       # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/core/uniqueness.js
@@ -74,8 +115,18 @@ results:
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
+
+      # TODO: investigate as well. session related.
+      - mongo/jstests/readonly/getmore.js
+
+      # https://github.com/FerretDB/dance/issues/294
+      - mongo/jstests/auth/getMore.js
+
+      - mongo/jstests/auth/list_sessions.js
   mongodb:
     stats:
-      expected_fail: 0
-      expected_pass: 53
+      expected_fail: 1
+      expected_pass: 74
     fail:
+    # https://github.com/FerretDB/dance/issues/294
+    -  mongo/jstests/auth/getMore.js
