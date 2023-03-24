@@ -61,8 +61,6 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	volume := "tests"
-
 	ch := make(chan *item, len(files))
 
 	var wg sync.WaitGroup
@@ -75,7 +73,14 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 			it := &item{
 				file: f,
 			}
-			it.out, it.err = runCommand(dir, "mongo", filepath.Join(volume, f))
+
+			// we set working_dir so use a relative path here instead
+			rel, err := filepath.Rel("mongo", f)
+			if err != nil {
+				panic(err)
+			}
+
+			it.out, it.err = runCommand(dir, "mongo", rel)
 			ch <- it
 		}(f)
 	}
