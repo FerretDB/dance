@@ -61,6 +61,10 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
+	// tokens is a counting semaphore used to enforce a limit of
+	// 20 concurrent runCommand invocations.
+	tokens := make(chan struct{}, 20)
+
 	ch := make(chan *item, len(files))
 
 	var wg sync.WaitGroup
@@ -70,6 +74,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		go func(f string) {
 			defer wg.Done()
 
+			tokens <- struct{}{}
 			it := &item{
 				file: f,
 			}
@@ -82,6 +87,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 			it.out, it.err = runCommand(dir, "mongo", rel)
 			ch <- it
+
+			<-tokens // release the token
 		}(f)
 	}
 
