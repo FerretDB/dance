@@ -7,8 +7,9 @@ args:
   - mongo/jstests/core/query/cursor/cursor*.js
   - mongo/jstests/core/query/cursor/getmore*.js
   - mongo/jstests/core/query/awaitdata_getmore_cmd.js
-  - mongo/jstests/readonly/getmore.js
+  - mongo/jstests/readonly/get_more.js
   - mongo/jstests/auth/getMore.js
+  - mongo/jstests/auth/list_sessions.js
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/array/array[1-4].js
@@ -24,7 +25,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 40
+      expected_fail: 42
       expected_pass: 35
     fail:
       # https://docs.ferretdb.io/diff/
@@ -116,17 +117,16 @@ results:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
 
-      # TODO: investigate as well. session related.
-      - mongo/jstests/readonly/getmore.js
-
       # https://github.com/FerretDB/dance/issues/294
+      - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/getMore.js
-
       - mongo/jstests/auth/list_sessions.js
   mongodb:
     stats:
-      expected_fail: 1
+      expected_fail: 3
       expected_pass: 74
     fail:
     # https://github.com/FerretDB/dance/issues/294
-    -  mongo/jstests/auth/getMore.js
+    - mongo/jstests/auth/getMore.js
+    - mongo/jstests/readonly/get_more.js
+    - mongo/jstests/auth/list_sessions.js
