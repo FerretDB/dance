@@ -63,7 +63,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	// tokens is a counting semaphore used to enforce a limit of
 	// 20 concurrent runCommand invocations.
-	var tokens = make(chan struct{}, 20)
+	tokens := make(chan struct{}, 20)
 
 	ch := make(chan *item, len(files))
 
