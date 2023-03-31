@@ -96,22 +96,26 @@ results:
       expected_pass: 0
     fail:
     ignore:
-      # TODO: these files have the exclude_with_any_tags so ignore them in args instead.
-      - jstests/core/administrative/apply_ops/apply_ops1.js
-      - jstests/auth/autocomplete_auth.js
-      - jstests/core/administrative/apply_ops/apply_ops1.js
-      - jstests/core/administrative/apply_ops/apply_ops_system_dot_views.js
-      - jstests/core/administrative/auth1.js
-      - jstests/core/administrative/automation_setparameter.js
-      - jstests/core/administrative/current_op/currentop.js
-      - jstests/core/administrative/profile/profile1.js
-      - jstests/core/administrative/profile/profile3.js
-      - jstests/core/administrative/set_param1.js
-      - jstests/core/catalog/list_collections_no_views.js
-      - jstests/core/connection_status.js
-      - jstests/core/dbhash2.js
-      # - assumes_superuser_permissions
-      # - requires_eval_command
-      # - requires_spawning_own_processes
-      # - uses_multiple_connections
-      # - uses_testing_only_commands
+      # # TODO: these files have the exclude_with_any_tags so ignore them in args instead.
+      # - jstests/core/administrative/apply_ops/apply_ops1.js
+      # - jstests/auth/autocomplete_auth.js
+      # - jstests/core/administrative/apply_ops/apply_ops1.js
+      # - jstests/core/administrative/apply_ops/apply_ops_system_dot_views.js
+      # - jstests/core/administrative/auth1.js
+      # - jstests/core/administrative/automation_setparameter.js
+      # - jstests/core/administrative/current_op/currentop.js
+      # - jstests/core/administrative/profile/profile1.js
+      # - jstests/core/administrative/profile/profile3.js
+      # - jstests/core/administrative/set_param1.js
+      # - jstests/core/catalog/list_collections_no_views.js
+      # - jstests/core/connection_status.js
+      # - jstests/core/dbhash2.js
+      # # - assumes_superuser_permissions
+      # # - requires_eval_command
+      # # - requires_spawning_own_processes
+      # # - uses_multiple_connections
+      # # - uses_testing_only_commands
+  mongodb:
+    stats:
+      expected_fail: 0
+      expected_pass: 0
