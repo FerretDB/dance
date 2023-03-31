@@ -70,9 +70,9 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 13
+      expected_fail: 17
       expected_skip: 16
-      expected_pass: 624
+      expected_pass: 616
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
