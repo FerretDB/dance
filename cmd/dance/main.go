@@ -32,7 +32,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
-	service "github.com/FerretDB/dance/internal/srvtest"
+	"github.com/FerretDB/dance/internal/service"
 )
 
 func waitForPort(ctx context.Context, port uint16) error {
