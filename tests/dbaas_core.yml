@@ -4,7 +4,7 @@ runner: service
 args:
   - jstests/core/**/*.js
 
-  # these files have exclude tags so add use !(pattern) to avoid reading them
+  # these files should be excluded because they have the exclude_files field
   - jstests/core/txns/!**/*.js
   # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
   - jstests/core/!find_and_modify.js
@@ -84,7 +84,7 @@ args:
   - jstests/core/!collection_uuid_write_commands.js
   - jstests/core/!index_stats.js
   - jstests/core/!list_all_local_sessions.js
-  - jstests/core/!timeseries/timeseries_lookup.js
+  - jstests/core/timeseries/!timeseries_lookup.js
   - jstests/core/!write_change_stream_pit_preimage.js
   - jstests/core/!operation_latency_histogram.js
   - jstests/core/!profile_findandmodify.js
@@ -96,8 +96,7 @@ results:
       expected_pass: 0
     fail:
     ignore:
-      # these files have exclude tags so add use !(pattern) and add them to args.
-      # TODO: find a way to remove them from globs.
+      # TODO: these files have the exclude_with_any_tags so ignore them in args instead.
       - jstests/core/administrative/apply_ops/apply_ops1.js
       - jstests/auth/autocomplete_auth.js
       - jstests/core/administrative/apply_ops/apply_ops1.js
@@ -111,8 +110,8 @@ results:
       - jstests/core/catalog/list_collections_no_views.js
       - jstests/core/connection_status.js
       - jstests/core/dbhash2.js
-        # - assumes_superuser_permissions
-        # - requires_eval_command
-        # - requires_spawning_own_processes
-        # - uses_multiple_connections
-        # - uses_testing_only_commands
+      # - assumes_superuser_permissions
+      # - requires_eval_command
+      # - requires_spawning_own_processes
+      # - uses_multiple_connections
+      # - uses_testing_only_commands
