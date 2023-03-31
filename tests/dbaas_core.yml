@@ -95,6 +95,92 @@ results:
       expected_fail: 410
       expected_pass: 71
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/1492
+      - mongo/jstests/core/administrative/auth1.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1750
+      - mongo/jstests/core/administrative/auth2.js
+
+      # no such command: 'setParameter' - setLogLevel
+      - mongo/jstests/core/administrative/automation_setparameter.js
+      - mongo/jstests/core/administrative/list_all_local_sessions.js
+      - mongo/jstests/core/administrative/list_all_sessions.js
+      - mongo/jstests/core/administrative/set_param1.js
+
+      # no such command: 'rolesInfo'
+      - mongo/jstests/core/administrative/builtin_roles_external.js
+      # requires_sharding
+      - mongo/jstests/core/administrative/check_shard_index.js
+      # no such command: 'compact'
+      - mongo/jstests/core/administrative/compact_keeps_indexes.js
+      # https://github.com/FerretDB/dance/issues/294
+      - mongo/jstests/core/administrative/getlog2.js
+      # https://github.com/FerretDB/FerretDB/issues/1554
+      - mongo/jstests/core/administrative/list_sessions.js
+      # no such command: 'validateDBMetadata'
+      - mongo/jstests/core/administrative/validate_db_metadata_command.js
+
+      # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
+      - mongo/jstests/core/api/api_params_getmore.js
+
+      # Invalid namespace: createAPIVersion.basicCreate
+      - mongo/jstests/core/api/api_version_create.js
+
+      # Invalid namespace: findAndModifyAPIVersion.testColl
+      - mongo/jstests/core/api/api_version_find_and_modify.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1413
+      - mongo/jstests/core/api/api_version_new_50_language_features.js
+      - mongo/jstests/core/api/api_version_new_51_language_features.js
+
+      # https://github.com/FerretDB/FerretDB/issues/2130
+      - mongo/jstests/core/api/api_version_new_52_language_features.js
+
+      # Error: command worked when it should have failed
+      - mongo/jstests/core/api/api_version_parameters.js
+      - mongo/jstests/core/api/api_version_unstable_fields.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1416
+      - mongo/jstests/core/api/api_version_pipeline_stages.js
+
+      # https://github.com/FerretDB/FerretDB/issues/1432
+      - mongo/jstests/core/api/api_version_test_expression.js
+
+      # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/api/api_version_unstable_indexes.js
+
+      # db.serverStatus().storageEngine is undefined
+      - mongo/jstests/core/api/apitest_db.js
+
+      # no such command: 'profile'
+      - mongo/jstests/core/api/apitest_db_profile_level.js
+
+      # TODO: investigate - Error: [100] != [-1] are not equal : 11 :
+      - mongo/jstests/core/api/apitest_dbcollection.js
+
+      # https://github.com/FerretDB/FerretDB/issues/75
+      - mongo/jstests/core/capped/capped.js
+      - mongo/jstests/core/capped/capped5.js
+      - mongo/jstests/core/capped/capped_empty.js
+      # create: support for field \"size\" with value 2.62144e+07 is not implemented yet
+      - mongo/jstests/core/capped/capped_large_docs.js
+      # value 51200
+      - mongo/jstests/core/capped/capped_queries_and_id_index.js
+      - mongo/jstests/core/capped/capped_resize.js
+      - mongo/jstests/core/capped/capped_update.js
+      - mongo/jstests/core/capped/capped_upsert.js
+
+      # TODO: investigate
+      - mongo/jstests/core/capped/capped_max1.js
+      - mongo/jstests/core/capped/cappeda.js
+
+      # create: support for field \"viewOn\" with value simple is not implemented yet
+      - mongo/jstests/core/catalog/list_catalog.js
+
+      # TODO: investigate - Error: ["object"] != ["undefined"] are not equal
+      - mongo/jstests/core/catalog/list_collections1.js
+
+
   mongodb:
     stats:
       expected_fail: 0
