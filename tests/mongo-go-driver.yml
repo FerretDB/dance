@@ -70,9 +70,9 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 13
+      expected_fail: 17
       expected_skip: 16
-      expected_pass: 624
+      expected_pass: 616
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
@@ -82,7 +82,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
 
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
@@ -93,7 +92,6 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
 
       - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_and_delete_with_batches
       - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unacknowledged_write
@@ -327,6 +325,14 @@ results:
 
       # session commands https://github.com/FerretDB/FerretDB/issues/153
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+
+      # Index option "partialFilterExpression" is not implemented yet
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+
+      # Index option "unique" is not implemented yet
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
   mongodb:
     stats:
       unexpected_fail: 0
