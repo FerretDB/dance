@@ -32,6 +32,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
+	"github.com/FerretDB/dance/internal/service"
 )
 
 func waitForPort(ctx context.Context, port uint16) error {
@@ -128,6 +129,8 @@ func main() {
 			runRes, err = gotest.Run(ctx, dir, config.Args, *vF)
 		case "jstest":
 			runRes, err = jstest.Run(ctx, dir, config.Args)
+		case "service":
+			runRes, err = service.Run(ctx, dir, config.Args)
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}
