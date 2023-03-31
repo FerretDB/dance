@@ -39,6 +39,7 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - dbaas_core
 
     steps:
       - name: Checkout code
