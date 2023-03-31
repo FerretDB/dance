@@ -93,10 +93,10 @@ exclude_args:
 results:
   ferretdb:
     stats:
-      expected_fail: 355
-      expected_pass: 66
+      expected_fail: 0
+      expected_pass: 0
     fail:
-      # TODO: add all 355 failures.
+      # TODO: add all 354 failures.
   mongodb:
     stats:
       expected_fail: 0
