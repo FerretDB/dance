@@ -327,6 +327,14 @@ results:
 
       # session commands https://github.com/FerretDB/FerretDB/issues/153
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+
+      # Index option "partialFilterExpression" is not implemented yet
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+
+      # Index option "unique" is not implemented yet
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
   mongodb:
     stats:
       unexpected_fail: 0
