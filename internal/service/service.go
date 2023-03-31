@@ -31,7 +31,7 @@ func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal
 	_ = dir
 	dir = "mongo"
 
-	excluded := []string{}
+	excludeMatches := []string{}
 
 	// inclusion patterns are only allowed so we do this
 	for _, f := range excludeArgs {
@@ -40,8 +40,8 @@ func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal
 			return nil, err
 		}
 
-		excluded = append(excluded, matches...)
+		excludeMatches = append(excludeMatches, matches...)
 	}
 
-	return jstest.Run(ctx, dir, args, excluded)
+	return jstest.Run(ctx, dir, args, excludeMatches)
 }
