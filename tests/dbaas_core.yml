@@ -95,6 +95,8 @@ results:
       expected_fail: 410
       expected_pass: 71
     fail:
+      # WIP - add all 410 failures.
+
       # https://github.com/FerretDB/FerretDB/issues/1492
       - mongo/jstests/core/administrative/auth1.js
 
