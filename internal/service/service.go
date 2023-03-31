@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package srvtest contains service tests runner.
-package srvtest
+// Package service contains service tests runner.
+package service
 
 import (
 	"context"

@@ -65,29 +65,29 @@ exclude_args:
   - mongo/jstests/core/index/indexj.js
   - mongo/jstests/core/query/objid/objid5.js
   - mongo/jstests/core/query/plan_cache/plan_cache_sbe.js
-  # ---
-  - mongo/jstests/core/projection_dotted_paths.js
-  - mongo/jstests/core/projection_expr_mod.js
+  - mongo/jstests/core/query/project/projection_dotted_paths.js
+  - mongo/jstests/core/query/project/projection_expr_mod.js
   - mongo/jstests/core/timeseries/bucket_granularity.js
   - mongo/jstests/core/timeseries/timeseries_delete_concurrent.js
   - mongo/jstests/core/timeseries/timeseries_delete_hint.js
   - mongo/jstests/core/timeseries/timeseries_update_concurrent.js
   - mongo/jstests/core/timeseries/timeseries_update_hint.js
-  - mongo/jstests/core/wildcard_index_cached_plans.js
-  - mongo/jstests/core/explain_execution_error.js
-  - mongo/jstests/core/explain_find.js
-  - mongo/jstests/core/sortj.js
+  - mongo/jstests/core/index/wildcard/wildcard_index_cached_plans.js
+  - mongo/jstests/core/query/explain/explain_execution_error.js
+  - mongo/jstests/core/query/explain/explain_find.js
+  - mongo/jstests/core/query/sort/sortj.js
   # Post 6.0
-  - mongo/jstests/core/batched_multi_deletes.js
-  - mongo/jstests/core/clustered_collection_creation.js
-  - mongo/jstests/core/collection_uuid_drop.js
-  - mongo/jstests/core/collection_uuid_write_commands.js
-  - mongo/jstests/core/index_stats.js
-  - mongo/jstests/core/list_all_local_sessions.js
+  - mongo/jstests/core/write/batched_multi_deletes.js
+  - mongo/jstests/core/clustered/clustered_collection_creation.js
+  - mongo/jstests/core/ddl/collection_uuid_drop.js
+  - mongo/jstests/core/write/collection_uuid_write_commands.js
+  - mongo/jstests/core/index/index_stats.js
+  - mongo/jstests/core/administrative/list_all_local_sessions.js
   - mongo/jstests/core/timeseries/timeseries_lookup.js
-  - mongo/jstests/core/write_change_stream_pit_preimage.js
+  - mongo/jstests/core/write/write_change_stream_pit_preimage.js
   - mongo/jstests/core/operation_latency_histogram.js
-  - mongo/jstests/core/profile_findandmodify.js
+  - mongo/jstests/core/administrative/profile/profile_findandmodify.js
+  # TODO: add the exclude_with_any_tags files here too.
 
 results:
   ferretdb:
