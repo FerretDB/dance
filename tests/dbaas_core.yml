@@ -92,10 +92,10 @@ results:
       - mongo/jstests/core/profile_findandmodify.js
   ferretdb:
     stats:
-      expected_fail: 0
-      expected_pass: 0
+      expected_fail: 410
+      expected_pass: 71
     fail:
   mongodb:
     stats:
       expected_fail: 0
-      expected_pass: 0
+      expected_pass: 481
