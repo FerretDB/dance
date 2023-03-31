@@ -1,5 +1,5 @@
 ---
-runner: srvtest
+runner: service
 
 args:
   - mongo/jstests/core/**/*.js
