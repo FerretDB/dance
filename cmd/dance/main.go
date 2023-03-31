@@ -128,9 +128,9 @@ func main() {
 		case "gotest":
 			runRes, err = gotest.Run(ctx, dir, config.Args, *vF)
 		case "jstest":
-			runRes, err = jstest.Run(ctx, dir, config.Args)
+			runRes, err = jstest.Run(ctx, dir, config.Args, nil)
 		case "srvtest":
-			runRes, err = srvtest.Run(ctx, dir, config.Args)
+			runRes, err = srvtest.Run(ctx, dir, config.Args, config.ExcludeArgs)
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}
