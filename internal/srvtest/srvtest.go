@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package srvtest contains service tests runner.
 package srvtest
 
 import (
@@ -26,6 +27,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
+	_ = dir
 	dir = "mongo"
 
 	return jstest.Run(ctx, dir, args)
