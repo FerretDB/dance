@@ -17,18 +17,31 @@ package srvtest
 
 import (
 	"context"
+	"path/filepath"
 
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/jstest"
 )
 
 // Run runs service tests.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
 	_ = dir
 	dir = "mongo"
 
-	return jstest.Run(ctx, dir, args)
+	excluded := []string{}
+
+	// inclusion patterns are only allowed so we do this
+	for _, f := range excludeArgs {
+		matches, err := filepath.Glob(f)
+		if err != nil {
+			return nil, err
+		}
+
+		excluded = append(excluded, matches...)
+	}
+
+	return jstest.Run(ctx, dir, args, excluded)
 }
