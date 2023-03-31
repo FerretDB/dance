@@ -18,6 +18,7 @@ import (
 	"context"
 
 	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/jstest"
 )
 
 // Run runs service tests.
@@ -25,7 +26,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	// we parse dbaas_core.yml and just call jstest.Run.
+	dir = "mongo"
 
-	return nil, nil
+	return jstest.Run(ctx, dir, args)
 }
