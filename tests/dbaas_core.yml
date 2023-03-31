@@ -179,8 +179,6 @@ results:
 
       # TODO: investigate - Error: ["object"] != ["undefined"] are not equal
       - mongo/jstests/core/catalog/list_collections1.js
-
-
   mongodb:
     stats:
       expected_fail: 0
