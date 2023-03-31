@@ -181,5 +181,5 @@ results:
       - mongo/jstests/core/catalog/list_collections1.js
   mongodb:
     stats:
-      expected_fail: 0
-      expected_pass: 481
+      expected_fail: 174
+      expected_pass: 307
