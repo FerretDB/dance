@@ -20,7 +20,6 @@ import (
 	"log"
 	"os/exec"
 	"path/filepath"
-	"sort"
 	"strings"
 	"sync"
 
@@ -30,7 +29,7 @@ import (
 )
 
 // Run runs jstests.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -48,8 +47,11 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}
 	}
 
+	for _, f := range excludeArgs {
+		delete(filesM, f)
+	}
+
 	files := maps.Keys(filesM)
-	sort.Strings(files)
 
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
