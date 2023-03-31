@@ -159,9 +159,8 @@ results:
   ferretdb:
     stats:
       # TODO: add all failures and fix stats.
-      unexpected_fail: 353
       expected_fail: 0
-      expected_pass: 65
+      expected_pass: 0
   mongodb:
     stats:
       expected_fail: 0
