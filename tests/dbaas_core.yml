@@ -4,7 +4,7 @@ runner: service
 args:
   - jstests/core/**/*.js
 
-  # we exclude all the below files.
+  # these files have exclude tags so add use !(pattern) to avoid reading them
   - jstests/core/txns/!**/*.js
   # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
   - jstests/core/!find_and_modify.js
