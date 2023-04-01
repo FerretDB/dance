@@ -164,7 +164,7 @@ results:
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     fail:
-      # TODO: investigate all failures.
+      # TODO: investigate failures.
       - mongo/jstests/core/administrative/auth2.js
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/administrative/getlog2.js
