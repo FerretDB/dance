@@ -520,6 +520,6 @@ results:
       - mongo/jstests/core/write/write_result.js
   mongodb:
     stats:
-      # TODO: investigate failures.
-      unexpected_fail: 148
-      expected_pass: 270
+      # TODO: add stats.
+      unexpected_fail: 0
+      expected_pass: 0
