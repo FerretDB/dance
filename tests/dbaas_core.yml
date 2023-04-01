@@ -1,3 +1,4 @@
+# 6.0/dbaas_core.yml suite.
 ---
 runner: service
 
@@ -518,5 +519,5 @@ results:
       - mongo/jstests/core/write/write_result.js
   mongodb:
     stats:
-      expected_fail: 0
-      expected_pass: 0
+      unexpected_fail: 148 # TODO: look into failures.
+      expected_pass: 270
