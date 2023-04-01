@@ -164,6 +164,7 @@ results:
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     fail:
+      # TODO: investigate all failures.
       - mongo/jstests/core/administrative/auth2.js
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/administrative/getlog2.js
@@ -519,5 +520,6 @@ results:
       - mongo/jstests/core/write/write_result.js
   mongodb:
     stats:
-      unexpected_fail: 148 # TODO: look into failures.
+      # TODO: investigate failures.
+      unexpected_fail: 148
       expected_pass: 270
