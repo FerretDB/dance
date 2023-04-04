@@ -28,10 +28,11 @@ import (
 //
 //nolint:govet // we don't care about alignment there
 type Config struct {
-	Runner  string
-	Dir     string
-	Args    []string
-	Results Results
+	Runner      string
+	Dir         string
+	Args        []string
+	ExcludeArgs []string
+	Results     Results
 }
 
 // Results represents expected dance results.
