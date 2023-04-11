@@ -33,7 +33,10 @@ tasks:
   env-up-detach:
     desc: "Start dependencies in docker"
     cmds:
-      - docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes --timeout=0 --detach
+      # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
+      # https://github.com/docker/compose/issues/10269#issuecomment-1495205234
+      - >
+        docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
@@ -46,8 +49,11 @@ tasks:
   env-up-repl:
     desc: "Start a minimal environment for testing a single-node replica set"
     cmds:
+      # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
+      # https://github.com/docker/compose/issues/10269#issuecomment-1495205234
       - >
-        docker compose up --remove-orphans --renew-anon-volumes --timeout=0 --detach --build {{.REPLSET}}
+        docker compose up --remove-orphans --renew-anon-volumes -t 0 --detach
+        --build {{.REPLSET}}
       - task: env-logs
 
   env-logs:
