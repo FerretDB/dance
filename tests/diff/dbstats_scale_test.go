@@ -15,11 +15,12 @@
 package diff
 
 import (
+	"math"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"math"
-	"testing"
 )
 
 func TestDBStatsScale(t *testing.T) {
