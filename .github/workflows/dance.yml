@@ -74,15 +74,18 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          bin/task env-logs-collect > /tmp/compose-logs.txt
+          bin/task env-logs-collect > /tmp/compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
 
-      # TODO zip logs https://github.com/FerretDB/FerretDB/issues/2086
+      - name: Compress logs before upload
+        if: failure()
+        run: zip -q -9 compose-logs.zip /tmp/compose-logs.txt
+
       - name: Upload logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
-          path: /tmp/compose-logs.txt
+          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+          path: compose-logs.zip
           retention-days: 1
 
       # ignore `go mod tidy` being applied to the Go driver, etc
