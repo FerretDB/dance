@@ -74,7 +74,7 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          bin/task env-logs-collect > /tmp/compose-logs-${{ matrix.db }}-${{ matrix.test }}.txt
+          bin/task env-logs-collect > /tmp/compose-logs.txt
 
       - name: Compress logs before upload
         if: failure()
