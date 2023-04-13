@@ -75,7 +75,6 @@ tasks:
     desc: "Run all integration tests"
     dir: tests
     cmds:
-      - exit 1 # test CI
       - go run ../cmd/dance -db={{.DB}} {{.TEST}}
     preconditions:
       - sh: "test {{.DB}}"
