@@ -45,11 +45,10 @@ type Stats struct {
 //
 //nolint:govet // we don't care about alignment there
 type ConfigYAML struct {
-	Runner      string      `yaml:"runner"`
-	Dir         string      `yaml:"dir"`
-	Args        []string    `yaml:"args"`
-	ExcludeArgs []string    `yaml:"exclude_args"`
-	Results     ResultsYAML `yaml:"results"`
+	Runner  string      `yaml:"runner"`
+	Dir     string      `yaml:"dir"`
+	Args    []string    `yaml:"args"`
+	Results ResultsYAML `yaml:"results"`
 }
 
 // ResultsYAML is a yaml representation of the Results struct.
@@ -92,7 +91,6 @@ func (cf *ConfigYAML) Convert() (*Config, error) {
 		cf.Runner,
 		cf.Dir,
 		cf.Args,
-		cf.ExcludeArgs,
 		Results{common, ferretDB, mongoDB},
 	}, nil
 }
