@@ -17,39 +17,63 @@ package jstest
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
 
+	"github.com/mattn/go-zglob"
 	"golang.org/x/exp/maps"
 
 	"github.com/FerretDB/dance/internal"
 )
 
 // Run runs jstests.
-func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
 	filesM := make(map[string]struct{})
 
+	excludeFilesM := make(map[string]struct{})
+
 	// remove duplicates if globs match same files
 	for _, f := range args {
-		matches, err := filepath.Glob(f)
+		if strings.HasPrefix(f, "!") {
+			f = strings.TrimPrefix(f, "!")
+			matches, err := zglob.Glob(f)
+
+			if errors.Is(err, os.ErrNotExist) {
+				continue // ignore non-existent files and globs
+			}
+
+			// exclude files from the list of files to run
+			for _, m := range matches {
+				excludeFilesM[m] = struct{}{}
+			}
+
+			continue
+		}
+
+		matches, err := zglob.Glob(f)
 		if err != nil {
-			return nil, err
+			return nil, errors.New("failed to glob: " + err.Error())
 		}
 
 		for _, m := range matches {
+			// skip excluded files
+			if _, ok := excludeFilesM[m]; ok {
+				fmt.Println("skipping", m)
+				continue
+			}
 			filesM[m] = struct{}{}
 		}
 	}
 
-	for _, f := range excludeArgs {
-		delete(filesM, f)
-	}
+	fmt.Println(len(filesM), "files to run")
 
 	files := maps.Keys(filesM)
 
