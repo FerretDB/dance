@@ -17,31 +17,18 @@ package service
 
 import (
 	"context"
-	"path/filepath"
 
 	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/jstest"
 )
 
 // Run runs service tests.
-func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
 	_ = dir
 	dir = "mongo"
 
-	excludeMatches := []string{}
-
-	// inclusion patterns are only allowed so we do this
-	for _, f := range excludeArgs {
-		matches, err := filepath.Glob(f)
-		if err != nil {
-			return nil, err
-		}
-
-		excludeMatches = append(excludeMatches, matches...)
-	}
-
-	return jstest.Run(ctx, dir, args, excludeMatches)
+	return jstest.Run(ctx, dir, args)
 }
