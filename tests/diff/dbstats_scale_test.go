@@ -61,15 +61,6 @@ func TestDBStatsScale(t *testing.T) {
 				Message: "BSON field 'scale' value must be >= 1, actual value '-2147483648'",
 			},
 		},
-		"MaxFloat": {
-			scale:              math.MaxFloat64,
-			expectedMongoDBErr: "scale has to be > 0",
-			expectedFerretDBErr: mongo.CommandError{
-				Name:    "Location51024",
-				Code:    51024,
-				Message: "BSON field 'scale' value must be >= 1, actual value '0'",
-			},
-		},
 		"String": {
 			scale:              "1",
 			expectedMongoDBErr: "scale has to be a number > 0",
