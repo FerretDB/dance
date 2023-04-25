@@ -17,7 +17,6 @@ package jstest
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -61,20 +60,17 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 		matches, err := zglob.Glob(f)
 		if err != nil {
-			return nil, errors.New("failed to glob: " + err.Error())
+			return nil, err
 		}
 
 		for _, m := range matches {
 			// skip excluded files
 			if _, ok := excludeFilesM[m]; ok {
-				fmt.Println("skipping", m)
 				continue
 			}
 			filesM[m] = struct{}{}
 		}
 	}
-
-	fmt.Println(len(filesM), "files to run")
 
 	files := maps.Keys(filesM)
 
