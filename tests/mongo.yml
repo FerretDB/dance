@@ -29,8 +29,9 @@ args:
 results:
   ferretdb:
     stats:
+      unexpected_fail: 50
       expected_fail: 42
-      expected_pass: 35
+      expected_pass: 54
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
