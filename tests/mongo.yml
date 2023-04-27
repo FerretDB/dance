@@ -4,7 +4,7 @@ runner: jstest
 # To exclude a file, use the ! prefix and enclose the file name in quotes.
 # Put the exclusion patterns before inclusion patterns.
 args:
-  # https://github.com/mattn/go-zglob/issues/44
+  # https://github.com/mattn/go-zglob/issues/44 - zglob does not support range wildcards
   - mongo/jstests/core/administrative/auth*.js
   - mongo/jstests/core/query/all/all*.js
   - mongo/jstests/core/query/basic*.js
