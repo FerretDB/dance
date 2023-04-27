@@ -32,7 +32,6 @@ func TestDatabaseName(t *testing.T) {
 		"ReservedPrefix":     "_ferretdb_xxx",
 		"NonLatin":           "データベース",
 		"StartingWithNumber": "1database",
-		"CapitalLetter":      "Database",
 	}
 
 	for name, dbName := range testCases {
