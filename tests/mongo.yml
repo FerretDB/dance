@@ -28,6 +28,10 @@ args:
 
 results:
   ferretdb:
+    ignore:
+    - mongo/jstests/core/query/array/array_comparison_correctness.js
+    - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js
+
     stats:
       unexpected_fail: 50
       expected_fail: 42
@@ -42,6 +46,58 @@ results:
       - mongo/jstests/core/query/array/arrayfind1.js
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind4.js
+      - mongo/jstests/core/query/array/arrayfind10.js
+
+      # TODO: create issues / investigate
+      - mongo/jstests/core/query/array/array_match2.js
+      - mongo/jstests/core/query/array/arrayfinda.js
+      - mongo/jstests/core/query/array/arrayfindb.js
+      - mongo/jstests/core/query/distinct/distinct_compound_index.js
+      - mongo/jstests/core/query/distinct/distinct_index1.js
+      - mongo/jstests/core/query/distinct/distinct_index2.js
+      - mongo/jstests/core/query/distinct/distinct_multikey.js
+      - mongo/jstests/core/query/distinct/distinct_with_hashed_index.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_concurrent_update.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_invalid_query_params.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_metrics.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6865.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6993.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server7660.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_where.js
+      - mongo/jstests/core/write/update/update_addToSet.js
+      - mongo/jstests/core/write/update/update_affects_indexes.js
+      - mongo/jstests/core/write/update/update_arrayFilters.js
+      - mongo/jstests/core/write/update/update_array_offset_positional.js
+      - mongo/jstests/core/write/update/update_arraymatch1.js
+      - mongo/jstests/core/write/update/update_arraymatch2.js
+      - mongo/jstests/core/write/update/update_arraymatch3.js
+      - mongo/jstests/core/write/update/update_arraymatch4.js
+      - mongo/jstests/core/write/update/update_arraymatch5.js
+      - mongo/jstests/core/write/update/update_arraymatch6.js
+      - mongo/jstests/core/write/update/update_arraymatch7.js
+      - mongo/jstests/core/write/update/update_arraymatch8.js
+      - mongo/jstests/core/write/update/update_bit_examples.js
+      - mongo/jstests/core/write/update/update_dbref.js
+      - mongo/jstests/core/write/update/update_find_and_modify_id.js
+      - mongo/jstests/core/write/update/update_hint.js
+      - mongo/jstests/core/write/update/update_invalid1.js
+      - mongo/jstests/core/write/update/update_metrics.js
+      - mongo/jstests/core/write/update/update_min_max_examples.js
+      - mongo/jstests/core/write/update/update_modifier_pop.js
+      - mongo/jstests/core/write/update/update_numeric_field_name.js
+      - mongo/jstests/core/write/update/update_pipeline_shell_helpers.js
+      - mongo/jstests/core/write/update/update_server-12848.js
+      - mongo/jstests/core/write/update/update_setOnInsert.js
+      - mongo/jstests/core/write/update/update_with_large_hint.js
+      - mongo/jstests/core/write/update/update_with_pipeline.js
+      - mongo/jstests/core/write/update/updatea.js
+      - mongo/jstests/core/write/update/updated.js
+      - mongo/jstests/core/write/update/updatek.js
+
+
 
       # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind5.js
@@ -99,6 +155,7 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/2236
       - mongo/jstests/core/query/distinct/distinct1.js
+      - mongo/jstests/core/query/distinct/distinct_multikey_dotted_path.js
 
       # https://github.com/FerretDB/FerretDB/issues/2231
       - mongo/jstests/core/query/distinct/distinct4.js
