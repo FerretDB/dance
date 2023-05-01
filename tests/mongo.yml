@@ -110,8 +110,6 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/2539
       - mongo/jstests/core/write/update/updatea.js
-
-      # TODO: create issues
       - mongo/jstests/core/write/update/updated.js
       - mongo/jstests/core/write/update/updatek.js
 
