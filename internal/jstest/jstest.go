@@ -18,14 +18,11 @@ import (
 	"context"
 	"errors"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
 
-	// https://github.com/golang/go/issues/11862
-	"github.com/mattn/go-zglob"
 	"golang.org/x/exp/maps"
 
 	"github.com/FerretDB/dance/internal"
@@ -44,10 +41,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	for _, f := range args {
 		if strings.HasPrefix(f, "!") {
 			f = strings.TrimPrefix(f, "!")
-			matches, err := zglob.Glob(f)
-
-			if errors.Is(err, os.ErrNotExist) {
-				continue // ignore non-existent files and globs, TODO: investigate why these files are not found.
+			matches, err := filepath.Glob(f)
+			if err != nil {
+				return nil, err
 			}
 
 			// exclude files from the list of files to run
@@ -58,7 +54,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 			continue
 		}
 
-		matches, err := zglob.Glob(f)
+		matches, err := filepath.Glob(f)
 		if err != nil {
 			return nil, err
 		}
