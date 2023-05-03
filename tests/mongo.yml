@@ -93,8 +93,6 @@ results:
       - mongo/jstests/core/write/update/update_with_large_hint.js
       - mongo/jstests/core/write/update/update_with_pipeline.js
 
-
-
       # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind5.js
 
