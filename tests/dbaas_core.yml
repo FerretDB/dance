@@ -161,10 +161,18 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 353
-      expected_pass: 64
+      expected_fail: 351
+      expected_pass: 70
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
+    pass:
+      # TODO: investigate passes.
+      - mongo/jstests/core/capped/capped5.js
+      - mongo/jstests/core/catalog/list_indexes_invalid.js
+      - mongo/jstests/core/ddl/background_unique_indexes.js
+      - mongo/jstests/core/ddl/drop_index.js
+      - mongo/jstests/core/ddl/drop_indexes.js
+      - mongo/jstests/core/timeseries/clustered_index_crud.js
     fail:
       # TODO: investigate failures.
       - mongo/jstests/core/administrative/auth2.js
@@ -181,7 +189,6 @@ results:
       - mongo/jstests/core/api/api_version_unstable_indexes.js
       - mongo/jstests/core/api/apitest_db_profile_level.js
       - mongo/jstests/core/capped/capped.js
-      - mongo/jstests/core/capped/capped5.js
       - mongo/jstests/core/capped/capped_large_docs.js
       - mongo/jstests/core/capped/capped_max1.js
       - mongo/jstests/core/capped/capped_queries_and_id_index.js
@@ -193,14 +200,12 @@ results:
       - mongo/jstests/core/catalog/list_collections_filter.js
       - mongo/jstests/core/catalog/list_collections_name_only.js
       - mongo/jstests/core/catalog/list_databases.js
-      - mongo/jstests/core/catalog/list_indexes_invalid.js
       - mongo/jstests/core/catalog/list_indexes_invalidation.js
       - mongo/jstests/core/clustered/clustered_collection_basic.js
       - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js
       - mongo/jstests/core/clustered/clustered_collection_collation.js
       - mongo/jstests/core/clustered/clustered_collection_create_index_clustered.js
       - mongo/jstests/core/clustered/clustered_collection_hint.js
-      - mongo/jstests/core/ddl/background_unique_indexes.js
       - mongo/jstests/core/ddl/capped_convertToCapped1.js
       - mongo/jstests/core/ddl/clone_as_capped_nonexistant.js
       - mongo/jstests/core/ddl/collMod_index_invalid_option.js
@@ -221,8 +226,6 @@ results:
       - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js
       - mongo/jstests/core/ddl/drop3.js
       - mongo/jstests/core/ddl/drop_collection.js
-      - mongo/jstests/core/ddl/drop_index.js
-      - mongo/jstests/core/ddl/drop_indexes.js
       - mongo/jstests/core/ddl/index_create_too_many.js
       - mongo/jstests/core/ddl/index_create_with_nul_in_name.js
       - mongo/jstests/core/ddl/index_dropdups_ignore.js
@@ -314,6 +317,7 @@ results:
       - mongo/jstests/core/query/dotted_path_in_null.js
       - mongo/jstests/core/query/double_decimal_compare.js
       - mongo/jstests/core/query/explode_for_sort_plan_cache.js
+      - mongo/jstests/core/query/explode_for_sort_equality_to_array.js
       - mongo/jstests/core/query/expressions_matching_whole_array.js
       - mongo/jstests/core/query/idhack.js
       - mongo/jstests/core/query/index_key_expression.js
@@ -324,6 +328,7 @@ results:
       - mongo/jstests/core/query/minmax.js
       - mongo/jstests/core/query/minmax_edge.js
       - mongo/jstests/core/query/nan.js
+      - mongo/jstests/core/query/natural_validation.js
       - mongo/jstests/core/query/neq_null_correctly_cache.js
       - mongo/jstests/core/query/null_query_semantics.js
       - mongo/jstests/core/query/partial_index_logical.js
@@ -335,7 +340,6 @@ results:
       - mongo/jstests/core/timeseries/bucket_unpacking_with_sort.js
       - mongo/jstests/core/timeseries/bucket_unpacking_with_sort_extended_range.js
       - mongo/jstests/core/timeseries/bucket_unpacking_with_sort_plan_cache.js
-      - mongo/jstests/core/timeseries/clustered_index_crud.js
       - mongo/jstests/core/timeseries/clustered_index_options.js
       - mongo/jstests/core/timeseries/nondefault_collation.js
       - mongo/jstests/core/timeseries/partialFilterExpression_with_internalBucketGeoWithin.js
@@ -357,6 +361,8 @@ results:
       - mongo/jstests/core/timeseries/timeseries_delete_with_meta_concurrent.js
       - mongo/jstests/core/timeseries/timeseries_expire_collmod.js
       - mongo/jstests/core/timeseries/timeseries_explicit_unpack_bucket.js
+      - mongo/jstests/core/timeseries/timeseries_explain_delete.js
+      - mongo/jstests/core/timeseries/timeseries_delete_compressed_buckets.js
       - mongo/jstests/core/timeseries/timeseries_filter_extended_range.js
       - mongo/jstests/core/timeseries/timeseries_find.js
       - mongo/jstests/core/timeseries/timeseries_geonear.js
