@@ -92,8 +92,6 @@ results:
       - mongo/jstests/core/write/update/update_setOnInsert.js
       - mongo/jstests/core/write/update/update_with_large_hint.js
       - mongo/jstests/core/write/update/update_with_pipeline.js
-      - mongo/jstests/core/write/update/updatea.js
-      - mongo/jstests/core/write/update/updated.js
 
 
 
