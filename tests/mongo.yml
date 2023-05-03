@@ -94,7 +94,6 @@ results:
       - mongo/jstests/core/write/update/update_with_pipeline.js
       - mongo/jstests/core/write/update/updatea.js
       - mongo/jstests/core/write/update/updated.js
-      - mongo/jstests/core/write/update/updatek.js
 
 
 
