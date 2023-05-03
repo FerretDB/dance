@@ -70,7 +70,7 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 14
+      expected_fail: 13
       expected_skip: 16
       expected_pass: 623
     ignore:
@@ -78,6 +78,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
 
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
+
+      # returns unknown result.
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
@@ -136,9 +139,6 @@ results:
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
-
-      # (NotImplemented) Index option "partialFilterExpression" is not implemented yet
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
 
       # Should be true
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
