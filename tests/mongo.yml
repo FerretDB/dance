@@ -32,9 +32,8 @@ results:
     - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js
 
     stats:
-      unexpected_fail: 50
-      expected_fail: 42
-      expected_pass: 54
+      expected_fail: 45
+      expected_pass: 32
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
