@@ -27,10 +27,6 @@ args:
 
 results:
   ferretdb:
-    ignore:
-    - mongo/jstests/core/query/array/array_comparison_correctness.js
-    - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js
-
     stats:
       expected_fail: 45
       expected_pass: 32
