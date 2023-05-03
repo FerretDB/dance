@@ -42,6 +42,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		if strings.HasPrefix(f, "!") {
 			f = strings.TrimPrefix(f, "!")
 			matches, err := filepath.Glob(f)
+
 			if err != nil {
 				return nil, err
 			}
