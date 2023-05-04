@@ -39,10 +39,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	// remove duplicates if globs match same files
 	for _, f := range args {
-		if strings.HasPrefix(f, "!") {
-			f = strings.TrimPrefix(f, "!")
-
-			matches, err := filepath.Glob(f)
+		if exclude, found := strings.CutPrefix(f, "!"); found {
+			matches, err := filepath.Glob(exclude)
 			if err != nil {
 				return nil, err
 			}
