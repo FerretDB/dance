@@ -29,26 +29,42 @@ import (
 )
 
 // Run runs jstests.
-func Run(ctx context.Context, dir string, args, excludeArgs []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
 	filesM := make(map[string]struct{})
 
+	excludeFilesM := make(map[string]struct{})
+
 	// remove duplicates if globs match same files
 	for _, f := range args {
+		if exclude, found := strings.CutPrefix(f, "!"); found {
+			matches, err := filepath.Glob(exclude)
+			if err != nil {
+				return nil, err
+			}
+
+			// exclude files from the list of files to run
+			for _, m := range matches {
+				excludeFilesM[m] = struct{}{}
+			}
+
+			continue
+		}
+
 		matches, err := filepath.Glob(f)
 		if err != nil {
 			return nil, err
 		}
 
 		for _, m := range matches {
+			// skip excluded files
+			if _, ok := excludeFilesM[m]; ok {
+				continue
+			}
 			filesM[m] = struct{}{}
 		}
-	}
-
-	for _, f := range excludeArgs {
-		delete(filesM, f)
 	}
 
 	files := maps.Keys(filesM)
