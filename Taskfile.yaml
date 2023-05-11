@@ -118,4 +118,4 @@ tasks:
     desc: "Format and lint documentation"
     cmds:
       - docker compose run --rm textlint --fix --rule one-sentence-per-line "**/*.md" ".github/**/*.md"
-      - docker compose run --rm markdownlint "**/*.md" "#tests"
+      - docker compose run --rm markdownlint "**/*.md" "#dumps" "#tests"
