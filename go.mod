@@ -6,9 +6,9 @@ require (
 	github.com/AlekSi/pointer v1.2.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/stretchr/testify v1.8.2
-	go.mongodb.org/mongo-driver v1.11.4
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
-	golang.org/x/sys v0.7.0
+	go.mongodb.org/mongo-driver v1.11.6
+	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
+	golang.org/x/sys v0.8.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -24,5 +24,5 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/text v0.3.7 // indirect
 )
