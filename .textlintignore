@@ -1,3 +1,4 @@
 # https://textlint.github.io/docs/ignore.html
 
-tests
+dumps/**
+tests/**
