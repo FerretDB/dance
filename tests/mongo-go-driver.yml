@@ -168,9 +168,9 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 0
-      expected_skip: 416
-      expected_pass: 1903
+      expected_fail: 2
+      expected_skip: 417
+      expected_pass: 1901
     fail:
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
