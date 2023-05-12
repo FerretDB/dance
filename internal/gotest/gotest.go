@@ -21,6 +21,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/FerretDB/dance/internal"
 )
@@ -31,6 +32,12 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 	_ = ctx
 
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
+
+	// use the same condition as in FerretDB's Taskfile.yml
+	if runtime.GOOS != "windows" && runtime.GOARCH != "arm" && runtime.GOARCH != "riscv64" {
+		args = append(args, "-race")
+	}
+
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
 	cmd.Stderr = os.Stderr

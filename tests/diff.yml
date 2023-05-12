@@ -1,12 +1,12 @@
 ---
 runner: gotest
-args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
+args: ["-timeout=30s", "-shuffle=on", "./..."]
 
 results:
   ferretdb:
     stats:
-      expected_fail: 86
-      expected_pass: 35
+      expected_fail: 92
+      expected_pass: 37
 
     pass:
       - regex: FerretDB$
@@ -16,8 +16,8 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 86
-      expected_pass: 35
+      expected_fail: 92
+      expected_pass: 37
 
     pass:
       - regex: MongoDB$
