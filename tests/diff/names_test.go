@@ -16,6 +16,7 @@ package diff
 
 import (
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 	"testing"
 
@@ -66,10 +67,11 @@ func TestCollectionName(t *testing.T) {
 		"NonUTF-8":       string([]byte{0xff, 0xfe, 0xfd}),
 	}
 
-	for name, collection := range testCases {
-		name, collection := name, collection
+	t.Run("CreateCollection", func(t *testing.T) {
 
-		t.Run("CreateCollection", func(t *testing.T) {
+		for name, collection := range testCases {
+			name, collection := name, collection
+
 			t.Run(name, func(t *testing.T) {
 				ctx, db := setup(t)
 				dbName := db.Name()
@@ -88,9 +90,12 @@ func TestCollectionName(t *testing.T) {
 					require.NoError(t, err)
 				})
 			})
-		})
+		}
+	})
 
-		/*	t.Run("RenameCollection", func(t *testing.T) {
+	t.Run("RenameCollection", func(t *testing.T) {
+		for name, collection := range testCases {
+			name, collection := name, collection
 			t.Run(name, func(t *testing.T) {
 				ctx, db := setup(t)
 				dbName := db.Name()
@@ -119,6 +124,6 @@ func TestCollectionName(t *testing.T) {
 					require.NoError(t, err)
 				})
 			})
-		})*/
-	}
+		}
+	})
 }
