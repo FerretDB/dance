@@ -16,11 +16,11 @@ package diff
 
 import (
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -68,7 +68,6 @@ func TestCollectionName(t *testing.T) {
 	}
 
 	t.Run("CreateCollection", func(t *testing.T) {
-
 		for name, collection := range testCases {
 			name, collection := name, collection
 
