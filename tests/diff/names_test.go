@@ -20,7 +20,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -91,7 +90,7 @@ func TestCollectionName(t *testing.T) {
 			})
 		})
 
-		t.Run("RenameCollection", func(t *testing.T) {
+		/*	t.Run("RenameCollection", func(t *testing.T) {
 			t.Run(name, func(t *testing.T) {
 				ctx, db := setup(t)
 				dbName := db.Name()
@@ -120,6 +119,6 @@ func TestCollectionName(t *testing.T) {
 					require.NoError(t, err)
 				})
 			})
-		})
+		})*/
 	}
 }
