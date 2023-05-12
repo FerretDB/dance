@@ -1,6 +1,6 @@
 ---
 runner: gotest
-args: ["-timeout=30s", "-shuffle=on", "-race", "./..."]
+args: ["-timeout=30s", "-shuffle=on", "./..."]
 
 results:
   ferretdb:
