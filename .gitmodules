@@ -10,3 +10,6 @@
 	path = dumps/mongodb-sample-databases
 	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
+[submodule "tests/mongodb-dotnet-example"]
+	path = tests/mongodb-dotnet-example
+	url = https://github.com/mongodb-developer/mongodb-dotnet-example
