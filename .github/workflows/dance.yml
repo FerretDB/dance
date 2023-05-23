@@ -10,8 +10,8 @@ on:
       - opened
       - reopened
       - synchronize
-  schedule:
-    - cron: "12 3 * * *" # after FerretDB's Docker workflow
+  # schedule:
+  #   - cron: "12 3 * * *" # after FerretDB's Docker workflow
 
 env:
   GOPATH: /home/runner/go
