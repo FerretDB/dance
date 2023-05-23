@@ -3,15 +3,15 @@ name: Dance
 on:
   push:
     branches:
-      - dotnet
+      - dotnet # TODO: revert to main
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
       - opened
       - reopened
       - synchronize
-  # schedule:
-  #   - cron: "12 3 * * *" # after FerretDB's Docker workflow
+  schedule:
+    - cron: "12 3 * * *" # after FerretDB's Docker workflow
 
 env:
   GOPATH: /home/runner/go
@@ -34,8 +34,6 @@ jobs:
         db:
           - ferretdb
           - mongodb
-        dotnet-version:
-          - 7.0 # use the same version in the project file.
         test:
           - diff
           - mongo
@@ -53,13 +51,6 @@ jobs:
         uses: FerretDB/github-actions/setup-go@main
         with:
           cache-key: dance
-
-      - name: Setup .NET
-        uses: actions/checkout@v3
-        with:
-          dotnet-version: '7.0'
-      - name: Install .NET dependencies
-        run: dotnet restore
 
       - name: Install Task
         run: go generate -x
@@ -79,9 +70,6 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-
-      - name: .Net test
-        run: run dotnet
 
       - name: Collect logs
         if: failure()
@@ -105,3 +93,49 @@ jobs:
         run: |
           git status --ignore-submodules=none
           git diff --ignore-submodules=all --exit-code
+
+dotnet-example:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        db:
+          - ferretdb
+          - mongodb
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Setup .NET Core SDK 7.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
+
+      - name: Install Task
+        run: go generate -x
+        working-directory: tools
+
+      - name: Start environment
+        run: bin/task env-up-detach
+        env:
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+          DB: ${{ matrix.db }}
+
+      - name: Run init
+        run: bin/task init
+
+      - name: Install dependencies
+        working-directory: ./tests/dotnet-example
+        run: dotnet restore
+
+      - name: Test
+        working-directory: ./tests/dotnet-example
+        run: dotnet run
