@@ -25,6 +25,12 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
       - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
       - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+
+
+      # test fails frequently, skipping; see GODRIVER-2852
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -69,18 +75,13 @@ results:
 
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-
-      # test fails frequently, skipping; see GODRIVER-2852
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
   ferretdb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 13
-      expected_skip: 19
+      expected_skip: 16
       expected_pass: 621
     ignore:
       # returns unknown result.
@@ -178,7 +179,7 @@ results:
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 420
+      expected_skip: 417
       expected_pass: 1892
     fail:
     skip:
