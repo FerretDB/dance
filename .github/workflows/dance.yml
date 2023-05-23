@@ -41,6 +41,7 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - dotnet-example
 
     steps:
       - name: Checkout code
@@ -81,7 +82,7 @@ jobs:
           TEST: ${{ matrix.test }}
 
       - name: .Net test
-        run: dotnet run
+        run: run dotnet
 
       - name: Collect logs
         if: failure()
