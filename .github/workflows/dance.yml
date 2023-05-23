@@ -34,6 +34,8 @@ jobs:
         db:
           - ferretdb
           - mongodb
+        dotnet-version:
+          - 7.0 # use the same version in the project file.
         test:
           - diff
           - mongo
@@ -51,6 +53,13 @@ jobs:
         uses: FerretDB/github-actions/setup-go@main
         with:
           cache-key: dance
+
+      - name: Setup .NET
+        uses: actions/checkout@v3
+        with:
+          dotnet-version: '7.0'
+      - name: Install .NET dependencies
+        run: dotnet restore
 
       - name: Install Task
         run: go generate -x
@@ -70,6 +79,9 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
+
+      - name: .Net test
+        run: dotnet run
 
       - name: Collect logs
         if: failure()
