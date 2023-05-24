@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package command contains commmand tests runner.
+// Package command contains command tests runner.
 package command
 
 import (
@@ -53,6 +53,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 				Status: internal.Fail,
 				Output: string(out),
 			}
+
 			continue
 		}
 
