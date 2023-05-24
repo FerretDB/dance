@@ -66,7 +66,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runCommand runs command in dir with args returns the combined output.
+// runCommand runs command in dir with args and returns the combined output.
 func runCommand(dir, command string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath(command)
 	if err != nil {
