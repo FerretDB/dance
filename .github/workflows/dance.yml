@@ -39,6 +39,7 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - dotnet
 
     steps:
       - name: Checkout code
@@ -93,49 +94,3 @@ jobs:
         run: |
           git status --ignore-submodules=none
           git diff --ignore-submodules=all --exit-code
-
-  dotnet-example:
-      runs-on: ubuntu-latest
-
-      strategy:
-        fail-fast: false
-        matrix:
-          db:
-            - ferretdb
-            - mongodb
-
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-            submodules: recursive
-        - name: Setup .NET Core SDK 7.0
-          uses: actions/setup-dotnet@v3
-          with:
-            dotnet-version: 7.0.x
-
-        - name: Setup Go
-          uses: FerretDB/github-actions/setup-go@main
-          with:
-            cache-key: dance
-
-        - name: Install Task
-          run: go generate -x
-          working-directory: tools
-
-        - name: Start environment
-          run: bin/task env-up-detach
-          env:
-            FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-            DB: ${{ matrix.db }}
-
-        - name: Run init
-          run: bin/task init
-
-        - name: Install dependencies
-          working-directory: ./tests/dotnet-example
-          run: dotnet restore
-
-        - name: Test
-          working-directory: ./tests/dotnet-example
-          run: dotnet run
