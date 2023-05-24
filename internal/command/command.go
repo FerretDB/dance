@@ -34,32 +34,26 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	_ = dir
-	dir = args[len(args)-1]
+	cmdName, cmdArgs := args[0], args[1:]
 
-	cmdName := args[0]
-	cmdArgs := args[1 : len(args)-1]
-
-	for _, arg := range cmdArgs {
-		out, err := runCommand(dir, cmdName, arg)
-		if err != nil {
-			var exitErr *exec.ExitError
-			if !errors.As(err, &exitErr) {
-				return nil, err
-			}
-
-			res.TestResults[dir] = internal.TestResult{
-				Status: internal.Fail,
-				Output: string(out),
-			}
-
-			continue
+	out, err := runCommand(dir, cmdName, cmdArgs...)
+	if err != nil {
+		var exitErr *exec.ExitError
+		if !errors.As(err, &exitErr) {
+			return nil, err
 		}
 
 		res.TestResults[dir] = internal.TestResult{
-			Status: internal.Pass,
+			Status: internal.Fail,
 			Output: string(out),
 		}
+
+		return res, nil
+	}
+
+	res.TestResults[dir] = internal.TestResult{
+		Status: internal.Pass,
+		Output: string(out),
 	}
 
 	return res, nil
