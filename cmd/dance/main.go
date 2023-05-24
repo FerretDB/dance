@@ -30,6 +30,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/command"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
 	"github.com/FerretDB/dance/internal/service"
@@ -131,6 +132,8 @@ func main() {
 			runRes, err = jstest.Run(ctx, dir, config.Args)
 		case "service":
 			runRes, err = service.Run(ctx, dir, config.Args)
+		case "command":
+			runRes, err = command.Run(ctx, dir, config.Args)
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}
