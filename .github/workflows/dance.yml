@@ -39,7 +39,7 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
-          - dotnet
+          - dotnet-example
 
     steps:
       - name: Checkout code
