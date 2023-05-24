@@ -37,12 +37,11 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	_ = dir
 	dir = args[len(args)-1]
 
-	cmd := args[0]
-
+	cmdName := args[0]
 	cmdArgs := args[1 : len(args)-1]
 
 	for _, arg := range cmdArgs {
-		out, err := runCommand(dir, cmd, arg)
+		out, err := runCommand(dir, cmdName, arg)
 		if err != nil {
 			var exitErr *exec.ExitError
 			if !errors.As(err, &exitErr) {
