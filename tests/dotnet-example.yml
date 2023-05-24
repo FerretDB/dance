@@ -1,6 +1,6 @@
 ---
 runner: command
-args: ["dotnet","run", "dotnet-example"]
+args: ["dotnet", "run", "dotnet-example"]
 
 results:
   common:
