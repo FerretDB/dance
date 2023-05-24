@@ -25,7 +25,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs commands tests.
+// Run runs generic command tests.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
