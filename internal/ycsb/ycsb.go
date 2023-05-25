@@ -51,7 +51,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 // runWorkload runs a YCSB workload.
 func runWorkload(dir string, args ...string) ([]byte, error) {
-	bin, err := exec.LookPath("ycsb")
+	bin, err := exec.LookPath("go-ycsb")
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,8 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 		}, args...,
 	)
 
-	wlArgs = append(wlArgs, "-p", "mongodb.url=mongodb://host.docker.internal:27017/")
+	// TODO: create a directory tests/ycsb/workloads and put the workloads there
+	wlArgs = append(wlArgs, "-p", "mongodb.url=mongodb://localhost:27017/")
 	cmd := exec.Command(bin, wlArgs...)
 	cmd.Dir = dir
 

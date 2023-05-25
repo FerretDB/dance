@@ -1,5 +1,16 @@
 ---
 runner: ycsb
 args:
-  - workloada
+  - workloads/workloada
   - recordcount=50000
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:
