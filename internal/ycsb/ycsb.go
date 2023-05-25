@@ -58,11 +58,7 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 
 	// TODO: create a directory tests/ycsb/workloads and put the workloads there
 	wlArgs := []string{"load", "mongodb", "-P", args[0], "-p"}
-
-	// remove the workload file to not reappend it
-	args = args[1:]
-
-	wlArgs = append(wlArgs, args...)
+	wlArgs = append(wlArgs, args[1:]...)
 	wlArgs = append(wlArgs, "mongodb.url=mongodb://localhost:27017/")
 
 	cmd := exec.Command(bin, wlArgs...)
