@@ -24,7 +24,7 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs ycsb workloads.
+// Run runs YCSB workloads.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
@@ -38,6 +38,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		return nil, err
 	}
 
+	// just log the output of the workload for now
 	log.Println(string(out))
 
 	res.TestResults[dir] = internal.TestResult{
@@ -50,22 +51,21 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 // runWorkload runs a YCSB workload.
 func runWorkload(dir string, args ...string) ([]byte, error) {
-	bin, err := exec.LookPath("docker")
+	bin, err := exec.LookPath("ycsb")
 	if err != nil {
 		return nil, err
 	}
 
-	dockerArgs := append([]string{"compose",
-		"run",
-		"-T",
-		"--rm",
-		"ycsb",
-		"load",
-		"mongodb",
-		"-P",
-	}, args...)
-	dockerArgs = append(dockerArgs, "-p", "mongodb.url=mongodb://host.docker.internal:27017/")
-	cmd := exec.Command(bin, dockerArgs...)
+	wlArgs := append(
+		[]string{
+			"load",
+			"mongodb",
+			"-P",
+		}, args...,
+	)
+
+	wlArgs = append(wlArgs, "-p", "mongodb.url=mongodb://host.docker.internal:27017/")
+	cmd := exec.Command(bin, wlArgs...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
