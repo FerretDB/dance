@@ -24,6 +24,9 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
+// TODO: execute the workload after loading -
+// https://github.com/brianfrankcooper/YCSB/wiki/Running-a-Workload#step-6-execute-the-workload
+
 // Run runs YCSB workloads.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
@@ -46,9 +49,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// TODO: execute the workload after loading -
-// https://github.com/brianfrankcooper/YCSB/wiki/Running-a-Workload#step-6-execute-the-workload
-// loadWorkload load a YCSB workload.
+// loadWorkload loads a YCSB workload.
 func loadWorkload(dir string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("go-ycsb")
 	if err != nil {
