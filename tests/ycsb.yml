@@ -1,7 +1,7 @@
 ---
 runner: ycsb
 args:
-  # the first argument must be the workload file.
+  # the first argument must be a workload file.
   - workloads/workloada
   - recordcount=5000
 
