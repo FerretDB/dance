@@ -33,13 +33,10 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	out, err := runWorkload(dir, args...)
+	out, err := loadWorkload(dir, args...)
 	if err != nil {
 		return nil, err
 	}
-
-	// just log the output of the workload for now
-	log.Println(string(out))
 
 	res.TestResults[dir] = internal.TestResult{
 		Status: internal.Pass,
@@ -49,8 +46,10 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runWorkload runs a YCSB workload.
-func runWorkload(dir string, args ...string) ([]byte, error) {
+// TODO: execute the workload after loading -
+// https://github.com/brianfrankcooper/YCSB/wiki/Running-a-Workload#step-6-execute-the-workload
+// loadWorkload load a YCSB workload.
+func loadWorkload(dir string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("go-ycsb")
 	if err != nil {
 		return nil, err
