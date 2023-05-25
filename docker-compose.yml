@@ -105,16 +105,6 @@ services:
     restart: "no"
     entrypoint: ["bash", "-c", "sleep 10 && mongosh --host mongodb_replset:47017 --eval 'rs.initiate();'"]
 
-  ycsb:
-    build:
-      context: ./build/deps
-      dockerfile: ycsb.Dockerfile
-    container_name: dance_ycsb
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    ports:
-      - 6060:6060
-
   # for documentation
   textlint:
     build:
