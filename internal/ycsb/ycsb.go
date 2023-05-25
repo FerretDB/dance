@@ -57,9 +57,10 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 	}
 
 	// TODO: create a directory tests/ycsb/workloads and put the workloads there
-	wlArgs := []string{"load", "mongodb", "-P", args[0], "-p"}
+	wlFile := args[0]
+	wlArgs := []string{"load", "mongodb", "-P", wlFile}
+	wlArgs = append(wlArgs, "-p")
 	wlArgs = append(wlArgs, args[1:]...)
-	wlArgs = append(wlArgs, "mongodb.url=mongodb://localhost:27017/")
 
 	cmd := exec.Command(bin, wlArgs...)
 	cmd.Dir = dir
@@ -73,9 +74,8 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 	}
 
 	// the run phase will execute the workload and will report performance statistics on stdout
-	cmd.Args = cmd.Args[1:]
-	cmd.Args[0] = "run"
-	cmd = exec.Command(bin, cmd.Args...)
+	cmd.Args[1] = "run"
+	cmd = exec.Command(bin, cmd.Args[1:]...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
