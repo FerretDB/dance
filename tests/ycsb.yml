@@ -1,0 +1,5 @@
+---
+runner: ycsb
+args:
+  - workloada
+  - recordcount=50000
