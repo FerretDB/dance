@@ -3,7 +3,7 @@ name: Dance
 on:
   push:
     branches:
-      - main
+      - ycsb
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
@@ -39,6 +39,7 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - ycsb
 
     steps:
       - name: Checkout code
