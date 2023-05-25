@@ -17,6 +17,9 @@ package ycsb
 
 import (
 	"context"
+	"log"
+	"os/exec"
+	"strings"
 
 	"github.com/FerretDB/dance/internal"
 )
@@ -30,7 +33,42 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	// TODO
-	// load mongodb -P workloads/workloada -p recordcount=1000
+	out, err := runWorkload(dir, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Println(string(out))
+
+	res.TestResults[dir] = internal.TestResult{
+		Status: internal.Pass,
+		Output: string(out),
+	}
+
 	return res, nil
+}
+
+// runWorkload runs a YCSB workload.
+func runWorkload(dir string, args ...string) ([]byte, error) {
+	bin, err := exec.LookPath("docker")
+	if err != nil {
+		return nil, err
+	}
+
+	dockerArgs := append([]string{"compose",
+		"run",
+		"-T",
+		"--rm",
+		"ycsb",
+		"load",
+		"mongodb",
+		"-P",
+	}, args...)
+	dockerArgs = append(dockerArgs, "-p", "mongodb.url=mongodb://host.docker.internal:27017/")
+	cmd := exec.Command(bin, dockerArgs...)
+	cmd.Dir = dir
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
+	return cmd.CombinedOutput()
 }

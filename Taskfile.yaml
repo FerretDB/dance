@@ -113,13 +113,6 @@ tasks:
         docker compose run --rm mongosh mongosh mongodb://host.docker.internal:27017/
         --verbose --eval 'disableTelemetry()' --shell
 
-  ycsb:
-    desc : "Run YCSB"
-    cmds:
-      - >
-        docker compose run --rm ycsb load mongodb -P workloads/workloada
-        -p mongodb.url=mongodb://host.docker.internal:27017/
-
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
     desc: "Format and lint documentation"
