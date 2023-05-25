@@ -24,9 +24,6 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// TODO: execute the workload after loading -
-// https://github.com/brianfrankcooper/YCSB/wiki/Running-a-Workload#step-6-execute-the-workload
-
 // Run runs YCSB workloads.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
@@ -36,10 +33,12 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	out, err := loadWorkload(dir, args...)
+	out, err := runWorkload(dir, args...)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Print(string(out))
 
 	res.TestResults[dir] = internal.TestResult{
 		Status: internal.Pass,
@@ -49,17 +48,38 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// loadWorkload loads a YCSB workload.
-func loadWorkload(dir string, args ...string) ([]byte, error) {
+// runWorkload loads and runs a YCSB workload. Properties defined in the YAML file
+// will override properties defined in the workload parameter file.
+func runWorkload(dir string, args ...string) ([]byte, error) {
 	bin, err := exec.LookPath("go-ycsb")
 	if err != nil {
 		return nil, err
 	}
 
 	// TODO: create a directory tests/ycsb/workloads and put the workloads there
-	wlArgs := append([]string{"load", "mongodb", "-P"}, args...)
-	wlArgs = append(wlArgs, "-p", "mongodb.url=mongodb://localhost:27017/")
+	wlArgs := []string{"load", "mongodb", "-P", args[0], "-p"}
+
+	// remove the workload file to not reappend it
+	args = args[1:]
+
+	wlArgs = append(wlArgs, args...)
+	wlArgs = append(wlArgs, "mongodb.url=mongodb://localhost:27017/")
+
 	cmd := exec.Command(bin, wlArgs...)
+	cmd.Dir = dir
+
+	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
+
+	// load the workload
+	err = cmd.Run()
+	if err != nil {
+		return nil, err
+	}
+
+	// the run phase will execute the workload and will report performance statistics on stdout
+	cmd.Args = cmd.Args[1:]
+	cmd.Args[0] = "run"
+	cmd = exec.Command(bin, cmd.Args...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
