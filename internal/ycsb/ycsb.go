@@ -18,6 +18,7 @@ package ycsb
 import (
 	"context"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -48,10 +49,13 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 // runWorkload loads and runs a YCSB workload. Properties defined in the YAML file
 // will override properties defined in the workload parameter file.
 func runWorkload(dir string, args ...string) ([]byte, error) {
-	bin, err := exec.LookPath("go-ycsb")
+	_, err := os.Stat("../bin/go-ycsb")
 	if err != nil {
 		return nil, err
 	}
+
+	// because we set cmd.Dir after checking for the binary
+	bin := "../../bin/go-ycsb"
 
 	wlFile := args[0]
 	wlArgs := []string{"load", "mongodb", "-P", wlFile}
