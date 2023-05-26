@@ -31,6 +31,22 @@ args:
   - mongo/jstests/core/write/update/update_arrayFilters.js
   - mongo/jstests/core/query/push/push*.js
   - mongo/jstests/core/query/pull/pull*.js
+  - mongo/jstests/core/query/rename/rename_operator.js
+  - mongo/jstests/core/dbstats.js
+  - mongo/jstests/aggregation/expressions/size.js
+  - mongo/jstests/write/update/update_mul_examples.js
+  - mongo/jstests/core/ddl/create_indexes.js
+  - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js
+  - mongo/jstests/core/ddl/drop_index.js
+  - mongo/jstests/core/ddl/drop_indexes.js
+  - mongo/jstests/core/ddl/index_create_too_many.js
+  - mongo/jstests/core/ddl/rename_collection.js
+  - mongo/jstests/core/ddl/rename_collection_long_name.js
+  - mongo/jstests/core/doc_validation/doc_validation_error.js
+  - mongo/jstests/core/index/covered/coveredIndex[1-4].js
+  - mongo/jstests/core/index/covered/covered_index_compound_1.js
+  - mongo/jstests/aggregation/sources/collStats/count.js
+  - mongo/jstests/aggregation/bugs/server5932.js
 
 results:
   ferretdb:
