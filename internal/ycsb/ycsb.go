@@ -42,7 +42,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	res.TestResults[dir] = internal.TestResult{
 		Status: internal.Pass,
-		Output: string(out),
+		Output: "",
 	}
 
 	return res, nil
@@ -56,7 +56,6 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 		return nil, err
 	}
 
-	// TODO: create a directory tests/ycsb/workloads and put the workloads there
 	wlFile := args[0]
 	wlArgs := []string{"load", "mongodb", "-P", wlFile}
 	wlArgs = append(wlArgs, "-p")
