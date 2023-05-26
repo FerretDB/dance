@@ -30,6 +30,7 @@ results:
     stats:
       expected_fail: 45
       expected_pass: 32
+
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -129,12 +130,14 @@ results:
       - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+
   mongodb:
     stats:
       expected_fail: 3
       expected_pass: 74
+
     fail:
-    # https://github.com/FerretDB/dance/issues/294
-    - mongo/jstests/auth/getMore.js
-    - mongo/jstests/readonly/get_more.js
-    - mongo/jstests/auth/list_sessions.js
+      # https://github.com/FerretDB/dance/issues/294
+      - mongo/jstests/auth/getMore.js
+      - mongo/jstests/readonly/get_more.js
+      - mongo/jstests/auth/list_sessions.js

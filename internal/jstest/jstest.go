@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package jstest contains `mongo` runner.
 package jstest
 
 import (
@@ -28,7 +29,8 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs jstests.
+// Run runs `mongo`.
+// Args is a list of filepath.Glob file patterns with additional support for !exclude.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx

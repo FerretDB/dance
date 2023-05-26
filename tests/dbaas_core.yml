@@ -1,6 +1,7 @@
 # 6.0/dbaas_core.yml suite.
 ---
-runner: service
+runner: jstest
+dir: mongo
 
 # To exclude a file, use the ! prefix and enclose the file name in quotes.
 # Put the exclusion patterns before inclusion patterns.
@@ -526,8 +527,8 @@ results:
       - mongo/jstests/core/write/verify_update_mods.js
       - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
       - mongo/jstests/core/write/write_result.js
+
   mongodb:
     stats:
       # TODO: add stats.
-      unexpected_fail: 0
       expected_pass: 0

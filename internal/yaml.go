@@ -45,7 +45,7 @@ type Stats struct {
 //
 //nolint:govet // we don't care about alignment there
 type ConfigYAML struct {
-	Runner  string      `yaml:"runner"`
+	Runner  RunnerType  `yaml:"runner"`
 	Dir     string      `yaml:"dir"`
 	Args    []string    `yaml:"args"`
 	Results ResultsYAML `yaml:"results"`
@@ -78,20 +78,26 @@ func (cf *ConfigYAML) Convert() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	ferretDB, err := cf.Results.FerretDB.Convert()
 	if err != nil {
 		return nil, err
 	}
+
 	mongoDB, err := cf.Results.MongoDB.Convert()
 	if err != nil {
 		return nil, err
 	}
 
 	return &Config{
-		cf.Runner,
-		cf.Dir,
-		cf.Args,
-		Results{common, ferretDB, mongoDB},
+		Runner: cf.Runner,
+		Dir:    cf.Dir,
+		Args:   cf.Args,
+		Results: Results{
+			Common:   common,
+			FerretDB: ferretDB,
+			MongoDB:  mongoDB,
+		},
 	}, nil
 }
 
