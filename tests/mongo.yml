@@ -26,7 +26,6 @@ args:
   - mongo/jstests/core/write/update/update[a-z].js
 
   - mongo/jstests/core/catalog/list_indexes.js
-  - mongo/jstests/core/query/pull/pull*.js
   - mongo/jstests/aggregation/accumulators/accumulator_js.js
   - mongo/jstests/core/write/update/update_addToSet*.js
   - mongo/jstests/core/write/update/update_arrayFilters.js
