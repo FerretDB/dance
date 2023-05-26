@@ -37,7 +37,7 @@ const (
 	// RunnerTypeJSTest is the jstest runner type.
 	RunnerTypeJSTest RunnerType = "jstest"
 
-	// RunnerTypeYCSB is the YCSB runner type.
+	// RunnerTypeYCSB is the ycsb runner type.
 	RunnerTypeYCSB RunnerType = "ycsb"
 )
 
