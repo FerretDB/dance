@@ -35,11 +35,12 @@ jobs:
           - ferretdb
           - mongodb
         test:
+          - dbaas_core
           - diff
+          - dotnet-example
           - mongo
           - mongo-go-driver
           - mongo-tools
-          - dotnet-example
 
     steps:
       - name: Checkout code

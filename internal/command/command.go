@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package command contains command tests runner.
+// Package command contains generic test runner.
 package command
 
 import (
@@ -25,18 +25,25 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs generic command tests.
+// Run runs generic test.
+// It runs a command with arguments in a directory and returns the combined output as is.
+// If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
-	// TODO https://github.com/FerretDB/dance/issues/20
-	_ = ctx
+	bin, err := exec.LookPath(args[0])
+	if err != nil {
+		return nil, err
+	}
+
+	cmd := exec.CommandContext(ctx, bin, args[1:]...)
+	cmd.Dir = dir
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	cmdName, cmdArgs := args[0], args[1:]
-
-	out, err := runCommand(dir, cmdName, cmdArgs...)
+	out, err := cmd.CombinedOutput()
 	if err != nil {
 		var exitErr *exec.ExitError
 		if !errors.As(err, &exitErr) {
@@ -57,19 +64,4 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	}
 
 	return res, nil
-}
-
-// runCommand runs command in dir with args and returns the combined output.
-func runCommand(dir, command string, args ...string) ([]byte, error) {
-	bin, err := exec.LookPath(command)
-	if err != nil {
-		return nil, err
-	}
-
-	cmd := exec.Command(bin, args...)
-	cmd.Dir = dir
-
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
-	return cmd.CombinedOutput()
 }
