@@ -26,9 +26,6 @@ import (
 
 // Run runs YCSB workloads.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
-	// TODO https://github.com/FerretDB/dance/issues/20
-	_ = ctx
-
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
