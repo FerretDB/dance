@@ -21,6 +21,16 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
       - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+
+      # test fails frequently, skipping; see GODRIVER-2852
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
+
     skip:
       - output_regex: skipping due to environmental constraints.*
 
@@ -65,14 +75,13 @@ results:
 
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
   ferretdb:
     stats:
-      unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
       expected_fail: 13
       expected_skip: 16
-      expected_pass: 623
+      expected_pass: 621
+
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
@@ -81,6 +90,7 @@ results:
 
       # returns unknown result.
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
@@ -133,6 +143,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
+
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
@@ -163,15 +174,12 @@ results:
 
       # Unexpected error: write command error: [{write errors: [{invalid document: document must contain '_id' field}]}, {<nil>}]
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
+
   mongodb:
     stats:
-      unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
-      expected_fail: 0
       expected_skip: 417
-      expected_pass: 1903
-    fail:
+      expected_pass: 1892
+
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
@@ -278,6 +286,7 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueMultiple_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueSize_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueTimeoutMS_should_be_included_in_connection_pool_created_message_when_specified
+
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
