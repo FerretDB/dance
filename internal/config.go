@@ -28,9 +28,14 @@ import (
 type RunnerType string
 
 const (
+	// RunnerTypeCommand is the command runner type.
 	RunnerTypeCommand RunnerType = "command"
-	RunnerTypeGoTest  RunnerType = "gotest"
-	RunnerTypeJSTest  RunnerType = "jstest"
+
+	// RunnerTypeGoTest is the gotest runner type.
+	RunnerTypeGoTest RunnerType = "gotest"
+
+	// RunnerTypeJSTest is the jstest runner type.
+	RunnerTypeJSTest RunnerType = "jstest"
 )
 
 // Config represents dance configuration.
