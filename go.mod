@@ -5,9 +5,9 @@ go 1.20
 require (
 	github.com/AlekSi/pointer v1.2.0
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	go.mongodb.org/mongo-driver v1.11.6
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
+	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	golang.org/x/sys v0.8.0
 	golang.org/x/text v0.3.8 // indirect; see https://github.com/FerretDB/dance/security/dependabot/5
 	gopkg.in/yaml.v3 v3.0.1
