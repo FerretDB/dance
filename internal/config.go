@@ -36,9 +36,10 @@ const (
 
 	// RunnerTypeJSTest is the jstest runner type.
 	RunnerTypeJSTest RunnerType = "jstest"
-
+  
 	// RunnerTypeYCSB is the YCSB runner type.
 	RunnerTypeYCSB RunnerType = "ycsb"
+
 )
 
 // Config represents dance configuration.
