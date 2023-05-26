@@ -26,35 +26,19 @@ import (
 )
 
 // Run runs YCSB workloads.
+// It loads and runs a YCSB workload. Properties defined in the YAML file
+// will override properties defined in the workload parameter file.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	out, err := runWorkload(dir, args...)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Print(string(out))
-
-	res.TestResults[dir] = internal.TestResult{
-		Status: internal.Pass,
-		Output: "",
-	}
-
-	return res, nil
-}
-
-// runWorkload loads and runs a YCSB workload. Properties defined in the YAML file
-// will override properties defined in the workload parameter file.
-func runWorkload(dir string, args ...string) ([]byte, error) {
 	_, err := os.Stat("../bin/go-ycsb")
 	if err != nil {
 		return nil, err
 	}
 
-	// because we set cmd.Dir after checking for the binary
+	// because we set cmd.Dir, the relative path here is different
 	bin := "../../bin/go-ycsb"
 
 	wlFile := args[0]
@@ -62,7 +46,7 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 	wlArgs = append(wlArgs, "-p")
 	wlArgs = append(wlArgs, args[1:]...)
 
-	cmd := exec.Command(bin, wlArgs...)
+	cmd := exec.CommandContext(ctx, bin, wlArgs...)
 	cmd.Dir = dir
 
 	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
@@ -75,10 +59,22 @@ func runWorkload(dir string, args ...string) ([]byte, error) {
 
 	// the run phase will execute the workload and will report performance statistics on stdout
 	cmd.Args[1] = "run"
-	cmd = exec.Command(bin, cmd.Args[1:]...)
+	cmd = exec.CommandContext(ctx, bin, cmd.Args[1:]...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	return cmd.CombinedOutput()
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, err
+	}
+
+	log.Print(string(out))
+
+	res.TestResults[dir] = internal.TestResult{
+		Status: internal.Pass,
+		Output: "",
+	}
+
+	return res, nil
 }
