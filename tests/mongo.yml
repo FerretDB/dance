@@ -25,11 +25,11 @@ args:
   # - mongo/jstests/core/write/update/update[2-9].js
   # - mongo/jstests/core/write/update/update[a-z].js
   # added May 26, 2023 for GA.
-  - mongo/jstests/core/catalog/list_indexes.js
+  - mongo/jstests/core/catalog/list_indexes.js # https://github.com/FerretDB/FerretDB/issues/2045
   - mongo/jstests/core/write/update/update_addToSet*.js
   - mongo/jstests/core/write/update/update_arrayFilters.js
   - mongo/jstests/core/query/push/push.js
-  - mongo/jstests/core/query/pull/pull*.js
+  - mongo/jstests/core/query/pull/pull*.js # https://github.com/FerretDB/FerretDB/issues/2766
   - mongo/jstests/core/query/rename/rename_operator*.js
   - mongo/jstests/core/dbstats.js
   - mongo/jstests/aggregation/expressions/size.js
@@ -44,9 +44,10 @@ args:
   - mongo/jstests/core/doc_validation/doc_validation_error.js
   - mongo/jstests/core/index/covered/coveredIndex[1-4].js
   - mongo/jstests/core/index/covered/covered_index_compound_1.js
-  - mongo/jstests/aggregation/sources/collStats/count.js
-  - mongo/jstests/aggregation/bugs/server5932.js
-  - mongo/jstests/core/max_doc_size.js
+  - mongo/jstests/aggregation/sources/collStats/count.js # https://github.com/FerretDB/FerretDB/issues/2763
+  - mongo/jstests/aggregation/bugs/sort_arrays.js
+  - mongo/jstests/aggregation/unwind.js
+  - mongo/jstests/core/max_doc_size.js # nested arrays are not supported
   - mongo/jstests/core/query/set/set[1-7].js
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js
