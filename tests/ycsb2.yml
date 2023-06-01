@@ -1,0 +1,18 @@
+---
+runner: ycsb
+dir: ycsb
+args:
+  # the first argument must be a workload file.
+  - workloads/workloadc # Workload C: Read only
+  - recordcount=5000
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:

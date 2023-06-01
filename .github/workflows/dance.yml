@@ -41,6 +41,8 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - ycsb1
+          - ycsb2
 
     steps:
       - name: Checkout code
