@@ -28,8 +28,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 45
-      expected_pass: 32
+      expected_fail: 43
+      expected_pass: 34
 
     fail:
       # https://docs.ferretdb.io/diff/
