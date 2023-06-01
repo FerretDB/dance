@@ -35,7 +35,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	bin := filepath.Join("../", "/bin/go-ycsb")
+	bin := filepath.Join("..", "bin", "go-ycsb")
 
 	_, err := os.Stat(bin)
 	if err != nil {
