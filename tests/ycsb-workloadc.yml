@@ -1,9 +1,9 @@
 ---
+# Workload C: Read only
 runner: ycsb
 dir: ycsb
 args:
-  # the first argument must be a workload file.
-  - workloads/workloada # Workload A: Update heavy workload
+  - workloads/workloadc
   - recordcount=5000
 
 results:

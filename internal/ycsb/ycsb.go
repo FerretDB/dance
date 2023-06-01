@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ycsb contains ycsb runner.
+// Package ycsb contains `ycsb` runner.
 package ycsb
 
 import (
 	"context"
-	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -27,65 +26,61 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs YCSB workloads.
-// It loads and runs a YCSB workload. Properties defined in the YAML file
-// will override properties defined in the workload parameter file.
+// Run runs `go-ycsb`.
+//
+// It loads and runs a YCSB workload.
+// Properties defined in the YAML file will override properties defined in the workload parameter file.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
-	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
-	}
-
 	bin := filepath.Join("..", "bin", "go-ycsb")
-
-	_, err := os.Stat(bin)
-	if err != nil {
+	if _, err := os.Stat(bin); err != nil {
 		return nil, err
 	}
 
 	// because we set cmd.Dir, the relative path here is different
 	bin = filepath.Join("..", bin)
 
-	// the load phase will load the dataset into the database
-	wlFile := args[0]
-	wlArgs := []string{"load", "mongodb", "-P", wlFile}
-	wlArgs = append(wlArgs, "-p")
-	wlArgs = append(wlArgs, args[1:]...)
+	// load workload
 
-	cmd := exec.CommandContext(ctx, bin, wlArgs...)
-	cmd.Dir = dir
-
-	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
-
-	if err = cmd.Run(); err != nil {
-		return nil, err
+	cliArgs := []string{"load", "mongodb", "-P", args[0]}
+	for _, p := range args[1:] {
+		cliArgs = append(cliArgs, "-p", p)
 	}
 
-	// the run phase will execute the workload against the dataset and
-	// will report performance statistics on stdout
-	cmd.Args[1] = "run"
-	cmd = exec.CommandContext(ctx, bin, cmd.Args[1:]...)
+	cmd := exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		var exitErr *exec.ExitError
-		if !errors.As(err, &exitErr) {
-			return nil, err
-		}
-
-		res.TestResults[dir] = internal.TestResult{
-			Status: internal.Fail,
-			Output: string(out),
-		}
-
-		return res, nil
+	if err := cmd.Run(); err != nil {
+		return nil, err
 	}
 
-	res.TestResults[dir] = internal.TestResult{
-		Status: internal.Pass,
-		Output: string(out),
+	// run workload with almost the same args
+
+	cliArgs[0] = "run"
+
+	cmd = exec.CommandContext(ctx, bin, cliArgs...)
+	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
+	res := &internal.TestResults{
+		TestResults: map[string]internal.TestResult{
+			dir: {
+				Status: internal.Pass,
+			},
+		},
+	}
+
+	if err := cmd.Run(); err != nil {
+		res.TestResults[dir] = internal.TestResult{
+			Status: internal.Fail,
+			Output: err.Error(),
+		}
 	}
 
 	return res, nil
