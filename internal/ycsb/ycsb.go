@@ -17,6 +17,7 @@ package ycsb
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -56,8 +57,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
 
-	err = cmd.Run()
-	if err != nil {
+	if err = cmd.Run(); err != nil {
 		return nil, err
 	}
 
@@ -71,14 +71,22 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, err
-	}
+		var exitErr *exec.ExitError
+		if !errors.As(err, &exitErr) {
+			return nil, err
+		}
 
-	log.Print(string(out))
+		res.TestResults[dir] = internal.TestResult{
+			Status: internal.Fail,
+			Output: string(out),
+		}
+
+		return res, nil
+	}
 
 	res.TestResults[dir] = internal.TestResult{
 		Status: internal.Pass,
-		Output: "",
+		Output: string(out),
 	}
 
 	return res, nil
