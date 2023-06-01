@@ -43,7 +43,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	}
 
 	// because we set cmd.Dir, the relative path here is different
-	bin = filepath.Join("../", bin)
+	bin = filepath.Join("..", bin)
 
 	// the load phase will load the dataset into the database
 	wlFile := args[0]
