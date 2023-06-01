@@ -1,8 +1,9 @@
 ---
 runner: ycsb
+dir: ycsb
 args:
   # the first argument must be a workload file.
-  - workloads/workloada
+  - workloads/workloadc # Workload C: Read only
   - recordcount=5000
 
 results:
