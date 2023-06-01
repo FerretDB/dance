@@ -134,7 +134,7 @@ func main() {
 		case internal.RunnerTypeJSTest:
 			runRes, err = jstest.Run(ctx, dir, config.Args)
 		case internal.RunnerTypeYCSB:
-			runRes, err = ycsb.Run(ctx, dir, config.Args, *vF)
+			runRes, err = ycsb.Run(ctx, dir, config.Args)
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}

@@ -17,8 +17,8 @@ package command
 
 import (
 	"context"
-	"errors"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -36,31 +36,24 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	cmd := exec.CommandContext(ctx, bin, args[1:]...)
 	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
+		TestResults: map[string]internal.TestResult{
+			dir: {
+				Status: internal.Pass,
+			},
+		},
 	}
 
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		var exitErr *exec.ExitError
-		if !errors.As(err, &exitErr) {
-			return nil, err
-		}
-
+	if err = cmd.Run(); err != nil {
 		res.TestResults[dir] = internal.TestResult{
 			Status: internal.Fail,
-			Output: string(out),
+			Output: err.Error(),
 		}
-
-		return res, nil
-	}
-
-	res.TestResults[dir] = internal.TestResult{
-		Status: internal.Pass,
-		Output: string(out),
 	}
 
 	return res, nil

@@ -17,7 +17,6 @@ package ycsb
 
 import (
 	"context"
-	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -31,15 +30,9 @@ import (
 //
 // It loads and runs a YCSB workload.
 // Properties defined in the YAML file will override properties defined in the workload parameter file.
-func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
-	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
-	}
-
+func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
 	bin := filepath.Join("..", "bin", "go-ycsb")
-
-	_, err := os.Stat(bin)
-	if err != nil {
+	if _, err := os.Stat(bin); err != nil {
 		return nil, err
 	}
 
@@ -60,7 +53,7 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	if err = cmd.Run(); err != nil {
+	if err := cmd.Run(); err != nil {
 		return nil, err
 	}
 
@@ -70,36 +63,24 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 
 	cmd = exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	var out []byte
-
-	if verbose {
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err = cmd.Run()
-	} else {
-		out, err = cmd.CombinedOutput()
+	res := &internal.TestResults{
+		TestResults: map[string]internal.TestResult{
+			dir: {
+				Status: internal.Pass,
+			},
+		},
 	}
 
-	if err != nil {
-		var exitErr *exec.ExitError
-		if !errors.As(err, &exitErr) {
-			return nil, err
-		}
-
+	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = internal.TestResult{
 			Status: internal.Fail,
-			Output: string(out),
+			Output: err.Error(),
 		}
-
-		return res, nil
-	}
-
-	res.TestResults[dir] = internal.TestResult{
-		Status: internal.Pass,
-		Output: string(out),
 	}
 
 	return res, nil
