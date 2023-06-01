@@ -10,7 +10,7 @@ require (
 	github.com/quasilyte/go-consistent v0.0.0-20220429160651-4e46040fbc82
 	github.com/reviewdog/reviewdog v0.14.1
 	golang.org/x/perf v0.0.0-20230427221525-d343f6398b76
-	golang.org/x/tools v0.9.1
+	golang.org/x/tools v0.9.2
 	golang.org/x/vuln v0.1.0
 	mvdan.cc/gofumpt v0.5.0
 )
