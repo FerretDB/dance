@@ -41,8 +41,8 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
-          - ycsb1
-          - ycsb2
+          - ycsb-workloada
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code

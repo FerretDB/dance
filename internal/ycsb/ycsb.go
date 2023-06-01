@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ycsb contains ycsb runner.
+// Package ycsb contains `ycsb` runner.
 package ycsb
 
 import (
@@ -27,10 +27,11 @@ import (
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs YCSB workloads.
-// It loads and runs a YCSB workload. Properties defined in the YAML file
-// will override properties defined in the workload parameter file.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+// Run runs `go-ycsb`.
+//
+// It loads and runs a YCSB workload.
+// Properties defined in the YAML file will override properties defined in the workload parameter file.
+func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
@@ -45,30 +46,43 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	// because we set cmd.Dir, the relative path here is different
 	bin = filepath.Join("..", bin)
 
-	// the load phase will load the dataset into the database
-	wlFile := args[0]
-	wlArgs := []string{"load", "mongodb", "-P", wlFile}
-	wlArgs = append(wlArgs, "-p")
-	wlArgs = append(wlArgs, args[1:]...)
+	// load workload
 
-	cmd := exec.CommandContext(ctx, bin, wlArgs...)
+	cliArgs := []string{"load", "mongodb", "-P", args[0]}
+	for _, p := range args[1:] {
+		cliArgs = append(cliArgs, "-p", p)
+	}
+
+	cmd := exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	if err = cmd.Run(); err != nil {
 		return nil, err
 	}
 
-	// the run phase will execute the workload against the dataset and
-	// will report performance statistics on stdout
-	cmd.Args[1] = "run"
-	cmd = exec.CommandContext(ctx, bin, cmd.Args[1:]...)
+	// run workload with almost the same args
+
+	cliArgs[0] = "run"
+
+	cmd = exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	out, err := cmd.CombinedOutput()
+	var out []byte
+
+	if verbose {
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err = cmd.Run()
+	} else {
+		out, err = cmd.CombinedOutput()
+	}
+
 	if err != nil {
 		var exitErr *exec.ExitError
 		if !errors.As(err, &exitErr) {

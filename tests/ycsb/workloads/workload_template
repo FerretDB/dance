@@ -22,8 +22,8 @@
 # out. When a property has a finite number of settings,
 # the default is enabled and the alternates are shown in
 # comments below it.
-# 
-# Use of most explained through comments in Client.java or 
+#
+# Use of most explained through comments in Client.java or
 # CoreWorkload.java or on the YCSB wiki page:
 # https://github.com/brianfrankcooper/YCSB/wiki/Core-Properties
 
@@ -33,7 +33,7 @@ workload=core
 # There is no default setting for recordcount but it is
 # required to be set.
 # The number of records in the table to be inserted in
-# the load phase or the number of records already in the 
+# the load phase or the number of records already in the
 # table before the run phase.
 recordcount=1000000
 
@@ -43,7 +43,7 @@ recordcount=1000000
 operationcount=3000000
 
 # The number of thread.
-threadcount=500 
+threadcount=500
 
 # The number of insertions to do, if different from recordcount.
 # Used with insertstart to grow an existing table.
@@ -107,7 +107,7 @@ hotspotdatafraction=0.2
 hotspotopnfraction=0.8
 
 # Maximum execution time in seconds
-#maxexecutiontime= 
+#maxexecutiontime=
 
 # The name of the database table to run queries against
 table=usertable
@@ -141,7 +141,7 @@ measurementtype=histogram
 # Measure JVM information over time including GC counts, max and min memory
 # used, max and min thread counts, max and min system load and others. This
 # setting must be enabled in conjunction with the "-s" flag to run the status
-# thread. Every "status.interval", the status thread will capture JVM 
+# thread. Every "status.interval", the status thread will capture JVM
 # statistics and record the results. At the end of the run, max and mins will
 # be recorded.
 # measurement.trackjvm = false
