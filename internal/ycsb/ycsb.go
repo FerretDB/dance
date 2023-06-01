@@ -47,8 +47,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	// the load phase will load the dataset into the database
 	wlFile := args[0]
-	phase := "load"
-	wlArgs := []string{phase, "mongodb", "-P", wlFile}
+	wlArgs := []string{"load", "mongodb", "-P", wlFile}
 	wlArgs = append(wlArgs, "-p")
 	wlArgs = append(wlArgs, args[1:]...)
 
