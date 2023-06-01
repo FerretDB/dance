@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/FerretDB/dance/internal"
@@ -33,16 +34,20 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		TestResults: make(map[string]internal.TestResult),
 	}
 
-	_, err := os.Stat("../bin/go-ycsb")
+	bin := filepath.Join("../", "/bin/go-ycsb")
+
+	_, err := os.Stat(bin)
 	if err != nil {
 		return nil, err
 	}
 
 	// because we set cmd.Dir, the relative path here is different
-	bin := "../../bin/go-ycsb"
+	bin = filepath.Join("../", bin)
 
+	// the load phase will load the dataset into the database
 	wlFile := args[0]
-	wlArgs := []string{"load", "mongodb", "-P", wlFile}
+	phase := "load"
+	wlArgs := []string{phase, "mongodb", "-P", wlFile}
 	wlArgs = append(wlArgs, "-p")
 	wlArgs = append(wlArgs, args[1:]...)
 
@@ -51,13 +56,13 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	log.Printf("Loading workload with properties %s", strings.Join(args, " "))
 
-	// load the workload
 	err = cmd.Run()
 	if err != nil {
 		return nil, err
 	}
 
-	// the run phase will execute the workload and will report performance statistics on stdout
+	// the run phase will execute the workload against the dataset and
+	// will report performance statistics on stdout
 	cmd.Args[1] = "run"
 	cmd = exec.CommandContext(ctx, bin, cmd.Args[1:]...)
 	cmd.Dir = dir
