@@ -106,10 +106,6 @@ results:
       - mongo/jstests/core/write/update/updatej.js
       - mongo/jstests/core/write/update/updatek.js
 
-      # https://github.com/FerretDB/FerretDB/issues/2539
-      - mongo/jstests/core/write/update/updatea.js
-      - mongo/jstests/core/write/update/updated.js
-
       # https://github.com/FerretDB/FerretDB/issues/1742
       - mongo/jstests/core/write/update/updateb.js
       - mongo/jstests/core/write/update/updatel.js
