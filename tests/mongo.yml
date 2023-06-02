@@ -25,11 +25,11 @@ args:
   # - mongo/jstests/core/write/update/update[2-9].js
   # - mongo/jstests/core/write/update/update[a-z].js
   # added May 26, 2023 for GA.
-  - mongo/jstests/core/catalog/list_indexes.js # https://github.com/FerretDB/FerretDB/issues/2045
+  - mongo/jstests/core/catalog/list_indexes.js
   - mongo/jstests/core/write/update/update_addToSet*.js
   - mongo/jstests/core/write/update/update_arrayFilters.js
   - mongo/jstests/core/query/push/push.js
-  - mongo/jstests/core/query/pull/pull*.js # https://github.com/FerretDB/FerretDB/issues/2766
+  - mongo/jstests/core/query/pull/pull*.js
   - mongo/jstests/core/query/rename/rename_operator*.js
   - mongo/jstests/core/dbstats.js
   - mongo/jstests/aggregation/expressions/size.js
@@ -44,11 +44,11 @@ args:
   - mongo/jstests/core/doc_validation/doc_validation_error.js
   - mongo/jstests/core/index/covered/coveredIndex[1-4].js
   - mongo/jstests/core/index/covered/covered_index_compound_1.js
-  - mongo/jstests/aggregation/sources/collStats/count.js # https://github.com/FerretDB/FerretDB/issues/2763
+  - mongo/jstests/aggregation/sources/collStats/count.js
   - mongo/jstests/aggregation/bugs/sort_arrays.js
-  - mongo/jstests/aggregation/bugs/match.js # checks that filter behavior is equivalent to a mongo query; #L54 invalid syntax.
+  - mongo/jstests/aggregation/bugs/match.js
   - mongo/jstests/aggregation/unwind.js
-  - mongo/jstests/core/max_doc_size.js # nested arrays are not supported
+  - mongo/jstests/core/max_doc_size.js
   - mongo/jstests/core/query/set/set[1-7].js
   - mongo/jstests/core/query/unset/unset*.js
   - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js
@@ -157,6 +157,19 @@ results:
       - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+
+      # added May 26, 2023 for GA.
+      # https://github.com/FerretDB/FerretDB/issues/2780
+      - mongo/jstests/aggregation/bugs/match.js
+      # https://github.com/FerretDB/FerretDB/issues/2763
+      - mongo/jstests/aggregation/sources/collStats/count.js
+      # https://github.com/FerretDB/FerretDB/issues/2766
+      - mongo/jstests/core/query/pull/pull*.js
+      # we do not support nested arrays
+      - mongo/jstests/core/max_doc_size.js
+      # https://github.com/FerretDB/FerretDB/issues/2045
+      - mongo/jstests/core/catalog/list_indexes.js
+
   mongodb:
     stats:
       expected_fail: 4
