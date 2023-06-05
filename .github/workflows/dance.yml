@@ -3,7 +3,7 @@ name: Dance
 on:
   push:
     branches:
-      - main
+      - add-java-ci
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
@@ -38,6 +38,7 @@ jobs:
           - dbaas_core
           - diff
           - dotnet-example
+          - java-example
           - mongo
           - mongo-go-driver
           - mongo-tools
