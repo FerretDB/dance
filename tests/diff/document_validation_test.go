@@ -143,4 +143,52 @@ func TestDocumentValidation(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("FindAndModify", func(t *testing.T) {
+		t.Parallel()
+
+		for name, tc := range map[string]struct {
+			command  bson.D
+			expected mongo.CommandError
+		}{
+			"DollarPrefixFieldName": {
+				command: bson.D{
+					{"query", bson.D{{"_id", bson.D{{"k", bson.D{{"$invalid", "v"}}}}}}},
+					{"upsert", true},
+					{"update", bson.D{{"v", "replaced"}}},
+				},
+				expected: mongo.CommandError{
+					Code: 52,
+					Name: "DollarPrefixedFieldName",
+					Message: `Plan executor error during findAndModify :: caused by :: ` +
+						`_id fields may not contain '$'-prefixed fields: $invalid is not valid for storage.`,
+				},
+			},
+		} {
+			name, tc := name, tc
+
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				collection := db.Collection("findandmodify-validation-" + name)
+
+				command := bson.D{{"findAndModify", collection.Name()}}
+				command = append(command, tc.command...)
+
+				err := collection.Database().RunCommand(ctx, command).Err()
+
+				t.Run("FerretDB", func(t *testing.T) {
+					t.Parallel()
+
+					assertEqualError(t, tc.expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					t.Parallel()
+
+					require.NoError(t, err)
+				})
+			})
+		}
+	})
 }
