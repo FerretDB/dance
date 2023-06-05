@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: java-example/java
-args: [mvn, compile, exec:java, -Dexec.mainClass="com.start.Connection"]
+args: [mvn, compile, exec:java, -Dexec.mainClass=com.start.Connection]
 
 results:
   common:
