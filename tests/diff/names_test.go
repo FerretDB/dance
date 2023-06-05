@@ -20,6 +20,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -32,7 +33,6 @@ func TestDatabaseName(t *testing.T) {
 		"ReservedPrefix":     "_ferretdb_xxx",
 		"NonLatin":           "データベース",
 		"StartingWithNumber": "1database",
-		"CapitalLetter":      "Database",
 	}
 
 	for name, dbName := range testCases {
@@ -67,25 +67,62 @@ func TestCollectionName(t *testing.T) {
 		"NonUTF-8":       string([]byte{0xff, 0xfe, 0xfd}),
 	}
 
-	for name, collection := range testCases {
-		name, collection := name, collection
-		t.Run(name, func(t *testing.T) {
-			ctx, db := setup(t)
-			dbName := db.Name()
-			err := db.CreateCollection(ctx, collection)
+	t.Run("CreateCollection", func(t *testing.T) {
+		for name, collection := range testCases {
+			name, collection := name, collection
 
-			t.Run("FerretDB", func(t *testing.T) {
-				expected := mongo.CommandError{
-					Name:    "InvalidNamespace",
-					Code:    73,
-					Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
-				}
-				assertEqualError(t, expected, err)
+			t.Run(name, func(t *testing.T) {
+				ctx, db := setup(t)
+				dbName := db.Name()
+				err := db.CreateCollection(ctx, collection)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					expected := mongo.CommandError{
+						Name:    "InvalidNamespace",
+						Code:    73,
+						Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
+					}
+					assertEqualError(t, expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					require.NoError(t, err)
+				})
 			})
+		}
+	})
 
-			t.Run("MongoDB", func(t *testing.T) {
+	t.Run("RenameCollection", func(t *testing.T) {
+		for name, collection := range testCases {
+			name, collection := name, collection
+			t.Run(name, func(t *testing.T) {
+				ctx, db := setup(t)
+				dbName := db.Name()
+				collectionToCreate := "collectionToRename" + name
+
+				err := db.CreateCollection(ctx, collectionToCreate)
 				require.NoError(t, err)
+
+				renameCommand := bson.D{
+					{"renameCollection", dbName + "." + collectionToCreate},
+					{"to", dbName + "." + collection},
+				}
+				var res bson.D
+				err = db.Client().Database("admin").RunCommand(ctx, renameCommand).Decode(&res)
+
+				t.Run("FerretDB", func(t *testing.T) {
+					expected := mongo.CommandError{
+						Name:    "IllegalOperation",
+						Code:    20,
+						Message: fmt.Sprintf(`error with target namespace: Invalid collection name: %s`, collection),
+					}
+					assertEqualError(t, expected, err)
+				})
+
+				t.Run("MongoDB", func(t *testing.T) {
+					require.NoError(t, err)
+				})
 			})
-		})
-	}
+		}
+	})
 }

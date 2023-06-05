@@ -24,15 +24,31 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// RunnerType represents runner type.
+type RunnerType string
+
+const (
+	// RunnerTypeCommand is the command runner type.
+	RunnerTypeCommand RunnerType = "command"
+
+	// RunnerTypeGoTest is the gotest runner type.
+	RunnerTypeGoTest RunnerType = "gotest"
+
+	// RunnerTypeJSTest is the jstest runner type.
+	RunnerTypeJSTest RunnerType = "jstest"
+
+	// RunnerTypeYCSB is the ycsb runner type.
+	RunnerTypeYCSB RunnerType = "ycsb"
+)
+
 // Config represents dance configuration.
 //
 //nolint:govet // we don't care about alignment there
 type Config struct {
-	Runner      string
-	Dir         string
-	Args        []string
-	ExcludeArgs []string
-	Results     Results
+	Runner  RunnerType
+	Dir     string
+	Args    []string // meaning depends on runner type
+	Results Results
 }
 
 // Results represents expected dance results.

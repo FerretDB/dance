@@ -21,16 +21,26 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs Go tests.
+// Run runs `go test`.
+// Args contain additional arguments to `go test`.
+// `-v -json -count=1` are always added.
+// `-race` is added if possible.
 func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
 	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
+
+	// use the same condition as in FerretDB's Taskfile.yml
+	if runtime.GOOS != "windows" && runtime.GOARCH != "arm" && runtime.GOARCH != "riscv64" {
+		args = append(args, "-race")
+	}
+
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
 	cmd.Stderr = os.Stderr

@@ -30,9 +30,10 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/command"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
-	"github.com/FerretDB/dance/internal/service"
+	"github.com/FerretDB/dance/internal/ycsb"
 )
 
 func waitForPort(ctx context.Context, port uint16) error {
@@ -115,7 +116,8 @@ func main() {
 		}
 
 		if config.Dir != "" {
-			dir = filepath.Join(dir, config.Dir)
+			dir = config.Dir
+			log.Printf("\tDir changed to %s", dir)
 		}
 
 		expectedConfig, err := config.Results.ForDB(*dbF)
@@ -125,12 +127,14 @@ func main() {
 
 		var runRes *internal.TestResults
 		switch config.Runner {
-		case "gotest":
+		case internal.RunnerTypeCommand:
+			runRes, err = command.Run(ctx, dir, config.Args)
+		case internal.RunnerTypeGoTest:
 			runRes, err = gotest.Run(ctx, dir, config.Args, *vF)
-		case "jstest":
-			runRes, err = jstest.Run(ctx, dir, config.Args, nil)
-		case "service":
-			runRes, err = service.Run(ctx, dir, config.Args, config.ExcludeArgs)
+		case internal.RunnerTypeJSTest:
+			runRes, err = jstest.Run(ctx, dir, config.Args)
+		case internal.RunnerTypeYCSB:
+			runRes, err = ycsb.Run(ctx, dir, config.Args)
 		default:
 			log.Fatalf("unknown runner: %q", config.Runner)
 		}

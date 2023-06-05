@@ -1,5 +1,8 @@
 ---
 runner: jstest
+
+# To exclude a file, use the ! prefix and enclose the file name in quotes.
+# Put the exclusion patterns before inclusion patterns.
 args:
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
@@ -25,8 +28,9 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 42
-      expected_pass: 35
+      expected_fail: 40
+      expected_pass: 37
+
     fail:
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -51,10 +55,6 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/1492
       - mongo/jstests/core/administrative/auth1.js
-
-      # https://github.com/FerretDB/FerretDB/issues/1750
-      # logout deprecated since version 5.0.
-      - mongo/jstests/core/administrative/auth2.js
 
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
@@ -92,9 +92,6 @@ results:
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
 
-      # https://github.com/FerretDB/FerretDB/issues/2236
-      - mongo/jstests/core/query/distinct/distinct1.js
-
       # https://github.com/FerretDB/FerretDB/issues/2231
       - mongo/jstests/core/query/distinct/distinct4.js
 
@@ -121,12 +118,14 @@ results:
       - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+
   mongodb:
     stats:
       expected_fail: 3
       expected_pass: 74
+
     fail:
-    # https://github.com/FerretDB/dance/issues/294
-    - mongo/jstests/auth/getMore.js
-    - mongo/jstests/readonly/get_more.js
-    - mongo/jstests/auth/list_sessions.js
+      # https://github.com/FerretDB/dance/issues/294
+      - mongo/jstests/auth/getMore.js
+      - mongo/jstests/readonly/get_more.js
+      - mongo/jstests/auth/list_sessions.js

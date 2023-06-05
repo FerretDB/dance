@@ -14,7 +14,7 @@ pull_request_rules:
       - "-merged"
       - "author != dependabot[bot]"
       - "base = main"
-      - "label != 'no ci'"
+      - "label != 'not ready'"
 
     actions:
       update:

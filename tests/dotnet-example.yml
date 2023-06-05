@@ -1,0 +1,14 @@
+---
+runner: command
+args: ["dotnet", "run", "dotnet-example"]
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:
