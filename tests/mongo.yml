@@ -28,8 +28,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 45
-      expected_pass: 32
+      expected_fail: 40
+      expected_pass: 37
 
     fail:
       # https://docs.ferretdb.io/diff/
@@ -55,10 +55,6 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/1492
       - mongo/jstests/core/administrative/auth1.js
-
-      # https://github.com/FerretDB/FerretDB/issues/1750
-      # logout deprecated since version 5.0.
-      - mongo/jstests/core/administrative/auth2.js
 
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
@@ -96,9 +92,6 @@ results:
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
 
-      # https://github.com/FerretDB/FerretDB/issues/2236
-      - mongo/jstests/core/query/distinct/distinct1.js
-
       # https://github.com/FerretDB/FerretDB/issues/2231
       - mongo/jstests/core/query/distinct/distinct4.js
 
@@ -111,11 +104,6 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/1855
       - mongo/jstests/core/write/update/update8.js
       - mongo/jstests/core/write/update/updatej.js
-      - mongo/jstests/core/write/update/updatek.js
-
-      # https://github.com/FerretDB/FerretDB/issues/2539
-      - mongo/jstests/core/write/update/updatea.js
-      - mongo/jstests/core/write/update/updated.js
 
       # https://github.com/FerretDB/FerretDB/issues/1742
       - mongo/jstests/core/write/update/updateb.js

@@ -12,29 +12,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package command contains generic test runner.
-package command
+// Package ycsb contains `ycsb` runner.
+package ycsb
 
 import (
 	"context"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/FerretDB/dance/internal"
 )
 
-// Run runs generic test.
-// It runs a command with arguments in a directory and returns the combined output as is.
-// If the command exits with a non-zero exit code, the test fails.
+// Run runs `go-ycsb`.
+//
+// It loads and runs a YCSB workload.
+// Properties defined in the YAML file will override properties defined in the workload parameter file.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
-	bin, err := exec.LookPath(args[0])
-	if err != nil {
+	bin := filepath.Join("..", "bin", "go-ycsb")
+	if _, err := os.Stat(bin); err != nil {
 		return nil, err
 	}
 
-	cmd := exec.CommandContext(ctx, bin, args[1:]...)
+	// because we set cmd.Dir, the relative path here is different
+	bin = filepath.Join("..", bin)
+
+	// load workload
+
+	cliArgs := []string{"load", "mongodb", "-P", args[0]}
+	for _, p := range args[1:] {
+		cliArgs = append(cliArgs, "-p", p)
+	}
+
+	cmd := exec.CommandContext(ctx, bin, cliArgs...)
+	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
+	if err := cmd.Run(); err != nil {
+		return nil, err
+	}
+
+	// run workload with almost the same args
+
+	cliArgs[0] = "run"
+
+	cmd = exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -49,7 +76,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		},
 	}
 
-	if err = cmd.Run(); err != nil {
+	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = internal.TestResult{
 			Status: internal.Fail,
 			Output: err.Error(),
