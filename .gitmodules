@@ -15,3 +15,6 @@
 	path = dumps/mongodb-sample-databases
 	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
+[submodule "java-example"]
+	path = tests/java-example
+	url = https://github.com/FerretDB/java-example.git
