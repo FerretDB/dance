@@ -392,7 +392,6 @@ results:
       - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
     fail:
       # TODO: investigate failures.
-      - mongo/jstests/core/administrative/auth2.js
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/administrative/getlog2.js
       - mongo/jstests/core/api/api_params_getmore.js
