@@ -358,7 +358,7 @@ args:
   - mongo/jstests/core/top.js
   - mongo/jstests/core/transaction_too_large_for_cache.js
   - mongo/jstests/core/ts1.js
-  - mongo/jstests/core/txns # we exclude all transaction tests but leaving it in for consistency
+  - mongo/jstests/core/txns
   - mongo/jstests/core/txns/timeseries/*.js
   - mongo/jstests/core/type_bracket.js
   - mongo/jstests/core/uniqueness.js
