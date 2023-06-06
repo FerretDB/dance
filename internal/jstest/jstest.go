@@ -153,7 +153,7 @@ func runCommand(dir, command string, args ...string) ([]byte, error) {
 	eb.WriteRune(' ')
 	f := filepath.Base(args[len(args)-1])
 	testName := strings.TrimSuffix(f, filepath.Ext(f))
-	eb.WriteString(fmt.Sprintf("TestData.jsTestName = '%s';", testName))
+	eb.WriteString(fmt.Sprintf("TestData.testName = '%s';", testName))
 
 	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String()}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
