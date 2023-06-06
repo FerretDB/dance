@@ -743,5 +743,5 @@ results:
 
   mongodb:
     stats:
-      # TODO: add stats.
-      expected_pass: 0
+      expected_fail: 73
+      expected_pass: 897
