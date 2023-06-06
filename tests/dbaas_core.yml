@@ -157,6 +157,7 @@ args:
   - "!mongo/jstests/core/write/collection_truncate.js"
 
   # include all tests in the following directories
+  # WIP.
   - mongo/jstests/core/**/*.js
 
 results:
