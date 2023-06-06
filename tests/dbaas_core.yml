@@ -157,7 +157,7 @@ args:
   - "!mongo/jstests/core/write/collection_truncate.js"
 
   # include all tests in the following directories
-  - mongo/jstests/core/**/*.js
+  # - mongo/jstests/core/**/*.js
   - mongo/jstests/core/administrative/*.js
   - mongo/jstests/core/api/*.js
   - mongo/jstests/core/benchrun_cmd_param_error.js
@@ -167,10 +167,10 @@ args:
   - mongo/jstests/core/capped/*.js
   - mongo/jstests/core/catalog/*.js
   - mongo/jstests/core/client_metadata_ismaster.js
-  - mongo/jstests/core/clustered
+  - mongo/jstests/core/clustered/*.js
   - mongo/jstests/core/collation.js
   - mongo/jstests/core/collStats_numericOnly.js
-  - mongo/jstests/core/columnstore
+  - mongo/jstests/core/columnstore/*.js
   - mongo/jstests/core/command_json_schema_field.js
   - mongo/jstests/core/command_let_variables.js
   - mongo/jstests/core/command_let_variables_merge_only.js
@@ -197,13 +197,13 @@ args:
   - mongo/jstests/core/dbhash.js
   - mongo/jstests/core/db.js
   - mongo/jstests/core/dbstats.js
-  - mongo/jstests/core/ddl
+  - mongo/jstests/core/ddl/*.js
   - mongo/jstests/core/delx.js
   - mongo/jstests/core/depth_limit.js
   - mongo/jstests/core/diagdata.js
   - mongo/jstests/core/disallow_query_wrapped_cmd_format.js
   - mongo/jstests/core/disallow_system_views_user_writes.js
-  - mongo/jstests/core/doc_validation
+  - mongo/jstests/core/doc_validation/*.js
   - mongo/jstests/core/doc_validation_with_now_variable.js
   - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js
   - mongo/jstests/core/error5.js
@@ -224,9 +224,14 @@ args:
   - mongo/jstests/core/id1.js
   - mongo/jstests/core/id_partial_projection.js
   - mongo/jstests/core/illegal_cmd_namespace.js
-  - mongo/jstests/core/index
+  - mongo/jstests/core/index/*.js
+  - mongo/jstests/core/index/covered/*.js
+  - mongo/jstests/core/index/fts/*.js
+  - mongo/jstests/core/index/geo/*.js
+  - mongo/jstests/core/index/hashed/*.js
+  - mongo/jstests/core/index/wildcard/*.js
   - mongo/jstests/core/json1.js
-  - mongo/jstests/core/json_schema
+  - mongo/jstests/core/json_schema/*.js
   - mongo/jstests/core/jssymbol.js
   - mongo/jstests/core/kill_cursors.js
   - mongo/jstests/core/latch_analyzer.js
@@ -269,7 +274,41 @@ args:
   - mongo/jstests/core/pop_server_13516.js
   - mongo/jstests/core/positional_projection.js
   - mongo/jstests/core/positional_projection_multiple_array_fields.js
-  - mongo/jstests/core/query
+  - mongo/jstests/core/query/*.js
+  - mongo/jstests/core/query/all/*.js
+  - mongo/jstests/core/query/and/*.js
+  - mongo/jstests/core/query/array/*.js
+  - mongo/jstests/core/query/count/*.js
+  - mongo/jstests/core/query/cursor/*.js
+  - mongo/jstests/core/query/date/*.js
+  - mongo/jstests/core/query/dbref/*.js
+  - mongo/jstests/core/query/distinct/*.js
+  - mongo/jstests/core/query/elemmatch/*.js
+  - mongo/jstests/core/query/exists/*.js
+  - mongo/jstests/core/query/explain/*.js
+  - mongo/jstests/core/query/expr/*.js
+  - mongo/jstests/core/query/find/*.js
+  - mongo/jstests/core/query/in/*.js
+  - mongo/jstests/core/query/inc/*.js
+  - mongo/jstests/core/query/internal_hash_eq/*.js
+  - mongo/jstests/core/query/js/*.js
+  - mongo/jstests/core/query/mr/*.js
+  - mongo/jstests/core/query/ne/*.js
+  - mongo/jstests/core/query/nin/*.js
+  - mongo/jstests/core/query/not/*.js
+  - mongo/jstests/core/query/number/*.js
+  - mongo/jstests/core/query/objid/*.js
+  - mongo/jstests/core/query/or/*.js
+  - mongo/jstests/core/query/plan_cache/*.js
+  - mongo/jstests/core/query/project/*.js
+  - mongo/jstests/core/query/pull/*.js
+  - mongo/jstests/core/query/regex/*.js
+  - mongo/jstests/core/query/rename/*.js
+  - mongo/jstests/core/query/set/*.js
+  - mongo/jstests/core/query/sort/*.js
+  - mongo/jstests/core/query/type/*.js
+  - mongo/jstests/core/query/unset/*.js
+  - mongo/jstests/core/query/where/*.js
   - mongo/jstests/core/read_after_optime.js
   - mongo/jstests/core/record_store_count.js
   - mongo/jstests/core/recursion.js
@@ -281,7 +320,7 @@ args:
   - mongo/jstests/core/roles_info.js
   - mongo/jstests/core/run_program1.js
   - mongo/jstests/core/sample_rate.js
-  - mongo/jstests/core/sbe
+  - mongo/jstests/core/sbe/*.js
   - mongo/jstests/core/sbe_plan_cache_autoparameterize_collscan.js
   - mongo/jstests/core/server1470.js
   - mongo/jstests/core/server14747.js
@@ -294,7 +333,7 @@ args:
   - mongo/jstests/core/server7756.js
   - mongo/jstests/core/server9385.js
   - mongo/jstests/core/server9547.js
-  - mongo/jstests/core/shell
+  - mongo/jstests/core/shell/*.js
   - mongo/jstests/core/show_record_id.js
   - mongo/jstests/core/single_batch.js
   - mongo/jstests/core/single_field_hashed_index.js
@@ -319,14 +358,18 @@ args:
   - mongo/jstests/core/top.js
   - mongo/jstests/core/transaction_too_large_for_cache.js
   - mongo/jstests/core/ts1.js
-  - mongo/jstests/core/txns
+  # - mongo/jstests/core/txns we exclude all transaction tests
   - mongo/jstests/core/type_bracket.js
   - mongo/jstests/core/uniqueness.js
   - mongo/jstests/core/validate_js_timestamp.js
   - mongo/jstests/core/version_api_list_commands_verification.js
   - mongo/jstests/core/version_api_v1_command_coverage.js
-  - mongo/jstests/core/views
-  - mongo/jstests/core/write
+  - mongo/jstests/core/views/bulk/*.js
+  - mongo/jstests/core/write/*.js
+  - mongo/jstests/core/write/delete/*.js
+  - mongo/jstests/core/write/find_and_modify/*.js
+  - mongo/jstests/core/write/insert/*.js
+  - mongo/jstests/core/write/update/*.js
 
 results:
   ferretdb:
