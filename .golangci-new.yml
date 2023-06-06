@@ -44,7 +44,6 @@ linters:
   disable:
     # checked by the other configuration
     - asciicheck
-    - depguard
     - exhaustive
     - gci
     - goconst
@@ -69,6 +68,7 @@ linters:
     - cyclop
     - deadcode
     - decorder
+    - depguard
     - dogsled
     - dupl
     - durationcheck

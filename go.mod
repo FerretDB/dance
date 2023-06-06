@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/AlekSi/pointer v1.2.0
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.mongodb.org/mongo-driver v1.11.6
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	golang.org/x/sys v0.8.0
