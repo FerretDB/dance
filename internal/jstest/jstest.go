@@ -18,6 +18,7 @@ package jstest
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"os/exec"
 	"path/filepath"
@@ -147,8 +148,16 @@ func runCommand(dir, command string, args ...string) ([]byte, error) {
 		return nil, err
 	}
 
-	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/"}, args...)
+	var eb strings.Builder
+	eb.WriteString("TestData = new Object();")
+	eb.WriteRune(' ')
+	f := filepath.Base(args[len(args)-1])
+	testName := strings.TrimSuffix(f, filepath.Ext(f))
+	eb.WriteString(fmt.Sprintf("TestData.jsTestName = '%s';", testName))
+
+	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String()}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
+
 	cmd := exec.Command(bin, dockerArgs...)
 	cmd.Dir = dir
 
