@@ -375,8 +375,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 351
-      expected_pass: 70
+      expected_fail: 553
+      expected_pass: 254
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     pass:
@@ -387,6 +387,9 @@ results:
       - mongo/jstests/core/ddl/drop_index.js
       - mongo/jstests/core/ddl/drop_indexes.js
       - mongo/jstests/core/timeseries/clustered_index_crud.js
+      # ---
+      - mongo/jstests/core/administrative/auth2.js
+      - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
     fail:
       # TODO: investigate failures.
       - mongo/jstests/core/administrative/auth2.js
