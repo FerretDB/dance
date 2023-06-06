@@ -38,6 +38,7 @@ jobs:
           - dbaas_core
           - diff
           - dotnet-example
+          - java-example
           - mongo
           - mongo-go-driver
           - mongo-tools
