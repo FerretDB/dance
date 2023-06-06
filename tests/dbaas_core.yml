@@ -381,8 +381,8 @@ results:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     pass:
       # TODO: investigate passes.
-      - mongo/jstests/core/capped/capped5.js
-      - mongo/jstests/core/catalog/list_indexes_invalid.js
+      - mongo/jstests/core/capped/capped5.js # silently passes because no assertions are used.
+      - mongo/jstests/core/catalog/list_indexes_invalid.js # passes because
       - mongo/jstests/core/ddl/background_unique_indexes.js
       - mongo/jstests/core/ddl/drop_index.js
       - mongo/jstests/core/ddl/drop_indexes.js
@@ -740,7 +740,6 @@ results:
       - mongo/jstests/core/write/batch_write_collation_estsize.js
       - mongo/jstests/core/write/collation_find_and_modify.js
       - mongo/jstests/core/write/verify_update_mods.js
-      - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
       - mongo/jstests/core/write/write_result.js
 
   mongodb:
