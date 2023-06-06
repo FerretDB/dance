@@ -3,7 +3,7 @@ name: Dance
 on:
   push:
     branches:
-      - dbaas_core-all
+      - main
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
