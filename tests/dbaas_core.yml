@@ -156,8 +156,7 @@ args:
   - "!mongo/jstests/core/stage_debug/stages_or.js"
   - "!mongo/jstests/core/write/collection_truncate.js"
 
-  # include all tests in the following directories
-  # - mongo/jstests/core/**/*.js
+  # include all the below core tests.
   - mongo/jstests/core/administrative/*.js
   - mongo/jstests/core/api/*.js
   - mongo/jstests/core/benchrun_cmd_param_error.js
@@ -380,10 +379,10 @@ results:
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     pass:
-      # TODO: investigate passes.
       - mongo/jstests/core/capped/capped5.js # silently passes because no assertions are used.
-      - mongo/jstests/core/catalog/list_indexes_invalid.js # passes because
-      - mongo/jstests/core/ddl/background_unique_indexes.js
+      - mongo/jstests/core/catalog/list_indexes_invalid.js # passes because cannot seeem to use helper functions from list_indexes.js
+      - mongo/jstests/core/ddl/background_unique_indexes.js # passes due to no replication support.
+      # ---
       - mongo/jstests/core/ddl/drop_index.js
       - mongo/jstests/core/ddl/drop_indexes.js
       - mongo/jstests/core/timeseries/clustered_index_crud.js
