@@ -16,6 +16,7 @@
 package jstest
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -151,12 +152,12 @@ func runCommand(dir, command string, args ...string) ([]byte, error) {
 	}
 
 	// creates the TestData variable and sets the testName property for the shell
-	var eb strings.Builder
+	var eb bytes.Buffer
 	eb.WriteString("TestData = new Object();")
 	eb.WriteRune(' ')
 	f := filepath.Base(args[len(args)-1])
 	testName := strings.TrimSuffix(f, filepath.Ext(f))
-	eb.WriteString(fmt.Sprintf("TestData.testName = '%s';", testName))
+	fmt.Fprintf(&eb, "TestData.testName = %q;", testName)
 
 	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String()}, args...)
 	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
