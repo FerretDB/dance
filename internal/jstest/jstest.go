@@ -71,6 +71,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	files := maps.Keys(filesM)
 
+	log.Printf("Total number of tests to run %d\n", len(files))
+
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
