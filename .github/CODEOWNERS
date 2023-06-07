@@ -2,14 +2,3 @@
 # Order is important; the last matching pattern takes the most precedence.
 
 *                    @FerretDB/specops
-
-/cmd/                @FerretDB/leads @FerretDB/specops
-/internal/           @FerretDB/leads @FerretDB/specops
-
-/tests/              @b1ron
-/tests/diff/         @FerretDB/leads
-/tests/mongo-tools/  @FerretDB/leads
-
-/build/              @AlekSi
-go.mod               @AlekSi
-go.sum               @AlekSi
