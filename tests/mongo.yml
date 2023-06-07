@@ -114,7 +114,7 @@ results:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
 
-      # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
+      # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
 
@@ -124,5 +124,6 @@ results:
       expected_pass: 75
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
+      # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
