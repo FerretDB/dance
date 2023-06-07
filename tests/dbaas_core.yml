@@ -239,6 +239,28 @@ results:
       - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
     fail:
       # TODO: investigate failures.
+      - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
+      - mongo/jstests/core/administrative/getlog2.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/api/api_params_getmore.js # https://github.com/FerretDB/FerretDB/issues/1733
+      - mongo/jstests/core/api/api_version_create.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/api/api_version_find_and_modify.js # unknown field \"apiVersion\"
+      - mongo/jstests/core/api/api_version_new_50_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
+      - mongo/jstests/core/api/api_version_new_51_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
+      - mongo/jstests/core/api/api_version_new_52_language_features.js # https://github.com/FerretDB/FerretDB/issues/1467
+      - mongo/jstests/core/api/api_version_pipeline_stages.js  # Stable API
+      - mongo/jstests/core/api/api_version_unstable_fields.js  # Stable API
+      - mongo/jstests/core/api/api_version_unstable_indexes.js # Stable API
+      - mongo/jstests/core/api/apitest_db_profile_level.js     # Stable API, https://github.com/FerretDB/FerretDB/issues/2398
+      - mongo/jstests/core/capped/capped.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/capped/capped_large_docs.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/capped/capped_max1.js # https://github.com/FerretDB/FerretDB/issues/2813, unhandled element type `Undefined (value) — Deprecated`
+      - mongo/jstests/core/capped/capped_queries_and_id_index.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/capped/capped_resize.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/capped/capped_upsert.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/capped/cappeda.js # https://github.com/FerretDB/FerretDB/issues/2813
+      - mongo/jstests/core/catalog/list_catalog.js # https://github.com/FerretDB/FerretDB/issues/176
+      - mongo/jstests/core/catalog/list_collections1.js # https://github.com/FerretDB/FerretDB/issues/2815
 
   mongodb:
     stats:
