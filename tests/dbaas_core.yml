@@ -245,9 +245,6 @@ results:
       - mongo/jstests/core/api/api_params_getmore.js # https://github.com/FerretDB/FerretDB/issues/1733
       - mongo/jstests/core/api/api_version_create.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/api/api_version_find_and_modify.js # unknown field \"apiVersion\"
-      - mongo/jstests/core/api/api_version_new_50_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
-      - mongo/jstests/core/api/api_version_new_51_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
-      - mongo/jstests/core/api/api_version_new_52_language_features.js # https://github.com/FerretDB/FerretDB/issues/1467
       - mongo/jstests/core/api/api_version_pipeline_stages.js  # Stable API
       - mongo/jstests/core/api/api_version_unstable_fields.js  # Stable API
       - mongo/jstests/core/api/api_version_unstable_indexes.js # Stable API
@@ -261,6 +258,16 @@ results:
       - mongo/jstests/core/capped/cappeda.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/catalog/list_catalog.js # https://github.com/FerretDB/FerretDB/issues/176
       - mongo/jstests/core/catalog/list_collections1.js # https://github.com/FerretDB/FerretDB/issues/2815
+      # --- aggregation tests ---
+      # https://github.com/FerretDB/FerretDB/issues/2275
+      # https://github.com/FerretDB/FerretDB/issues/1469
+      # https://github.com/FerretDB/FerretDB/issues/414
+      # https://github.com/FerretDB/FerretDB/issues/1457
+      - mongo/jstests/core/command_let_variables.js
+      - mongo/jstests/core/command_let_variables_merge_only.js
+      - mongo/jstests/core/api/api_version_new_50_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
+      - mongo/jstests/core/api/api_version_new_51_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
+      - mongo/jstests/core/api/api_version_new_52_language_features.js # https://github.com/FerretDB/FerretDB/issues/1467
 
   mongodb:
     stats:
