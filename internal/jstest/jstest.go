@@ -150,6 +150,7 @@ func runCommand(dir, command string, args ...string) ([]byte, error) {
 		return nil, err
 	}
 
+	// creates the TestData variable and sets the testName property for the shell
 	var eb strings.Builder
 	eb.WriteString("TestData = new Object();")
 	eb.WriteRune(' ')
