@@ -115,7 +115,6 @@ results:
       - mongo/jstests/core/write/update/updateh.js
 
       # https://github.com/FerretDB/dance/issues/294
-      - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
 
@@ -124,6 +123,5 @@ results:
       expected_fail: 2
       expected_pass: 75
     fail:
-      # https://github.com/FerretDB/dance/issues/294
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
