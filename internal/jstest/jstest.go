@@ -150,7 +150,10 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	}
 
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
-	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", evalBuilder(script, nil), script}
+	shellArgs := []string{
+		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
+		"--eval", evalBuilder(script, nil), script,
+	}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
 	cmd := exec.Command(bin, dockerArgs...)
@@ -169,6 +172,7 @@ func evalBuilder(script string, obj map[string]string) string {
 	eb.WriteByte(' ')
 	scriptName := filepath.Base(script)
 	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
+
 	if obj == nil {
 		return eb.String()
 	}
