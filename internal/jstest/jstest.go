@@ -85,8 +85,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	// tokens is a counting semaphore used to enforce a limit of
-	// 20 concurrent runCommand invocations.
+	// tokens is a counting semaphore used to enforce a limit of 20 concurrent calls to runShellWithScript.
 	tokens := make(chan struct{}, 20)
 
 	ch := make(chan *item, len(files))
@@ -109,7 +108,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 				panic(err)
 			}
 
-			it.out, it.err = runCommand(dir, "mongo", rel)
+			it.out, it.err = runShellWithScript(dir, rel)
 			ch <- it
 
 			<-tokens // release the token
@@ -143,9 +142,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runCommand runs command with args inside the mongo container and returns the
-// combined output.
-func runCommand(dir, command string, args ...string) ([]byte, error) {
+// runShellWithScript runs the mongo shell inside a container with file and returns the combined output.
+func runShellWithScript(dir, file string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
@@ -153,14 +151,13 @@ func runCommand(dir, command string, args ...string) ([]byte, error) {
 
 	// creates the TestData variable and sets the testName property for the shell
 	var eb bytes.Buffer
-	eb.WriteString("TestData = new Object();")
-	eb.WriteRune(' ')
-	f := filepath.Base(args[len(args)-1])
-	testName := strings.TrimSuffix(f, filepath.Ext(f))
-	fmt.Fprintf(&eb, "TestData.testName = %q;", testName)
+	eb.WriteString("TestData = new Object(); ")
+	f := filepath.Base(file)
+	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(f, filepath.Ext(f)))
 
-	args = append([]string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String()}, args...)
-	dockerArgs := append([]string{"compose", "run", "-T", "--rm", command}, args...)
+	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
+	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String(), file}
+	dockerArgs = append(dockerArgs, shellArgs...)
 
 	cmd := exec.Command(bin, dockerArgs...)
 	cmd.Dir = dir
