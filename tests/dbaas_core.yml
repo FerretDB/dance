@@ -277,23 +277,18 @@ results:
       - mongo/jstests/core/ddl/capped_convertToCapped1.js # cloneCollectionAsCapped command not implemented
       - mongo/jstests/core/ddl/collMod_index_invalid_option.js # https://github.com/FerretDB/FerretDB/issues/2415
       - mongo/jstests/core/ddl/collation_convert_to_capped.js # collation not implemented
-      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # featureCompatibilityVersion not implemented and relies on FeatureFlagUtil
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # featureCompatibilityVersion not implemented and relies on FeatureFlagUtil
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # featureFlagCollModIndexUnique not implemented and relies on FeatureFlagUtil
+      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # relies on feature flag parameters
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # relies on feature flag parameters
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # relies on feature flag parameters
       - mongo/jstests/core/ddl/create_collection.js # convertToCapped not implemented
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # featureFlagCollModIndexUnique not implemented
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # relies on feature flag parameters
       - mongo/jstests/core/ddl/convert_to_capped.js # convertToCapped not implemented
       - mongo/jstests/core/ddl/create_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
       - mongo/jstests/core/ddl/create_collection_fail_cleanup.js # collation not implemented
       - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js # ignoreUnknownIndexOptions not implemented
       - mongo/jstests/core/ddl/drop_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
       - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
-      - mongo/jstests/core/ddl/index_prepareUnique.js # featureFlagCollModIndexUnique not implemented
-      - mongo/
-      - mongo/
-      - mongo/
-      - mongo/
-      - mongo/
+      - mongo/jstests/core/ddl/index_prepareUnique.js # relies on feature flag parameters
 
   mongodb:
     stats:
