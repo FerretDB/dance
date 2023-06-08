@@ -142,8 +142,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runShellWithScript runs the mongo shell inside a container with file and returns the combined output.
-func runShellWithScript(dir, file string) ([]byte, error) {
+// runShellWithScript runs the mongo shell inside a container with script and returns the combined output.
+func runShellWithScript(dir, script string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
@@ -152,11 +152,11 @@ func runShellWithScript(dir, file string) ([]byte, error) {
 	// create the TestData variable and set the testName property for the shell
 	var eb bytes.Buffer
 	eb.WriteString("TestData = new Object(); ")
-	f := filepath.Base(file)
-	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(f, filepath.Ext(f)))
+	scriptName := filepath.Base(script)
+	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
 
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
-	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String(), file}
+	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String(), script}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
 	cmd := exec.Command(bin, dockerArgs...)
