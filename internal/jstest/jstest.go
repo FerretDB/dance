@@ -152,7 +152,7 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
 		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
-		"--eval", evalBuilder(script, map[string]string{"foo": "bar"}), script,
+		"--eval", evalBuilder(script, nil), script,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
