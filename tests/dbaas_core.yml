@@ -268,6 +268,31 @@ results:
       - mongo/jstests/core/api/api_version_new_50_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
       - mongo/jstests/core/api/api_version_new_51_language_features.js # https://github.com/FerretDB/FerretDB/issues/2590
       - mongo/jstests/core/api/api_version_new_52_language_features.js # https://github.com/FerretDB/FerretDB/issues/1467
+      - mongo/jstests/core/command_let_variables_merge_only.js # https://github.com/FerretDB/FerretDB/issues/1430
+      - mongo/jstests/core/compound_index_max_fields.js # https://github.com/FerretDB/FerretDB/issues/2819
+      # --- end of aggregation tests ---
+      - mongo/jstests/core/compound_wildcard_index_validation.js # not implemented
+      - mongo/jstests/core/datasize_validation.js # keyPattern, min, max are not implemented
+      - mongo/jstests/core/dbhash.js # not implemented
+      - mongo/jstests/core/ddl/capped_convertToCapped1.js # cloneCollectionAsCapped command not implemented
+      - mongo/jstests/core/ddl/collMod_index_invalid_option.js # https://github.com/FerretDB/FerretDB/issues/2415
+      - mongo/jstests/core/ddl/collation_convert_to_capped.js # collation not implemented
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # getParameter and featureCompatibilityVersion not implemented
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # getParameter and featureFlagCollModIndexUnique not implemented
+      - mongo/jstests/core/ddl/create_collection.js # convertToCapped not implemented
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
 
   mongodb:
     stats:
