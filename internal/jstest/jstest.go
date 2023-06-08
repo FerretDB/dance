@@ -149,14 +149,8 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 		return nil, err
 	}
 
-	// create the TestData variable and set the testName property for the shell
-	var eb bytes.Buffer
-	eb.WriteString("TestData = new Object(); ")
-	scriptName := filepath.Base(script)
-	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
-
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
-	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", eb.String(), script}
+	shellArgs := []string{"--verbose", "--norc", "mongodb://host.docker.internal:27017/", "--eval", evalBuilder(script, nil), script}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
 	cmd := exec.Command(bin, dockerArgs...)
@@ -165,4 +159,26 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	return cmd.CombinedOutput()
+}
+
+// evalBuilder creates the TestData object and sets the testName property for the shell.
+// It optionally sets additional properties on the TestData object.
+func evalBuilder(script string, obj map[string]string) string {
+	var eb bytes.Buffer
+	eb.WriteString("TestData = new Object();")
+	eb.WriteByte(' ')
+	scriptName := filepath.Base(script)
+	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
+	if obj == nil {
+		return eb.String()
+	}
+
+	eb.WriteByte(' ')
+
+	for key, value := range obj {
+		fmt.Fprintf(&eb, "TestData.%s = %s;", key, value)
+		eb.WriteByte(' ')
+	}
+
+	return eb.String()
 }
