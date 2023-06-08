@@ -149,7 +149,7 @@ func runShellWithScript(dir, file string) ([]byte, error) {
 		return nil, err
 	}
 
-	// creates the TestData variable and sets the testName property for the shell
+	// create the TestData variable and set the testName property for the shell
 	var eb bytes.Buffer
 	eb.WriteString("TestData = new Object(); ")
 	f := filepath.Base(file)
