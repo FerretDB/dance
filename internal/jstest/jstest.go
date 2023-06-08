@@ -152,7 +152,7 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
 		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
-		"--eval", evalBuilder(script, nil), script,
+		"--eval", evalBuilder(script, map[string]string{"foo": "bar"}), script,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
@@ -179,8 +179,17 @@ func evalBuilder(script string, obj map[string]string) string {
 
 	eb.WriteByte(' ')
 
+	// avoids extraneous space
+	i := len(obj) - 1
+
 	for key, value := range obj {
 		fmt.Fprintf(&eb, "TestData.%s = %s;", key, value)
+
+		if i == 0 {
+			break
+		}
+		i--
+
 		eb.WriteByte(' ')
 	}
 
