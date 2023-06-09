@@ -289,6 +289,8 @@ results:
       - mongo/jstests/core/ddl/drop_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
       - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
       - mongo/jstests/core/ddl/index_prepareUnique.js # relies on feature flag parameters
+      - mongo/jstests/core/ddl/rename_collection.js # dropTarget not implemented
+      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
 
   mongodb:
     stats:
