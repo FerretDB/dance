@@ -159,7 +159,7 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	cmd := exec.Command(bin, dockerArgs...)
 	cmd.Dir = dir
 
-	log.Printf("Running %s", script)
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	return cmd.CombinedOutput()
 }
