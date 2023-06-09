@@ -224,8 +224,9 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 553
-      expected_pass: 254
+      expected_fail: 0
+      unexpected_fail: 711
+      expected_pass: 256
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
     pass:
@@ -243,5 +244,5 @@ results:
   mongodb:
     stats:
       expected_fail: 0
-      unexpected_fail: 71
-      expected_pass: 897
+      unexpected_fail: 53
+      expected_pass: 915

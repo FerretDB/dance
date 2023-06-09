@@ -28,8 +28,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 40
-      expected_pass: 37
+      expected_fail: 39
+      expected_pass: 38
 
     fail:
       # https://docs.ferretdb.io/diff/
@@ -114,18 +114,16 @@ results:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
 
-      # https://github.com/FerretDB/dance/issues/294
-      - mongo/jstests/readonly/get_more.js
+      # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
 
   mongodb:
     stats:
-      expected_fail: 3
-      expected_pass: 74
-
+      expected_fail: 2
+      expected_pass: 75
     fail:
-      # https://github.com/FerretDB/dance/issues/294
+      # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
+      # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
-      - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/list_sessions.js
