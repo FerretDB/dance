@@ -291,6 +291,57 @@ results:
       - mongo/jstests/core/ddl/index_prepareUnique.js # relies on feature flag parameters
       - mongo/jstests/core/ddl/rename_collection.js # dropTarget not implemented
       - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
+      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
+      - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
+      - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
+      - mongo/jstests/core/ddl/rename_collection_to_itself.js # dropTarget not implemented
+      - mongo/jstests/core/ddl/ttl_index_options.js # expireAfterSeconds not implemented
+      - mongo/jstests/core/diagdata.js # getDiagnosticData not implemented
+      - mongo/jstests/core/doc_validation/bypass_doc_validation.js # collMod not implemented
+      - mongo/jstests/core/doc_validation/doc_validation.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/doc_validation/doc_validation_encrypt_keywords.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/doc_validation/doc_validation_error.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/doc_validation/doc_validation_invalid_validators.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/doc_validation/doc_validation_options.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/doc_validation_with_now_variable.js # https://github.com/FerretDB/FerretDB/issues/77
+      - mongo/jstests/core/field_name_validation.js # document resitrictions we do not allow dotted field names
+      - mongo/jstests/core/filemd5.js # filemd5 not implemented
+      - mongo/jstests/core/function_string_representations.js # mapreduce not implemented
+      - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/index/covered/covered_index_negative_1.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js # cannot do exclusion on _id field
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
+      - mongo/
 
   mongodb:
     stats:
