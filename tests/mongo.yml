@@ -11,7 +11,6 @@ args:
   - mongo/jstests/aggregation/illegal_reference_in_match.js
   - mongo/jstests/aggregation/match*.js
   - mongo/jstests/aggregation/use*.js
-  - mongo/jstests/aggregation/testall.js
   - mongo/jstests/aggregation/accumulators/min_n_max_n.js
   - mongo/jstests/aggregation/expressions/add.js
   - mongo/jstests/aggregation/expressions/date_from_string.js
@@ -27,6 +26,7 @@ args:
   - mongo/jstests/aggregation/bugs/sort_arrays.js
   - mongo/jstests/aggregation/bugs/cond.js
   - mongo/jstests/aggregation/bugs/firstlast.js
+  - mongo/jstests/aggregation/testall.js
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
@@ -51,8 +51,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 39
-      expected_pass: 38
+      expected_fail: 64
+      expected_pass: 39
 
     fail:
       # https://docs.ferretdb.io/diff/
@@ -141,14 +141,10 @@ results:
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
 
-      # --- aggregation tests ---
-      - mongo/jstests/aggregation/
-      # --- end of aggregation tests ---
-
   mongodb:
     stats:
-      expected_fail: 2
-      expected_pass: 75
+      expected_fail: 6
+      expected_pass: 97
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
