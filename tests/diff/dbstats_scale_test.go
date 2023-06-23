@@ -58,7 +58,7 @@ func TestDBStatsScale(t *testing.T) {
 			expectedFerretDBErr: mongo.CommandError{
 				Name:    "Location51024",
 				Code:    51024,
-				Message: "BSON field 'scale' value must be >= 1, actual value '-2147483648'",
+				Message: "BSON field 'scale' value must be >= 1, actual value '-9223372036854775808'",
 			},
 		},
 		"String": {
