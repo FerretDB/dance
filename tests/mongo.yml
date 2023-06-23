@@ -25,7 +25,6 @@ args:
   - mongo/jstests/aggregation/bugs/sort_arrays.js
   - mongo/jstests/aggregation/bugs/cond.js
   - mongo/jstests/aggregation/bugs/firstlast.js
-  - mongo/jstests/aggregation/bugs/server11118.js
   - mongo/jstests/aggregation/testall.js
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
