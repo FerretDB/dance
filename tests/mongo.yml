@@ -13,7 +13,6 @@ args:
   - mongo/jstests/aggregation/max_subpipeline_depth.js
   - mongo/jstests/aggregation/use*.js
   - mongo/jstests/aggregation/accumulators/min_n_max_n.js
-  - mongo/jstests/aggregation/expressions/date_from_string.js
   - mongo/jstests/aggregation/expressions/convert.js
   - mongo/jstests/aggregation/expressions/filter.js
   - mongo/jstests/aggregation/expressions/set.js
@@ -50,7 +49,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 64
+      expected_fail: 61
       expected_pass: 39
 
     fail:
@@ -143,7 +142,7 @@ results:
   mongodb:
     stats:
       expected_fail: 2
-      expected_pass: 97
+      expected_pass: 98
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
