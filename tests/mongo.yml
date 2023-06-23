@@ -49,10 +49,27 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 61
+      expected_fail: 39
       expected_pass: 39
 
     fail:
+      # --- aggregation tests ---
+      - mongo/jstests/aggregation/accumulators/min_n_max_n.js # $group accumulator \"$minN\" is not implemented yet
+      - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+      - mongo/jstests/aggregation/bugs/cond.js # The operator $cond is not implemented yet
+      - mongo/jstests/aggregation/bugs/firstlast.js # $group accumulator \"$first\" is not implemented yet
+      - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/bugs/match.js # did not throw exception
+      - mongo/jstests/aggregation/explain.js # aggregate: support for field \"explain\" with value true is not implemented yet
+      - mongo/jstests/aggregation/expressions/convert.js # https://github.com/FerretDB/FerretDB/issues/66
+      - mongo/jstests/aggregation/expressions/filter.js # unhandled element type `Undefined (value) Deprecated`
+      - mongo/jstests/aggregation/expressions/n_expressions.js # The operator $minN is not implemented yet
+      - mongo/jstests/aggregation/expressions/not.js # The operator $not is not implemented yet
+      - mongo/jstests/aggregation/expressions/rand.js # The operator $rand is not implemented yet
+      - mongo/jstests/aggregation/expressions/set.js # The operator $setUnion is not implemented yet
+      - mongo/jstests/aggregation/match_swapping_renamed_fields.js # https://github.com/FerretDB/FerretDB/issues/2768
+      # --- end of aggregation tests ---
+
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
       - mongo/jstests/core/query/all/all2.js
