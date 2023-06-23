@@ -9,16 +9,15 @@ args:
   - mongo/jstests/aggregation/aggregation_with_uuids.js
   - mongo/jstests/aggregation/explain.js
   - mongo/jstests/aggregation/illegal_reference_in_match.js
-  - mongo/jstests/aggregation/match*.js
+  - mongo/jstests/aggregation/match_swapping_renamed_fields.js
+  - mongo/jstests/aggregation/max_subpipeline_depth.js
   - mongo/jstests/aggregation/use*.js
   - mongo/jstests/aggregation/accumulators/min_n_max_n.js
-  - mongo/jstests/aggregation/expressions/add.js
   - mongo/jstests/aggregation/expressions/date_from_string.js
   - mongo/jstests/aggregation/expressions/convert.js
   - mongo/jstests/aggregation/expressions/filter.js
   - mongo/jstests/aggregation/expressions/set.js
   - mongo/jstests/aggregation/expressions/rand.js
-  - mongo/jstests/aggregation/expressions/subtract.js
   - mongo/jstests/aggregation/expressions/not.js
   - mongo/jstests/aggregation/expressions/n_expressions.js
   - mongo/jstests/aggregation/bugs/match.js
@@ -26,6 +25,7 @@ args:
   - mongo/jstests/aggregation/bugs/sort_arrays.js
   - mongo/jstests/aggregation/bugs/cond.js
   - mongo/jstests/aggregation/bugs/firstlast.js
+  - mongo/jstests/aggregation/bugs/server11118.js
   - mongo/jstests/aggregation/testall.js
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
@@ -143,7 +143,7 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 6
+      expected_fail: 2
       expected_pass: 97
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
