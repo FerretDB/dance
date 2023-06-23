@@ -4,6 +4,29 @@ runner: jstest
 # To exclude a file, use the ! prefix and enclose the file name in quotes.
 # Put the exclusion patterns before inclusion patterns.
 args:
+  - mongo/jstests/aggregation/ifnull.js
+  - mongo/jstests/aggregation/agg_infinite_recursion.js
+  - mongo/jstests/aggregation/aggregation_with_uuids.js
+  - mongo/jstests/aggregation/explain.js
+  - mongo/jstests/aggregation/illegal_reference_in_match.js
+  - mongo/jstests/aggregation/match*.js
+  - mongo/jstests/aggregation/use*.js
+  - mongo/jstests/aggregation/testall.js
+  - mongo/jstests/aggregation/accumulators/min_n_max_n.js
+  - mongo/jstests/aggregation/expressions/add.js
+  - mongo/jstests/aggregation/expressions/date_from_string.js
+  - mongo/jstests/aggregation/expressions/convert.js
+  - mongo/jstests/aggregation/expressions/filter.js
+  - mongo/jstests/aggregation/expressions/set.js
+  - mongo/jstests/aggregation/expressions/rand.js
+  - mongo/jstests/aggregation/expressions/subtract.js
+  - mongo/jstests/aggregation/expressions/not.js
+  - mongo/jstests/aggregation/expressions/n_expressions.js
+  - mongo/jstests/aggregation/bugs/match.js
+  - mongo/jstests/aggregation/bugs/groupMissing.js
+  - mongo/jstests/aggregation/bugs/sort_arrays.js
+  - mongo/jstests/aggregation/bugs/cond.js
+  - mongo/jstests/aggregation/bugs/firstlast.js
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
@@ -117,6 +140,10 @@ results:
       # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+
+      # --- aggregation tests ---
+      - mongo/jstests/aggregation/
+      # --- end of aggregation tests ---
 
   mongodb:
     stats:
