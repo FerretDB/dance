@@ -55,16 +55,16 @@ results:
     fail:
       # --- aggregation tests ---
       - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
-      - mongo/jstests/aggregation/accumulators/min_n_max_n.js # $group accumulator \"$minN\" is not implemented yet
+      - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
       - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where.
-      - mongo/jstests/aggregation/bugs/cond.js # The operator $cond is not implemented yet
-      - mongo/jstests/aggregation/bugs/firstlast.js # $group accumulator \"$first\" is not implemented yet
+      - mongo/jstests/aggregation/bugs/cond.js # https://github.com/FerretDB/FerretDB/issues/2892
+      - mongo/jstests/aggregation/bugs/firstlast.js # https://github.com/FerretDB/FerretDB/issues/2894
       - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
       - mongo/jstests/aggregation/bugs/match.js # did not throw exception
-      - mongo/jstests/aggregation/explain.js # aggregate: support for field \"explain\" with value true is not implemented yet
+      - mongo/jstests/aggregation/explain.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/expressions/convert.js # https://github.com/FerretDB/FerretDB/issues/66
       - mongo/jstests/aggregation/expressions/filter.js # unhandled element type `Undefined (value) Deprecated`
-      - mongo/jstests/aggregation/expressions/n_expressions.js # The operator $minN is not implemented yet
+      - mongo/jstests/aggregation/expressions/n_expressions.js # https://github.com/FerretDB/FerretDB/issues/2125
       - mongo/jstests/aggregation/expressions/not.js # The operator $not is not implemented yet
       - mongo/jstests/aggregation/expressions/rand.js # The operator $rand is not implemented yet
       - mongo/jstests/aggregation/expressions/set.js # The operator $setUnion is not implemented yet
@@ -72,6 +72,10 @@ results:
       - mongo/jstests/aggregation/aggregation_with_uuids.js # we do not generate collection UUIDs yet
       - mongo/jstests/aggregation/illegal_reference_in_match.js # did not throw exception
       - mongo/jstests/aggregation/max_subpipeline_depth.js # `aggregate` stage \"$unionWith\" is not implemented yet
+      - mongo/jstests/aggregation/testall.js # https://github.com/FerretDB/FerretDB/issues/2914
+      - mongo/jstests/aggregation/use_query_project_and_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
       # --- end of aggregation tests ---
 
       # https://docs.ferretdb.io/diff/
