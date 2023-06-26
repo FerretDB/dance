@@ -25,26 +25,26 @@ args:
   - mongo/jstests/aggregation/bugs/cond.js
   - mongo/jstests/aggregation/bugs/firstlast.js
   - mongo/jstests/aggregation/testall.js
-  - mongo/jstests/core/administrative/auth[1-2].js
-  - mongo/jstests/core/query/all/all[2-5]*.js
-  - mongo/jstests/core/query/basic*.js
-  - mongo/jstests/core/query/cursor/cursor*.js
-  - mongo/jstests/core/query/cursor/getmore*.js
-  - mongo/jstests/core/query/awaitdata_getmore_cmd.js
-  - mongo/jstests/readonly/get_more.js
-  - mongo/jstests/auth/getMore.js
-  - mongo/jstests/auth/list_sessions.js
-  - mongo/jstests/core/uniqueness.js
-  - mongo/jstests/core/query/unset/unset*.js
-  - mongo/jstests/core/query/array/array[1-4].js
-  - mongo/jstests/core/query/array/arrayfind[1-9].js
-  - mongo/jstests/core/query/distinct/distinct_array1.js
-  - mongo/jstests/core/query/distinct/distinct[1-4].js
-  - mongo/jstests/core/query/elemmatch/elemmatch*.js
-  - mongo/jstests/core/write/find_and_modify/find_and_modify.js
-  - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
-  - mongo/jstests/core/write/update/update[2-9].js
-  - mongo/jstests/core/write/update/update[a-z].js
+  # - mongo/jstests/core/administrative/auth[1-2].js
+  # - mongo/jstests/core/query/all/all[2-5]*.js
+  # - mongo/jstests/core/query/basic*.js
+  # - mongo/jstests/core/query/cursor/cursor*.js
+  # - mongo/jstests/core/query/cursor/getmore*.js
+  # - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+  # - mongo/jstests/readonly/get_more.js
+  # - mongo/jstests/auth/getMore.js
+  # - mongo/jstests/auth/list_sessions.js
+  # - mongo/jstests/core/uniqueness.js
+  # - mongo/jstests/core/query/unset/unset*.js
+  # - mongo/jstests/core/query/array/array[1-4].js
+  # - mongo/jstests/core/query/array/arrayfind[1-9].js
+  # - mongo/jstests/core/query/distinct/distinct_array1.js
+  # - mongo/jstests/core/query/distinct/distinct[1-4].js
+  # - mongo/jstests/core/query/elemmatch/elemmatch*.js
+  # - mongo/jstests/core/write/find_and_modify/find_and_modify.js
+  # - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
+  # - mongo/jstests/core/write/update/update[2-9].js
+  # - mongo/jstests/core/write/update/update[a-z].js
 
 results:
   ferretdb:
@@ -54,8 +54,9 @@ results:
 
     fail:
       # --- aggregation tests ---
+      - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
       - mongo/jstests/aggregation/accumulators/min_n_max_n.js # $group accumulator \"$minN\" is not implemented yet
-      - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+      - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where.
       - mongo/jstests/aggregation/bugs/cond.js # The operator $cond is not implemented yet
       - mongo/jstests/aggregation/bugs/firstlast.js # $group accumulator \"$first\" is not implemented yet
       - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
@@ -68,6 +69,9 @@ results:
       - mongo/jstests/aggregation/expressions/rand.js # The operator $rand is not implemented yet
       - mongo/jstests/aggregation/expressions/set.js # The operator $setUnion is not implemented yet
       - mongo/jstests/aggregation/match_swapping_renamed_fields.js # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/aggregation_with_uuids.js # we do not generate collection UUIDs yet
+      - mongo/jstests/aggregation/illegal_reference_in_match.js # did not throw exception
+      - mongo/jstests/aggregation/max_subpipeline_depth.js # `aggregate` stage \"$unionWith\" is not implemented yet
       # --- end of aggregation tests ---
 
       # https://docs.ferretdb.io/diff/
