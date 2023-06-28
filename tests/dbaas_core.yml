@@ -381,144 +381,144 @@ results:
       - mongo/jstests/core/index/geo/geo_big_polygon2.js # Index key value \"2dsphere\" is not implemented yet
       - mongo/jstests/core/index/geo/geo_big_polygon3.js # did not throw exception : within point with strictCRS
       - mongo/jstests/core/index/geo/geo_borders.js # Index key value \"2d\" is not implemented yet
-      - mongo/jstests/core/index/geo/geo_box1.js
-      - mongo/jstests/core/index/geo/geo_box1_noindex.js
-      - mongo/jstests/core/index/geo/geo_box2.js
-      - mongo/jstests/core/index/geo/geo_box3.js
-      - mongo/jstests/core/index/geo/geo_center_sphere1.js
-      - mongo/jstests/core/index/geo/geo_center_sphere2.js
-      - mongo/jstests/core/index/geo/geo_circle1.js
-      - mongo/jstests/core/index/geo/geo_circle1_noindex.js
-      - mongo/jstests/core/index/geo/geo_circle2.js
-      - mongo/jstests/core/index/geo/geo_circle2a.js
-      - mongo/jstests/core/index/geo/geo_circle3.js
-      - mongo/jstests/core/index/geo/geo_circle4.js
-      - mongo/jstests/core/index/geo/geo_circle5.js
-      - mongo/jstests/core/index/geo/geo_distinct.js
-      - mongo/jstests/core/index/geo/geo_exactfetch.js
-      - mongo/jstests/core/index/geo/geo_fiddly_box.js
-      - mongo/jstests/core/index/geo/geo_fiddly_box2.js
-      - mongo/jstests/core/index/geo/geo_invalid_2d_params.js
-      - mongo/jstests/core/index/geo/geo_invalid_polygon.js
-      - mongo/jstests/core/index/geo/geo_max.js
-      - mongo/jstests/core/index/geo/geo_mindistance.js
-      - mongo/jstests/core/index/geo/geo_mindistance_boundaries.js
-      - mongo/jstests/core/index/geo/geo_multikey0.js
-      - mongo/jstests/core/index/geo/geo_multikey1.js
-      - mongo/jstests/core/index/geo/geo_multinest0.js
-      - mongo/jstests/core/index/geo/geo_multinest1.js
-      - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js
-      - mongo/jstests/core/index/geo/geo_near_point_query.js
-      - mongo/jstests/core/index/geo/geo_near_random1.js
-      - mongo/jstests/core/index/geo/geo_near_random2.js
-      - mongo/jstests/core/index/geo/geo_near_tailable.js
-      - mongo/jstests/core/index/geo/geo_nearwithin.js
-      - mongo/jstests/core/index/geo/geo_oob_sphere.js
-      - mongo/jstests/core/index/geo/geo_operator_crs.js
-      - mongo/jstests/core/index/geo/geo_or.js
-      - mongo/jstests/core/index/geo/geo_poly_edge.js
-      - mongo/jstests/core/index/geo/geo_poly_line.js
-      - mongo/jstests/core/index/geo/geo_polygon1.js
-      - mongo/jstests/core/index/geo/geo_polygon1_noindex.js
-      - mongo/jstests/core/index/geo/geo_polygon2.js
-      - mongo/jstests/core/index/geo/geo_polygon3.js
-      - mongo/jstests/core/index/geo/geo_queryoptimizer.js
-      - mongo/jstests/core/index/geo/geo_regex0.js
-      - mongo/jstests/core/index/geo/geo_s2cursorlimitskip.js
-      - mongo/jstests/core/index/geo/geo_s2dedupnear.js
-      - mongo/jstests/core/index/geo/geo_s2descindex.js
-      - mongo/jstests/core/index/geo/geo_s2disjoint_holes.js
-      - mongo/jstests/core/index/geo/geo_s2dupe_points.js
-      - mongo/jstests/core/index/geo/geo_s2edgecases.js
-      - mongo/jstests/core/index/geo/geo_s2exact.js
-      - mongo/jstests/core/index/geo/geo_s2explain.js
-      - mongo/jstests/core/index/geo/geo_s2index.js
-      - mongo/jstests/core/index/geo/geo_s2indexoldformat.js
-      - mongo/jstests/core/index/geo/geo_s2indexversion1.js
-      - mongo/jstests/core/index/geo/geo_s2intersection.js
-      - mongo/jstests/core/index/geo/geo_s2largewithin.js
-      - mongo/jstests/core/index/geo/geo_s2meridian.js
-      - mongo/jstests/core/index/geo/geo_s2multi.js
-      - mongo/jstests/core/index/geo/geo_s2near.js
-      - mongo/jstests/core/index/geo/geo_s2nearComplex.js
-      - mongo/jstests/core/index/geo/geo_s2near_equator_opposite.js
-      - mongo/jstests/core/index/geo/geo_s2nearcorrect.js
-      - mongo/jstests/core/index/geo/geo_s2nearwithin.js
-      - mongo/jstests/core/index/geo/geo_s2nongeoarray.js
-      - mongo/jstests/core/index/geo/geo_s2nonstring.js
-      - mongo/jstests/core/index/geo/geo_s2oddshapes.js
-      - mongo/jstests/core/index/geo/geo_s2ordering.js
-      - mongo/jstests/core/index/geo/geo_s2overlappingpolys.js
-      - mongo/jstests/core/index/geo/geo_s2polywithholes.js
-      - mongo/jstests/core/index/geo/geo_s2sparse.js
-      - mongo/jstests/core/index/geo/geo_s2twofields.js
-      - mongo/jstests/core/index/geo/geo_s2validindex.js
-      - mongo/jstests/core/index/geo/geo_s2within.js
-      - mongo/jstests/core/index/geo/geo_s2within_line_polygon_sphere.js
-      - mongo/jstests/core/index/geo/geo_small_large.js
-      - mongo/jstests/core/index/geo/geo_sort1.js
-      - mongo/jstests/core/index/geo/geo_uniqueDocs.js
-      - mongo/jstests/core/index/geo/geo_uniqueDocs2.js
-      - mongo/jstests/core/index/geo/geo_update.js
-      - mongo/jstests/core/index/geo/geo_update1.js
-      - mongo/jstests/core/index/geo/geo_update2.js
-      - mongo/jstests/core/index/geo/geo_update_dedup.js
-      - mongo/jstests/core/index/geo/geo_validate.js
-      - mongo/jstests/core/index/geo/geo_withinquery.js
-      - mongo/jstests/core/index/geo/geoa.js
-      - mongo/jstests/core/index/geo/geob.js
-      - mongo/jstests/core/index/geo/geoc.js
-      - mongo/jstests/core/index/geo/geod.js
-      - mongo/jstests/core/index/geo/geoe.js
-      - mongo/jstests/core/index/geo/geof.js
-      - mongo/jstests/core/index/geo/geonear_cmd_input_validation.js
-      - mongo/jstests/core/index/geo/geonear_key.js
-      - mongo/jstests/core/index/hashed/hashed_index_collation.js
-      - mongo/jstests/core/index/hashed/hashed_index_covered_queries.js
-      - mongo/jstests/core/index/hashed/hashed_index_queries.js
-      - mongo/jstests/core/index/hashed/hashed_index_queries_with_logical_operators.js
-      - mongo/jstests/core/index/hashed/hashed_index_sort.js
-      - mongo/jstests/core/index/hashed/hashed_index_with_arrays.js
-      - mongo/jstests/core/index/hidden_index.js
-      - mongo/jstests/core/index/index13.js
-      - mongo/jstests/core/index/index4.js
-      - mongo/jstests/core/index/index8.js
-      - mongo/jstests/core/index/index_bigkeys.js
-      - mongo/jstests/core/index/index_bounds_code.js
-      - mongo/jstests/core/index/index_bounds_maxkey.js
-      - mongo/jstests/core/index/index_bounds_minkey.js
-      - mongo/jstests/core/index/index_bounds_number_edge_cases.js
-      - mongo/jstests/core/index/index_bounds_object.js
-      - mongo/jstests/core/index/index_bounds_pipe.js
-      - mongo/jstests/core/index/index_bounds_timestamp.js
-      - mongo/jstests/core/index/index_check2.js
-      - mongo/jstests/core/index/index_check3.js
-      - mongo/jstests/core/index/index_check6.js
-      - mongo/jstests/core/index/index_check7.js
-      - mongo/jstests/core/index/index_count_scan.js
-      - mongo/jstests/core/index/index_decimal.js
-      - mongo/jstests/core/index/index_diag.js
-      - mongo/jstests/core/index/index_filter_catalog_independent.js
-      - mongo/jstests/core/index/index_filter_collation.js
-      - mongo/jstests/core/index/index_filter_commands_invalidate_plan_cache_entries.js
-      - mongo/jstests/core/index/index_filter_on_hidden_index.js
-      - mongo/jstests/core/index/index_large_and_small_dates.js
-      - mongo/jstests/core/index/index_many.js
-      - mongo/jstests/core/index/index_many2.js
-      - mongo/jstests/core/index/index_multikey.js
-      - mongo/jstests/core/index/index_multiple_compatibility.js
-      - mongo/jstests/core/index/index_partial_2dsphere.js
-      - mongo/jstests/core/index/index_partial_create_drop.js
-      - mongo/jstests/core/index/index_partial_read_ops.js
-      - mongo/jstests/core/index/index_partial_validate.js
-      - mongo/jstests/core/index/index_partial_write_ops.js
-      - mongo/jstests/core/index/index_plugins.js
-      - mongo/jstests/core/index/index_signature.js
-      - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js
-      - mongo/jstests/core/index/index_sparse1.js
-      - mongo/jstests/core/index/index_sparse2.js
-      - mongo/jstests/core/index/indexa.js
-      - mongo/jstests/core/index/indexapi.js
+      - mongo/jstests/core/index/geo/geo_box1.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_box1_noindex.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_box2.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_box3.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_center_sphere1.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_center_sphere2.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle1.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle1_noindex.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle2.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle2a.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle3.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle4.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_circle5.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_distinct.js # "errmsg" : "Index key value \"2dsphere\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_exactfetch.js # "errmsg" : "unknown operator: $nearSphere"
+      - mongo/jstests/core/index/geo/geo_fiddly_box.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_fiddly_box2.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_invalid_2d_params.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_invalid_polygon.js # 15:7 assert failed : Error message didn't contain document _id
+      - mongo/jstests/core/index/geo/geo_max.js # "errmsg" : "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_mindistance.js # "errmsg" : "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_mindistance_boundaries.js # "errmsg" : "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_multikey0.js # geo_multikey0.js:8:8 assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/geo/geo_multikey1.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_multinest0.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_multinest1.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js # "errmsg" : "Index key value \"2dsphere\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_near_point_query.js # "errmsg" : "Index key value \"2dsphere\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_near_random1.js # "errmsg" : "create: support for field \"size\" with value 10000 is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_near_random2.js # projection expression { $meta: \"geoNearDistance\" } is not supported
+      - mongo/jstests/core/index/geo/geo_near_tailable.js # "errmsg" : "create: support for field \"size\" with value 10000 is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_nearwithin.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_oob_sphere.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_operator_crs.js # "errmsg" : "Index key value \"2dsphere\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_or.js # "errmsg" : "unknown operator: $nearSphere"
+      - mongo/jstests/core/index/geo/geo_poly_edge.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_poly_line.js # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_polygon1.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_polygon1_noindex.j # "errmsg" : "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_polygon2.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_polygon3.js # "errmsg" : "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_queryoptimizer.js # "errmsg" : "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_regex0.js # "errmsg" : "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_s2cursorlimitskip.js # "unknown operator: $geoNear"
+      - mongo/jstests/core/index/geo/geo_s2dedupnear.js # uncaught exception: Error: [0] != [1] are not equal
+      - mongo/jstests/core/index/geo/geo_s2descindex.js # "unknown operator: $geoWithin"
+      - mongo/jstests/core/index/geo/geo_s2disjoint_holes.js # Error: did not throw exception : parsing a polygon with non-overlapping holes.
+      - mongo/jstests/core/index/geo/geo_s2dupe_points.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_s2edgecases.js # assert: [0] != [2] are not equal
+      - mongo/jstests/core/index/geo/geo_s2exact.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/geo/geo_s2explain.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_s2index.js # uncaught exception: Error: error hasNext: false
+      - mongo/jstests/core/index/geo/geo_s2indexoldformat.js # unknown operator: $geoIntersects"
+      - mongo/jstests/core/index/geo/geo_s2indexversion1.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_s2intersection.js # "unknown operator: $geoIntersects"
+      - mongo/jstests/core/index/geo/geo_s2largewithin.js # "unknown operator: $geoWithin"
+      - mongo/jstests/core/index/geo/geo_s2meridian.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_s2multi.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_s2near.js # `aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_s2nearComplex.js # network error
+      - mongo/jstests/core/index/geo/geo_s2near_equator_opposite.js # "unknown operator: $nearSphere"
+      - mongo/jstests/core/index/geo/geo_s2nearcorrect.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/geo/geo_s2nearwithin.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_s2nongeoarray.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/geo/geo_s2nonstring.js # "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_s2oddshapes.js # "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_s2ordering.js # "Index key value \"2dsphere\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo_s2overlappingpolys.js # assert: [0] != [1] are not equal
+      - mongo/jstests/core/index/geo/geo_s2polywithholes.js # "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_s2sparse.js # uncaught exception: TypeError: coll.validate().keysPerIndex is undefined
+      - mongo/jstests/core/index/geo/geo_s2twofields.js # TypeError: t.find(...).explain(...).executionStats is undefined
+      - mongo/jstests/core/index/geo/geo_s2validindex.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_s2within.js # assert: [0] != [1] are not equal
+      - mongo/jstests/core/index/geo/geo_s2within_line_polygon_sphere.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_small_large.js # projection expression { $meta: \"geoNearDistance\" } is not supported
+      - mongo/jstests/core/index/geo/geo_sort1.js # "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_uniqueDocs.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_uniqueDocs2.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/geo/geo_update.js # assert: [4] != [1] are not equal
+      - mongo/jstests/core/index/geo/geo_update1.js # network error
+      - mongo/jstests/core/index/geo/geo_update2.js # "unknown operator: $within"
+      - mongo/jstests/core/index/geo/geo_update_dedup.js # assert: [1] != [0] are not equal : duplicates returned from query
+      - mongo/jstests/core/index/geo/geo_validate.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_withinquery.js # unknown operator: $within
+      - mongo/jstests/core/index/geo/geoa.js # "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geob.js # aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geod.js # aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geoe.js # uknown operator: $geoWithin
+      - mongo/jstests/core/index/geo/geof.js # unknown operator: $near
+      - mongo/jstests/core/index/geo/geoc.js # aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geonear_cmd_input_validation.js # aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geonear_key.js # aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_collation.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_covered_queries.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_queries.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_queries_with_logical_operators.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_sort.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hashed/hashed_index_with_arrays.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/index/hidden_index.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index13.js # unknown operator: b
+      - mongo/jstests/core/index/index4.js # assert failed : len1
+      - mongo/jstests/core/index/index8.js # assert failed : B1 { "v" : 2, "key" : { "b" : 1 }, "name" : "b_1" }
+      - mongo/jstests/core/index/index_bigkeys.js # ERROR: index row requires 33896 bytes, maximum size is 8191 (SQLSTATE 54000)
+      - mongo/jstests/core/index/index_bounds_code.js # network error
+      - mongo/jstests/core/index/index_bounds_maxkey.js # network error
+      - mongo/jstests/core/index/index_bounds_minkey.js # network error
+      - mongo/jstests/core/index/index_bounds_number_edge_cases.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/index/index_bounds_object.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_bounds_pipe.js # uncought exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_bounds_timestamp.js # uncaught exception: TypeError: root is undefined
+      - mongo/jstests/core/index/index_check2.js # TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_check3.js # uncaught exception: TypeError: explain.executionStats is undefined
+      - mongo/jstests/core/index/index_check6.js # uncaught exception: TypeError: explain.executionStats is undefined
+      - mongo/jstests/core/index/index_check7.js # uncaught exception: TypeError: explain.executionStats is undefined
+      - mongo/jstests/core/index/index_count_scan.js # nested arrays are not supported
+      - mongo/jstests/core/index/index_decimal.js # network error
+      - mongo/jstests/core/index/index_diag.js # support for field \"returnKey\" with non-default value true is not implemented yet
+      - mongo/jstests/core/index/index_filter_catalog_independent.js # "no such command: 'planCacheSetFilter'"
+      - mongo/jstests/core/index/index_filter_collation.js # create: support for field \"collation\" with value &{[{fr locale} {2 strength}]} is not implemented yet
+      - mongo/jstests/core/index/index_filter_commands_invalidate_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
+      - mongo/jstests/core/index/index_filter_on_hidden_index.js # "no such command: 'planCacheSetFilter'"
+      - mongo/jstests/core/index/index_large_and_small_dates.js # "Index option \"v\" is unknown"
+      - mongo/jstests/core/index/index_many.js # assert: command worked when it should have failed
+      - mongo/jstests/core/index/index_many2.js # assert: command worked when it should have failed
+      - mongo/jstests/core/index/index_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_multiple_compatibility.js # Index key value \"collation\" is not implemented yet
+      - mongo/jstests/core/index/index_partial_2dsphere.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/index_partial_create_drop.js # assert: command failed: { "ok" : 0, "errmsg" : "no option found to get" } with original command request: { "getParameter" : 1, "featureCompatibilityVersion" : 1 }
+      - mongo/jstests/core/index/index_partial_read_ops.js # Index option \"partialFilterExpression\" is not implemented yet
+      - mongo/jstests/core/index/index_partial_validate.js # Index option \"partialFilterExpression\" is not implemented yet
+      - mongo/jstests/core/index/index_partial_write_ops.js # Index option \"partialFilterExpression\" is not implemented yet
+      - mongo/jstests/core/index/index_plugins.js # "Index key value \"hashed\" is not implemented yet"
+      - mongo/jstests/core/index/index_signature.js # uncaught exception: TypeError: can't convert undefined to object
+      - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js # create: support for field \"collation\" with value &{[{fr locale}]} is not implemented yet
+      - mongo/jstests/core/index/index_sparse1.js # assert: [2] != [1] are not equal : C1
+      - mongo/jstests/core/index/index_sparse2.js # network error
+      - mongo/jstests/core/index/indexa.js # assert: [2] != [3] are not equal : indexa 1
+      - mongo/jstests/core/index/indexapi.js # `aggregate` stage \"$indexStats\" is not implemented yet
       - mongo/jstests/core/index/indexb.js
       - mongo/jstests/core/index/indexes_multiple_commands.js
       - mongo/jstests/core/index/indexm.js
