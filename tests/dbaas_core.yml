@@ -333,54 +333,54 @@ results:
       - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js # https://github.com/FerretDB/FerretDB/issues/2826
       - mongo/jstests/core/index/elemmatch_index.js # Index option \"sparse\" is not implemented yet
       - mongo/jstests/core/index/fts/fts1.js # Index key value \"text\" is not implemented yet
-      - mongo/jstests/core/index/fts/fts2.js
-      - mongo/jstests/core/index/fts/fts4.js
-      - mongo/jstests/core/index/fts/fts5.js
-      - mongo/jstests/core/index/fts/fts6.js
-      - mongo/jstests/core/index/fts/fts_array.js
-      - mongo/jstests/core/index/fts/fts3.js
-      - mongo/jstests/core/index/fts/fts_blog.js
-      - mongo/jstests/core/index/fts/fts_blogwild.js
-      - mongo/jstests/core/index/fts/fts_casesensitive.js
-      - mongo/jstests/core/index/fts/fts_diacritic_and_caseinsensitive.js
-      - mongo/jstests/core/index/fts/fts_diacritic_and_casesensitive.js
-      - mongo/jstests/core/index/fts/fts_diacriticsensitive.js
-      - mongo/jstests/core/index/fts/fts_dotted_prefix_fields.js
-      - mongo/jstests/core/index/fts/fts_explain.js
-      - mongo/jstests/core/index/fts/fts_find_and_modify.js
-      - mongo/jstests/core/index/fts/fts_index.js
-      - mongo/jstests/core/index/fts/fts_index2.js
-      - mongo/jstests/core/index/fts/fts_index3.js
-      - mongo/jstests/core/index/fts/fts_index_version1.js
-      - mongo/jstests/core/index/fts/fts_index_version2.js
-      - mongo/jstests/core/index/fts/fts_index_wildcard_and_weight.js
-      - mongo/jstests/core/index/fts/fts_mix.js
-      - mongo/jstests/core/index/fts/fts_partition1.js
-      - mongo/jstests/core/index/fts/fts_partition_no_multikey.js
-      - mongo/jstests/core/index/fts/fts_phrase.js
-      - mongo/jstests/core/index/fts/fts_proj.js
-      - mongo/jstests/core/index/fts/fts_projection.js
-      - mongo/jstests/core/index/fts/fts_querylang.js
-      - mongo/jstests/core/index/fts/fts_score_sort.js
-      - mongo/jstests/core/index/fts/fts_spanish.js
-      - mongo/jstests/core/index/fts/fts_trailing_fields.js
-      - mongo/jstests/core/index/geo/geo1.js
-      - mongo/jstests/core/index/geo/geo10.js
-      - mongo/jstests/core/index/geo/geo2.js
-      - mongo/jstests/core/index/geo/geo3.js
-      - mongo/jstests/core/index/geo/geo6.js
-      - mongo/jstests/core/index/geo/geo7.js
-      - mongo/jstests/core/index/geo/geo9.js
-      - mongo/jstests/core/index/geo/geo_2d_explain.js
-      - mongo/jstests/core/index/geo/geo_2d_trailing_fields.js
-      - mongo/jstests/core/index/geo/geo_2d_with_geojson_point.js
-      - mongo/jstests/core/index/geo/geo_allowedcomparisons.js
-      - mongo/jstests/core/index/geo/geo_array0.js
-      - mongo/jstests/core/index/geo/geo_array2.js
-      - mongo/jstests/core/index/geo/geo_big_polygon.js
-      - mongo/jstests/core/index/geo/geo_big_polygon2.js
-      - mongo/jstests/core/index/geo/geo_big_polygon3.js
-      - mongo/jstests/core/index/geo/geo_borders.js
+      - mongo/jstests/core/index/fts/fts2.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts4.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts5.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts6.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_array.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts3.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_blog.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_blogwild.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_casesensitive.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_diacritic_and_caseinsensitive.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_diacritic_and_casesensitive.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_diacriticsensitive.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_dotted_prefix_fields.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_explain.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_find_and_modify.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index2.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index3.js  # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index_version1.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index_version2.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_index_wildcard_and_weight.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_mix.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_partition1.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_partition_no_multikey.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_phrase.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_proj.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_projection.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_querylang.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_score_sort.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_spanish.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/fts/fts_trailing_fields.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo1.js # [2] != [1] are not equal : S3
+      - mongo/jstests/core/index/geo/geo10.js # "Index key value \"2d\" is not implemented yet"
+      - mongo/jstests/core/index/geo/geo2.js # "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo3.js # `aggregate` stage \"$geoNear\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo6.js # [2] != [3] are not equal : A2
+      - mongo/jstests/core/index/geo/geo7.js # Index key value \"2d\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo9.js # "unknown operator: $near"
+      - mongo/jstests/core/index/geo/geo_2d_explain.js # stats is undefined
+      - mongo/jstests/core/index/geo/geo_2d_trailing_fields.js # stats is undefined
+      - mongo/jstests/core/index/geo/geo_2d_with_geojson_point.js # did not throw exception : querying 2d index with GeoJSON point.
+      - mongo/jstests/core/index/geo/geo_allowedcomparisons.js # no write error: { "nInserted" : 1 }
+      - mongo/jstests/core/index/geo/geo_array0.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_array2.js # Index key value \"2d\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_big_polygon.js # nested arrays are not supported
+      - mongo/jstests/core/index/geo/geo_big_polygon2.js # Index key value \"2dsphere\" is not implemented yet
+      - mongo/jstests/core/index/geo/geo_big_polygon3.js # did not throw exception : within point with strictCRS
+      - mongo/jstests/core/index/geo/geo_borders.js # Index key value \"2d\" is not implemented yet
       - mongo/jstests/core/index/geo/geo_box1.js
       - mongo/jstests/core/index/geo/geo_box1_noindex.js
       - mongo/jstests/core/index/geo/geo_box2.js
