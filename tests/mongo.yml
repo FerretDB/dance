@@ -4,6 +4,27 @@ runner: jstest
 # To exclude a file, use the ! prefix and enclose the file name in quotes.
 # Put the exclusion patterns before inclusion patterns.
 args:
+  - mongo/jstests/aggregation/ifnull.js
+  - mongo/jstests/aggregation/agg_infinite_recursion.js
+  - mongo/jstests/aggregation/aggregation_with_uuids.js
+  - mongo/jstests/aggregation/explain.js
+  - mongo/jstests/aggregation/illegal_reference_in_match.js
+  - mongo/jstests/aggregation/match_swapping_renamed_fields.js
+  - mongo/jstests/aggregation/max_subpipeline_depth.js
+  - mongo/jstests/aggregation/use*.js
+  - mongo/jstests/aggregation/accumulators/min_n_max_n.js
+  - mongo/jstests/aggregation/expressions/convert.js
+  - mongo/jstests/aggregation/expressions/filter.js
+  - mongo/jstests/aggregation/expressions/set.js
+  - mongo/jstests/aggregation/expressions/rand.js
+  - mongo/jstests/aggregation/expressions/not.js
+  - mongo/jstests/aggregation/expressions/n_expressions.js
+  - mongo/jstests/aggregation/bugs/match.js
+  - mongo/jstests/aggregation/bugs/groupMissing.js
+  - mongo/jstests/aggregation/bugs/sort_arrays.js
+  - mongo/jstests/aggregation/bugs/cond.js
+  - mongo/jstests/aggregation/bugs/firstlast.js
+  - mongo/jstests/aggregation/testall.js
   - mongo/jstests/core/administrative/auth[1-2].js
   - mongo/jstests/core/query/all/all[2-5]*.js
   - mongo/jstests/core/query/basic*.js
@@ -28,10 +49,35 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 40
-      expected_pass: 37
+      expected_fail: 61
+      expected_pass: 39
 
     fail:
+      # --- aggregation tests ---
+      - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
+      - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
+      - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where.
+      - mongo/jstests/aggregation/bugs/cond.js # https://github.com/FerretDB/FerretDB/issues/2892
+      - mongo/jstests/aggregation/bugs/firstlast.js # https://github.com/FerretDB/FerretDB/issues/2894
+      - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/bugs/match.js # https://github.com/FerretDB/FerretDB/issues/2780
+      - mongo/jstests/aggregation/explain.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/expressions/convert.js # https://github.com/FerretDB/FerretDB/issues/66
+      - mongo/jstests/aggregation/expressions/filter.js # unhandled element type `Undefined (value) Deprecated`
+      - mongo/jstests/aggregation/expressions/n_expressions.js # https://github.com/FerretDB/FerretDB/issues/2125
+      - mongo/jstests/aggregation/expressions/not.js # https://github.com/FerretDB/FerretDB/issues/2917
+      - mongo/jstests/aggregation/expressions/rand.js # https://github.com/FerretDB/FerretDB/issues/541
+      - mongo/jstests/aggregation/expressions/set.js # https://github.com/FerretDB/FerretDB/issues/2916
+      - mongo/jstests/aggregation/match_swapping_renamed_fields.js # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/aggregation_with_uuids.js # we do not generate collection UUIDs yet
+      - mongo/jstests/aggregation/illegal_reference_in_match.js # https://github.com/FerretDB/FerretDB/issues/2919
+      - mongo/jstests/aggregation/max_subpipeline_depth.js # https://github.com/FerretDB/FerretDB/issues/2916
+      - mongo/jstests/aggregation/testall.js # https://github.com/FerretDB/FerretDB/issues/2914
+      - mongo/jstests/aggregation/use_query_project_and_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
+      # --- end of aggregation tests ---
+
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
       - mongo/jstests/core/query/all/all2.js
@@ -114,18 +160,16 @@ results:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
 
-      # https://github.com/FerretDB/dance/issues/294
-      - mongo/jstests/readonly/get_more.js
+      # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
 
   mongodb:
     stats:
-      expected_fail: 3
-      expected_pass: 74
-
+      expected_fail: 2
+      expected_pass: 98
     fail:
-      # https://github.com/FerretDB/dance/issues/294
+      # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
+      # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
-      - mongo/jstests/readonly/get_more.js
       - mongo/jstests/auth/list_sessions.js
