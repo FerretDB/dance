@@ -596,337 +596,337 @@ results:
       - mongo/jstests/core/positional_projection_multiple_array_fields.js # projection expression { $slice: 2.0 } is not supported
       - mongo/jstests/core/query/agg_hint.js # aggregate: support for field \"explain\" not implemented yet
       - mongo/jstests/core/query/all/all2.js # assert: [1] != [0] are not equal : { "a.x" : { "$all" : [ 1, 2 ] } } F count no index
-      - mongo/jstests/core/query/all/all4.js #
-      - mongo/jstests/core/query/all/all5.js #
-      - mongo/jstests/core/query/always_true_false.js #
-      - mongo/jstests/core/query/and/and.js #
-      - mongo/jstests/core/query/and/and2.js #
-      - mongo/jstests/core/query/and/and3.js #
-      - mongo/jstests/core/query/and/and_or_index_sort.js #
-      - mongo/jstests/core/query/array/array1.js #
-      - mongo/jstests/core/query/array/array_comparison_correctness.js #
-      - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js #
-      - mongo/jstests/core/query/array/array_match2.js #
-      - mongo/jstests/core/query/array/arrayfind1.js #
-      - mongo/jstests/core/query/array/arrayfind10.js #
-      - mongo/jstests/core/query/array/arrayfind2.js #
-      - mongo/jstests/core/query/array/arrayfind3.js #
-      - mongo/jstests/core/query/array/arrayfind4.js #
-      - mongo/jstests/core/query/array/arrayfind5.js #
-      - mongo/jstests/core/query/array/arrayfind6.js #
-      - mongo/jstests/core/query/array/arrayfind7.js #
-      - mongo/jstests/core/query/array/arrayfind8.js #
-      - mongo/jstests/core/query/array/arrayfind9.js #
-      - mongo/jstests/core/query/array/arrayfinda.js #
-      - mongo/jstests/core/query/array/arrayfindb.js #
-      - mongo/jstests/core/query/basic1.js #
-      - mongo/jstests/core/query/batch_size.js #
-      - mongo/jstests/core/query/bittest.js #
-      - mongo/jstests/core/query/collection_uuid_find.js #
-      - mongo/jstests/core/query/count/count.js #
-      - mongo/jstests/core/query/count/count11.js #
-      - mongo/jstests/core/query/count/count6.js #
-      - mongo/jstests/core/query/count/count_hint.js #
-      - mongo/jstests/core/query/count/countb.js #
-      - mongo/jstests/core/query/count/countc.js #
-      - mongo/jstests/core/query/covered_multikey.js #
-      - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js #
-      - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js #
-      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js #
-      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js #
-      - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js #
-      - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js #
-      - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js #
-      - mongo/jstests/core/query/cursor/tailable_skip_limit.js #
-      - mongo/jstests/core/query/dbref/dbref1.js #
-      - mongo/jstests/core/query/dbref/dbref2.js #
-      - mongo/jstests/core/query/dbref/dbref3.js #
-      - mongo/jstests/core/query/dbref/dbref4.js #
-      - mongo/jstests/core/query/dbref/ref.js #
-      - mongo/jstests/core/query/dbref/ref2.js #
-      - mongo/jstests/core/query/dbref/ref3.js #
-      - mongo/jstests/core/query/dbref/ref4.js #
-      - mongo/jstests/core/query/distinct/distinct4.js #
-      - mongo/jstests/core/query/distinct/distinct_array1.js #
-      - mongo/jstests/core/query/distinct/distinct_compound_index.js #
-      - mongo/jstests/core/query/distinct/distinct_index1.js #
-      - mongo/jstests/core/query/distinct/distinct_index2.js #
-      - mongo/jstests/core/query/distinct/distinct_multikey.js #
-      - mongo/jstests/core/query/distinct/distinct_multikey_dotted_path.js #
-      - mongo/jstests/core/query/distinct/distinct_with_hashed_index.js #
-      - mongo/jstests/core/query/dotted_path_in_null.js #
-      - mongo/jstests/core/query/double_decimal_compare.js #
-      - mongo/jstests/core/query/elemmatch/elemmatch_object.js #
-      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js #
-      - mongo/jstests/core/query/elemmatch/elemmatch_projection.js #
-      - mongo/jstests/core/query/elemmatch/elemmatch_value.js #
-      - mongo/jstests/core/query/exists/exists7.js #
-      - mongo/jstests/core/query/exists/exists8.js #
-      - mongo/jstests/core/query/exists/existsa.js #
-      - mongo/jstests/core/query/explain/explain1.js #
-      - mongo/jstests/core/query/explain/explain4.js #
-      - mongo/jstests/core/query/explain/explain5.js #
-      - mongo/jstests/core/query/explain/explain6.js #
-      - mongo/jstests/core/query/explain/explain_agg_write_concern.js #
-      - mongo/jstests/core/query/explain/explain_batch_size.js #
-      - mongo/jstests/core/query/explain/explain_count.js #
-      - mongo/jstests/core/query/explain/explain_db_mismatch.js #
-      - mongo/jstests/core/query/explain/explain_delete.js #
-      - mongo/jstests/core/query/explain/explain_distinct.js #
-      - mongo/jstests/core/query/explain/explain_find_and_modify.js #
-      - mongo/jstests/core/query/explain/explain_missing_collection.js #
-      - mongo/jstests/core/query/explain/explain_missing_database.js #
-      - mongo/jstests/core/query/explain/explain_multi_plan.js #
-      - mongo/jstests/core/query/explain/explain_multi_plan_count.js #
-      - mongo/jstests/core/query/explain/explain_multikey.js #
-      - mongo/jstests/core/query/explain/explain_plan_scores.js #
-      - mongo/jstests/core/query/explain/explain_sample.js #
-      - mongo/jstests/core/query/explain/explain_server_params.js #
-      - mongo/jstests/core/query/explain/explain_shell_helpers.js #
-      - mongo/jstests/core/query/explain/explain_sort_type.js #
-      - mongo/jstests/core/query/explain/explain_upsert.js #
-      - mongo/jstests/core/query/explain/explain_uuid.js #
-      - mongo/jstests/core/query/explain/explain_validation.js #
-      - mongo/jstests/core/query/explain/explain_winning_plan.js #
-      - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js #
-      - mongo/jstests/core/query/explode_for_sort_equality_to_array.js #
-      - mongo/jstests/core/query/explode_for_sort_plan_cache.js #
-      - mongo/jstests/core/query/expr/expr.js #
-      - mongo/jstests/core/query/expr/expr_or_pushdown.js #
-      - mongo/jstests/core/query/expr/expr_valid_positions.js #
-      - mongo/jstests/core/query/expressions_matching_whole_array.js #
-      - mongo/jstests/core/query/find/find6.js #
-      - mongo/jstests/core/query/find/find8.js #
-      - mongo/jstests/core/query/find/find9.js #
-      - mongo/jstests/core/query/find/find_covered_projection.js #
-      - mongo/jstests/core/query/find/find_getmore_bsonsize.js #
-      - mongo/jstests/core/query/find/find_getmore_cmd.js #
-      - mongo/jstests/core/query/find/find_project_sort.js #
-      - mongo/jstests/core/query/find/find_projection_meta_errors.js #
-      - mongo/jstests/core/query/find/find_size.js #
-      - mongo/jstests/core/query/find/finda.js #
-      - mongo/jstests/core/query/idhack.js #
-      - mongo/jstests/core/query/in/in3.js #
-      - mongo/jstests/core/query/in/in_with_mixed_values.js #
-      - mongo/jstests/core/query/inc/inc-SERVER-7446.js #
-      - mongo/jstests/core/query/index_key_expression.js #
-      - mongo/jstests/core/query/internal_apply_oplog_update.js #
-      - mongo/jstests/core/query/internal_hash_eq/expr_rewrites.js #
-      - mongo/jstests/core/query/internal_hash_eq/lookup_using_hash_key.js #
-      - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js #
-      - mongo/jstests/core/query/introspect_hidden_index_plan_cache_entries.js #
-      - mongo/jstests/core/query/invalid_collation_locale.js #
-      - mongo/jstests/core/query/js/js1.js #
-      - mongo/jstests/core/query/js/js3.js #
-      - mongo/jstests/core/query/js/js4.js #
-      - mongo/jstests/core/query/js/js5.js #
-      - mongo/jstests/core/query/js/js8.js #
-      - mongo/jstests/core/query/js/js_global_scope.js #
-      - mongo/jstests/core/query/js/js_object_properties.js #
-      - mongo/jstests/core/query/min_max_key.js #
-      - mongo/jstests/core/query/minmax.js #
-      - mongo/jstests/core/query/minmax_edge.js #
-      - mongo/jstests/core/query/mr/mr_agg_explain.js #
-      - mongo/jstests/core/query/mr/mr_bigobject.js #
-      - mongo/jstests/core/query/mr/mr_bigobject_replace.js #
-      - mongo/jstests/core/query/mr/mr_comments.js #
-      - mongo/jstests/core/query/mr/mr_compute_avg.js #
-      - mongo/jstests/core/query/mr/mr_correctness.js #
-      - mongo/jstests/core/query/mr/mr_fail_invalid_js.js #
-      - mongo/jstests/core/query/mr/mr_merge.js #
-      - mongo/jstests/core/query/mr/mr_multikey_deduping.js #
-      - mongo/jstests/core/query/mr/mr_null_arguments.js #
-      - mongo/jstests/core/query/mr/mr_preserve_indexes.js #
-      - mongo/jstests/core/query/mr/mr_reduce.js #
-      - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js #
-      - mongo/jstests/core/query/mr/mr_replace_into_other_db.js #
-      - mongo/jstests/core/query/mr/mr_scope.js #
-      - mongo/jstests/core/query/mr/mr_sort.js #
-      - mongo/jstests/core/query/mr/mr_stored.js #
-      - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js #
-      - mongo/jstests/core/query/mr/mr_use_this_object.js #
-      - mongo/jstests/core/query/nan.js #
-      - mongo/jstests/core/query/natural_validation.js #
-      - mongo/jstests/core/query/ne/ne2.js #
-      - mongo/jstests/core/query/ne/ne3.js #
-      - mongo/jstests/core/query/ne/ne_array.js #
-      - mongo/jstests/core/query/neq_null_correctly_cache.js #
-      - mongo/jstests/core/query/nin/nin.js #
-      - mongo/jstests/core/query/not/not2.js #
-      - mongo/jstests/core/query/null_query_semantics.js #
-      - mongo/jstests/core/query/number/numberlong2.js #
-      - mongo/jstests/core/query/number/numberlong3.js #
-      - mongo/jstests/core/query/or/or2.js #
-      - mongo/jstests/core/query/or/or3.js #
-      - mongo/jstests/core/query/or/or4.js #
-      - mongo/jstests/core/query/or/or_inexact.js #
-      - mongo/jstests/core/query/or/or_to_in.js #
-      - mongo/jstests/core/query/or/ora.js #
-      - mongo/jstests/core/query/or/ord.js #
-      - mongo/jstests/core/query/or/orf.js #
-      - mongo/jstests/core/query/or/orj.js #
-      - mongo/jstests/core/query/or/oro.js #
-      - mongo/jstests/core/query/partial_index_logical.js #
-      - mongo/jstests/core/query/plan_cache/collation_plan_cache.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_clear.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_list_plans.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_list_shapes.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_positional_projection.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_shell_helpers.js #
-      - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js #
-      - mongo/jstests/core/query/project/proj_key1.js #
-      - mongo/jstests/core/query/project/project_with_collation.js #
-      - mongo/jstests/core/query/project/projection_conflicts.js #
-      - mongo/jstests/core/query/project/projection_meta_index_key.js #
-      - mongo/jstests/core/query/pull/pull2.js #
-      - mongo/jstests/core/query/pull/pull_or.js #
-      - mongo/jstests/core/query/pull/pull_remove1.js #
-      - mongo/jstests/core/query/pull/pullall2.js #
-      - mongo/jstests/core/query/query_hash_stability.js #
-      - mongo/jstests/core/query/regex/regex.js #
-      - mongo/jstests/core/query/regex/regex3.js #
-      - mongo/jstests/core/query/regex/regex4.js #
-      - mongo/jstests/core/query/regex/regex5.js #
-      - mongo/jstests/core/query/regex/regex6.js #
-      - mongo/jstests/core/query/regex/regex_distinct.js #
-      - mongo/jstests/core/query/regex/regex_error.js #
-      - mongo/jstests/core/query/regex/regex_limit.js #
-      - mongo/jstests/core/query/regex/regex_options.js #
-      - mongo/jstests/core/query/regex/regex_unicode.js #
-      - mongo/jstests/core/query/regex/regex_verbs.js #
-      - mongo/jstests/core/query/regex/regexa.js #
-      - mongo/jstests/core/query/rename/rename_operator.js #
-      - mongo/jstests/core/query/rename/rename_operator_change_target_type.js #
-      - mongo/jstests/core/query/set/set1.js #
-      - mongo/jstests/core/query/set/set6.js #
-      - mongo/jstests/core/query/set/set7.js #
-      - mongo/jstests/core/query/sort/sort1.js #
-      - mongo/jstests/core/query/sort/sort2.js #
-      - mongo/jstests/core/query/sort/sort9.js #
-      - mongo/jstests/core/query/sort/sort_array.js #
-      - mongo/jstests/core/query/sort/sort_dotted_paths.js #
-      - mongo/jstests/core/query/sort/sort_dotted_paths_collation.js #
-      - mongo/jstests/core/query/sort/sort_dotted_paths_numeric.js #
-      - mongo/jstests/core/query/sort/sort_dotted_paths_parallel_arrays.js #
-      - mongo/jstests/core/query/sort/sort_merge.js #
-      - mongo/jstests/core/query/sort/sort_merge_collation.js #
-      - mongo/jstests/core/query/sort/sort_with_meta_operator.js #
-      - mongo/jstests/core/query/sort/sorta.js #
-      - mongo/jstests/core/query/sort/sortb.js #
-      - mongo/jstests/core/query/sort/sortf.js #
-      - mongo/jstests/core/query/sort/sortg.js #
-      - mongo/jstests/core/query/sort/sortk.js #
-      - mongo/jstests/core/query/sort/sortl.js #
-      - mongo/jstests/core/query/type/type3.js #
-      - mongo/jstests/core/query/type/type8.js #
-      - mongo/jstests/core/query/type/type_array.js #
-      - mongo/jstests/core/query/type/type_operator_on_missing_values.js #
-      - mongo/jstests/core/query/unset/unset2.js #
-      - mongo/jstests/core/query/where/where1.js #
-      - mongo/jstests/core/query/where/where2.js #
-      - mongo/jstests/core/query/where/where3.js #
-      - mongo/jstests/core/query/where/where5.js #
-      - mongo/jstests/core/query/where/where_multiple_plans.js #
-      - mongo/jstests/core/query/where/where_system_js.js #
-      - mongo/jstests/core/query/where/where_tolerates_js_exception.js #
-      - mongo/jstests/core/record_store_count.js #
-      - mongo/jstests/core/recursion.js #
-      - mongo/jstests/core/resume_query.js #
-      - mongo/jstests/core/resume_query_from_non_existent_record.js #
-      - mongo/jstests/core/return_bson_scalar_from_js_function.js #
-      - mongo/jstests/core/return_key.js #
-      - mongo/jstests/core/sample_rate.js #
-      - mongo/jstests/core/server1470.js #
-      - mongo/jstests/core/server22053.js #
-      - mongo/jstests/core/server7756.js #
-      - mongo/jstests/core/server9547.js #
-      - mongo/jstests/core/shell/bson_compare_bug.js #
-      - mongo/jstests/core/shell/collection_save.js #
-      - mongo/jstests/core/show_record_id.js #
-      - mongo/jstests/core/single_batch.js #
-      - mongo/jstests/core/single_field_hashed_index.js #
-      - mongo/jstests/core/slice1.js #
-      - mongo/jstests/core/sparse_index_supports_ne_null.js #
-      - mongo/jstests/core/startup_log.js #
-      - mongo/jstests/core/storefunc.js #
-      - mongo/jstests/core/string_with_nul_bytes.js #
-      - mongo/jstests/core/system_js_access.js #
-      - mongo/jstests/core/system_js_drop.js #
-      - mongo/jstests/core/text_covered_matching.js #
-      - mongo/jstests/core/top.js #
-      - mongo/jstests/core/top_drop.js #
-      - mongo/jstests/core/transaction_too_large_for_cache.js #
-      - mongo/jstests/core/ts1.js #
-      - mongo/jstests/core/type_bracket.js #
-      - mongo/jstests/core/uniqueness.js #
-      - mongo/jstests/core/validate_js_timestamp.js #
-      - mongo/jstests/core/write/batch_write_collation_estsize.js #
-      - mongo/jstests/core/write/collation_find_and_modify.js #
-      - mongo/jstests/core/write/delete/batch_write_command_delete.js #
-      - mongo/jstests/core/write/delete/delete_hint.js #
-      - mongo/jstests/core/write/delete/remove7.js #
-      - mongo/jstests/core/write/delete/remove_undefined.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify2.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify3.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_invalid_query_params.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_metrics.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6582.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6588.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6659.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6865.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6909.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6993.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server7660.js #
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_where.js #
-      - mongo/jstests/core/write/insert/batch_write_command_insert.js #
-      - mongo/jstests/core/write/insert/insert_id_undefined.js #
-      - mongo/jstests/core/write/insert/insert_illegal_doc.js #
-      - mongo/jstests/core/write/update/batch_write_command_update.js #
-      - mongo/jstests/core/write/update/collation_update.js #
-      - mongo/jstests/core/write/update/update2.js #
-      - mongo/jstests/core/write/update/update8.js #
-      - mongo/jstests/core/write/update/update_addToSet.js #
-      - mongo/jstests/core/write/update/update_affects_indexes.js #
-      - mongo/jstests/core/write/update/update_arrayFilters.js #
-      - mongo/jstests/core/write/update/update_array_offset_positional.js #
-      - mongo/jstests/core/write/update/update_arraymatch1.js #
-      - mongo/jstests/core/write/update/update_arraymatch2.js #
-      - mongo/jstests/core/write/update/update_arraymatch3.js #
-      - mongo/jstests/core/write/update/update_arraymatch4.js #
-      - mongo/jstests/core/write/update/update_arraymatch5.js #
-      - mongo/jstests/core/write/update/update_arraymatch6.js #
-      - mongo/jstests/core/write/update/update_arraymatch7.js #
-      - mongo/jstests/core/write/update/update_arraymatch8.js #
-      - mongo/jstests/core/write/update/update_bit_examples.js #
-      - mongo/jstests/core/write/update/update_dbref.js #
-      - mongo/jstests/core/write/update/update_find_and_modify_id.js #
-      - mongo/jstests/core/write/update/update_hint.js #
-      - mongo/jstests/core/write/update/update_invalid1.js #
-      - mongo/jstests/core/write/update/update_metrics.js #
-      - mongo/jstests/core/write/update/update_min_max_examples.js #
-      - mongo/jstests/core/write/update/update_modifier_pop.js #
-      - mongo/jstests/core/write/update/update_multi6.js #
-      - mongo/jstests/core/write/update/update_numeric_field_name.js #
-      - mongo/jstests/core/write/update/update_pipeline_shell_helpers.js #
-      - mongo/jstests/core/write/update/update_server-12848.js #
-      - mongo/jstests/core/write/update/update_setOnInsert.js #
-      - mongo/jstests/core/write/update/update_with_large_hint.js #
-      - mongo/jstests/core/write/update/update_with_pipeline.js #
-      - mongo/jstests/core/write/update/updateb.js #
-      - mongo/jstests/core/write/update/updateh.js #
-      - mongo/jstests/core/write/update/updatej.js #
-      - mongo/jstests/core/write/update/updatel.js #
-      - mongo/jstests/core/write/update/upsert_and.js #
-      - mongo/jstests/core/write/update/upsert_fields.js #
-      - mongo/jstests/core/write/update/upsert_shell.js #
-      - mongo/jstests/core/write/verify_update_mods.js #
-      - mongo/jstests/core/write/write_error_message_truncation.js #
-      - mongo/jstests/core/write/write_result.js #
+      - mongo/jstests/core/query/all/all4.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/all/all5.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/always_true_false.js # unknown top level operator: $alwaysFalse
+      - mongo/jstests/core/query/and/and.js # unknown top level operator: $where
+      - mongo/jstests/core/query/and/and2.js # assert: [[ 5, 2 ]] != [[ 1, 2 ]] are not equal
+      - mongo/jstests/core/query/and/and3.js # uncaught exception: TypeError: e.executionStats is undefined
+      - mongo/jstests/core/query/and/and_or_index_sort.js # Cannot do exclusion on field _id in inclusion projection
+      - mongo/jstests/core/query/array/array1.js # nested array not supported
+      - mongo/jstests/core/query/array/array_comparison_correctness.js # network error
+      - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js # network error
+      - mongo/jstests/core/query/array/array_match2.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind1.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind10.js # nested array not supported
+      - mongo/jstests/core/query/array/arrayfind2.js # assert: [3] != [0] are not equal : no index A2
+      - mongo/jstests/core/query/array/arrayfind3.js # assert: [1] != [2] are not equal : A2
+      - mongo/jstests/core/query/array/arrayfind4.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind5.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind6.js # count failed "errmsg" : "unknown operator: b"
+      - mongo/jstests/core/query/array/arrayfind7.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind8.js # assert: [1] != [2] are not equal : unexpected count in unindexed elemMatch query
+      - mongo/jstests/core/query/array/arrayfind9.js # $elemMatch: support for $not not implemented yet
+      - mongo/jstests/core/query/array/arrayfinda.js # uncaught exception: Error: error hasNext: false
+      - mongo/jstests/core/query/array/arrayfindb.js # "unknown operator: b"
+      - mongo/jstests/core/query/basic1.js # Invalid command format: the 'aggregate' field must specify a collection name or 1
+      - mongo/jstests/core/query/batch_size.js # assert: [1] != [4] are not equal
+      - mongo/jstests/core/query/bittest.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/query/collection_uuid_find.js # firstBatch[0].info is undefined
+      - mongo/jstests/core/query/count/count.js # assert: [9] != [40415] are not equal
+      - mongo/jstests/core/query/count/count11.js # assert: did not throw exception
+      - mongo/jstests/core/query/count/count6.js # BSON field 'limit' value must be >= 0, actual value '-1'
+      - mongo/jstests/core/query/count/count_hint.js # Index option \"sparse\" is not implemented yet
+      - mongo/jstests/core/query/count/countb.js # unknown top level operator: $where
+      - mongo/jstests/core/query/count/countc.js # assert: [6] != [[ 2 ]] are not equal
+      - mongo/jstests/core/query/covered_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js # aggregate` stage \"$out\" is not implemented yet
+      - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js # uncaught exception: Error: [5] != [1] are not equal
+      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js # create: support for field \"size\" with value 1024 is not implemented yet
+      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js # network error
+      - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js # tailable cursors not supported
+      - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js # tailing cursors not supported, size field not supported
+      - mongo/jstests/core/query/cursor/tailable_skip_limit.js # support for field \"size\" with value 1024 is not implemented yet
+      - mongo/jstests/core/query/dbref/dbref1.js # network error
+      - mongo/jstests/core/query/dbref/dbref2.js # uncaught exception: TypeError: b.findOne() is null
+      - mongo/jstests/core/query/dbref/dbref3.js # assert: [2] != [0] are not equal
+      - mongo/jstests/core/query/dbref/dbref4.js # assert failed
+      - mongo/jstests/core/query/dbref/ref.js # network error
+      - mongo/jstests/core/query/dbref/ref2.js # assert: [2] != [0] are not equal : A
+      - mongo/jstests/core/query/dbref/ref3.js # uncaught exception: TypeError: db.things3.findOne().o is undefined
+      - mongo/jstests/core/query/dbref/ref4.js # network error
+      - mongo/jstests/core/query/distinct/distinct4.js # assert failed
+      - mongo/jstests/core/query/distinct/distinct_array1.js # assert failed
+      - mongo/jstests/core/query/distinct/distinct_compound_index.js # getWinningPlan not implemented
+      - mongo/jstests/core/query/distinct/distinct_index1.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/query/distinct/distinct_index2.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/query/distinct/distinct_multikey.js # getWinningPlan not implemented
+      - mongo/jstests/core/query/distinct/distinct_multikey_dotted_path.js # assert failed
+      - mongo/jstests/core/query/distinct/distinct_with_hashed_index.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/query/dotted_path_in_null.js # assert failed
+      - mongo/jstests/core/query/double_decimal_compare.js # assert failed
+      - mongo/jstests/core/query/elemmatch/elemmatch_object.js # assert failed
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js # $elemMatch: support for $or not implemented yet
+      - mongo/jstests/core/query/elemmatch/elemmatch_projection.js # projection expression { $elemMatch: { a: -6.0 } } is not supported
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js # assert failed
+      - mongo/jstests/core/query/exists/exists7.js # assert failed
+      - mongo/jstests/core/query/exists/exists8.js # assert failed
+      - mongo/jstests/core/query/exists/existsa.js # assert failed
+      - mongo/jstests/core/query/explain/explain1.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain4.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain5.js # TypeError: stats1 is undefined
+      - mongo/jstests/core/query/explain/explain6.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain_agg_write_concern.js # aggregate` stage \"$out\" is not implemented yet
+      - mongo/jstests/core/query/explain/explain_batch_size.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain_count.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_db_mismatch.js # command did not fail with any of the following codes [ 73 ]
+      - mongo/jstests/core/query/explain/explain_delete.js # assert failed
+      - mongo/jstests/core/query/explain/explain_distinct.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_find_and_modify.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_missing_collection.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_missing_database.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_multi_plan.js # winningPlan is undefined
+      - mongo/jstests/core/query/explain/explain_multi_plan_count.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain_multikey.js # winningPlan is undefined
+      - mongo/jstests/core/query/explain/explain_plan_scores.js # winningPlan is undefined
+      - mongo/jstests/core/query/explain/explain_sample.js # assert: [true] != [undefined] are not equal
+      - mongo/jstests/core/query/explain/explain_server_params.js # aggregate: support for field \"explain\" with value true is not implemented yet
+      - mongo/jstests/core/query/explain/explain_shell_helpers.js # assert failed
+      - mongo/jstests/core/query/explain/explain_sort_type.js # collection/table does not exist
+      - mongo/jstests/core/query/explain/explain_upsert.js # uncaught exception: TypeError: collInfos[0].info is undefined
+      - mongo/jstests/core/query/explain/explain_uuid.js # uncaught exception: TypeError: collInfos[0].info is undefined
+      - mongo/jstests/core/query/explain/explain_validation.js # uncaught exception: TypeError: collInfos[0].info is undefined
+      - mongo/jstests/core/query/explain/explain_winning_plan.js # command worked when it should have failed
+      - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js # collection/table does not exist
+      - mongo/jstests/core/query/explode_for_sort_equality_to_array.js # nested array not supported
+      - mongo/jstests/core/query/explode_for_sort_plan_cache.js # winningPlan is undefined
+      - mongo/jstests/core/query/expr/expr.js # unknown top level operator: $expr
+      - mongo/jstests/core/query/expr/expr_or_pushdown.js # unknown top level operator: $expr
+      - mongo/jstests/core/query/expr/expr_valid_positions.js # assert did not throw error
+      - mongo/jstests/core/query/expressions_matching_whole_array.js # unknown top level operator: $where
+      - mongo/jstests/core/query/find/find6.js # unknown top level operator: $where
+      - mongo/jstests/core/query/find/find8.js # FieldPath field names may not start with '$'
+      - mongo/jstests/core/query/find/find9.js # Error: assertion src/mongo/util/hex.cpp:113
+      - mongo/jstests/core/query/find/find_covered_projection.js # Cannot do exclusion on field _id in inclusion projection
+      - mongo/jstests/core/query/find/find_getmore_bsonsize.js # Error: assertion src/mongo/util/hex.cpp:113 :
+      - mongo/jstests/core/query/find/find_getmore_cmd.js # assert: 0 is not greater than 0
+      - mongo/jstests/core/query/find/find_project_sort.js # assert: write failed with errors, NaN inserted
+      - mongo/jstests/core/query/find/find_projection_meta_errors.js # projection expression { $meta: \"some garbage\" } is not supported
+      - mongo/jstests/core/query/find/find_size.js # nested array not supported
+      - mongo/jstests/core/query/find/finda.js # assert: [150] != [200] are not equal
+      - mongo/jstests/core/query/idhack.js # executionStats is undefined
+      - mongo/jstests/core/query/in/in3.js # ssert: [1] != [0] are not equal
+      - mongo/jstests/core/query/in/in_with_mixed_values.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/inc/inc-SERVER-7446.js # assert: [0] != [NaN] are not equal
+      - mongo/jstests/core/query/index_key_expression.js # no such command: '_hashBSONElement'
+      - mongo/jstests/core/query/internal_apply_oplog_update.js # BSON field 'update.updates.u' is the wrong type 'array'
+      - mongo/jstests/core/query/internal_hash_eq/expr_rewrites.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/query/internal_hash_eq/lookup_using_hash_key.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js # "unknown operator: $_internalEqHash"
+      - mongo/jstests/core/query/introspect_hidden_index_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
+      - mongo/jstests/core/query/invalid_collation_locale.js # assert: command did not fail with any of the following codes [ 2 ]
+      - mongo/jstests/core/query/js/js1.js # network error
+      - mongo/jstests/core/query/js/js3.js # network error
+      - mongo/jstests/core/query/js/js4.js # network error
+      - mongo/jstests/core/query/js/js5.js # unknown top level operator: $where
+      - mongo/jstests/core/query/js/js8.js # network error
+      - mongo/jstests/core/query/js/js_global_scope.js # network error
+      - mongo/jstests/core/query/js/js_object_properties.js # network error
+      - mongo/jstests/core/query/min_max_key.js # network error
+      - mongo/jstests/core/query/minmax.js # assert: [1] != [4] are not equal
+      - mongo/jstests/core/query/minmax_edge.js # assert: [9] != [0] are not equal
+      - mongo/jstests/core/query/mr/mr_agg_explain.js # network error
+      - mongo/jstests/core/query/mr/mr_bigobject.js # network error
+      - mongo/jstests/core/query/mr/mr_bigobject_replace.js # network error
+      - mongo/jstests/core/query/mr/mr_comments.js # network error
+      - mongo/jstests/core/query/mr/mr_compute_avg.js # network error
+      - mongo/jstests/core/query/mr/mr_correctness.js # network error
+      - mongo/jstests/core/query/mr/mr_fail_invalid_js.js # network error
+      - mongo/jstests/core/query/mr/mr_merge.js # network error
+      - mongo/jstests/core/query/mr/mr_multikey_deduping.js # network error
+      - mongo/jstests/core/query/mr/mr_null_arguments.js # network error
+      - mongo/jstests/core/query/mr/mr_preserve_indexes.js # network error
+      - mongo/jstests/core/query/mr/mr_reduce.js # network error
+      - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js # network error
+      - mongo/jstests/core/query/mr/mr_replace_into_other_db.js # network error
+      - mongo/jstests/core/query/mr/mr_scope.js # network error
+      - mongo/jstests/core/query/mr/mr_sort.js # network error
+      - mongo/jstests/core/query/mr/mr_stored.js # network error
+      - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js # network error
+      - mongo/jstests/core/query/mr/mr_use_this_object.js # network error
+      - mongo/jstests/core/query/nan.js # infinity values are not allowed
+      - mongo/jstests/core/query/natural_validation.js # FieldPath field names may not start with '$'
+      - mongo/jstests/core/query/ne/ne2.js # executionStats is undefined
+      - mongo/jstests/core/query/ne/ne3.js # assert did not throw exception
+      - mongo/jstests/core/query/ne/ne_array.js # nested array not supported
+      - mongo/jstests/core/query/neq_null_correctly_cache.js # no such command: 'planCacheClear'
+      - mongo/jstests/core/query/nin/nin.js # assert: [4] != [3] are not equal : no index K
+      - mongo/jstests/core/query/not/not2.js # assert did not throw exception
+      - mongo/jstests/core/query/null_query_semantics.js # network error
+      - mongo/jstests/core/query/number/numberlong2.js # network error
+      - mongo/jstests/core/query/number/numberlong3.js # can't access lexical declaration 'ret'
+      - mongo/jstests/core/query/or/or2.js # winningPlan is undefined
+      - mongo/jstests/core/query/or/or3.js # winningPlan is undefined
+      - mongo/jstests/core/query/or/or4.js # 'mapreduce' not implemented
+      - mongo/jstests/core/query/or/or_inexact.js # unknown top level operator: $text
+      - mongo/jstests/core/query/or/or_to_in.js # network error
+      - mongo/jstests/core/query/or/ora.js # unknown top level operator: $where
+      - mongo/jstests/core/query/or/ord.js # assert did not throw exception
+      - mongo/jstests/core/query/or/orf.js # executionStats is undefined
+      - mongo/jstests/core/query/or/orj.js # assert did not throw exception
+      - mongo/jstests/core/query/or/oro.js # network error while attempting to run command 'collStats'
+      - mongo/jstests/core/query/partial_index_logical.js # partialFilterExpression not implemented
+      - mongo/jstests/core/query/plan_cache/collation_plan_cache.js # Index option \"collation\" is not implemented yet
+      - mongo/jstests/core/query/plan_cache/plan_cache_clear.js # assert: ["undefined"] != ["string"] are not equal
+      - mongo/jstests/core/query/plan_cache/plan_cache_list_plans.js # assert: ["undefined"] != ["string"] are not equal
+      - mongo/jstests/core/query/plan_cache/plan_cache_list_shapes.js # planCacheStats not implemented
+      - mongo/jstests/core/query/plan_cache/plan_cache_positional_projection.js # network error
+      - mongo/jstests/core/query/plan_cache/plan_cache_shell_helpers.js # planCacheStats not implemented
+      - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js # assert: ["undefined"] != ["string"] are not equal
+      - mongo/jstests/core/query/project/proj_key1.js # Cannot do exclusion on field _id in inclusion projection
+      - mongo/jstests/core/query/project/project_with_collation.js # create: support for field \"collation\ not implemented yet
+      - mongo/jstests/core/query/project/projection_conflicts.js # assert: 238 was not in [ 31250, 31249 ] : { "a.b" : 1, "a" : { "b" : "$$REMOVE" } }
+      - mongo/jstests/core/query/project/projection_meta_index_key.js #projection expression { $meta: \"indexKey\" } is not supported
+      - mongo/jstests/core/query/pull/pull2.js # assert: [0] != [1] are not equal : B
+      - mongo/jstests/core/query/pull/pull_or.js # assert: [[ { "x" : 1 }, { "x" : 2 }, { "z" : "z" } ]] != [[ { "x" : 1 }, { "y" : "y" }, { "x" : 2 }, { "z" : "z" } ]] are not equal
+      - mongo/jstests/core/query/pull/pull_remove1.js # assert: [[ 6, 7, 8 ]] != [[ 1, 2, 3, 4, 5, 6, 7, 8 ]] are not equal : A2
+      - mongo/jstests/core/query/pull/pullall2.js # assert failed: not equal : B
+      - mongo/jstests/core/query/query_hash_stability.js # sparse not implemented
+      - mongo/jstests/core/query/regex/regex.js # assert failed
+      - mongo/jstests/core/query/regex/regex3.js # executionStats is undefined
+      - mongo/jstests/core/query/regex/regex4.js # executionStats is undefined
+      - mongo/jstests/core/query/regex/regex5.js # assert: [1] != [0] are not equal : F
+      - mongo/jstests/core/query/regex/regex6.js # executionStats is undefined
+      - mongo/jstests/core/query/regex/regex_distinct.js # winningPlan is undefined
+      - mongo/jstests/core/query/regex/regex_error.js # command worked when it should have failed
+      - mongo/jstests/core/query/regex/regex_limit.js # network error
+      - mongo/jstests/core/query/regex/regex_options.js # invalid flag in regex options: u
+      - mongo/jstests/core/query/regex/regex_unicode.js # Regular expression is invalid: nothing to repeat
+      - mongo/jstests/core/query/regex/regex_verbs.js # Regular expression is invalid: nothing to repeat
+      - mongo/jstests/core/query/regex/regexa.js # network error
+      - mongo/jstests/core/query/rename/rename_operator.js # Expected error but didn't get one for: t.update( {}, {$rename:{'':'a'}} )
+      - mongo/jstests/core/query/rename/rename_operator_change_target_type.js # $type aggregation operator is not implemented yet
+      - mongo/jstests/core/query/set/set1.js # assert: [{ "_id" : 1, "emb" : { "a.dot" : "data" } }] != [{ "_id" : 1, "emb" : { } }] are not equal : A
+      - mongo/jstests/core/query/set/set6.js # assert: [{ "_id" : 1, "r" : DBRef("foo", ObjectId("64807d905fa218ed418d31fe")) }] != [null] are not equal : A
+      - mongo/jstests/core/query/set/set7.js # uncaught exception: TypeError: t.findOne() is null
+      - mongo/jstests/core/query/sort/sort1.js # find: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort2.js # assert failed
+      - mongo/jstests/core/query/sort/sort9.js # assert: [2] != [1] are not equal
+      - mongo/jstests/core/query/sort/sort_array.js # aggregate: support for field \"explain\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_dotted_paths.js # network error
+      - mongo/jstests/core/query/sort/sort_dotted_paths_collation.js # create: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_dotted_paths_numeric.js # network error
+      - mongo/jstests/core/query/sort/sort_dotted_paths_parallel_arrays.js # assert: command worked when it should have failed
+      - mongo/jstests/core/query/sort/sort_merge.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/query/sort/sort_merge_collation.js # create: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_with_meta_operator.js # Illegal key in $sort specification: _id: &{[{1 $meta}]}"
+      - mongo/jstests/core/query/sort/sorta.js # network error
+      - mongo/jstests/core/query/sort/sortb.js # assert did not throw exception
+      - mongo/jstests/core/query/sort/sortf.js # network error
+      - mongo/jstests/core/query/sort/sortg.js # assert: [6] != [[ 292 ]] are not equal
+      - mongo/jstests/core/query/sort/sortk.js # executionStats is undefined
+      - mongo/jstests/core/query/sort/sortl.js # projection expression { $meta: \"sortKey\" } is not supported
+      - mongo/jstests/core/query/type/type3.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/type/type8.js # network error
+      - mongo/jstests/core/query/type/type_array.js # nested array not supported
+      - mongo/jstests/core/query/type/type_operator_on_missing_values.js # Unknown type name alias: undefined
+      - mongo/jstests/core/query/unset/unset2.js # assert: [[ "a", "b", "c", null ]] != [[ "a", "b", "c" ]] are not equal
+      - mongo/jstests/core/query/where/where1.js # network error
+      - mongo/jstests/core/query/where/where2.js # unknown top level operator: $where
+      - mongo/jstests/core/query/where/where3.js # network error
+      - mongo/jstests/core/query/where/where5.js # network error
+      - mongo/jstests/core/query/where/where_multiple_plans.js # network error
+      - mongo/jstests/core/query/where/where_system_js.js # network error
+      - mongo/jstests/core/query/where/where_tolerates_js_exception.js # network error
+      - mongo/jstests/core/record_store_count.js # uncaught exception: TypeError: root is undefined
+      - mongo/jstests/core/recursion.js # network error
+      - mongo/jstests/core/resume_query.js # find: unknown field \"$_requestResumeToken\"
+      - mongo/jstests/core/resume_query_from_non_existent_record.js # find: unknown field \"$_requestResumeToken\"
+      - mongo/jstests/core/return_bson_scalar_from_js_function.js # network error
+      - mongo/jstests/core/return_key.js # find: support for field \"returnKey\"
+      - mongo/jstests/core/sample_rate.js # unknown top level operator: $sampleRate
+      - mongo/jstests/core/server1470.js # uncaught exception: TypeError: t.findOne() is null
+      - mongo/jstests/core/server22053.js # network error
+      - mongo/jstests/core/server7756.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/server9547.js # assert: [4] != [10] are not equal : no order
+      - mongo/jstests/core/shell/bson_compare_bug.js # aggregate` stage \"$replaceRoot\" is not implemented yet
+      - mongo/jstests/core/shell/collection_save.js # assert: did not throw exception : saving an array must throw an error
+      - mongo/jstests/core/show_record_id.js # find: support for field \"showRecordId\"
+      - mongo/jstests/core/single_batch.js # Error: assertion src/mongo/util/hex.cpp:113 :
+      - mongo/jstests/core/single_field_hashed_index.js # Index key value \"hashed\" is not implemented yet
+      - mongo/jstests/core/slice1.js # projection expression { $slice: 3.0 } is not supported
+      - mongo/jstests/core/sparse_index_supports_ne_null.js # network error
+      - mongo/jstests/core/startup_log.js # network error
+      - mongo/jstests/core/storefunc.js # Invalid namespace specified 'storefunc.system.js'
+      - mongo/jstests/core/string_with_nul_bytes.js # uncaught exception: TypeError: t.findOne() is null
+      - mongo/jstests/core/system_js_access.js # network error
+      - mongo/jstests/core/system_js_drop.js # network error
+      - mongo/jstests/core/text_covered_matching.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/top.js # command did not fail with any of the following codes [ 10334, 13548 ]
+      - mongo/jstests/core/top_drop.js # command did not fail with any of the following codes [ 10334, 13548 ]
+      - mongo/jstests/core/transaction_too_large_for_cache.js # Index key value \"text\" is not implemented yet
+      - mongo/jstests/core/ts1.js # assert: 0 is not greater than 0 : Expected Timestamp(0, 0) to be smaller than Timestamp(0, 0) (at iteration 0)
+      - mongo/jstests/core/type_bracket.js # network error
+      - mongo/jstests/core/uniqueness.js # assert: no write error: { "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 }
+      - mongo/jstests/core/validate_js_timestamp.js # network error
+      - mongo/jstests/core/write/batch_write_collation_estsize.js # support for field \"collation\" with value &{[{en_US locale}
+      - mongo/jstests/core/write/collation_find_and_modify.js # support for field \"collation\" with value &{[{en_US locale}
+      - mongo/jstests/core/write/delete/batch_write_command_delete.js # assert failed : { "ok" : 1, "n" : 0 }
+      - mongo/jstests/core/write/delete/delete_hint.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/write/delete/remove7.js # network error
+      - mongo/jstests/core/write/delete/remove_undefined.js # network error
+      - mongo/jstests/core/write/find_and_modify/find_and_modify2.js # findandmodify: support for field \"fields\" not implemented yet
+      - mongo/jstests/core/write/find_and_modify/find_and_modify3.js # Cannot create field '$' in element {comments: [ { i: 0.0, j: 0.0 }, { i: 1.0, j: 1.0 } ]}",
+      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js # ERROR: deadlock detected (SQLSTATE 40P01)
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js # findandmodify: support for field \"fields\" not implemented yet
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_invalid_query_params.js # BSON field 'findAndModify.query' is the wrong type 'null', expected type 'object'
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_metrics.js # assert: undefined is not greater than or eq 0
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js # Aggregation pipelines are not supported yet
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6582.js # uncaught exception: TypeError: le is undefined
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6588.js # ssert: [{ "_id" : 1, "a" : [ { "b" : 2 } ], "z" : 1 }] != [{ "_id" : 1, "a" : [ { "b" : 1 } ], "z" : 1 }] are not equal
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6659.js # network error
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js # uncaught exception: ReferenceError: can't access lexical declaration 'ret' before initialization :
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6865.js # findAndModify: support for field \"fields\" not implemented yet
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6909.js # network error
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6993.js # Cannot create field '$' in element {a: [ 1.0, 2.0 ]}
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server7660.js # ERROR: deadlock detected (SQLSTATE 40P01)
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_where.js # unknown top level operator: $where
+      - mongo/jstests/core/write/insert/batch_write_command_insert.js # assert failed : { "n" : 0, "ok" : 1 }
+      - mongo/jstests/core/write/insert/insert_id_undefined.js # network error
+      - mongo/jstests/core/write/insert/insert_illegal_doc.js # assert: no write error
+      - mongo/jstests/core/write/update/batch_write_command_update.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/write/update/collation_update.js # create: support for field \"collation\" with value &{[{en_US locale}
+      - mongo/jstests/core/write/update/update2.js # network error
+      - mongo/jstests/core/write/update/update8.js # assert: [{ "_id" : 1, "tags" : [ "a" ] }] != [null] are not equal : A
+      - mongo/jstests/core/write/update/update_addToSet.js # "errmsg" : "invalid key: \"x.$.y\" (key must not contain '.' sign)"
+      - mongo/jstests/core/write/update/update_affects_indexes.js # find: support for field \"returnKey\" with non-default value &{true}
+      - mongo/jstests/core/write/update/update_arrayFilters.js # assert: found code(s) [ ] does not match any of the expected codes [ 9 ]
+      - mongo/jstests/core/write/update/update_array_offset_positional.js # nested array not supported
+      - mongo/jstests/core/write/update/update_arraymatch1.js # assert failed: are not equal : A3
+      - mongo/jstests/core/write/update/update_arraymatch2.js # assert failed : A1
+      - mongo/jstests/core/write/update/update_arraymatch3.js # assert failed: are not equal : A2
+      - mongo/jstests/core/write/update/update_arraymatch4.js # assert: [{ "_id" : 1, "arr" : [ "A2", "B1", "C1" ] }] != [{ "_id" : 1, "arr" : [ "A1", "B1", "C1" ] }] are not equal : A2
+      - mongo/jstests/core/write/update/update_arraymatch5.js # unknown operator: visible
+      - mongo/jstests/core/write/update/update_arraymatch6.js # Cannot create field '$' in element {a: [ { id: 1.0, x: [ 5.0, 6.0, 7.0 ] }, { id: 2.0, x: [ 8.0, 9.0, 10.0 ] } ]}
+      - mongo/jstests/core/write/update/update_arraymatch7.js # assert failed
+      - mongo/jstests/core/write/update/update_arraymatch8.js # assert failed
+      - mongo/jstests/core/write/update/update_bit_examples.js #  Unknown modifier: $bit. Expected a valid update modifier or pipeline-style update specified as an array
+      - mongo/jstests/core/write/update/update_dbref.js # uncaught exception: TypeError: res.hasWriteError is not a function
+      - mongo/jstests/core/write/update/update_find_and_modify_id.js # Plan executor error during findAndModify :: caused by :: After applying the update, the (immutable) field '_id' was found to have been altered to _id: \"%!s(float64=1)\"",
+      - mongo/jstests/core/write/update/update_hint.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/write/update/update_invalid1.js # assert: [1] != [0] are not equal : A1
+      - mongo/jstests/core/write/update/update_metrics.js # assert: undefined is not greater than or eq 0
+      - mongo/jstests/core/write/update/update_min_max_examples.js # Cannot create field '$' in element {y: [ { a: 2.0 }, { a: 6.0 }, { a: [ 9.0, 1.0, 1.0 ] } ]}
+      - mongo/jstests/core/write/update/update_modifier_pop.js # Cannot use the part ($) of (a.$.b) to traverse the element ({a: [ { b: [ 1.0, 2.0, 3.0 ] }, { b: [ 4.0, 5.0, 6.0 ] } ]})
+      - mongo/jstests/core/write/update/update_multi6.js # assert: no write error
+      - mongo/jstests/core/write/update/update_numeric_field_name.js # assert: no write error
+      - mongo/jstests/core/write/update/update_pipeline_shell_helpers.js # BSON field 'update.updates.u' is the wrong type 'array', expected type 'object'
+      - mongo/jstests/core/write/update/update_server-12848.js # nested array not supported
+      - mongo/jstests/core/write/update/update_setOnInsert.js # assert: [{ "_id" : 5, "a" : 4, "x" : 4 }] != [{ "_id" : 5, "x" : 4, "a" : 3 }] are not equal
+      - mongo/jstests/core/write/update/update_with_large_hint.js # assert: command worked when it should have failed
+      - mongo/jstests/core/write/update/update_with_pipeline.js # BSON field 'update.updates.u' is the wrong type 'array', expected type 'object'"
+      - mongo/jstests/core/write/update/updateb.js # uncaught exception: TypeError: got is null
+      - mongo/jstests/core/write/update/updateh.js # "errmsg" : "invalid key: \"$b\" (key must not start with '$' sign)"
+      - mongo/jstests/core/write/update/updatej.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/write/update/updatel.js # TypeError: res.hasWriteError is not a function
+      - mongo/jstests/core/write/update/upsert_and.js # invalid key: \"$and\" (key must not start with '$' sign)
+      - mongo/jstests/core/write/update/upsert_fields.js # Performing an update on the path '_id' would modify the immutable field '_id'
+      - mongo/jstests/core/write/update/upsert_shell.js # TypeError: l.getUpsertedId is not a function
+      - mongo/jstests/core/write/verify_update_mods.js # q: support for field \"arrayFilters\" with value &{[0xc000b077d0]} is not implemented yet
+      - mongo/jstests/core/write/write_error_message_truncation.js # network error
+      - mongo/jstests/core/write/write_result.js # "errmsg" : "E11000 duplicate key error collection: test.write_result index: _id_ dup key: { _id: [100,128,125,122,88,157,37,232,236,27,215,96] }"
 
   mongodb:
     stats:
