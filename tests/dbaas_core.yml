@@ -279,7 +279,6 @@ results:
       - mongo/jstests/core/ddl/index_prepareUnique.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2565
       - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
-      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
       - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
       - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
       - mongo/jstests/core/ddl/rename_collection_to_itself.js # https://github.com/FerretDB/FerretDB/issues/2565
