@@ -318,7 +318,7 @@ results:
       - mongo/jstests/core/index/covered/covered_index_sort_2.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/covered/covered_index_sort_3.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js # https://github.com/FerretDB/FerretDB/issues/2826
-      - mongo/jstests/core/index/elemmatch_index.js # Index option \"sparse\" is not implemented yet
+      - mongo/jstests/core/index/elemmatch_index.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/fts/fts1.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/index/fts/fts2.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/index/fts/fts4.js # https://github.com/FerretDB/FerretDB/issues/416
@@ -502,7 +502,7 @@ results:
       - mongo/jstests/core/index/index_plugins.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/index/index_signature.js # uncaught exception: TypeError: can't convert undefined to object
       - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js # https://github.com/FerretDB/FerretDB/issues/10
-      - mongo/jstests/core/index/index_sparse1.js # assert: [2] != [1] are not equal : C1
+      - mongo/jstests/core/index/index_sparse1.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/index_sparse2.js # network error
       - mongo/jstests/core/index/indexa.js # assert: [2] != [3] are not equal : indexa 1
       - mongo/jstests/core/index/indexapi.js # `aggregate` stage \"$indexStats\" is not implemented yet
@@ -515,7 +515,7 @@ results:
       - mongo/jstests/core/index/indext.js # assert: [0] != [2] are not equal
       - mongo/jstests/core/index/indexu.js # assert: command worked when it should have failed: { "ok" : 1 }
       - mongo/jstests/core/index/partial_index_optimization.js # https://github.com/FerretDB/FerretDB/issues/2448
-      - mongo/jstests/core/index/sparse_index_internal_expr.js # unknown top level operator: $expr. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+      - mongo/jstests/core/index/sparse_index_internal_expr.js # https://github.com/FerretDB/FerretDB/issues/414
       - mongo/jstests/core/index/unique_index_insert.js # assert: no write error: { "nInserted" : 1 } : Failed with i 0, iter 0
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_count.js # network error
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js # https://github.com/FerretDB/FerretDB/issues/2947
@@ -613,7 +613,7 @@ results:
       - mongo/jstests/core/query/count/count.js # assert: [9] != [40415] are not equal
       - mongo/jstests/core/query/count/count11.js # assert: did not throw exception
       - mongo/jstests/core/query/count/count6.js # BSON field 'limit' value must be >= 0, actual value '-1'
-      - mongo/jstests/core/query/count/count_hint.js # Index option \"sparse\" is not implemented yet
+      - mongo/jstests/core/query/count/count_hint.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/query/count/countb.js # unknown top level operator: $where
       - mongo/jstests/core/query/count/countc.js # assert: [6] != [[ 2 ]] are not equal
       - mongo/jstests/core/query/covered_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
@@ -689,7 +689,7 @@ results:
       - mongo/jstests/core/query/find/find_getmore_bsonsize.js # Error: assertion src/mongo/util/hex.cpp:113 :
       - mongo/jstests/core/query/find/find_getmore_cmd.js # assert: 0 is not greater than 0
       - mongo/jstests/core/query/find/find_project_sort.js # assert: write failed with errors, NaN inserted
-      - mongo/jstests/core/query/find/find_projection_meta_errors.js # projection expression { $meta: \"some garbage\" } is not supported
+      - mongo/jstests/core/query/find/find_projection_meta_errors.js # https://github.com/FerretDB/FerretDB/issues/1712
       - mongo/jstests/core/query/find/find_size.js # nested array not supported
       - mongo/jstests/core/query/find/finda.js # assert: [150] != [200] are not equal
       - mongo/jstests/core/query/idhack.js # https://github.com/FerretDB/FerretDB/issues/2950
@@ -764,12 +764,12 @@ results:
       - mongo/jstests/core/query/project/proj_key1.js # Cannot do exclusion on field _id in inclusion projection
       - mongo/jstests/core/query/project/project_with_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/project/projection_conflicts.js # assert: 238 was not in [ 31250, 31249 ] : { "a.b" : 1, "a" : { "b" : "$$REMOVE" } }
-      - mongo/jstests/core/query/project/projection_meta_index_key.js #projection expression { $meta: \"indexKey\" } is not supported
+      - mongo/jstests/core/query/project/projection_meta_index_key.js # https://github.com/FerretDB/FerretDB/issues/1712
       - mongo/jstests/core/query/pull/pull2.js # assert: [0] != [1] are not equal : B
       - mongo/jstests/core/query/pull/pull_or.js # assert: [[ { "x" : 1 }, { "x" : 2 }, { "z" : "z" } ]] != [[ { "x" : 1 }, { "y" : "y" }, { "x" : 2 }, { "z" : "z" } ]] are not equal
       - mongo/jstests/core/query/pull/pull_remove1.js # assert: [[ 6, 7, 8 ]] != [[ 1, 2, 3, 4, 5, 6, 7, 8 ]] are not equal : A2
       - mongo/jstests/core/query/pull/pullall2.js # assert failed: not equal : B
-      - mongo/jstests/core/query/query_hash_stability.js # sparse not implemented
+      - mongo/jstests/core/query/query_hash_stability.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/query/regex/regex.js # assert failed
       - mongo/jstests/core/query/regex/regex3.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/regex/regex4.js # https://github.com/FerretDB/FerretDB/issues/2950
