@@ -269,7 +269,6 @@ results:
       - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/create_collection.js # convertToCapped not implemented
       - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/convert_to_capped.js # convertToCapped not implemented
       - mongo/jstests/core/ddl/create_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
