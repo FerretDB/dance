@@ -229,17 +229,8 @@ results:
       expected_pass: 256
     ignore:
       - mongo/jstests/core/query/explode_for_sort_fetch.js
-    pass:
-      - mongo/jstests/core/capped/capped5.js # silently passes because no assertions are used.
-      - mongo/jstests/core/catalog/list_indexes_invalid.js # passes because cannot seeem to use helper functions from list_indexes.js
-      - mongo/jstests/core/ddl/background_unique_indexes.js # passes due to no replication support.
-      - mongo/jstests/core/ddl/drop_index.js
-      - mongo/jstests/core/ddl/drop_indexes.js
-      - mongo/jstests/core/timeseries/clustered_index_crud.js
-      - mongo/jstests/core/administrative/auth2.js
-      - mongo/jstests/core/write/write_commands_reject_unknown_fields.js
+
     fail:
-      # TODO: investigate failures.
       - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
       - mongo/jstests/core/administrative/getlog2.js # \x0D JavaScript code BSON type not implemented
@@ -259,45 +250,43 @@ results:
       - mongo/jstests/core/capped/cappeda.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/catalog/list_catalog.js # https://github.com/FerretDB/FerretDB/issues/176
       - mongo/jstests/core/catalog/list_collections1.js # https://github.com/FerretDB/FerretDB/issues/2815
-      # --- aggregation tests ---
       # https://github.com/FerretDB/FerretDB/issues/2275
       # https://github.com/FerretDB/FerretDB/issues/1469
       # https://github.com/FerretDB/FerretDB/issues/414
       # https://github.com/FerretDB/FerretDB/issues/1457
       - mongo/jstests/core/command_let_variables.js
-      - mongo/jstests/core/api/api_version_new_50_language_features.js
-      - mongo/jstests/core/api/api_version_new_51_language_features.js
+      - mongo/jstests/core/api/api_version_new_50_language_features.js # https://github.com/FerretDB/FerretDB/issues/2943
+      - mongo/jstests/core/api/api_version_new_51_language_features.js # https://github.com/FerretDB/FerretDB/issues/2944
       - mongo/jstests/core/api/api_version_new_52_language_features.js # https://github.com/FerretDB/FerretDB/issues/1467
       - mongo/jstests/core/command_let_variables_merge_only.js # https://github.com/FerretDB/FerretDB/issues/1430
       - mongo/jstests/core/compound_index_max_fields.js # https://github.com/FerretDB/FerretDB/issues/2819
-      # --- end of aggregation tests ---
-      - mongo/jstests/core/compound_wildcard_index_validation.js # not implemented
+      - mongo/jstests/core/compound_wildcard_index_validation.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/datasize_validation.js # keyPattern, min, max are not implemented
-      - mongo/jstests/core/dbhash.js # not implemented
+      - mongo/jstests/core/dbhash.js # dbhash command not implemented
       - mongo/jstests/core/ddl/capped_convertToCapped1.js # cloneCollectionAsCapped command not implemented
       - mongo/jstests/core/ddl/collMod_index_invalid_option.js # https://github.com/FerretDB/FerretDB/issues/2415
-      - mongo/jstests/core/ddl/collation_convert_to_capped.js # collation not implemented
-      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # relies on feature flag parameters
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # relies on feature flag parameters
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # relies on feature flag parameters
+      - mongo/jstests/core/ddl/collation_convert_to_capped.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # https://github.com/FerretDB/FerretDB/issues/2822
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # https://github.com/FerretDB/FerretDB/issues/2822
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/create_collection.js # convertToCapped not implemented
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # relies on feature flag parameters
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/convert_to_capped.js # convertToCapped not implemented
       - mongo/jstests/core/ddl/create_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
-      - mongo/jstests/core/ddl/create_collection_fail_cleanup.js # collation not implemented
+      - mongo/jstests/core/ddl/create_collection_fail_cleanup.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js # ignoreUnknownIndexOptions not implemented
       - mongo/jstests/core/ddl/drop_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
       - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
-      - mongo/jstests/core/ddl/index_prepareUnique.js # relies on feature flag parameters
-      - mongo/jstests/core/ddl/rename_collection.js # dropTarget not implemented
+      - mongo/jstests/core/ddl/index_prepareUnique.js # https://github.com/FerretDB/FerretDB/issues/2822
+      - mongo/jstests/core/ddl/rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2565
       - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
       - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
       - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
       - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
-      - mongo/jstests/core/ddl/rename_collection_to_itself.js # dropTarget not implemented
-      - mongo/jstests/core/ddl/ttl_index_options.js # expireAfterSeconds not implemented
+      - mongo/jstests/core/ddl/rename_collection_to_itself.js # https://github.com/FerretDB/FerretDB/issues/2565
+      - mongo/jstests/core/ddl/ttl_index_options.js # https://github.com/FerretDB/FerretDB/issues/2415
       - mongo/jstests/core/diagdata.js # getDiagnosticData not implemented
-      - mongo/jstests/core/doc_validation/bypass_doc_validation.js # collMod not implemented
+      - mongo/jstests/core/doc_validation/bypass_doc_validation.js # https://github.com/FerretDB/FerretDB/issues/1510
       - mongo/jstests/core/doc_validation/doc_validation.js # https://github.com/FerretDB/FerretDB/issues/77
       - mongo/jstests/core/doc_validation/doc_validation_encrypt_keywords.js # https://github.com/FerretDB/FerretDB/issues/77
       - mongo/jstests/core/doc_validation/doc_validation_error.js # https://github.com/FerretDB/FerretDB/issues/77
@@ -310,15 +299,13 @@ results:
       - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/index/covered/covered_index_negative_1.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js # https://github.com/FerretDB/FerretDB/issues/2826
-      - mongo/jstests/core/function_string_representations.js # no such command: 'mapreduce'
-      - mongo/jstests/core/geo_parse_err.js # err.getWriteError() is null
-      - mongo/jstests/core/grow_hash_table.js #
-      - mongo/jstests/core/hashed_partial_and_sparse_index.js # Index key value \"hashed\" is not implemented yet
-      - mongo/jstests/core/hint1.js # network error
-      - mongo/jstests/core/hostinfo.js # [undefined] != [null] are equal : Missing Memory Size
-      - mongo/jstests/core/id_partial_projection.js # results are not equal
-      - mongo/jstests/core/illegal_cmd_namespace.js # command worked when it should have failed
-      - mongo/jstests/core/index/bindata_indexonly.js # TypeError: root is undefined
+      - mongo/jstests/core/function_string_representations.js # mapreduce not implemented
+      - mongo/jstests/core/geo_parse_err.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/hostinfo.js # hostinfo.system.memSizeMB not implemented
+      - mongo/jstests/core/id_partial_projection.js # https://github.com/FerretDB/FerretDB/issues/2948
+      - mongo/jstests/core/illegal_cmd_namespace.js # we do not validate namespaces in queries
+      - mongo/jstests/core/index/bindata_indexonly.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/covered/coveredIndex1.js # uncaught exception: Error: assert failed
       - mongo/jstests/core/index/covered/coveredIndex2.js # TypeError: queryPlanner.winningPlan is undefined
       - mongo/jstests/core/index/covered/covered_index_compound_1.js # TypeError: root is undefined
@@ -451,7 +438,7 @@ results:
       - mongo/jstests/core/index/geo/geo_s2overlappingpolys.js # assert: [0] != [1] are not equal
       - mongo/jstests/core/index/geo/geo_s2polywithholes.js # "unknown operator: $within"
       - mongo/jstests/core/index/geo/geo_s2sparse.js # uncaught exception: TypeError: coll.validate().keysPerIndex is undefined
-      - mongo/jstests/core/index/geo/geo_s2twofields.js # TypeError: t.find(...).explain(...).executionStats is undefined
+      - mongo/jstests/core/index/geo/geo_s2twofields.js # TypeError: t.find(...).explain(...).https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/geo/geo_s2validindex.js # Index key value \"2dsphere\" is not implemented yet
       - mongo/jstests/core/index/geo/geo_s2within.js # assert: [0] != [1] are not equal
       - mongo/jstests/core/index/geo/geo_s2within_line_polygon_sphere.js # nested arrays are not supported
@@ -492,21 +479,21 @@ results:
       - mongo/jstests/core/index/index_bounds_pipe.js # uncought exception: TypeError: queryPlanner.winningPlan is undefined
       - mongo/jstests/core/index/index_bounds_timestamp.js # uncaught exception: TypeError: root is undefined
       - mongo/jstests/core/index/index_check2.js # TypeError: queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/index/index_check3.js # uncaught exception: TypeError: explain.executionStats is undefined
-      - mongo/jstests/core/index/index_check6.js # uncaught exception: TypeError: explain.executionStats is undefined
-      - mongo/jstests/core/index/index_check7.js # uncaught exception: TypeError: explain.executionStats is undefined
+      - mongo/jstests/core/index/index_check3.js #https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/index/index_check6.js #https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/index/index_check7.js #https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/index_count_scan.js # nested arrays are not supported
       - mongo/jstests/core/index/index_decimal.js # network error
       - mongo/jstests/core/index/index_diag.js # support for field \"returnKey\" with non-default value true is not implemented yet
       - mongo/jstests/core/index/index_filter_catalog_independent.js # "no such command: 'planCacheSetFilter'"
-      - mongo/jstests/core/index/index_filter_collation.js # create: support for field \"collation\" with value &{[{fr locale} {2 strength}]} is not implemented yet
+      - mongo/jstests/core/index/index_filter_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_filter_commands_invalidate_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/index/index_filter_on_hidden_index.js # "no such command: 'planCacheSetFilter'"
       - mongo/jstests/core/index/index_large_and_small_dates.js # "Index option \"v\" is unknown"
       - mongo/jstests/core/index/index_many.js # assert: command worked when it should have failed
       - mongo/jstests/core/index/index_many2.js # assert: command worked when it should have failed
       - mongo/jstests/core/index/index_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/index/index_multiple_compatibility.js # Index key value \"collation\" is not implemented yet
+      - mongo/jstests/core/index/index_multiple_compatibility.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_partial_2dsphere.js # Index key value \"2dsphere\" is not implemented yet
       - mongo/jstests/core/index/index_partial_create_drop.js # assert: command failed: { "ok" : 0, "errmsg" : "no option found to get" } with original command request: { "getParameter" : 1, "featureCompatibilityVersion" : 1 }
       - mongo/jstests/core/index/index_partial_read_ops.js # Index option \"partialFilterExpression\" is not implemented yet
@@ -514,7 +501,7 @@ results:
       - mongo/jstests/core/index/index_partial_write_ops.js # Index option \"partialFilterExpression\" is not implemented yet
       - mongo/jstests/core/index/index_plugins.js # "Index key value \"hashed\" is not implemented yet"
       - mongo/jstests/core/index/index_signature.js # uncaught exception: TypeError: can't convert undefined to object
-      - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js # create: support for field \"collation\" with value &{[{fr locale}]} is not implemented yet
+      - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_sparse1.js # assert: [2] != [1] are not equal : C1
       - mongo/jstests/core/index/index_sparse2.js # network error
       - mongo/jstests/core/index/indexa.js # assert: [2] != [3] are not equal : indexa 1
@@ -578,7 +565,7 @@ results:
       - mongo/jstests/core/map_reduce_subplanning.js # network error
       - mongo/jstests/core/map_reduce_validation.js # network error
       - mongo/jstests/core/max_doc_size.js # network error
-      - mongo/jstests/core/merge_sort_collation.js # Index option \"collation\" is not implemented yet
+      - mongo/jstests/core/merge_sort_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/min_max_bounds.js # assert: [3] != [2] are not equal
       - mongo/jstests/core/min_max_hashed_index.js # Index key value \"hashed\" is not implemented yet
       - mongo/jstests/core/mod.js # network error
@@ -601,7 +588,7 @@ results:
       - mongo/jstests/core/query/always_true_false.js # unknown top level operator: $alwaysFalse
       - mongo/jstests/core/query/and/and.js # unknown top level operator: $where
       - mongo/jstests/core/query/and/and2.js # assert: [[ 5, 2 ]] != [[ 1, 2 ]] are not equal
-      - mongo/jstests/core/query/and/and3.js # uncaught exception: TypeError: e.executionStats is undefined
+      - mongo/jstests/core/query/and/and3.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/and/and_or_index_sort.js # Cannot do exclusion on field _id in inclusion projection
       - mongo/jstests/core/query/array/array1.js # nested array not supported
       - mongo/jstests/core/query/array/array_comparison_correctness.js # network error
@@ -663,12 +650,12 @@ results:
       - mongo/jstests/core/query/exists/exists7.js # assert failed
       - mongo/jstests/core/query/exists/exists8.js # assert failed
       - mongo/jstests/core/query/exists/existsa.js # assert failed
-      - mongo/jstests/core/query/explain/explain1.js # executionStats is undefined
-      - mongo/jstests/core/query/explain/explain4.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain1.js # https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/query/explain/explain4.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/explain/explain5.js # TypeError: stats1 is undefined
-      - mongo/jstests/core/query/explain/explain6.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain6.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/explain/explain_agg_write_concern.js # aggregate` stage \"$out\" is not implemented yet
-      - mongo/jstests/core/query/explain/explain_batch_size.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain_batch_size.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/explain/explain_count.js # collection/table does not exist
       - mongo/jstests/core/query/explain/explain_db_mismatch.js # command did not fail with any of the following codes [ 73 ]
       - mongo/jstests/core/query/explain/explain_delete.js # assert failed
@@ -677,7 +664,7 @@ results:
       - mongo/jstests/core/query/explain/explain_missing_collection.js # collection/table does not exist
       - mongo/jstests/core/query/explain/explain_missing_database.js # collection/table does not exist
       - mongo/jstests/core/query/explain/explain_multi_plan.js # winningPlan is undefined
-      - mongo/jstests/core/query/explain/explain_multi_plan_count.js # executionStats is undefined
+      - mongo/jstests/core/query/explain/explain_multi_plan_count.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/explain/explain_multikey.js # winningPlan is undefined
       - mongo/jstests/core/query/explain/explain_plan_scores.js # winningPlan is undefined
       - mongo/jstests/core/query/explain/explain_sample.js # assert: [true] != [undefined] are not equal
@@ -705,7 +692,7 @@ results:
       - mongo/jstests/core/query/find/find_projection_meta_errors.js # projection expression { $meta: \"some garbage\" } is not supported
       - mongo/jstests/core/query/find/find_size.js # nested array not supported
       - mongo/jstests/core/query/find/finda.js # assert: [150] != [200] are not equal
-      - mongo/jstests/core/query/idhack.js # executionStats is undefined
+      - mongo/jstests/core/query/idhack.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/in/in3.js # ssert: [1] != [0] are not equal
       - mongo/jstests/core/query/in/in_with_mixed_values.js # assert: [1] != [0] are not equal
       - mongo/jstests/core/query/inc/inc-SERVER-7446.js # assert: [0] != [NaN] are not equal
@@ -715,7 +702,7 @@ results:
       - mongo/jstests/core/query/internal_hash_eq/lookup_using_hash_key.js # Index key value \"hashed\" is not implemented yet
       - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js # "unknown operator: $_internalEqHash"
       - mongo/jstests/core/query/introspect_hidden_index_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
-      - mongo/jstests/core/query/invalid_collation_locale.js # assert: command did not fail with any of the following codes [ 2 ]
+      - mongo/jstests/core/query/invalid_collation_locale.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/js/js1.js # network error
       - mongo/jstests/core/query/js/js3.js # network error
       - mongo/jstests/core/query/js/js4.js # network error
@@ -747,7 +734,7 @@ results:
       - mongo/jstests/core/query/mr/mr_use_this_object.js # network error
       - mongo/jstests/core/query/nan.js # infinity values are not allowed
       - mongo/jstests/core/query/natural_validation.js # FieldPath field names may not start with '$'
-      - mongo/jstests/core/query/ne/ne2.js # executionStats is undefined
+      - mongo/jstests/core/query/ne/ne2.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/ne/ne3.js # assert did not throw exception
       - mongo/jstests/core/query/ne/ne_array.js # nested array not supported
       - mongo/jstests/core/query/neq_null_correctly_cache.js # no such command: 'planCacheClear'
@@ -763,11 +750,11 @@ results:
       - mongo/jstests/core/query/or/or_to_in.js # network error
       - mongo/jstests/core/query/or/ora.js # unknown top level operator: $where
       - mongo/jstests/core/query/or/ord.js # assert did not throw exception
-      - mongo/jstests/core/query/or/orf.js # executionStats is undefined
+      - mongo/jstests/core/query/or/orf.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/or/orj.js # assert did not throw exception
       - mongo/jstests/core/query/or/oro.js # network error while attempting to run command 'collStats'
       - mongo/jstests/core/query/partial_index_logical.js # partialFilterExpression not implemented
-      - mongo/jstests/core/query/plan_cache/collation_plan_cache.js # Index option \"collation\" is not implemented yet
+      - mongo/jstests/core/query/plan_cache/collation_plan_cache.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/plan_cache/plan_cache_clear.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/query/plan_cache/plan_cache_list_plans.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/query/plan_cache/plan_cache_list_shapes.js # planCacheStats not implemented
@@ -775,7 +762,7 @@ results:
       - mongo/jstests/core/query/plan_cache/plan_cache_shell_helpers.js # planCacheStats not implemented
       - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/query/project/proj_key1.js # Cannot do exclusion on field _id in inclusion projection
-      - mongo/jstests/core/query/project/project_with_collation.js # create: support for field \"collation\ not implemented yet
+      - mongo/jstests/core/query/project/project_with_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/project/projection_conflicts.js # assert: 238 was not in [ 31250, 31249 ] : { "a.b" : 1, "a" : { "b" : "$$REMOVE" } }
       - mongo/jstests/core/query/project/projection_meta_index_key.js #projection expression { $meta: \"indexKey\" } is not supported
       - mongo/jstests/core/query/pull/pull2.js # assert: [0] != [1] are not equal : B
@@ -784,10 +771,10 @@ results:
       - mongo/jstests/core/query/pull/pullall2.js # assert failed: not equal : B
       - mongo/jstests/core/query/query_hash_stability.js # sparse not implemented
       - mongo/jstests/core/query/regex/regex.js # assert failed
-      - mongo/jstests/core/query/regex/regex3.js # executionStats is undefined
-      - mongo/jstests/core/query/regex/regex4.js # executionStats is undefined
+      - mongo/jstests/core/query/regex/regex3.js # https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/query/regex/regex4.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/regex/regex5.js # assert: [1] != [0] are not equal : F
-      - mongo/jstests/core/query/regex/regex6.js # executionStats is undefined
+      - mongo/jstests/core/query/regex/regex6.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/regex/regex_distinct.js # winningPlan is undefined
       - mongo/jstests/core/query/regex/regex_error.js # command worked when it should have failed
       - mongo/jstests/core/query/regex/regex_limit.js # network error
@@ -800,22 +787,22 @@ results:
       - mongo/jstests/core/query/set/set1.js # assert: [{ "_id" : 1, "emb" : { "a.dot" : "data" } }] != [{ "_id" : 1, "emb" : { } }] are not equal : A
       - mongo/jstests/core/query/set/set6.js # assert: [{ "_id" : 1, "r" : DBRef("foo", ObjectId("64807d905fa218ed418d31fe")) }] != [null] are not equal : A
       - mongo/jstests/core/query/set/set7.js # uncaught exception: TypeError: t.findOne() is null
-      - mongo/jstests/core/query/sort/sort1.js # find: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort1.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/sort/sort2.js # assert failed
       - mongo/jstests/core/query/sort/sort9.js # assert: [2] != [1] are not equal
       - mongo/jstests/core/query/sort/sort_array.js # aggregate: support for field \"explain\" not implemented yet
       - mongo/jstests/core/query/sort/sort_dotted_paths.js # network error
-      - mongo/jstests/core/query/sort/sort_dotted_paths_collation.js # create: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_dotted_paths_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/sort/sort_dotted_paths_numeric.js # network error
       - mongo/jstests/core/query/sort/sort_dotted_paths_parallel_arrays.js # assert: command worked when it should have failed
       - mongo/jstests/core/query/sort/sort_merge.js # queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/query/sort/sort_merge_collation.js # create: support for field \"collation\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_merge_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/sort/sort_with_meta_operator.js # Illegal key in $sort specification: _id: &{[{1 $meta}]}"
       - mongo/jstests/core/query/sort/sorta.js # network error
       - mongo/jstests/core/query/sort/sortb.js # assert did not throw exception
       - mongo/jstests/core/query/sort/sortf.js # network error
       - mongo/jstests/core/query/sort/sortg.js # assert: [6] != [[ 292 ]] are not equal
-      - mongo/jstests/core/query/sort/sortk.js # executionStats is undefined
+      - mongo/jstests/core/query/sort/sortk.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/sort/sortl.js # projection expression { $meta: \"sortKey\" } is not supported
       - mongo/jstests/core/query/type/type3.js # assert: [1] != [0] are not equal
       - mongo/jstests/core/query/type/type8.js # network error
@@ -860,8 +847,8 @@ results:
       - mongo/jstests/core/type_bracket.js # network error
       - mongo/jstests/core/uniqueness.js # assert: no write error: { "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 }
       - mongo/jstests/core/validate_js_timestamp.js # network error
-      - mongo/jstests/core/write/batch_write_collation_estsize.js # support for field \"collation\" with value &{[{en_US locale}
-      - mongo/jstests/core/write/collation_find_and_modify.js # support for field \"collation\" with value &{[{en_US locale}
+      - mongo/jstests/core/write/batch_write_collation_estsize.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/write/collation_find_and_modify.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/write/delete/batch_write_command_delete.js # assert failed : { "ok" : 1, "n" : 0 }
       - mongo/jstests/core/write/delete/delete_hint.js # queryPlanner.winningPlan is undefined
       - mongo/jstests/core/write/delete/remove7.js # network error
@@ -887,7 +874,7 @@ results:
       - mongo/jstests/core/write/insert/insert_id_undefined.js # network error
       - mongo/jstests/core/write/insert/insert_illegal_doc.js # assert: no write error
       - mongo/jstests/core/write/update/batch_write_command_update.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/write/update/collation_update.js # create: support for field \"collation\" with value &{[{en_US locale}
+      - mongo/jstests/core/write/update/collation_update.js # create: https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/write/update/update2.js # network error
       - mongo/jstests/core/write/update/update8.js # assert: [{ "_id" : 1, "tags" : [ "a" ] }] != [null] are not equal : A
       - mongo/jstests/core/write/update/update_addToSet.js # "errmsg" : "invalid key: \"x.$.y\" (key must not contain '.' sign)"
