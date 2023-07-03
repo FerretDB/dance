@@ -225,11 +225,8 @@ results:
   ferretdb:
     stats:
       expected_fail: 0
-      unexpected_fail: 711
-      expected_pass: 256
+      expected_pass: 8
     ignore:
-      - mongo/jstests/core/query/explode_for_sort_fetch.js
-
     fail:
       - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
@@ -278,7 +275,7 @@ results:
       - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
       - mongo/jstests/core/ddl/index_prepareUnique.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/ddl/rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2565
-      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # cross-database renaming not implemented
+      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # https://github.com/FerretDB/FerretDB/issues/2563
       - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
       - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
       - mongo/jstests/core/ddl/rename_collection_to_itself.js # https://github.com/FerretDB/FerretDB/issues/2565
@@ -295,11 +292,7 @@ results:
       - mongo/jstests/core/filemd5.js # filemd5 not implemented
       - mongo/jstests/core/function_string_representations.js # mapreduce not implemented
       - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
-      - mongo/jstests/core/index/covered/covered_index_negative_1.js # https://github.com/FerretDB/FerretDB/issues/2416
-      - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js # https://github.com/FerretDB/FerretDB/issues/2826
-      - mongo/jstests/core/function_string_representations.js # mapreduce not implemented
       - mongo/jstests/core/geo_parse_err.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/hostinfo.js # hostinfo.system.memSizeMB not implemented
       - mongo/jstests/core/id_partial_projection.js # https://github.com/FerretDB/FerretDB/issues/2948
       - mongo/jstests/core/illegal_cmd_namespace.js # we do not validate namespaces in queries
@@ -349,11 +342,11 @@ results:
       - mongo/jstests/core/index/fts/fts_score_sort.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/index/fts/fts_spanish.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/index/fts/fts_trailing_fields.js # https://github.com/FerretDB/FerretDB/issues/416
-      - mongo/jstests/core/index/geo/geo1.js # [2] != [1] are not equal : S3
+      - mongo/jstests/core/index/geo/geo1.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo10.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo2.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo3.js # `https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo6.js # [2] != [3] are not equal : A2
+      - mongo/jstests/core/index/geo/geo3.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo6.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo7.js #https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo9.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_2d_explain.js # https://github.com/FerretDB/FerretDB/issues/128
@@ -392,14 +385,14 @@ results:
       - mongo/jstests/core/index/geo/geo_multikey1.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_multinest0.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_multinest1.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js # https://github.com/FerretDB/FerretDB/issues/128 https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_near_point_query.js # https://github.com/FerretDB/FerretDB/issues/128 https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_near_random1.js # https://github.com/FerretDB/FerretDB/issues/128 https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo_near_point_query.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo_near_random1.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_near_random2.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_near_tailable.js # https://github.com/FerretDB/FerretDB/issues/128 https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo_near_tailable.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_nearwithin.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_oob_sphere.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_operator_crs.js # https://github.com/FerretDB/FerretDB/issues/128 https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/index/geo/geo_operator_crs.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_or.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_poly_edge.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_poly_line.js # https://github.com/FerretDB/FerretDB/issues/128
@@ -464,33 +457,33 @@ results:
       - mongo/jstests/core/index/hashed/hashed_index_queries_with_logical_operators.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/index/hashed/hashed_index_sort.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/index/hashed/hashed_index_with_arrays.js # https://github.com/FerretDB/FerretDB/issues/2416
-      - mongo/jstests/core/index/hidden_index.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/index/index13.js # unknown operator: b
-      - mongo/jstests/core/index/index4.js # assert failed : len1
-      - mongo/jstests/core/index/index8.js # assert failed : B1 { "v" : 2, "key" : { "b" : 1 }, "name" : "b_1" }
+      - mongo/jstests/core/index/hidden_index.js # queryPlanner.winningPlan not implemented yet
+      - mongo/jstests/core/index/index13.js # https://github.com/FerretDB/FerretDB/issues/2262
+      - mongo/jstests/core/index/index4.js # TODO 1.
+      - mongo/jstests/core/index/index8.js # https://github.com/FerretDB/FerretDB/issues/1516
       - mongo/jstests/core/index/index_bigkeys.js # ERROR: index row requires 33896 bytes, maximum size is 8191 (SQLSTATE 54000)
-      - mongo/jstests/core/index/index_bounds_code.js # network error
-      - mongo/jstests/core/index/index_bounds_maxkey.js # network error
-      - mongo/jstests/core/index/index_bounds_minkey.js # network error
-      - mongo/jstests/core/index/index_bounds_number_edge_cases.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/index/index_bounds_object.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_bounds_code.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/index/index_bounds_maxkey.js # unhandled element type 0x7f (MaxKey)
+      - mongo/jstests/core/index/index_bounds_minkey.js # unhandled element type 0xff (MinKey)
+      - mongo/jstests/core/index/index_bounds_number_edge_cases.js # document fields of double type must not contain Infinity, -Infinity, or NaN values.
+      - mongo/jstests/core/index/index_bounds_object.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/index/index_bounds_pipe.js # uncought exception: TypeError: queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/index/index_bounds_timestamp.js # uncaught exception: https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/index/index_bounds_timestamp.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/index_check2.js # TypeError: queryPlanner.winningPlan is undefined
       - mongo/jstests/core/index/index_check3.js #https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/index_check6.js #https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/index_check7.js #https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/index/index_count_scan.js # nested arrays are not supported
-      - mongo/jstests/core/index/index_decimal.js # network error
+      - mongo/jstests/core/index/index_decimal.js # https://github.com/FerretDB/FerretDB/issues/66
       - mongo/jstests/core/index/index_diag.js # support for field \"returnKey\" with non-default value true is not implemented yet
       - mongo/jstests/core/index/index_filter_catalog_independent.js # "no such command: 'planCacheSetFilter'"
       - mongo/jstests/core/index/index_filter_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_filter_commands_invalidate_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/index/index_filter_on_hidden_index.js # "no such command: 'planCacheSetFilter'"
-      - mongo/jstests/core/index/index_large_and_small_dates.js # "Index option \"v\" is unknown"
-      - mongo/jstests/core/index/index_many.js # assert: command worked when it should have failed
-      - mongo/jstests/core/index/index_many2.js # assert: command worked when it should have failed
-      - mongo/jstests/core/index/index_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/index_large_and_small_dates.js # "Index option \"v\" is unknown", version 2 adds support for collation and Decimal128
+      - mongo/jstests/core/index/index_many.js # A single collection can have no more than 64 indexes.
+      - mongo/jstests/core/index/index_many2.js # A single collection can have no more than 64 indexes.
+      - mongo/jstests/core/index/index_multikey.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/index/index_multiple_compatibility.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_partial_2dsphere.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/index_partial_create_drop.js # https://github.com/FerretDB/FerretDB/issues/2822
@@ -498,24 +491,21 @@ results:
       - mongo/jstests/core/index/index_partial_validate.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/index_partial_write_ops.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/index_plugins.js # https://github.com/FerretDB/FerretDB/issues/2416
-      - mongo/jstests/core/index/index_signature.js # uncaught exception: TypeError: can't convert undefined to object
+      - mongo/jstests/core/index/index_signature.js # https://github.com/FerretDB/FerretDB/issues/2328
       - mongo/jstests/core/index/index_sort_within_multiple_point_ranges.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/index/index_sparse1.js # https://github.com/FerretDB/FerretDB/issues/2448
-      - mongo/jstests/core/index/index_sparse2.js # network error
-      - mongo/jstests/core/index/indexa.js # assert: [2] != [3] are not equal : indexa 1
-      - mongo/jstests/core/index/indexapi.js # `aggregate` stage \"$indexStats\" is not implemented yet
-      - mongo/jstests/core/index/indexb.js # assert failed : bfail1
-      - mongo/jstests/core/index/indexes_multiple_commands.js # assert: [NaN] != [1] are not equal : { "ok" : 1 }
-      - mongo/jstests/core/index/indexm.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/index/indexp.js # assert: command worked when it should have failed: { "ok" : 1 }
-      - mongo/jstests/core/index/indexr.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/index/indexs.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/index/indext.js # assert: [0] != [2] are not equal
-      - mongo/jstests/core/index/indexu.js # assert: command worked when it should have failed: { "ok" : 1 }
+      - mongo/jstests/core/index/index_sparse2.js # https://github.com/FerretDB/FerretDB/issues/2448
+      - mongo/jstests/core/index/indexapi.js # https://github.com/FerretDB/FerretDB/issues/1424
+      - mongo/jstests/core/index/indexes_multiple_commands.js # https://github.com/FerretDB/FerretDB/issues/2328
+      - mongo/jstests/core/index/indexm.js # TODO 1.
+      - mongo/jstests/core/index/indexp.js # https://github.com/FerretDB/FerretDB/issues/2955
+      - mongo/jstests/core/index/indexr.js # TODO 1.
+      - mongo/jstests/core/index/indexs.js # TODO 1.
+      - mongo/jstests/core/index/indext.js # https://github.com/FerretDB/FerretDB/issues/2448
+      - mongo/jstests/core/index/indexu.js # do not use numeric field names in embedded elements in an array), field: '0' for array: { 0: { 0: 1.0 } }"
       - mongo/jstests/core/index/partial_index_optimization.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/sparse_index_internal_expr.js # https://github.com/FerretDB/FerretDB/issues/414
-      - mongo/jstests/core/index/unique_index_insert.js # assert: no write error: { "nInserted" : 1 } : Failed with i 0, iter 0
-      - mongo/jstests/core/index/wildcard/compound_wildcard_index_count.js # network error
+      - mongo/jstests/core/index/wildcard/compound_wildcard_index_count.js # unhandled element type 0x0d (JavaScript)
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_hiding.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_hint.js # https://github.com/FerretDB/FerretDB/issues/2947
@@ -535,7 +525,7 @@ results:
       - mongo/jstests/core/index/wildcard/wildcard_index_filter.js # no such command: 'PlanCacheListFilters'
       - mongo/jstests/core/index/wildcard/wildcard_index_hint.js # assert: command worked when it should have failed
       - mongo/jstests/core/index/wildcard/wildcard_index_minmax.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/index/wildcard/wildcard_index_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/index/wildcard/wildcard_index_multikey.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/index/wildcard/wildcard_index_nonblocking_sort.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_partial_index.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_projection.js # assert: [1] != [0] are not equal
@@ -606,7 +596,7 @@ results:
       - mongo/jstests/core/query/array/arrayfindb.js # "unknown operator: b"
       - mongo/jstests/core/query/basic1.js # Invalid command format: the 'aggregate' field must specify a collection name or 1
       - mongo/jstests/core/query/batch_size.js # assert: [1] != [4] are not equal
-      - mongo/jstests/core/query/bittest.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/query/bittest.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/query/collection_uuid_find.js # firstBatch[0].info is undefined
       - mongo/jstests/core/query/count/count.js # assert: [9] != [40415] are not equal
       - mongo/jstests/core/query/count/count11.js # assert: did not throw exception
@@ -614,7 +604,7 @@ results:
       - mongo/jstests/core/query/count/count_hint.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/query/count/countb.js # unknown top level operator: $where
       - mongo/jstests/core/query/count/countc.js # assert: [6] != [[ 2 ]] are not equal
-      - mongo/jstests/core/query/covered_multikey.js # uncaught exception: TypeError: queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/query/covered_multikey.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js # aggregate` stage \"$out\" is not implemented yet
       - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js # uncaught exception: Error: [5] != [1] are not equal
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js # create: support for field \"size\" with value 1024 is not implemented yet
