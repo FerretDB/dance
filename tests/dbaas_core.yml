@@ -497,10 +497,10 @@ results:
       - mongo/jstests/core/index/index_sparse2.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/indexapi.js # https://github.com/FerretDB/FerretDB/issues/1424
       - mongo/jstests/core/index/indexes_multiple_commands.js # https://github.com/FerretDB/FerretDB/issues/2328
-      - mongo/jstests/core/index/indexm.js # TODO 1.
+      - mongo/jstests/core/index/indexm.js # https://github.com/FerretDB/FerretDB/issues/2970
       - mongo/jstests/core/index/indexp.js # https://github.com/FerretDB/FerretDB/issues/2955
-      - mongo/jstests/core/index/indexr.js # TODO 1.
-      - mongo/jstests/core/index/indexs.js # TODO 1.
+      - mongo/jstests/core/index/indexr.js # https://github.com/FerretDB/FerretDB/issues/2970
+      - mongo/jstests/core/index/indexs.js # https://github.com/FerretDB/FerretDB/issues/2970
       - mongo/jstests/core/index/indext.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/index/indexu.js # do not use numeric field names in embedded elements in an array), field: '0' for array: { 0: { 0: 1.0 } }"
       - mongo/jstests/core/index/partial_index_optimization.js # https://github.com/FerretDB/FerretDB/issues/2448
@@ -513,7 +513,7 @@ results:
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_prefix.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/index/wildcard/wildcard_and_text_indexes.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js # `aggregate` stage \"$graphLookup\" is not implemented yet
+      - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js # https://github.com/FerretDB/FerretDB/issues/1422
       - mongo/jstests/core/index/wildcard/wildcard_index_basic_index_bounds.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_count.js # nested array not supported yet
       - mongo/jstests/core/index/wildcard/wildcard_index_covered_queries.js # https://github.com/FerretDB/FerretDB/issues/2822
@@ -528,72 +528,74 @@ results:
       - mongo/jstests/core/index/wildcard/wildcard_index_multikey.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/index/wildcard/wildcard_index_nonblocking_sort.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_partial_index.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/index/wildcard/wildcard_index_projection.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/index/wildcard/wildcard_index_return_key.js # "https://github.com/FerretDB/FerretDB/issues/128 "find: support for field \"returnKey\" with non-default value true is not implemented yet"
+      - mongo/jstests/core/index/wildcard/wildcard_index_projection.js # https://github.com/FerretDB/FerretDB/issues/2947
+      - mongo/jstests/core/index/wildcard/wildcard_index_return_key.js # "find: support for field \"returnKey\" with non-default value true is not implemented yet"
       - mongo/jstests/core/index/wildcard/wildcard_index_type.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_update.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/json_schema/additional_items.js # assert: did not throw exception
-      - mongo/jstests/core/json_schema/additional_properties.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/dependencies.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/encrypt.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/items.js # assert: did not throw exception
-      - mongo/jstests/core/json_schema/json_schema.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/logical_keywords.js # assert: did not throw exception
-      - mongo/jstests/core/json_schema/min_max_items.js # assert: did not throw exception
-      - mongo/jstests/core/json_schema/min_max_properties.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/misc_validation.js # assert: did not throw exception
-      - mongo/jstests/core/json_schema/pattern_properties.js # uknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/required.js # unknown top level operator: $jsonSchema.
-      - mongo/jstests/core/json_schema/unique_items.js # assert: did not throw exception
-      - mongo/jstests/core/list_commands.js # assert failed
-      - mongo/jstests/core/list_namespaces_invalidation.js # uncaught exception: Error: command failed
+      # https://github.com/FerretDB/FerretDB/issues/77
+      # https://github.com/FerretDB/FerretDB/issues/415
+      - mongo/jstests/core/json_schema/additional_items.js
+      - mongo/jstests/core/json_schema/additional_properties.js
+      - mongo/jstests/core/json_schema/dependencies.js
+      - mongo/jstests/core/json_schema/encrypt.js
+      - mongo/jstests/core/json_schema/items.js
+      - mongo/jstests/core/json_schema/json_schema.js
+      - mongo/jstests/core/json_schema/logical_keywords.js
+      - mongo/jstests/core/json_schema/min_max_items.js
+      - mongo/jstests/core/json_schema/min_max_properties.js
+      - mongo/jstests/core/json_schema/misc_validation.js
+      - mongo/jstests/core/json_schema/pattern_properties.js
+      - mongo/jstests/core/json_schema/required.js
+      - mongo/jstests/core/json_schema/unique_items.js
+      - mongo/jstests/core/list_commands.js # secondaryOk not implemented yet
+      - mongo/jstests/core/list_namespaces_invalidation.js # tries to rename a collection that exceeds max table length
       - mongo/jstests/core/local_tail_capped.js # create: support for field \"size\" with value 1.048576e+07 is not implemented yet
-      - mongo/jstests/core/long_double_compare.js # Cannot do exclusion on field _id in inclusion projection
-      - mongo/jstests/core/map_reduce_subplanning.js # network error
-      - mongo/jstests/core/map_reduce_validation.js # network error
-      - mongo/jstests/core/max_doc_size.js # network error
+      - mongo/jstests/core/long_double_compare.js # https://github.com/FerretDB/FerretDB/issues/2826
+      - mongo/jstests/core/map_reduce_subplanning.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/map_reduce_validation.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/max_doc_size.js # https://github.com/FerretDB/FerretDB/issues/2957
       - mongo/jstests/core/merge_sort_collation.js # https://github.com/FerretDB/FerretDB/issues/10
-      - mongo/jstests/core/min_max_bounds.js # assert: [3] != [2] are not equal
+      - mongo/jstests/core/min_max_bounds.js # cursor.min() and cursor.max() are not implemented yet
       - mongo/jstests/core/min_max_hashed_index.js # https://github.com/FerretDB/FerretDB/issues/2416
-      - mongo/jstests/core/mod.js # network error
-      - mongo/jstests/core/mod_overflow.js # unknown top level operator: $expr
+      - mongo/jstests/core/mod.js # unhandled element type 0x13 (Decimal)
+      - mongo/jstests/core/mod_overflow.js # https://github.com/FerretDB/FerretDB/issues/414
       - mongo/jstests/core/mod_special_values.js # assert: [6] != [[ 2, 4938500 ]] are not equal
       - mongo/jstests/core/mod_with_where.js # unknown top level operator: $where
-      - mongo/jstests/core/monotonic_date_operations.js # Invalid $project :: caused by :: An empty sub-projection is not a valid value
-      - mongo/jstests/core/mr_single_reduce.js # network error
-      - mongo/jstests/core/multi.js # assert: [1] != [0] are not equal : E
-      - mongo/jstests/core/multikey_geonear.js # unknown operator: $near"
-      - mongo/jstests/core/natural.js # FieldPath field names may not start with '$'
-      - mongo/jstests/core/opcounters_active.js # assert: [undefined] != ...
-      - mongo/jstests/core/optimized_match_explain.js # aggregate: support for field \"explain\" not implemented yet
-      - mongo/jstests/core/partialFilterExpression_with_geoWithin.js # getParameter not implemented
+      - mongo/jstests/core/monotonic_date_operations.js # https://github.com/FerretDB/FerretDB/issues/2893
+      - mongo/jstests/core/mr_single_reduce.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/multi.js # nested arrays are not supported
+      - mongo/jstests/core/multikey_geonear.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/natural.js # relies on natural order
+      - mongo/jstests/core/opcounters_active.js # result.metrics.commands.serverStatus
+      - mongo/jstests/core/optimized_match_explain.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/core/partialFilterExpression_with_geoWithin.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/positional_projection_multiple_array_fields.js # projection expression { $slice: 2.0 } is not supported
-      - mongo/jstests/core/query/agg_hint.js # aggregate: support for field \"explain\" not implemented yet
-      - mongo/jstests/core/query/all/all2.js # assert: [1] != [0] are not equal : { "a.x" : { "$all" : [ 1, 2 ] } } F count no index
-      - mongo/jstests/core/query/all/all4.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/query/all/all5.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/agg_hint.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/core/query/all/all2.js # https://github.com/FerretDB/FerretDB/issues/2960
+      - mongo/jstests/core/query/all/all4.js # https://github.com/FerretDB/FerretDB/issues/2960
+      - mongo/jstests/core/query/all/all5.js # https://github.com/FerretDB/FerretDB/issues/2960
       - mongo/jstests/core/query/always_true_false.js # unknown top level operator: $alwaysFalse
       - mongo/jstests/core/query/and/and.js # unknown top level operator: $where
-      - mongo/jstests/core/query/and/and2.js # assert: [[ 5, 2 ]] != [[ 1, 2 ]] are not equal
+      - mongo/jstests/core/query/and/and2.js # https://github.com/FerretDB/FerretDB/issues/822
       - mongo/jstests/core/query/and/and3.js # https://github.com/FerretDB/FerretDB/issues/2950
-      - mongo/jstests/core/query/and/and_or_index_sort.js # Cannot do exclusion on field _id in inclusion projection
+      - mongo/jstests/core/query/and/and_or_index_sort.js # https://github.com/FerretDB/FerretDB/issues/2826
       - mongo/jstests/core/query/array/array1.js # nested array not supported
-      - mongo/jstests/core/query/array/array_comparison_correctness.js # network error
-      - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js # network error
-      - mongo/jstests/core/query/array/array_match2.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/query/array/arrayfind1.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/array_comparison_correctness.js # unhandled element type 0xff (MinKey)
+      - mongo/jstests/core/query/array/array_index_and_nonIndex_consistent.js # unhandled element type 0xff (MinKey)
+      - mongo/jstests/core/query/array/array_match2.js # unhandled element type 0xff (MinKey)
+      - mongo/jstests/core/query/array/arrayfind1.js # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind10.js # nested array not supported
-      - mongo/jstests/core/query/array/arrayfind2.js # assert: [3] != [0] are not equal : no index A2
-      - mongo/jstests/core/query/array/arrayfind3.js # assert: [1] != [2] are not equal : A2
-      - mongo/jstests/core/query/array/arrayfind4.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/query/array/arrayfind5.js # assert: [1] != [0] are not equal
-      - mongo/jstests/core/query/array/arrayfind6.js # count failed "https://github.com/FerretDB/FerretDB/issues/128 "unknown operator: b"
-      - mongo/jstests/core/query/array/arrayfind7.js # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/array/arrayfind2.js # https://github.com/FerretDB/FerretDB/issues/2262
+      - mongo/jstests/core/query/array/arrayfind3.js # https://github.com/FerretDB/FerretDB/issues/1989
+      - mongo/jstests/core/query/array/arrayfind4.js # nested arrays are not supported
+      - mongo/jstests/core/query/array/arrayfind5.js # https://github.com/FerretDB/FerretDB/issues/2967
+      - mongo/jstests/core/query/array/arrayfind6.js # https://github.com/FerretDB/FerretDB/issues/2964
+      - mongo/jstests/core/query/array/arrayfind7.js # nested arrays are not supported
       - mongo/jstests/core/query/array/arrayfind8.js # assert: [1] != [2] are not equal : unexpected count in unindexed elemMatch query
-      - mongo/jstests/core/query/array/arrayfind9.js # $elemMatch: support for $not not implemented yet
+      - mongo/jstests/core/query/array/arrayfind9.js # $https://github.com/FerretDB/FerretDB/issues/731
       - mongo/jstests/core/query/array/arrayfinda.js # uncaught exception: Error: error hasNext: false
-      - mongo/jstests/core/query/array/arrayfindb.js # "unknown operator: b"
+      - mongo/jstests/core/query/array/arrayfindb.js # https://github.com/FerretDB/FerretDB/issues/2964
       - mongo/jstests/core/query/basic1.js # Invalid command format: the 'aggregate' field must specify a collection name or 1
       - mongo/jstests/core/query/batch_size.js # assert: [1] != [4] are not equal
       - mongo/jstests/core/query/bittest.js # queryPlanner.winningPlan not implemented yet
@@ -778,7 +780,7 @@ results:
       - mongo/jstests/core/query/sort/sort1.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/sort/sort2.js # assert failed
       - mongo/jstests/core/query/sort/sort9.js # assert: [2] != [1] are not equal
-      - mongo/jstests/core/query/sort/sort_array.js # aggregate: support for field \"explain\" not implemented yet
+      - mongo/jstests/core/query/sort/sort_array.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/core/query/sort/sort_dotted_paths.js # network error
       - mongo/jstests/core/query/sort/sort_dotted_paths_collation.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/query/sort/sort_dotted_paths_numeric.js # network error
