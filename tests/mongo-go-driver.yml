@@ -168,9 +168,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
   mongodb:
     stats:
-      unexpected_fail: 0
-      unexpected_skip: 0
-      unexpected_pass: 0
       expected_fail: 0
       expected_skip: 410
       expected_pass: 1889
