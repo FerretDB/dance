@@ -592,37 +592,36 @@ results:
       - mongo/jstests/core/query/array/arrayfind5.js # https://github.com/FerretDB/FerretDB/issues/2967
       - mongo/jstests/core/query/array/arrayfind6.js # https://github.com/FerretDB/FerretDB/issues/2964
       - mongo/jstests/core/query/array/arrayfind7.js # nested arrays are not supported
-      - mongo/jstests/core/query/array/arrayfind8.js # assert: [1] != [2] are not equal : unexpected count in unindexed elemMatch query
-      - mongo/jstests/core/query/array/arrayfind9.js # $https://github.com/FerretDB/FerretDB/issues/731
-      - mongo/jstests/core/query/array/arrayfinda.js # uncaught exception: Error: error hasNext: false
+      - mongo/jstests/core/query/array/arrayfind8.js # https://github.com/FerretDB/FerretDB/issues/2399
+      - mongo/jstests/core/query/array/arrayfind9.js # https://github.com/FerretDB/FerretDB/issues/731
+      - mongo/jstests/core/query/array/arrayfinda.js # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfindb.js # https://github.com/FerretDB/FerretDB/issues/2964
       - mongo/jstests/core/query/basic1.js # Invalid command format: the 'aggregate' field must specify a collection name or 1
-      - mongo/jstests/core/query/batch_size.js # assert: [1] != [4] are not equal
+      - mongo/jstests/core/query/batch_size.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/bittest.js # queryPlanner.winningPlan not implemented yet
-      - mongo/jstests/core/query/collection_uuid_find.js # firstBatch[0].info is undefined
-      - mongo/jstests/core/query/count/count.js # assert: [9] != [40415] are not equal
-      - mongo/jstests/core/query/count/count11.js # assert: did not throw exception
+      - mongo/jstests/core/query/collection_uuid_find.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/query/count/count.js # wrong error, expected Location40415 got FailedToParse
+      - mongo/jstests/core/query/count/count11.js # we don't validate find command
       - mongo/jstests/core/query/count/count6.js # BSON field 'limit' value must be >= 0, actual value '-1'
       - mongo/jstests/core/query/count/count_hint.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/query/count/countb.js # unknown top level operator: $where
-      - mongo/jstests/core/query/count/countc.js # assert: [6] != [[ 2 ]] are not equal
+      - mongo/jstests/core/query/count/countc.js # unknown top level operator: $where
       - mongo/jstests/core/query/covered_multikey.js # queryPlanner.winningPlan not implemented yet
       - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js # aggregate` stage \"$out\" is not implemented yet
-      - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js # uncaught exception: Error: [5] != [1] are not equal
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js # create: support for field \"size\" with value 1024 is not implemented yet
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js # network error
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js # tailable cursors not supported
       - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js # tailing cursors not supported, size field not supported
       - mongo/jstests/core/query/cursor/tailable_skip_limit.js # support for field \"size\" with value 1024 is not implemented yet
-      - mongo/jstests/core/query/dbref/dbref1.js # network error
-      - mongo/jstests/core/query/dbref/dbref2.js # uncaught exception: TypeError: b.findOne() is null
-      - mongo/jstests/core/query/dbref/dbref3.js # assert: [2] != [0] are not equal
-      - mongo/jstests/core/query/dbref/dbref4.js # assert failed
-      - mongo/jstests/core/query/dbref/ref.js # network error
-      - mongo/jstests/core/query/dbref/ref2.js # assert: [2] != [0] are not equal : A
-      - mongo/jstests/core/query/dbref/ref3.js # uncaught exception: TypeError: db.things3.findOne().o is undefined
-      - mongo/jstests/core/query/dbref/ref4.js # network error
+      - mongo/jstests/core/query/dbref/dbref1.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/dbref2.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/dbref3.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/dbref4.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/ref.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/ref2.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/ref3.js # document keys must not start with $ sign
+      - mongo/jstests/core/query/dbref/ref4.js # document keys must not start with $ sign
       - mongo/jstests/core/query/distinct/distinct4.js # assert failed
       - mongo/jstests/core/query/distinct/distinct_array1.js # assert failed
       - mongo/jstests/core/query/distinct/distinct_compound_index.js # getWinningPlan not implemented
@@ -693,35 +692,35 @@ results:
       - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js # "unknown operator: $_internalEqHash"
       - mongo/jstests/core/query/introspect_hidden_index_plan_cache_entries.js # assert: ["undefined"] != ["string"] are not equal
       - mongo/jstests/core/query/invalid_collation_locale.js # https://github.com/FerretDB/FerretDB/issues/10
-      - mongo/jstests/core/query/js/js1.js # network error
-      - mongo/jstests/core/query/js/js3.js # network error
-      - mongo/jstests/core/query/js/js4.js # network error
-      - mongo/jstests/core/query/js/js5.js # unknown top level operator: $where
-      - mongo/jstests/core/query/js/js8.js # network error
-      - mongo/jstests/core/query/js/js_global_scope.js # network error
-      - mongo/jstests/core/query/js/js_object_properties.js # network error
-      - mongo/jstests/core/query/min_max_key.js # network error
+      - mongo/jstests/core/query/js/js1.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/js/js3.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/js/js4.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/js/js5.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/js/js8.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/js/js_global_scope.js # unhandled element type 0x0d (JavaScript)r
+      - mongo/jstests/core/query/js/js_object_properties.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/min_max_key.js # unhandled element type 0x7f (MaxKey)
       - mongo/jstests/core/query/minmax.js # assert: [1] != [4] are not equal
       - mongo/jstests/core/query/minmax_edge.js # assert: [9] != [0] are not equal
-      - mongo/jstests/core/query/mr/mr_agg_explain.js # network error
-      - mongo/jstests/core/query/mr/mr_bigobject.js # network error
-      - mongo/jstests/core/query/mr/mr_bigobject_replace.js # network error
-      - mongo/jstests/core/query/mr/mr_comments.js # network error
-      - mongo/jstests/core/query/mr/mr_compute_avg.js # network error
-      - mongo/jstests/core/query/mr/mr_correctness.js # network error
-      - mongo/jstests/core/query/mr/mr_fail_invalid_js.js # network error
-      - mongo/jstests/core/query/mr/mr_merge.js # network error
-      - mongo/jstests/core/query/mr/mr_multikey_deduping.js # network error
-      - mongo/jstests/core/query/mr/mr_null_arguments.js # network error
-      - mongo/jstests/core/query/mr/mr_preserve_indexes.js # network error
-      - mongo/jstests/core/query/mr/mr_reduce.js # network error
-      - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js # network error
-      - mongo/jstests/core/query/mr/mr_replace_into_other_db.js # network error
-      - mongo/jstests/core/query/mr/mr_scope.js # network error
-      - mongo/jstests/core/query/mr/mr_sort.js # network error
-      - mongo/jstests/core/query/mr/mr_stored.js # network error
-      - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js # network error
-      - mongo/jstests/core/query/mr/mr_use_this_object.js # network error
+      - mongo/jstests/core/query/mr/mr_agg_explain.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_bigobject.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_bigobject_replace.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_comments.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_compute_avg.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_correctness.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_fail_invalid_js.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_merge.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_multikey_deduping.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_null_arguments.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_preserve_indexes.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_reduce.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_replace_into_other_db.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_scope.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_sort.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_stored.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/query/mr/mr_use_this_object.js # unhandled element type 0x0d (JavaScript)
       - mongo/jstests/core/query/nan.js # infinity values are not allowed
       - mongo/jstests/core/query/natural_validation.js # FieldPath field names may not start with '$'
       - mongo/jstests/core/query/ne/ne2.js # https://github.com/FerretDB/FerretDB/issues/2950
@@ -729,7 +728,7 @@ results:
       - mongo/jstests/core/query/ne/ne_array.js # nested array not supported
       - mongo/jstests/core/query/neq_null_correctly_cache.js # no such command: 'planCacheClear'
       - mongo/jstests/core/query/nin/nin.js # assert: [4] != [3] are not equal : no index K
-      - mongo/jstests/core/query/not/not2.js # assert did not throw exception
+      - mongo/jstests/core/query/not/not2.js # https://github.com/FerretDB/FerretDB/issues/2974
       - mongo/jstests/core/query/null_query_semantics.js # network error
       - mongo/jstests/core/query/number/numberlong2.js # network error
       - mongo/jstests/core/query/number/numberlong3.js # can't access lexical declaration 'ret'
