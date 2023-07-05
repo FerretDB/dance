@@ -70,8 +70,8 @@ results:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
-      expected_fail: 13
-      expected_skip: 16
+      expected_fail: 10
+      expected_skip: 19
       expected_pass: 623
     ignore:
       # returns unknown result.
@@ -133,6 +133,11 @@ results:
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
+
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
@@ -149,9 +154,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
-
       # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
@@ -160,17 +162,14 @@ results:
 
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
-
-      # Unexpected error: write command error: [{write errors: [{invalid document: document must contain '_id' field}]}, {<nil>}]
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
   mongodb:
     stats:
       unexpected_fail: 0
       unexpected_skip: 0
       unexpected_pass: 0
       expected_fail: 0
-      expected_skip: 417
-      expected_pass: 1903
+      expected_skip: 410
+      expected_pass: 1889
     fail:
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
