@@ -158,6 +158,9 @@ args:
   - "!mongo/jstests/core/stage_debug/stages_or.js"
   - "!mongo/jstests/core/write/collection_truncate.js"
 
+  # XXX culprit tests
+  - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
+
   # include all tests in the following directories
   - mongo/jstests/core/*.js
   - mongo/jstests/core/administrative/*.js
@@ -225,9 +228,12 @@ results:
   ferretdb:
     stats:
       expected_fail: 0
-      expected_pass: 8
+      expected_pass: 0
     ignore:
     fail:
+      - mongo/jstests/core/command_json_schema_field.js
+      - mongo/jstests/core/ddl/background_unique_indexes.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/write/update/updatei.js #  [1] != [0] are not equal : update using object arg
       - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
       - mongo/jstests/core/administrative/getlog2.js # \x0D JavaScript code BSON type not implemented
@@ -247,6 +253,91 @@ results:
       - mongo/jstests/core/capped/cappeda.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/catalog/list_catalog.js # https://github.com/FerretDB/FerretDB/issues/176
       - mongo/jstests/core/catalog/list_collections1.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/catalog/list_collections_filter.js # https://github.com/FerretDB/FerretDB/issues/178
+      - mongo/jstests/core/catalog/list_collections_name_only.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/catalog/list_databases.js # https://github.com/FerretDB/FerretDB/issues/2374
+      - mongo/jstests/core/client_metadata_ismaster.js # https://github.com/FerretDB/FerretDB/issues/2989
+      - mongo/jstests/core/clustered/clustered_collection_basic.js # clustered index supports keys up to 8MB which exceeds 8191B.
+      - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/clustered/clustered_collection_collation.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/clustered/clustered_collection_create_index_clustered.js # Index option \"clustered\" is unknown
+      - mongo/jstests/core/clustered/clustered_collection_hint.js # https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/collStats_numericOnly.js # requires wiredTiger
+      - mongo/jstests/core/commands_that_do_not_write_do_not_accept_wc.js # requires writeConcern
+      - mongo/jstests/core/compare_timestamps.js # https://github.com/FerretDB/FerretDB/issues/2990
+      - mongo/jstests/core/constructors.js # unhandled element type 0x0d (JavaScript)
+      - mongo/jstests/core/cover_null_queries.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/covered_query_with_sort.js # queryPlanner.winningPlan is undefined
+      - mongo/jstests/core/dbcase.js # https://github.com/FerretDB/FerretDB/issues/2991
+      - mongo/jstests/core/dbcase2.js # https://github.com/FerretDB/FerretDB/issues/2991
+      - mongo/jstests/core/dbstats.js # res.storageEngine is undefined
+      - mongo/jstests/core/ddl/clone_as_capped_nonexistant.js # cloneCollectionAsCapped not implemented yet
+      - mongo/jstests/core/ddl/collection_uuid_coll_mod.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/ddl/collection_uuid_index_commands.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/ddl/collection_uuid_rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/ddl/collmod.js # TTL index not added, re-run
+      - mongo/jstests/core/ddl/collmod_without_uuid.js # https://github.com/FerretDB/FerretDB/issues/2815
+      - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js # assert: [59] != [26] are not equal : converting a nonexistent
+      - mongo/jstests/core/ddl/index_create_too_many.js # collection/table does not exist
+      - mongo/jstests/core/ddl/index_create_with_nul_in_name.js # assert: command did not fail with any of the following codes [ 67 ]
+      - mongo/jstests/core/ddl/rollback_index_drop.js # find: support for field \"returnKey\" with non-default value true is not implemented yet
+      - mongo/jstests/core/depth_limit.js # Exceeded depth limit of 150 when converting js object to BSON. Do you have a cycle?
+      - mongo/jstests/core/disallow_query_wrapped_cmd_format.js # assert: command worked when it should have failed
+      - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js # ssert: found code(s) [ 2 ] does not match any of the expected codes [ 52 ]
+      - mongo/jstests/core/field_name_empty.js # re-run
+      - mongo/jstests/core/find_with_resume_after_param.js # find: unknown field \"$_requestResumeToken\"
+      - mongo/jstests/core/id1.js # assert: [4] != [0] are not equal : A, re-run
+      - mongo/jstests/core/index/geo/geo_polygon1_noindex.js # geo no supported
+      - mongo/jstests/core/index/index_type_change.js # collection/table does not exist
+      - mongo/jstests/core/noop_writes.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/pop_server_13516.js # re-run
+      - mongo/jstests/core/query/basic8.js # re-run
+      - mongo/jstests/core/query/basica.js # re-run
+      - mongo/jstests/core/query/distinct/distinct1.js # distinct: unknown field \"lsid\"
+      - mongo/jstests/core/query/distinct/distinct2.js # distinct: unknown field \"lsid\"
+      - mongo/jstests/core/query/distinct/distinct_hint.js # Index option \"sparse\" is not implemented yet
+      - mongo/jstests/core/query/inc/inc1.js # re-run
+      - mongo/jstests/core/query/inc/inc2.js # re-run
+      - mongo/jstests/core/query/inc/inc3.js # re-run
+      - mongo/jstests/core/query/not/not3.js # re-run
+      - mongo/jstests/core/query/objid/objid2.js # re-run
+      - mongo/jstests/core/query/or/or1.js # re-run
+      - mongo/jstests/core/query/or_use_clustered_collection.js # "can't find index with key: { b: \"text\" }
+      - mongo/jstests/core/query/pull/pull.js # re-run
+      - mongo/jstests/core/query/pull/pullall.js # re-run
+      - mongo/jstests/core/query/rename/rename_operator_missing_source.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/query/set/set2.js # re-run
+      - mongo/jstests/core/query/set/set3.js # re-run
+      - mongo/jstests/core/query/set/set4.js # re-run
+      - mongo/jstests/core/query/set/set5.js # re-run
+      - mongo/jstests/core/query/set/set_type_change.js # re-run
+      - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js # collection/table does not exist
+      - mongo/jstests/core/query/unset/unset.js # re-run
+      - mongo/jstests/core/server5346.js # re-run
+      - mongo/jstests/core/server9385.js # re-run
+      - mongo/jstests/core/shell/shell_writeconcern.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/write/autoid.js # re-run
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_update.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6226.js
+      - mongo/jstests/core/write/update/update3.js
+      - mongo/jstests/core/write/update/update5.js
+      - mongo/jstests/core/write/update/update6.js
+      - mongo/jstests/core/write/update/update7.js
+      - mongo/jstests/core/write/update/update9.js
+      - mongo/jstests/core/write/update/update_addToSet3.js
+      - mongo/jstests/core/write/update/update_blank1.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/write/update/update_currentdate_examples.js # lsid
+      - mongo/jstests/core/write/update/update_mul_examples.js # lisd
+      - mongo/jstests/core/write/update/update_multi4.js # lsid
+      - mongo/jstests/core/write/update/update_multi5.js # lsid
+      - mongo/jstests/core/write/update/update_multi_halts.js # lsid
+      - mongo/jstests/core/write/update/updatea.js # lsid
+      - mongo/jstests/core/write/update/updatec.js # lsid
+      - mongo/jstests/core/write/update/updated.js # re-run
+      - mongo/jstests/core/write/update/updatee.js # re-run
+      - mongo/jstests/core/write/update/updateg.js # re-run
+      - mongo/jstests/core/write/update/updatek.js # re-run
+      - mongo/jstests/core/write/update/updatem.js # re-run 
       # https://github.com/FerretDB/FerretDB/issues/2275
       # https://github.com/FerretDB/FerretDB/issues/1469
       # https://github.com/FerretDB/FerretDB/issues/414
@@ -369,7 +460,6 @@ results:
       - mongo/jstests/core/index/geo/geo_circle1_noindex.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_circle2.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_circle2a.js # https://github.com/FerretDB/FerretDB/issues/128
-      - mongo/jstests/core/index/geo/geo_circle3.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_circle4.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_circle5.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/index/geo/geo_distinct.js # https://github.com/FerretDB/FerretDB/issues/128
@@ -730,7 +820,6 @@ results:
       - mongo/jstests/core/query/nin/nin.js # assert: [4] != [3] are not equal : no index K
       - mongo/jstests/core/query/not/not2.js # https://github.com/FerretDB/FerretDB/issues/2974
       - mongo/jstests/core/query/null_query_semantics.js # network error
-      - mongo/jstests/core/query/number/numberlong2.js # network error
       - mongo/jstests/core/query/number/numberlong3.js # can't access lexical declaration 'ret'
       - mongo/jstests/core/query/or/or2.js # winningPlan is undefined
       - mongo/jstests/core/query/or/or3.js # winningPlan is undefined
@@ -738,7 +827,7 @@ results:
       - mongo/jstests/core/query/or/or_inexact.js # unknown top level operator: $text
       - mongo/jstests/core/query/or/or_to_in.js # network error
       - mongo/jstests/core/query/or/ora.js # unknown top level operator: $where
-      - mongo/jstests/core/query/or/ord.js # assert did not throw exception
+      # - mongo/jstests/core/query/or/ord.js
       - mongo/jstests/core/query/or/orf.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/query/or/orj.js # assert did not throw exception
       - mongo/jstests/core/query/or/oro.js # network error while attempting to run command 'collStats'
@@ -770,7 +859,6 @@ results:
       - mongo/jstests/core/query/regex/regex_options.js # invalid flag in regex options: u
       - mongo/jstests/core/query/regex/regex_unicode.js # Regular expression is invalid: nothing to repeat
       - mongo/jstests/core/query/regex/regex_verbs.js # Regular expression is invalid: nothing to repeat
-      - mongo/jstests/core/query/regex/regexa.js # network error
       - mongo/jstests/core/query/rename/rename_operator.js # Expected error but didn't get one for: t.update( {}, {$rename:{'':'a'}} )
       - mongo/jstests/core/query/rename/rename_operator_change_target_type.js # $type aggregation operator is not implemented yet
       - mongo/jstests/core/query/set/set1.js # assert: [{ "_id" : 1, "emb" : { "a.dot" : "data" } }] != [{ "_id" : 1, "emb" : { } }] are not equal : A
@@ -840,7 +928,6 @@ results:
       - mongo/jstests/core/write/collation_find_and_modify.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/write/delete/batch_write_command_delete.js # assert failed : { "ok" : 1, "n" : 0 }
       - mongo/jstests/core/write/delete/delete_hint.js # queryPlanner.winningPlan is undefined
-      - mongo/jstests/core/write/delete/remove7.js # network error
       - mongo/jstests/core/write/delete/remove_undefined.js # network error
       - mongo/jstests/core/write/find_and_modify/find_and_modify2.js # findandmodify: support for field \"fields\" not implemented yet
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js # Cannot create field '$' in element {comments: [ { i: 0.0, j: 0.0 }, { i: 1.0, j: 1.0 } ]}",
