@@ -4,7 +4,7 @@ dir: dotnet-example
 args: 
   - dotnet
   - run
-  - mongodb://localhost:27017/
+  - mongodb://username:password@localhost:27017/?authMechanism=PLAIN
 
 results:
   common:

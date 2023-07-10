@@ -6,7 +6,7 @@ args:
   - compile
   - exec:java
   - -Dexec.mainClass=com.start.Connection
-  - -Dexec.args="mongodb://localhost:27017/"
+  - -Dexec.args="mongodb://username:password@localhost:27017/?authMechanism=PLAIN"
 
 results:
   common:
