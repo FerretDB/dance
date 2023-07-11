@@ -3,7 +3,7 @@ runner: command
 dir: python-example
 args: 
   - python3
-  - pymongo_test_insert.py
+  - pymongo_test.py
   - mongodb://localhost:27017/
 
 results:
