@@ -65,12 +65,6 @@ jobs:
         run: go generate -x
         working-directory: tools
 
-      # set up Python build environment
-      - name: Install Python dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install pandas
-
       - name: Start environment
         run: bin/task env-up-detach
         env:
