@@ -1,0 +1,18 @@
+---
+runner: command
+dir: python-example
+args: 
+  - python3
+  - pymongo_test_insert.py
+  - mongodb://username:password@localhost:27017/?authMechanism=PLAIN
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:
