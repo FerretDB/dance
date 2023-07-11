@@ -41,6 +41,8 @@ jobs:
           - dotnet-example-auth
           - java-example
           - java-example-auth
+          - python-example
+          - python-example-auth
           - mongo
           - mongo-go-driver
           - mongo-tools
@@ -62,6 +64,16 @@ jobs:
       - name: Install Task
         run: go generate -x
         working-directory: tools
+
+    # this Action should follow steps to set up Python build environment
+    - name: Install Python dependencies
+      uses: py-actions/py-dependency-install@v4
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+        run: |
+        python -m pip install --upgrade pip
+        pip install pandas
 
       - name: Start environment
         run: bin/task env-up-detach
