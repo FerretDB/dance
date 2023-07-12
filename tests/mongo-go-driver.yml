@@ -57,10 +57,6 @@ results:
       # event ordering incompatible with load-balancer SDAM spec test
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
 
-      # test fails frequently, skipping; see GODRIVER-2852
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
-
       # test requires that connections established by minPoolSize
       # are immediately used to satisfy check-out requests
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
@@ -83,7 +79,7 @@ results:
   ferretdb:
     stats:
       expected_fail: 10
-      expected_skip: 21
+      expected_skip: 19
       expected_pass: 628
 
     ignore:
