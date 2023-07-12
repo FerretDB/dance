@@ -21,8 +21,10 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -73,8 +75,6 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	files := maps.Keys(filesM)
 
-	log.Printf("Total number of tests to run %d\n", len(files))
-
 	res := &internal.TestResults{
 		TestResults: make(map[string]internal.TestResult),
 	}
@@ -85,8 +85,13 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	// tokens is a counting semaphore used to enforce a limit of 20 concurrent calls to runShellWithScript.
-	tokens := make(chan struct{}, 20)
+	// TOKENS controls the number of concurrent goroutines
+	tokens, err := strconv.Atoi(os.Getenv("TOKENS"))
+	if err != nil {
+		return nil, err
+	}
+
+	sema := make(chan struct{}, tokens)
 
 	ch := make(chan *item, len(files))
 
@@ -97,7 +102,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		go func(f string) {
 			defer wg.Done()
 
-			tokens <- struct{}{}
+			sema <- struct{}{}
 			it := &item{
 				file: f,
 			}
@@ -108,10 +113,10 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 				panic(err)
 			}
 
-			it.out, it.err = runShellWithScript(dir, rel)
+			it.out, it.err = runMongo(dir, rel)
 			ch <- it
 
-			<-tokens // release the token
+			<-sema // release the token
 		}(f)
 	}
 
@@ -142,8 +147,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runShellWithScript runs the mongo shell inside a container with script and returns the combined output.
-func runShellWithScript(dir, script string) ([]byte, error) {
+// runMongo runs the mongo shell inside a container with file and returns the combined output.
+func runMongo(dir, file string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
@@ -152,7 +157,7 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
 		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
-		"--eval", evalBuilder(script), script,
+		"--eval", evalBuilder(file), file,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
@@ -165,11 +170,11 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 }
 
 // evalBuilder creates the TestData object and sets the testName property for the shell.
-func evalBuilder(script string) string {
+func evalBuilder(file string) string {
 	var eb bytes.Buffer
 	fmt.Fprintf(&eb, "TestData = new Object(); ")
-	scriptName := filepath.Base(script)
-	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
+	fileName := filepath.Base(file)
+	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(fileName, filepath.Ext(fileName)))
 
 	return eb.String()
 }
