@@ -61,6 +61,12 @@ jobs:
         with:
           cache-key: dance
 
+      # set up Python build environment
+      - name: Install Python dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install pymongo
+ 
       - name: Install Task
         run: go generate -x
         working-directory: tools
