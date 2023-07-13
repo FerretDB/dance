@@ -5,6 +5,10 @@ updates:
     directory: "/"
     labels: [deps]
     assignees: [AlekSi]
+    open-pull-requests-limit: 20
+    groups:
+      integration:
+        patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -13,6 +17,10 @@ updates:
     directory: "/build/deps"
     labels: [deps]
     assignees: [AlekSi]
+    open-pull-requests-limit: 20
+    groups:
+      integration:
+        patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -21,6 +29,10 @@ updates:
     directory: "/"
     labels: [deps]
     assignees: [AlekSi]
+    open-pull-requests-limit: 20
+    groups:
+      integration:
+        patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -29,6 +41,10 @@ updates:
     directory: "/tools"
     labels: [deps]
     assignees: [AlekSi]
+    open-pull-requests-limit: 20
+    groups:
+      integration:
+        patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
@@ -37,6 +53,7 @@ updates:
     directory: "/"
     labels: [deps]
     assignees: [b1ron]
+    open-pull-requests-limit: 20
     schedule:
       interval: "weekly"
       day: "thursday"
