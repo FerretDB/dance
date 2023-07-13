@@ -6,15 +6,14 @@ args:
   - compile
   - exec:java
   - -Dexec.mainClass=com.start.Connection
-  - -Dexec.args="mongodb://username:password@localhost:27017/?authMechanism=PLAIN"
+  - -Dexec.args="mongodb://user:password@localhost:27017/?authMechanism=PLAIN"
 
 results:
-  common:
+  ferretdb:
     stats:
       expected_pass: 1
 
-  ferretdb:
-    stats:
-
   mongodb:
     stats:
+      # PLAIN is used in MongoDB to perform LDAP authentication.
+      unexpected_fail: 1
