@@ -280,7 +280,7 @@ results:
       # - mongo/jstests/core/ddl/collection_uuid_coll_mod.js # https://github.com/FerretDB/FerretDB/issues/2815
       # - mongo/jstests/core/ddl/collection_uuid_index_commands.js # https://github.com/FerretDB/FerretDB/issues/2815
       # - mongo/jstests/core/ddl/collection_uuid_rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2815
-      # - mongo/jstests/core/ddl/collmod.js # TTL index not added, re-run
+      # - mongo/jstests/core/ddl/collmod.js # TTL index not adde
       # - mongo/jstests/core/ddl/collmod_without_uuid.js # https://github.com/FerretDB/FerretDB/issues/2815
       # - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js # assert: [59] != [26] are not equal : converting a nonexistent
       # - mongo/jstests/core/ddl/index_create_too_many.js # collection/table does not exist
@@ -289,39 +289,39 @@ results:
       - mongo/jstests/core/depth_limit.js # Exceeded depth limit of 150 when converting js object to BSON. Do you have a cycle?
       - mongo/jstests/core/disallow_query_wrapped_cmd_format.js # assert: command worked when it should have failed
       - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js # ssert: found code(s) [ 2 ] does not match any of the expected codes [ 52 ]
-      - mongo/jstests/core/field_name_empty.js # re-run
+      - mongo/jstests/core/field_name_empty.js
       - mongo/jstests/core/find_with_resume_after_param.js # find: unknown field \"$_requestResumeToken\"
-      - mongo/jstests/core/id1.js # assert: [4] != [0] are not equal : A, re-run
+      - mongo/jstests/core/id1.js # assert: [4] != [0] are not equal : 
       - mongo/jstests/core/index/geo/geo_polygon1_noindex.js # geo no supported
       - mongo/jstests/core/index/index_type_change.js # collection/table does not exist
       - mongo/jstests/core/noop_writes.js # update: unknown field \"lsid\"
-      - mongo/jstests/core/pop_server_13516.js # re-run
-      - mongo/jstests/core/query/basic8.js # re-run
-      - mongo/jstests/core/query/basica.js # re-run
-      - mongo/jstests/core/query/distinct/distinct1.js # distinct: unknown field \"lsid\"
-      - mongo/jstests/core/query/distinct/distinct2.js # distinct: unknown field \"lsid\"
+      # - mongo/jstests/core/pop_server_13516.js
+      # - mongo/jstests/core/query/basic8.js
+      - mongo/jstests/core/query/basica.js
+      # - mongo/jstests/core/query/distinct/distinct1.js
+      # - mongo/jstests/core/query/distinct/distinct2.js
       - mongo/jstests/core/query/distinct/distinct_hint.js # Index option \"sparse\" is not implemented yet
-      - mongo/jstests/core/query/inc/inc1.js # re-run
-      - mongo/jstests/core/query/inc/inc2.js # re-run
-      - mongo/jstests/core/query/inc/inc3.js # re-run
-      - mongo/jstests/core/query/not/not3.js # re-run
-      - mongo/jstests/core/query/objid/objid2.js # re-run
-      - mongo/jstests/core/query/or/or1.js # re-run
+      # - mongo/jstests/core/query/inc/inc1.js
+      - mongo/jstests/core/query/inc/inc2.js
+      # - mongo/jstests/core/query/inc/inc3.js
+      - mongo/jstests/core/query/not/not3.js
+      - mongo/jstests/core/query/objid/objid2.js
+      # - mongo/jstests/core/query/or/or1.js
       - mongo/jstests/core/query/or_use_clustered_collection.js # "can't find index with key: { b: \"text\" }
-      - mongo/jstests/core/query/pull/pull.js # re-run
-      - mongo/jstests/core/query/pull/pullall.js # re-run
+      # - mongo/jstests/core/query/pull/pull.js
+      # - mongo/jstests/core/query/pull/pullall.js
       - mongo/jstests/core/query/rename/rename_operator_missing_source.js # update: unknown field \"lsid\"
-      - mongo/jstests/core/query/set/set2.js # re-run
-      - mongo/jstests/core/query/set/set3.js # re-run
-      - mongo/jstests/core/query/set/set4.js # re-run
-      - mongo/jstests/core/query/set/set5.js # re-run
-      - mongo/jstests/core/query/set/set_type_change.js # re-run
-      - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js # collection/table does not exist
-      - mongo/jstests/core/query/unset/unset.js # re-run
-      - mongo/jstests/core/server5346.js # re-run
-      - mongo/jstests/core/server9385.js # re-run
+      # - mongo/jstests/core/query/set/set2.js
+      # - mongo/jstests/core/query/set/set3.js
+      # - mongo/jstests/core/query/set/set4.js
+      # - mongo/jstests/core/query/set/set5.js
+      - mongo/jstests/core/query/set/set_type_change.js
+      # - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js
+      # - mongo/jstests/core/query/unset/unset.js
+      - mongo/jstests/core/server5346.js
+      - mongo/jstests/core/server9385.js
       - mongo/jstests/core/shell/shell_writeconcern.js # update: unknown field \"lsid\"
-      - mongo/jstests/core/write/autoid.js # re-run
+      - mongo/jstests/core/write/autoid.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_update.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6226.js
       - mongo/jstests/core/write/update/update3.js
@@ -338,11 +338,11 @@ results:
       - mongo/jstests/core/write/update/update_multi_halts.js # lsid
       - mongo/jstests/core/write/update/updatea.js # lsid
       - mongo/jstests/core/write/update/updatec.js # lsid
-      - mongo/jstests/core/write/update/updated.js # re-run
-      - mongo/jstests/core/write/update/updatee.js # re-run
-      - mongo/jstests/core/write/update/updateg.js # re-run
-      - mongo/jstests/core/write/update/updatek.js # re-run
-      - mongo/jstests/core/write/update/updatem.js # re-run 
+      - mongo/jstests/core/write/update/updated.js
+      - mongo/jstests/core/write/update/updatee.js
+      - mongo/jstests/core/write/update/updateg.js
+      - mongo/jstests/core/write/update/updatek.js
+      - mongo/jstests/core/write/update/updatem.js 
       # https://github.com/FerretDB/FerretDB/issues/2275
       # https://github.com/FerretDB/FerretDB/issues/1469
       # https://github.com/FerretDB/FerretDB/issues/414
@@ -870,7 +870,7 @@ results:
       # - mongo/jstests/core/query/regex/regex_unicode.js # Regular expression is invalid: nothing to repeat
       # - mongo/jstests/core/query/regex/regex_verbs.js # Regular expression is invalid: nothing to repeat
       - mongo/jstests/core/query/rename/rename_operator.js # Expected error but didn't get one for: t.update( {}, {$rename:{'':'a'}} )
-      - mongo/jstests/core/query/rename/rename_operator_change_target_type.js # $type aggregation operator is not implemented yet
+      # - mongo/jstests/core/query/rename/rename_operator_change_target_type.js
       - mongo/jstests/core/query/set/set1.js # assert: [{ "_id" : 1, "emb" : { "a.dot" : "data" } }] != [{ "_id" : 1, "emb" : { } }] are not equal : A
       - mongo/jstests/core/query/set/set6.js # assert: [{ "_id" : 1, "r" : DBRef("foo", ObjectId("64807d905fa218ed418d31fe")) }] != [null] are not equal : A
       - mongo/jstests/core/query/set/set7.js # uncaught exception: TypeError: t.findOne() is null
