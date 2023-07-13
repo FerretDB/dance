@@ -85,10 +85,14 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
+	var tokens = 20
+
 	// TOKENS controls the number of concurrent goroutines
-	tokens, err := strconv.Atoi(os.Getenv("TOKENS"))
-	if err != nil {
-		return nil, err
+	t, ok := os.LookupEnv("TOKENS")
+	if ok {
+		if i, err := strconv.Atoi(t); err == nil {
+			tokens = i
+		}
 	}
 
 	sema := make(chan struct{}, tokens)
