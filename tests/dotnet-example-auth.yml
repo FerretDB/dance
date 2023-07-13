@@ -9,7 +9,9 @@ args:
 results:
   ferretdb:
     stats:
-      expected_pass: 1
+      # https://github.com/FerretDB/FerretDB/issues/2516
+      unexpected_fail: 1
+      expected_pass: 0
 
   mongodb:
     stats:
