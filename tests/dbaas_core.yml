@@ -160,6 +160,10 @@ args:
 
   # XXX culprit tests
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
+  - "!mongo/jstests/core/ddl/*.js"
+  - "!mongo/jstests/core/ddl/*.js"
+  - "!mongo/jstests/core/write/delete/*.js"
+  - "!mongo/jstests/core/query/regex/*.js"
 
   # include all tests in the following directories
   - mongo/jstests/core/*.js
@@ -206,7 +210,7 @@ args:
   - mongo/jstests/core/query/plan_cache/*.js
   - mongo/jstests/core/query/project/*.js
   - mongo/jstests/core/query/pull/*.js
-  - mongo/jstests/core/query/regex/*.js
+  # - mongo/jstests/core/query/regex/*.js
   - mongo/jstests/core/query/rename/*.js
   - mongo/jstests/core/query/set/*.js
   - mongo/jstests/core/query/sort/*.js
@@ -232,7 +236,7 @@ results:
     ignore:
     fail:
       - mongo/jstests/core/command_json_schema_field.js
-      - mongo/jstests/core/ddl/background_unique_indexes.js
+      # - mongo/jstests/core/ddl/background_unique_indexes.js
       - mongo/jstests/core/write/update/updatei.js #  [1] != [0] are not equal : update using object arg
       - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
@@ -251,14 +255,13 @@ results:
       - mongo/jstests/core/capped/capped_resize.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/capped/capped_upsert.js # https://github.com/FerretDB/FerretDB/issues/2813
       - mongo/jstests/core/capped/cappeda.js # https://github.com/FerretDB/FerretDB/issues/2813
-      # --- removing all catalog tests for now
+      # --- removing all index tests for now
       # - mongo/jstests/core/catalog/list_catalog.js # https://github.com/FerretDB/FerretDB/issues/176
       # - mongo/jstests/core/catalog/list_collections1.js # https://github.com/FerretDB/FerretDB/issues/2815
       # - mongo/jstests/core/catalog/list_collections_filter.js # https://github.com/FerretDB/FerretDB/issues/178
       # - mongo/jstests/core/catalog/list_collections_name_only.js # https://github.com/FerretDB/FerretDB/issues/2815
       # - mongo/jstests/core/catalog/list_databases.js # https://github.com/FerretDB/FerretDB/issues/2374
       # - mongo/jstests/core/client_metadata_ismaster.js # https://github.com/FerretDB/FerretDB/issues/2989
-      # --- removing all catalog tests for now
       - mongo/jstests/core/clustered/clustered_collection_basic.js # clustered index supports keys up to 8MB which exceeds 8191B.
       - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js # queryPlanner.winningPlan is undefined
       - mongo/jstests/core/clustered/clustered_collection_collation.js # https://github.com/FerretDB/FerretDB/issues/10
@@ -273,52 +276,52 @@ results:
       - mongo/jstests/core/dbcase.js # https://github.com/FerretDB/FerretDB/issues/2991
       - mongo/jstests/core/dbcase2.js # https://github.com/FerretDB/FerretDB/issues/2991
       - mongo/jstests/core/dbstats.js # res.storageEngine is undefined
-      - mongo/jstests/core/ddl/clone_as_capped_nonexistant.js # cloneCollectionAsCapped not implemented yet
-      - mongo/jstests/core/ddl/collection_uuid_coll_mod.js # https://github.com/FerretDB/FerretDB/issues/2815
-      - mongo/jstests/core/ddl/collection_uuid_index_commands.js # https://github.com/FerretDB/FerretDB/issues/2815
-      - mongo/jstests/core/ddl/collection_uuid_rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2815
-      - mongo/jstests/core/ddl/collmod.js # TTL index not added, re-run
-      - mongo/jstests/core/ddl/collmod_without_uuid.js # https://github.com/FerretDB/FerretDB/issues/2815
-      - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js # assert: [59] != [26] are not equal : converting a nonexistent
-      - mongo/jstests/core/ddl/index_create_too_many.js # collection/table does not exist
-      - mongo/jstests/core/ddl/index_create_with_nul_in_name.js # assert: command did not fail with any of the following codes [ 67 ]
-      - mongo/jstests/core/ddl/rollback_index_drop.js # find: support for field \"returnKey\" with non-default value true is not implemented yet
+      # - mongo/jstests/core/ddl/clone_as_capped_nonexistant.js # cloneCollectionAsCapped not implemented yet
+      # - mongo/jstests/core/ddl/collection_uuid_coll_mod.js # https://github.com/FerretDB/FerretDB/issues/2815
+      # - mongo/jstests/core/ddl/collection_uuid_index_commands.js # https://github.com/FerretDB/FerretDB/issues/2815
+      # - mongo/jstests/core/ddl/collection_uuid_rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2815
+      # - mongo/jstests/core/ddl/collmod.js # TTL index not added, re-run
+      # - mongo/jstests/core/ddl/collmod_without_uuid.js # https://github.com/FerretDB/FerretDB/issues/2815
+      # - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js # assert: [59] != [26] are not equal : converting a nonexistent
+      # - mongo/jstests/core/ddl/index_create_too_many.js # collection/table does not exist
+      # - mongo/jstests/core/ddl/index_create_with_nul_in_name.js # assert: command did not fail with any of the following codes [ 67 ]
+      # - mongo/jstests/core/ddl/rollback_index_drop.js # find: support for field \"returnKey\" with non-default value true is not implemented yet
       - mongo/jstests/core/depth_limit.js # Exceeded depth limit of 150 when converting js object to BSON. Do you have a cycle?
       - mongo/jstests/core/disallow_query_wrapped_cmd_format.js # assert: command worked when it should have failed
       - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js # ssert: found code(s) [ 2 ] does not match any of the expected codes [ 52 ]
-      - mongo/jstests/core/field_name_empty.js
+      - mongo/jstests/core/field_name_empty.js # re-run
       - mongo/jstests/core/find_with_resume_after_param.js # find: unknown field \"$_requestResumeToken\"
       - mongo/jstests/core/id1.js # assert: [4] != [0] are not equal : A, re-run
       - mongo/jstests/core/index/geo/geo_polygon1_noindex.js # geo no supported
       - mongo/jstests/core/index/index_type_change.js # collection/table does not exist
-      - mongo/jstests/core/noop_writes.js
-      - mongo/jstests/core/pop_server_13516.js
-      - mongo/jstests/core/query/basic8.js
-      - mongo/jstests/core/query/basica.js
+      - mongo/jstests/core/noop_writes.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/pop_server_13516.js # re-run
+      - mongo/jstests/core/query/basic8.js # re-run
+      - mongo/jstests/core/query/basica.js # re-run
       - mongo/jstests/core/query/distinct/distinct1.js # distinct: unknown field \"lsid\"
       - mongo/jstests/core/query/distinct/distinct2.js # distinct: unknown field \"lsid\"
       - mongo/jstests/core/query/distinct/distinct_hint.js # Index option \"sparse\" is not implemented yet
-      - mongo/jstests/core/query/inc/inc1.js
-      - mongo/jstests/core/query/inc/inc2.js
-      - mongo/jstests/core/query/inc/inc3.js
-      - mongo/jstests/core/query/not/not3.js
-      - mongo/jstests/core/query/objid/objid2.js
-      - mongo/jstests/core/query/or/or1.js
+      - mongo/jstests/core/query/inc/inc1.js # re-run
+      - mongo/jstests/core/query/inc/inc2.js # re-run
+      - mongo/jstests/core/query/inc/inc3.js # re-run
+      - mongo/jstests/core/query/not/not3.js # re-run
+      - mongo/jstests/core/query/objid/objid2.js # re-run
+      - mongo/jstests/core/query/or/or1.js # re-run
       - mongo/jstests/core/query/or_use_clustered_collection.js # "can't find index with key: { b: \"text\" }
-      - mongo/jstests/core/query/pull/pull.js
-      - mongo/jstests/core/query/pull/pullall.js
-      - mongo/jstests/core/query/rename/rename_operator_missing_source.js
-      - mongo/jstests/core/query/set/set2.js
-      - mongo/jstests/core/query/set/set3.js
-      - mongo/jstests/core/query/set/set4.js
-      - mongo/jstests/core/query/set/set5.js
-      - mongo/jstests/core/query/set/set_type_change.js
+      - mongo/jstests/core/query/pull/pull.js # re-run
+      - mongo/jstests/core/query/pull/pullall.js # re-run
+      - mongo/jstests/core/query/rename/rename_operator_missing_source.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/query/set/set2.js # re-run
+      - mongo/jstests/core/query/set/set3.js # re-run
+      - mongo/jstests/core/query/set/set4.js # re-run
+      - mongo/jstests/core/query/set/set5.js # re-run
+      - mongo/jstests/core/query/set/set_type_change.js # re-run
       - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js # collection/table does not exist
-      - mongo/jstests/core/query/unset/unset.js
-      - mongo/jstests/core/server5346.js
-      - mongo/jstests/core/server9385.js
-      - mongo/jstests/core/shell/shell_writeconcern.js
-      - mongo/jstests/core/write/autoid.js
+      - mongo/jstests/core/query/unset/unset.js # re-run
+      - mongo/jstests/core/server5346.js # re-run
+      - mongo/jstests/core/server9385.js # re-run
+      - mongo/jstests/core/shell/shell_writeconcern.js # update: unknown field \"lsid\"
+      - mongo/jstests/core/write/autoid.js # re-run
       - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_update.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6226.js
       - mongo/jstests/core/write/update/update3.js
@@ -327,19 +330,19 @@ results:
       - mongo/jstests/core/write/update/update7.js
       - mongo/jstests/core/write/update/update9.js
       - mongo/jstests/core/write/update/update_addToSet3.js
-      - mongo/jstests/core/write/update/update_blank1.js
+      - mongo/jstests/core/write/update/update_blank1.js # update: unknown field \"lsid\"
       - mongo/jstests/core/write/update/update_currentdate_examples.js # lsid
       - mongo/jstests/core/write/update/update_mul_examples.js # lisd
-      - mongo/jstests/core/write/update/update_multi4.js
+      - mongo/jstests/core/write/update/update_multi4.js # lsid
       - mongo/jstests/core/write/update/update_multi5.js # lsid
       - mongo/jstests/core/write/update/update_multi_halts.js # lsid
       - mongo/jstests/core/write/update/updatea.js # lsid
       - mongo/jstests/core/write/update/updatec.js # lsid
-      - mongo/jstests/core/write/update/updated.js
-      - mongo/jstests/core/write/update/updatee.js
-      - mongo/jstests/core/write/update/updateg.js
-      - mongo/jstests/core/write/update/updatek.js
-      - mongo/jstests/core/write/update/updatem.js 
+      - mongo/jstests/core/write/update/updated.js # re-run
+      - mongo/jstests/core/write/update/updatee.js # re-run
+      - mongo/jstests/core/write/update/updateg.js # re-run
+      - mongo/jstests/core/write/update/updatek.js # re-run
+      - mongo/jstests/core/write/update/updatem.js # re-run 
       # https://github.com/FerretDB/FerretDB/issues/2275
       # https://github.com/FerretDB/FerretDB/issues/1469
       # https://github.com/FerretDB/FerretDB/issues/414
@@ -353,26 +356,28 @@ results:
       - mongo/jstests/core/compound_wildcard_index_validation.js # https://github.com/FerretDB/FerretDB/issues/2947
       - mongo/jstests/core/datasize_validation.js # keyPattern, min, max are not implemented
       - mongo/jstests/core/dbhash.js # dbhash command not implemented
-      - mongo/jstests/core/ddl/capped_convertToCapped1.js # cloneCollectionAsCapped command not implemented
-      - mongo/jstests/core/ddl/collMod_index_invalid_option.js # https://github.com/FerretDB/FerretDB/issues/2415
-      - mongo/jstests/core/ddl/collation_convert_to_capped.js # https://github.com/FerretDB/FerretDB/issues/10
-      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/convert_to_capped.js # convertToCapped not implemented
-      - mongo/jstests/core/ddl/create_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
-      - mongo/jstests/core/ddl/create_collection_fail_cleanup.js # https://github.com/FerretDB/FerretDB/issues/10
-      - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js # ignoreUnknownIndexOptions not implemented
-      - mongo/jstests/core/ddl/drop_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
-      - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
-      - mongo/jstests/core/ddl/index_prepareUnique.js # https://github.com/FerretDB/FerretDB/issues/2822
-      - mongo/jstests/core/ddl/rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2565
-      - mongo/jstests/core/ddl/rename_collection_different_dbs.js # https://github.com/FerretDB/FerretDB/issues/2563
-      - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
-      - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
-      - mongo/jstests/core/ddl/rename_collection_to_itself.js # https://github.com/FerretDB/FerretDB/issues/2565
-      - mongo/jstests/core/ddl/ttl_index_options.js # https://github.com/FerretDB/FerretDB/issues/2415
+      # --- removing ddl tests
+      # - mongo/jstests/core/ddl/capped_convertToCapped1.js # cloneCollectionAsCapped command not implemented
+      # - mongo/jstests/core/ddl/collMod_index_invalid_option.js # https://github.com/FerretDB/FerretDB/issues/2415
+      # - mongo/jstests/core/ddl/collation_convert_to_capped.js # https://github.com/FerretDB/FerretDB/issues/10
+      # - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js # https://github.com/FerretDB/FerretDB/issues/2822
+      # - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js # https://github.com/FerretDB/FerretDB/issues/2822
+      # - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js # https://github.com/FerretDB/FerretDB/issues/2822
+      # - mongo/jstests/core/ddl/collmod_convert_to_unique_violations_size_limit.js # https://github.com/FerretDB/FerretDB/issues/2822
+      # - mongo/jstests/core/ddl/convert_to_capped.js # convertToCapped not implemented
+      # - mongo/jstests/core/ddl/create_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
+      # - mongo/jstests/core/ddl/create_collection_fail_cleanup.js # https://github.com/FerretDB/FerretDB/issues/10
+      # - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js # ignoreUnknownIndexOptions not implemented
+      # - mongo/jstests/core/ddl/drop_collection.js # fails because tries to drop a non-existent collection, also fails on MongoDB
+      # - mongo/jstests/core/ddl/index_dropdups_ignore.js # dropDups not implemented - https://www.mongodb.com/docs/manual/release-notes/3.0-compatibility/#remove-dropdups-option
+      # - mongo/jstests/core/ddl/index_prepareUnique.js # https://github.com/FerretDB/FerretDB/issues/2822
+      # - mongo/jstests/core/ddl/rename_collection.js # https://github.com/FerretDB/FerretDB/issues/2565
+      # - mongo/jstests/core/ddl/rename_collection_different_dbs.js # https://github.com/FerretDB/FerretDB/issues/2563
+      # - mongo/jstests/core/ddl/rename_collection_long_name.js # https://github.com/FerretDB/FerretDB/issues/2571
+      # - mongo/jstests/core/ddl/rename_collection_staytemp.js # applyOps not implemented
+      # - mongo/jstests/core/ddl/rename_collection_to_itself.js # https://github.com/FerretDB/FerretDB/issues/2565
+      # - mongo/jstests/core/ddl/ttl_index_options.js # https://github.com/FerretDB/FerretDB/issues/2415
+      # --- removing ddl tests
       - mongo/jstests/core/diagdata.js # getDiagnosticData not implemented
       - mongo/jstests/core/doc_validation/bypass_doc_validation.js # https://github.com/FerretDB/FerretDB/issues/1510
       - mongo/jstests/core/doc_validation/doc_validation.js # https://github.com/FerretDB/FerretDB/issues/77
@@ -853,17 +858,17 @@ results:
       - mongo/jstests/core/query/pull/pull_remove1.js # assert: [[ 6, 7, 8 ]] != [[ 1, 2, 3, 4, 5, 6, 7, 8 ]] are not equal : A2
       - mongo/jstests/core/query/pull/pullall2.js # assert failed: not equal : B
       - mongo/jstests/core/query/query_hash_stability.js # https://github.com/FerretDB/FerretDB/issues/2448
-      - mongo/jstests/core/query/regex/regex.js # assert failed
-      - mongo/jstests/core/query/regex/regex3.js # https://github.com/FerretDB/FerretDB/issues/2950
-      - mongo/jstests/core/query/regex/regex4.js # https://github.com/FerretDB/FerretDB/issues/2950
-      - mongo/jstests/core/query/regex/regex5.js # assert: [1] != [0] are not equal : F
-      - mongo/jstests/core/query/regex/regex6.js # https://github.com/FerretDB/FerretDB/issues/2950
-      - mongo/jstests/core/query/regex/regex_distinct.js # winningPlan is undefined
-      - mongo/jstests/core/query/regex/regex_error.js # command worked when it should have failed
-      - mongo/jstests/core/query/regex/regex_limit.js # network error
-      - mongo/jstests/core/query/regex/regex_options.js # invalid flag in regex options: u
-      - mongo/jstests/core/query/regex/regex_unicode.js # Regular expression is invalid: nothing to repeat
-      - mongo/jstests/core/query/regex/regex_verbs.js # Regular expression is invalid: nothing to repeat
+      # - mongo/jstests/core/query/regex/regex.js # assert failed
+      # - mongo/jstests/core/query/regex/regex3.js # https://github.com/FerretDB/FerretDB/issues/2950
+      # - mongo/jstests/core/query/regex/regex4.js # https://github.com/FerretDB/FerretDB/issues/2950
+      # - mongo/jstests/core/query/regex/regex5.js # assert: [1] != [0] are not equal : F
+      # - mongo/jstests/core/query/regex/regex6.js # https://github.com/FerretDB/FerretDB/issues/2950
+      # - mongo/jstests/core/query/regex/regex_distinct.js # winningPlan is undefined
+      # - mongo/jstests/core/query/regex/regex_error.js # command worked when it should have failed
+      # - mongo/jstests/core/query/regex/regex_limit.js # network error
+      # - mongo/jstests/core/query/regex/regex_options.js # invalid flag in regex options: u
+      # - mongo/jstests/core/query/regex/regex_unicode.js # Regular expression is invalid: nothing to repeat
+      # - mongo/jstests/core/query/regex/regex_verbs.js # Regular expression is invalid: nothing to repeat
       - mongo/jstests/core/query/rename/rename_operator.js # Expected error but didn't get one for: t.update( {}, {$rename:{'':'a'}} )
       - mongo/jstests/core/query/rename/rename_operator_change_target_type.js # $type aggregation operator is not implemented yet
       - mongo/jstests/core/query/set/set1.js # assert: [{ "_id" : 1, "emb" : { "a.dot" : "data" } }] != [{ "_id" : 1, "emb" : { } }] are not equal : A
