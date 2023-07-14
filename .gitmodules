@@ -21,3 +21,4 @@
 [submodule "python-example"]
 	path = tests/python-example
 	url = https://github.com/FerretDB/python-example.git
+	branch = main
