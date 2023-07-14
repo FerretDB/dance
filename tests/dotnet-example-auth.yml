@@ -10,8 +10,9 @@ results:
   ferretdb:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/2516
-      unexpected_fail: 1
-      expected_pass: 0
+      expected_fail: 1
+    fail:
+      - dotnet-example
 
   mongodb:
     stats:
