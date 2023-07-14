@@ -64,8 +64,7 @@ jobs:
       # set up Python build environment
       - name: Install Python dependencies
         run: |
-          pip install pymongo
-          python3 -c 'import pymongo; print (pymongo.__version__)' 
+          pip3 install pymongo
  
       - name: Install Task
         run: go generate -x
