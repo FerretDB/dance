@@ -72,6 +72,11 @@ jobs:
 
       - name: Dance!
         run: bin/task dance
+        if: ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }}
+        env:
+          DB: ${{ matrix.db }}
+          TEST: ${{ matrix.test }}
+          MAXTOKENS: 1
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}

@@ -87,8 +87,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	var tokens = 20
 
-	// TOKENS controls the number of concurrent goroutines
-	t, ok := os.LookupEnv("TOKENS")
+	t, ok := os.LookupEnv("MAXTOKENS")
 	if ok {
 		if i, err := strconv.Atoi(t); err == nil {
 			tokens = i
