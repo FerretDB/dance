@@ -94,6 +94,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		}
 	}
 
+	log.Println(tokens)
+
 	sema := make(chan struct{}, tokens)
 
 	ch := make(chan *item, len(files))
