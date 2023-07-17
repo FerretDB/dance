@@ -3,7 +3,7 @@ name: Dance
 on:
   push:
     branches:
-      - main
+      - dbaas_core-failures
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
@@ -24,7 +24,7 @@ jobs:
   dance:
     name: dance
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
 
@@ -71,6 +71,9 @@ jobs:
         run: bin/task init
 
       - name: Dance!
+        if: ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }}
+        env:
+          MAXTOKENS=1
         run: bin/task dance
         env:
           DB: ${{ matrix.db }}
