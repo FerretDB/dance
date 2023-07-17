@@ -76,6 +76,7 @@ jobs:
           if [[ ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }} ]]; then
             echo "MAXTOKENS=1" >> $GITHUB_ENV
           fi
+          echo "${{ env.MAXTOKENS }}"
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
