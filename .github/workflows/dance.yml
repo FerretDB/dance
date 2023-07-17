@@ -48,8 +48,8 @@ jobs:
     steps:
       - name: init
         run:
-          echo "MAXTOKENS=1" >> $GITHUB_ENV
-          echo ${{ env.MAXTOKENS }}
+          echo "TOKENS=1" >> $GITHUB_ENV
+          echo ${{ env.TOKENS }}
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -79,13 +79,13 @@ jobs:
         run: |
           bin/task dance
           if [[ ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }} ]]; then
-            echo "MAXTOKENS=1" >> $GITHUB_ENV
+            echo "TOKENS=1" >> $GITHUB_ENV
           fi
-          echo "${{ env.MAXTOKENS }}"
+          echo matrix
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          MAXTOKENS: env.MAXTOKENS
+          MAXTOKENS: ${{ env.TOKENS }}
 
       - name: Collect logs
         if: failure()
