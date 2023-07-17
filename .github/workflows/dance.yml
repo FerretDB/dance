@@ -79,6 +79,7 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
+          MAXTOKENS: ${{ env.MAXTOKENS }}
 
       - name: Collect logs
         if: failure()
