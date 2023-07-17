@@ -2,7 +2,6 @@
 ---
 runner: jstest
 dir: mongo
-# cfg: &backend sqlite
 
 # To exclude a file, use the ! prefix and enclose the file name in quotes.
 # Put the exclusion patterns before inclusion patterns.
@@ -229,76 +228,75 @@ args:
 results:
   ferretdb:
     stats:
-      # unexpected_fail: 170
       expected_fail: 376
       expected_pass: 249
     ignore:
     fail:
-      - mongo/jstests/core/SERVER-23626.js
-      - mongo/jstests/core/administrative/builtin_roles_external.js
-      - mongo/jstests/core/administrative/getlog2.js
-      - mongo/jstests/core/client_metadata_ismaster.js
-      - mongo/jstests/core/collStats_numericOnly.js
+      - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/administrative/builtin_roles_external.js # https://github.com/FerretDB/FerretDB/issues/1536
+      - mongo/jstests/core/administrative/getlog2.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/client_metadata_ismaster.js # https://github.com/FerretDB/FerretDB/issues/2989
+      - mongo/jstests/core/collStats_numericOnly.js # requires wiredTiger
       - mongo/jstests/core/command_json_schema_field.js
-      - mongo/jstests/core/command_let_variables.js
-      - mongo/jstests/core/command_let_variables_merge_only.js
-      - mongo/jstests/core/commands_that_do_not_write_do_not_accept_wc.js
-      - mongo/jstests/core/compare_timestamps.js
-      - mongo/jstests/core/compound_index_max_fields.js
-      - mongo/jstests/core/compound_wildcard_index_validation.js
-      - mongo/jstests/core/constructors.js
-      - mongo/jstests/core/cover_null_queries.js
-      - mongo/jstests/core/covered_query_with_sort.js
-      - mongo/jstests/core/datasize_validation.js
-      - mongo/jstests/core/dbcase.js
-      - mongo/jstests/core/dbcase2.js
-      - mongo/jstests/core/dbhash.js
-      - mongo/jstests/core/dbstats.js
-      - mongo/jstests/core/depth_limit.js
-      - mongo/jstests/core/diagdata.js
+      - mongo/jstests/core/command_let_variables.js # https://github.com/FerretDB/FerretDB/issues/2275
+      - mongo/jstests/core/command_let_variables_merge_only.js # https://github.com/FerretDB/FerretDB/issues/2275
+      - mongo/jstests/core/commands_that_do_not_write_do_not_accept_wc.js # requires writeConcern
+      - mongo/jstests/core/compare_timestamps.js # https://github.com/FerretDB/FerretDB/issues/2990
+      - mongo/jstests/core/compound_index_max_fields.js # https://github.com/FerretDB/FerretDB/issues/2819
+      - mongo/jstests/core/compound_wildcard_index_validation.js # https://github.com/FerretDB/FerretDB/issues/2947
+      - mongo/jstests/core/constructors.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/cover_null_queries.js # winningPlan is undefined
+      - mongo/jstests/core/covered_query_with_sort.js # winningPlan is undefined
+      - mongo/jstests/core/datasize_validation.js # keyPattern, min, max are not implemented
+      - mongo/jstests/core/dbcase.js # https://github.com/FerretDB/FerretDB/issues/2991
+      - mongo/jstests/core/dbcase2.js # https://github.com/FerretDB/FerretDB/issues/2991
+      - mongo/jstests/core/dbhash.js # dbhash command not implemented
+      - mongo/jstests/core/dbstats.js # storageEngine is undefined
+      - mongo/jstests/core/depth_limit.js # Exceeded depth limit of 150 when converting js object to BSON. Do you have a cycle?
+      - mongo/jstests/core/diagdata.js # getDiagnosticData not implemented
       - mongo/jstests/core/disallow_query_wrapped_cmd_format.js
-      - mongo/jstests/core/doc_validation_with_now_variable.js
+      - mongo/jstests/core/doc_validation_with_now_variable.js # https://github.com/FerretDB/FerretDB/issues/77
       - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js
       - mongo/jstests/core/field_name_empty.js
-      - mongo/jstests/core/field_name_validation.js
-      - mongo/jstests/core/filemd5.js
+      - mongo/jstests/core/field_name_validation.js # document keys must not contain . sign
+      - mongo/jstests/core/filemd5.js # filemd5 command not implemented
       - mongo/jstests/core/find_with_resume_after_param.js
-      - mongo/jstests/core/function_string_representations.js
-      - mongo/jstests/core/geo_parse_err.js
-      - mongo/jstests/core/hashed_partial_and_sparse_index.js
-      - mongo/jstests/core/hostinfo.js
+      - mongo/jstests/core/function_string_representations.js # mapreduce not implemented
+      - mongo/jstests/core/geo_parse_err.js # https://github.com/FerretDB/FerretDB/issues/128
+      - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/hostinfo.js # hostinfo.system.memSizeMB not implemented
       - mongo/jstests/core/id1.js
-      - mongo/jstests/core/id_partial_projection.js
+      - mongo/jstests/core/id_partial_projection.js # https://github.com/FerretDB/FerretDB/issues/2948
       - mongo/jstests/core/illegal_cmd_namespace.js
-      - mongo/jstests/core/list_commands.js
-      - mongo/jstests/core/list_namespaces_invalidation.js
+      - mongo/jstests/core/list_commands.js # secondaryOk not implemented yet
+      - mongo/jstests/core/list_namespaces_invalidation.js # renames a collection that exceeds max table length 
       - mongo/jstests/core/local_tail_capped.js
-      - mongo/jstests/core/long_double_compare.js
-      - mongo/jstests/core/map_reduce_subplanning.js
-      - mongo/jstests/core/map_reduce_validation.js
-      - mongo/jstests/core/max_doc_size.js
-      - mongo/jstests/core/merge_sort_collation.js
-      - mongo/jstests/core/min_max_bounds.js
-      - mongo/jstests/core/min_max_hashed_index.js
-      - mongo/jstests/core/mod.js
-      - mongo/jstests/core/mod_overflow.js
+      - mongo/jstests/core/long_double_compare.js # https://github.com/FerretDB/FerretDB/issues/2826
+      - mongo/jstests/core/map_reduce_subplanning.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/map_reduce_validation.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/max_doc_size.js # https://github.com/FerretDB/FerretDB/issues/2957
+      - mongo/jstests/core/merge_sort_collation.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/min_max_bounds.js # cursor.min() and cursor.max() are not implemented yet
+      - mongo/jstests/core/min_max_hashed_index.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/mod.js # https://github.com/FerretDB/FerretDB/issues/66
+      - mongo/jstests/core/mod_overflow.js # https://github.com/FerretDB/FerretDB/issues/414
       - mongo/jstests/core/mod_special_values.js
       - mongo/jstests/core/mod_with_where.js
-      - mongo/jstests/core/monotonic_date_operations.js
-      - mongo/jstests/core/mr_single_reduce.js
-      - mongo/jstests/core/multi.js
-      - mongo/jstests/core/multikey_geonear.js
+      - mongo/jstests/core/monotonic_date_operations.js # https://github.com/FerretDB/FerretDB/issues/2893
+      - mongo/jstests/core/mr_single_reduce.js # \x0D JavaScript code BSON type not implemented
+      - mongo/jstests/core/multi.js # FerretDB does not support nested arrays.
+      - mongo/jstests/core/multikey_geonear.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/natural.js
       - mongo/jstests/core/opcounters_active.js
-      - mongo/jstests/core/optimized_match_explain.js
-      - mongo/jstests/core/partialFilterExpression_with_geoWithin.js
-      - mongo/jstests/core/positional_projection_multiple_array_fields.js
+      - mongo/jstests/core/optimized_match_explain.js # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/core/partialFilterExpression_with_geoWithin.js  # https://github.com/FerretDB/FerretDB/issues/2822
+      - mongo/jstests/core/positional_projection_multiple_array_fields.js # https://github.com/FerretDB/FerretDB/issues/1711
       - mongo/jstests/core/query/unset/unset2.js
-      - mongo/jstests/core/record_store_count.js
-      - mongo/jstests/core/recursion.js
+      - mongo/jstests/core/record_store_count.js # https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/recursion.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/resume_query.js
       - mongo/jstests/core/resume_query_from_non_existent_record.js
-      - mongo/jstests/core/return_bson_scalar_from_js_function.js
+      - mongo/jstests/core/return_bson_scalar_from_js_function.js # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/return_key.js
       - mongo/jstests/core/sample_rate.js
       - mongo/jstests/core/sbe_plan_cache_autoparameterize_collscan.js
@@ -308,35 +306,35 @@ results:
       - mongo/jstests/core/server9547.js
       - mongo/jstests/core/show_record_id.js
       - mongo/jstests/core/single_batch.js
-      - mongo/jstests/core/single_field_hashed_index.js
-      - mongo/jstests/core/slice1.js
+      - mongo/jstests/core/single_field_hashed_index.js # https://github.com/FerretDB/FerretDB/issues/2416
+      - mongo/jstests/core/slice1.js # https://github.com/FerretDB/FerretDB/issues/2950
       - mongo/jstests/core/sparse_index_supports_ne_null.js
       - mongo/jstests/core/startup_log.js
       - mongo/jstests/core/storefunc.js
       - mongo/jstests/core/string_with_nul_bytes.js
       - mongo/jstests/core/system_js_access.js
       - mongo/jstests/core/system_js_drop.js
-      - mongo/jstests/core/text_covered_matching.js
+      - mongo/jstests/core/text_covered_matching.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/top.js
       - mongo/jstests/core/top_drop.js
-      - mongo/jstests/core/transaction_too_large_for_cache.js
+      - mongo/jstests/core/transaction_too_large_for_cache.js # https://github.com/FerretDB/FerretDB/issues/416
       - mongo/jstests/core/ts1.js
       - mongo/jstests/core/type_bracket.js
-      - mongo/jstests/core/uniqueness.js
+      - mongo/jstests/core/uniqueness.js # https://github.com/FerretDB/FerretDB/issues/2822
       - mongo/jstests/core/validate_js_timestamp.js
-      - mongo/jstests/core/write/batch_write_collation_estsize.js
-      - mongo/jstests/core/write/collation_find_and_modify.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
+      - mongo/jstests/core/write/batch_write_collation_estsize.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/write/collation_find_and_modify.js # https://github.com/FerretDB/FerretDB/issues/10
+      - mongo/jstests/core/write/find_and_modify/find_and_modify2.js # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js # https://github.com/FerretDB/FerretDB/issues/1745
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js # winningPlan is undefined
       - mongo/jstests/core/write/find_and_modify/find_and_modify_invalid_query_params.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_metrics.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6588.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6865.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6865.js # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6909.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6993.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server7660.js
@@ -345,12 +343,12 @@ results:
       - mongo/jstests/core/write/insert/insert_id_undefined.js
       - mongo/jstests/core/write/insert/insert_illegal_doc.js
       - mongo/jstests/core/write/update/batch_write_command_update.js
-      - mongo/jstests/core/write/update/collation_update.js
+      - mongo/jstests/core/write/update/collation_update.js # https://github.com/FerretDB/FerretDB/issues/10
       - mongo/jstests/core/write/update/update8.js
-      - mongo/jstests/core/write/update/update_addToSet.js
+      - mongo/jstests/core/write/update/update_addToSet.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/write/update/update_affects_indexes.js
       - mongo/jstests/core/write/update/update_arrayFilters.js
-      - mongo/jstests/core/write/update/update_array_offset_positional.js
+      - mongo/jstests/core/write/update/update_array_offset_positional.js # FerretDB does not support nested arrays.
       - mongo/jstests/core/write/update/update_arraymatch1.js
       - mongo/jstests/core/write/update/update_arraymatch2.js
       - mongo/jstests/core/write/update/update_arraymatch3.js
@@ -370,7 +368,7 @@ results:
       - mongo/jstests/core/write/update/update_multi6.js
       - mongo/jstests/core/write/update/update_numeric_field_name.js
       - mongo/jstests/core/write/update/update_pipeline_shell_helpers.js
-      - mongo/jstests/core/write/update/update_server-12848.js
+      - mongo/jstests/core/write/update/update_server-12848.js # FerretDB does not support nested arrays.
       - mongo/jstests/core/write/update/update_setOnInsert.js
       - mongo/jstests/core/write/update/update_with_large_hint.js
       - mongo/jstests/core/write/update/update_with_pipeline.js
