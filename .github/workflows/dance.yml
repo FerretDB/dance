@@ -46,11 +46,6 @@ jobs:
           - ycsb-workloadc
 
     steps:
-      - name: init
-        run:
-          echo "TOKENS=1" >> $GITHUB_ENV
-          echo ${{ env.TOKENS }}
-
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -76,16 +71,11 @@ jobs:
         run: bin/task init
 
       - name: Dance!
-        run: |
-          bin/task dance
-          if [[ ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }} ]]; then
-            echo "TOKENS=1" >> $GITHUB_ENV
-          fi
-          echo matrix
+        run: bin/task dance
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          MAXTOKENS: ${{ env.TOKENS }}
+          MAXTOKENS: 1
 
       - name: Collect logs
         if: failure()
