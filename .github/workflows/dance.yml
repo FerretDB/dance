@@ -72,12 +72,11 @@ jobs:
 
       - name: Dance!
         if: ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }}
-        env:
-          MAXTOKENS: 1
         run: bin/task dance
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
+          MAXTOKENS: 1
 
       - name: Collect logs
         if: failure()
