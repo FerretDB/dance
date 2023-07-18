@@ -85,7 +85,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	var tokens = 20
+	tokens := 20
 
 	t, ok := os.LookupEnv("MAXTOKENS")
 	if ok {
