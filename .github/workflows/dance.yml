@@ -74,7 +74,7 @@ jobs:
       # but all subsequent steps in a job will have access. 
       - name: Set MAXTOKENS for job
         run: |
-          if [[ ${{ matrix.db == 'ferretdb' && matrix.test == 'dbaas_core' }} ]]; then
+          if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
             echo "MAXTOKENS=1" >> $GITHUB_ENV
             else
             sed -i "/MAXTOKENS=/d" $GITHUB_ENV
