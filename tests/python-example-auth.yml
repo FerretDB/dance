@@ -1,0 +1,19 @@
+---
+runner: command
+dir: python-example
+args: 
+  - python3
+  - pymongo_test.py
+  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+
+results:
+  ferretdb:
+    stats:
+      expected_pass: 1
+
+  mongodb:
+    stats:
+      # PLAIN is used in MongoDB to perform LDAP authentication.
+      expected_fail: 1
+    fail:
+      - python-example

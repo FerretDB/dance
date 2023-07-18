@@ -38,7 +38,11 @@ jobs:
           - dbaas_core
           - diff
           - dotnet-example
+          - dotnet-example-auth
           - java-example
+          - java-example-auth
+          - python-example
+          - python-example-auth
           - mongo
           - mongo-go-driver
           - mongo-tools
@@ -57,6 +61,11 @@ jobs:
         with:
           cache-key: dance
 
+      # set up Python build environment
+      - name: Install Python dependencies
+        run: |
+          pip3 install pymongo
+ 
       - name: Install Task
         run: go generate -x
         working-directory: tools
