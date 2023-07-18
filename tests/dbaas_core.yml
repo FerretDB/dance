@@ -936,8 +936,7 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 0
-      unexpected_fail: 183
+      expected_fail: 183
       expected_pass: 788
     ignore:
     fail:
