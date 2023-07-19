@@ -936,13 +936,11 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 183
-      expected_pass: 788
-    ignore:
+      expected_fail: 0
+      expected_pass: 0
     fail:
       - mongo/jstests/core/api/api_version_new_50_language_features.js
       - mongo/jstests/core/api/api_version_unstable_fields.js
-      - mongo/jstests/core/api/api_version_unstable_indexes.js
       - mongo/jstests/core/api/apitest_db_profile_level.js
       - mongo/jstests/core/capped/capped_resize.js
       - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js
