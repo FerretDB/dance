@@ -85,6 +85,8 @@ jobs:
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' && matrix.db == 'ferretdb' }} ]]; then
             echo "FILE_CONCURRENCY=1" >> $GITHUB_ENV
+          elif [[ ${{ matrix.test == 'dbaas_core' && matrix.db == 'mongodb' }} ]]; then
+            echo "FILE_CONCURRENCY=100" >> $GITHUB_ENV
           else
             sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
           fi
