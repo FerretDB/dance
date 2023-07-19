@@ -85,13 +85,12 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	tokens := 20
+	tokens := 50
 
-	if i, err := strconv.Atoi(os.Getenv("FILE_CONCURRENCY")); err == nil {
+	t := os.Getenv("FILE_CONCURRENCY")
+	if i, err := strconv.Atoi(t); err == nil {
 		tokens = i
 	}
-
-	log.Println(tokens)
 
 	sema := make(chan struct{}, tokens)
 
