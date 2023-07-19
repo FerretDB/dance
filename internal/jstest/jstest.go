@@ -87,8 +87,9 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	tokens := 20
 
+	// https://github.com/actions/runner/issues/1126
 	t, ok := os.LookupEnv("FILE_CONCURRENCY")
-	if ok {
+	if ok && t != "" {
 		if i, err := strconv.Atoi(t); err == nil {
 			tokens = i
 		}
