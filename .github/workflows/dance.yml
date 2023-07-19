@@ -94,7 +94,7 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          FILE_CONCURRENCY: ${{ env.FILE_CONCURRENCY }}
+          # FILE_CONCURRENCY: ${{ env.FILE_CONCURRENCY }}
 
       - name: Collect logs
         if: failure()
