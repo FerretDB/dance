@@ -87,7 +87,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	tokens := 20
 
-	t, ok := os.LookupEnv("MAXTOKENS")
+	t, ok := os.LookupEnv("FILE_CONCURRENCY")
 	if ok {
 		if i, err := strconv.Atoi(t); err == nil {
 			tokens = i

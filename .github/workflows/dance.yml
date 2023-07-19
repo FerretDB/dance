@@ -81,12 +81,12 @@ jobs:
 
       # The step that creates or updates the environment variable does not have access to the new value, 
       # but all subsequent steps in a job will have access. 
-      - name: Set MAXTOKENS for job
+      - name: Set FILE_CONCURRENCY for job
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' && matrix.db == 'ferretdb' }} ]]; then
-            echo "MAXTOKENS=1" >> $GITHUB_ENV
+            echo "FILE_CONCURRENCY=1" >> $GITHUB_ENV
           else
-            sed -i "/MAXTOKENS=/d" $GITHUB_ENV
+            sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
           fi
 
       - name: Dance!
@@ -94,7 +94,7 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          MAXTOKENS: ${{ env.MAXTOKENS }}
+          MAXTOKENS: ${{ env.FILE_CONCURRENCY }}
 
       - name: Collect logs
         if: failure()
