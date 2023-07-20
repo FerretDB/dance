@@ -10,31 +10,33 @@ updates:
     assignees: [AlekSi]
     open-pull-requests-limit: 20
     groups:
-      integration:
+      github-actions:
         patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
       time: "01:42"
+
   - package-ecosystem: "docker"
     directory: "/build/deps"
     labels: ["deps", "not ready"]
     assignees: [AlekSi]
     open-pull-requests-limit: 20
     groups:
-      integration:
+      build-deps:
         patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
       time: "01:42"
+
   - package-ecosystem: "gomod"
     directory: "/"
     labels: ["deps", "not ready"]
     assignees: [AlekSi]
     open-pull-requests-limit: 20
     groups:
-      integration:
+      dance:
         patterns: ["*"]
     schedule:
       interval: "weekly"
@@ -46,12 +48,13 @@ updates:
     assignees: [AlekSi]
     open-pull-requests-limit: 20
     groups:
-      integration:
+      tools:
         patterns: ["*"]
     schedule:
       interval: "weekly"
       day: "thursday"
       time: "01:42"
+
   - package-ecosystem: "gitsubmodule"
     directory: "/"
     labels: ["deps", "not ready"]

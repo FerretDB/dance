@@ -7,11 +7,11 @@ require (
 	github.com/go-task/task/v3 v3.27.1
 	github.com/golangci/golangci-lint v1.53.3
 	github.com/pingcap/go-ycsb v1.0.1
-	github.com/quasilyte/go-consistent v0.0.0-20230711154354-98abf12e05aa
+	github.com/quasilyte/go-consistent v0.6.0
 	github.com/reviewdog/reviewdog v0.14.2
-	golang.org/x/perf v0.0.0-20230427221525-d343f6398b76
+	golang.org/x/perf v0.0.0-20230717203022-1ba3a21238c9
 	golang.org/x/tools v0.11.0
-	golang.org/x/vuln v0.2.0
+	golang.org/x/vuln v1.0.0
 	mvdan.cc/gofumpt v0.5.0
 )
 
