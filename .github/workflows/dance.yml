@@ -23,7 +23,8 @@ env:
 jobs:
   dance:
     name: dance
-    runs-on: ubuntu-22.04
+    runs-on:
+      labels: ubuntu-20.04-16core
     timeout-minutes: 120
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
