@@ -18,3 +18,7 @@
 	path = dumps/mongodb-sample-databases
 	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
+[submodule "python-example"]
+	path = tests/python-example
+	url = https://github.com/FerretDB/python-example.git
+	branch = main
