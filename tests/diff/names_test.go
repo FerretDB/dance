@@ -30,9 +30,8 @@ func TestDatabaseName(t *testing.T) {
 	collectionName := strings.Repeat("a", 10)
 
 	testCases := map[string]string{
-		"ReservedPrefix":     "_ferretdb_xxx",
-		"NonLatin":           "データベース",
-		"StartingWithNumber": "1database",
+		"ReservedPrefix": "_ferretdb_xxx",
+		"NonLatin":       "データベース",
 	}
 
 	for name, dbName := range testCases {

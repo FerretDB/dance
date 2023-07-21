@@ -1,9 +1,9 @@
 ---
 runner: command
-dir: dotnet-example
+dir: python-example
 args: 
-  - dotnet
-  - run
+  - python3
+  - pymongo_test.py
   - mongodb://localhost:27017/
 
 results:
