@@ -78,9 +78,9 @@ results:
 
   ferretdb:
     stats:
-      expected_fail: 13
-      expected_skip: 16
-      expected_pass: 633
+      expected_fail: 10
+      expected_skip: 19
+      expected_pass: 628
 
     ignore:
       # returns unknown result.
@@ -144,6 +144,10 @@ results:
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
 
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
@@ -160,9 +164,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
-
       # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
       - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
@@ -171,14 +172,10 @@ results:
 
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
-
-      # Unexpected error: write command error: [{write errors: [{invalid document: document must contain '_id' field}]}, {<nil>}]
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
-
   mongodb:
     stats:
-      expected_skip: 432
-      expected_pass: 1940
+      expected_skip: 417
+      expected_pass: 1903
 
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
@@ -287,15 +284,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueSize_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueTimeoutMS_should_be_included_in_connection_pool_created_message_when_specified
 
-      # test must be skipped: "timeoutMode not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
-
-      # test must be skipped: "cursorType not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
