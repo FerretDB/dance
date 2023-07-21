@@ -49,7 +49,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 61
+      expected_fail: 62
       expected_pass: 39
 
     fail:
@@ -77,6 +77,8 @@ results:
       - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
       # --- end of aggregation tests ---
+
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
 
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
@@ -173,3 +175,4 @@ results:
       # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
