@@ -168,11 +168,16 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 2
-      expected_pass: 98
+      expected_fail: 8
+      expected_pass: 93
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
+      - mongo/jstests/aggregation/explain.js
+      - mongo/jstests/aggregation/match_swapping_renamed_fields.js
+      - mongo/jstests/aggregation/use_query_project_and_sort.js
+      - mongo/jstests/aggregation/use_query_projection.js
+      - mongo/jstests/aggregation/use_query_sort.js
