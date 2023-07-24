@@ -76,11 +76,21 @@ results:
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
 
+     # test must be skipped: "timeoutMode not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
+
+      # test must be skipped: "cursorType not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+
   ferretdb:
     stats:
       expected_fail: 10
       expected_skip: 19
-      expected_pass: 628
+      expected_pass: 633
 
     ignore:
       # returns unknown result.
