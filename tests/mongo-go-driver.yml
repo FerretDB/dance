@@ -76,7 +76,7 @@ results:
       # skip because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
 
-     # test must be skipped: "timeoutMode not supported"
+      # test must be skipped: "timeoutMode not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
@@ -184,8 +184,8 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
   mongodb:
     stats:
-      expected_skip: 417
-      expected_pass: 1903
+      expected_skip: 432
+      expected_pass: 1940
 
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
