@@ -26,6 +26,12 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 30
 
+    # Do not run this job in parallel for any PR change or branch push
+    # to save some resources.
+    concurrency:
+      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
 
     strategy:
@@ -65,7 +71,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip3 install pymongo
- 
+
       - name: Install Task
         run: go generate -x
         working-directory: tools
