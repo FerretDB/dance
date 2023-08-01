@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: dotnet-example
-args: 
+args:
   - dotnet
   - run
   - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
