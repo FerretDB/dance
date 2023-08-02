@@ -1,0 +1,15 @@
+---
+runner: command
+dir: enmeshed-runtime
+args: ["sh", "-c", "npm i && CONNECTION_STRING=mongodb://localhost:27017 npx jest -i"]
+
+results:
+  common:
+    stats:
+      expected_pass: 1
+
+  ferretdb:
+    stats:
+
+  mongodb:
+    stats:
