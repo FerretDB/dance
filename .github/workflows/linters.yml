@@ -13,6 +13,11 @@ on:
   schedule:
     - cron: "12 3 * * *"
 
+# Do not run this job in parallel for any PR change or branch push.
+concurrency:
+  group: ${{ github.workflow }}-golangci-lint-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 env:
   GOPATH: /home/runner/go
   GOCACHE: /home/runner/go/cache

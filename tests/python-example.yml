@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: python-example
-args: 
+args:
   - python3
   - pymongo_test.py
   - mongodb://localhost:27017/

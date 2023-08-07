@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: python-example
-args: 
+args:
   - python3
   - pymongo_test.py
   - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
