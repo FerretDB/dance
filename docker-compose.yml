@@ -36,7 +36,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo6.Dockerfile
-    command: --setParameter enableTestCommands=1
+    command: --setParameter enableTestCommands=1 --maxIncoming
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
@@ -44,6 +44,7 @@ services:
         soft: 64000
         hard: 64000
       nproc: 64000
+      cpus: '4'
     ports:
       - 27017:27017
     environment:
