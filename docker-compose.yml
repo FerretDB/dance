@@ -48,7 +48,7 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 8G
+          memory: 7G
     ports:
       - 27017:27017
     environment:
