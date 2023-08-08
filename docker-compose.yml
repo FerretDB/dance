@@ -47,8 +47,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4'
-          memory: 16G
+          cpus: '2'
+          memory: 8G
     ports:
       - 27017:27017
     environment:
