@@ -936,9 +936,113 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 8
-      expected_pass: 965
+      expected_fail: 184
+      expected_pass: 789
     fail:
+      - mongo/jstests/core/api/api_version_unstable_indexes.js
+      - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js
+      - mongo/jstests/core/clustered/clustered_collection_collation.js
+      - mongo/jstests/core/columnstore/column_scan_skip_row_store_projection.js
+      - mongo/jstests/core/columnstore/column_store_index_compression.js
+      - mongo/jstests/core/columnstore/column_store_projection.js
+      - mongo/jstests/core/columnstore/columnstore_eligibility.js
+      - mongo/jstests/core/columnstore/columnstore_index.js
+      - mongo/jstests/core/columnstore/columnstore_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
+      - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_validindex.js
+      - mongo/jstests/core/command_let_variables.js
+      - mongo/jstests/core/covered_query_with_sort.js
+      - mongo/jstests/core/ddl/collmod_convert_index_uniqueness.js
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_apply_ops.js
+      - mongo/jstests/core/ddl/collmod_convert_to_unique_violations.js
+      - mongo/jstests/core/ddl/index_prepareUnique.js
+      - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js
+      - mongo/jstests/core/hashed_partial_and_sparse_index.js
+      - mongo/jstests/core/index/bindata_indexonly.js
+      - mongo/jstests/core/index/covered/coveredIndex1.js
+      - mongo/jstests/core/index/covered/coveredIndex2.js
+      - mongo/jstests/core/index/covered/covered_index_compound_1.js
+      - mongo/jstests/core/index/covered/covered_index_negative_1.js
+      - mongo/jstests/core/index/covered/covered_index_simple_1.js
+      - mongo/jstests/core/index/covered/covered_index_simple_2.js
+      - mongo/jstests/core/index/covered/covered_index_simple_3.js
+      - mongo/jstests/core/index/covered/covered_index_simple_id.js
+      - mongo/jstests/core/index/covered/covered_index_sort_1.js
+      - mongo/jstests/core/index/covered/covered_index_sort_2.js
+      - mongo/jstests/core/index/covered/covered_index_sort_3.js
+      - mongo/jstests/core/index/covered/covered_index_sort_no_fetch_optimization.js
+      - mongo/jstests/core/index/elemmatch_index.js
+      - mongo/jstests/core/index/fts/fts_index3.js
+      - mongo/jstests/core/index/fts/fts_projection.js
+      - mongo/jstests/core/index/geo/geo_2d_explain.js
+      - mongo/jstests/core/index/hashed/hashed_index_collation.js
+      - mongo/jstests/core/index/hashed/hashed_index_covered_queries.js
+      - mongo/jstests/core/index/hashed/hashed_index_queries.js
+      - mongo/jstests/core/index/hashed/hashed_index_queries_with_logical_operators.js
+      - mongo/jstests/core/index/hashed/hashed_index_sort.js
+      - mongo/jstests/core/index/hidden_index.js
+      - mongo/jstests/core/index/index_bounds_code.js
+      - mongo/jstests/core/index/index_bounds_maxkey.js
+      - mongo/jstests/core/index/index_bounds_minkey.js
+      - mongo/jstests/core/index/index_bounds_object.js
+      - mongo/jstests/core/index/index_bounds_pipe.js
+      - mongo/jstests/core/index/index_bounds_timestamp.js
+      - mongo/jstests/core/index/index_check2.js
+      - mongo/jstests/core/index/index_decimal.js
+      - mongo/jstests/core/index/index_filter_catalog_independent.js
+      - mongo/jstests/core/index/index_filter_collation.js
+      - mongo/jstests/core/index/index_filter_on_hidden_index.js
+      - mongo/jstests/core/index/index_multikey.js
+      - mongo/jstests/core/index/index_partial_create_drop.js
+      - mongo/jstests/core/index/index_partial_read_ops.js
+      - mongo/jstests/core/index/index_signature.js
+      - mongo/jstests/core/index/index_type_change.js
+      - mongo/jstests/core/index/sparse_index_internal_expr.js
+      - mongo/jstests/core/index/wildcard/compound_wildcard_index_unbounded.js
+      - mongo/jstests/core/index/wildcard/wildcard_and_text_indexes.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_basic_index_bounds.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_count.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_covered_queries.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_distinct_scan.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_dup_predicates.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_empty_arrays.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_equality_to_empty_obj.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_filter.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_hint.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_minmax.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_multikey.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_nonblocking_sort.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_partial_index.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_projection.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_type.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js
+      - mongo/jstests/core/json_schema/json_schema.js
+      - mongo/jstests/core/optimized_match_explain.js
+      - mongo/jstests/core/partialFilterExpression_with_geoWithin.js
+      - mongo/jstests/core/query/agg_hint.js
+      - mongo/jstests/core/query/bittest.js
+      - mongo/jstests/core/query/covered_multikey.js
+      - mongo/jstests/core/query/distinct/distinct_compound_index.js
+      - mongo/jstests/core/query/distinct/distinct_index1.js
+      - mongo/jstests/core/query/distinct/distinct_multikey.js
+      - mongo/jstests/core/query/distinct/distinct_multikey_dotted_path.js
+      - mongo/jstests/core/query/distinct/distinct_with_hashed_index.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
+      - mongo/jstests/core/query/explain/explain_count.js
+      - mongo/jstests/core/query/explain/explain_distinct.js
+      - mongo/jstests/core/query/explain/explain_multi_plan_count.js
+      - mongo/jstests/core/query/explain/explain_multikey.js
+      - mongo/jstests/core/query/explain/explain_plan_scores.js
+      - mongo/jstests/core/query/explain/explain_sample.js
+      - mongo/jstests/core/query/explain/explain_shell_helpers.js
+      - mongo/jstests/core/query/explain/explain_sort_type.js
+      - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js
+      - mongo/jstests/core/query/explode_for_sort_equality_to_array.js
+      - mongo/jstests/core/query/idhack.js
+      - mongo/jstests/core/query/introspect_hidden_index_plan_cache_entries.js
+      - mongo/jstests/core/query/mr/mr_agg_explain.js
       - mongo/jstests/core/api/api_version_new_50_language_features.js
       - mongo/jstests/core/api/api_version_unstable_fields.js
       - mongo/jstests/core/api/apitest_db_profile_level.js
@@ -950,7 +1054,6 @@ results:
       - mongo/jstests/core/ddl/drop_collection.js
       - mongo/jstests/core/disallow_query_wrapped_cmd_format.js
       - mongo/jstests/core/doc_validation/bypass_doc_validation.js
-      - mongo/jstests/core/filemd5.js
       - mongo/jstests/core/find_with_resume_after_param.js
       - mongo/jstests/core/geo_parse_err.js
       - mongo/jstests/core/illegal_cmd_namespace.js
@@ -965,12 +1068,10 @@ results:
       - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js
       - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js
       - mongo/jstests/core/index/wildcard/wildcard_index_update.js
-      - mongo/jstests/core/query/array/array4.js
       - mongo/jstests/core/query/distinct/distinct_hint.js
       - mongo/jstests/core/query/explain/explain_delete.js
       - mongo/jstests/core/query/explain/explain_server_params.js
       - mongo/jstests/core/query/explode_for_sort_plan_cache.js
-      - mongo/jstests/core/query/find/find_dedup.js
       - mongo/jstests/core/query/index_key_expression.js
       - mongo/jstests/core/query/internal_hash_eq/expr_rewrites.js
       - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js
@@ -996,3 +1097,29 @@ results:
       - mongo/jstests/core/validate_js_timestamp.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6909.js
+      - mongo/jstests/core/ddl/rename_collection_view.js
+      - mongo/jstests/core/query/null_query_semantics.js
+      - mongo/jstests/core/query/or/or2.js
+      - mongo/jstests/core/query/or/or3.js
+      - mongo/jstests/core/query/partial_index_logical.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_list_shapes.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_shell_helpers.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js
+      - mongo/jstests/core/query/project/projection_semantics.js
+      - mongo/jstests/core/query/query_hash_stability.js
+      - mongo/jstests/core/query/regex/regex_distinct.js
+      - mongo/jstests/core/query/sort/sort_array.js
+      - mongo/jstests/core/query/sort/sort_merge.js
+      - mongo/jstests/core/query/sort/sort_merge_collation.js
+      - mongo/jstests/core/record_store_count.js
+      - mongo/jstests/core/resume_query.js
+      - mongo/jstests/core/resume_query_from_non_existent_record.js
+      - mongo/jstests/core/return_key.js
+      - mongo/jstests/core/single_field_hashed_index.js
+      - mongo/jstests/core/sparse_index_supports_ne_null.js
+      - mongo/jstests/core/text_covered_matching.js
+      - mongo/jstests/core/write/delete/delete_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
+      - mongo/jstests/core/write/update/update_hint.js
+      - mongo/jstests/core/write/update/update_pipeline_shell_helpers.js
