@@ -91,7 +91,7 @@ jobs:
       - name: Set FILE_CONCURRENCY for job
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' && matrix.db == 'ferretdb' }} ]]; then
-            echo "FILE_CONCURRENCY=1" >> $GITHUB_ENV
+            echo "FILE_CONCURRENCY=40" >> $GITHUB_ENV
           else
             sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
           fi
