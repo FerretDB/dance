@@ -936,9 +936,10 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 184
-      expected_pass: 789
+      expected_fail: 183
+      expected_pass: 790
     fail:
+      - mongo/jstests/core/ddl/rename_collection_view.js
       - mongo/jstests/core/api/api_version_unstable_indexes.js
       - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js
       - mongo/jstests/core/clustered/clustered_collection_collation.js
@@ -1097,7 +1098,6 @@ results:
       - mongo/jstests/core/validate_js_timestamp.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6909.js
-      - mongo/jstests/core/ddl/rename_collection_view.js
       - mongo/jstests/core/query/null_query_semantics.js
       - mongo/jstests/core/query/or/or2.js
       - mongo/jstests/core/query/or/or3.js
