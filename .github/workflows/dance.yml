@@ -92,9 +92,6 @@ jobs:
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
             echo "FILE_CONCURRENCY=40" >> $GITHUB_ENV
-          # else
-          #   sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
-          # fi
 
       - name: Dance!
         run: bin/task dance
