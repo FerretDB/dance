@@ -150,19 +150,19 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 // runMongo runs the mongo shell inside a container with file and returns the combined output.
 func runMongo(dir, file string) ([]byte, error) {
-	bin, err := exec.LookPath("docker")
+	bin, err := exec.LookPath("mongo")
 	if err != nil {
 		return nil, err
 	}
 
-	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
+	// dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
-		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
+		"--verbose", "--norc", "mongodb://localhost:27017/",
 		"--eval", evalBuilder(file), file,
 	}
-	dockerArgs = append(dockerArgs, shellArgs...)
+	// dockerArgs = append(dockerArgs, shellArgs...)
 
-	cmd := exec.Command(bin, dockerArgs...)
+	cmd := exec.Command(bin, shellArgs...)
 	cmd.Dir = dir
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))

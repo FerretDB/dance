@@ -936,8 +936,8 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 55
-      expected_pass: 914
+      expected_fail: 8
+      expected_pass: 965
     fail:
       - mongo/jstests/core/api/api_version_new_50_language_features.js
       - mongo/jstests/core/api/api_version_unstable_fields.js
@@ -950,14 +950,12 @@ results:
       - mongo/jstests/core/ddl/drop_collection.js
       - mongo/jstests/core/disallow_query_wrapped_cmd_format.js
       - mongo/jstests/core/doc_validation/bypass_doc_validation.js
-      - mongo/jstests/core/embedded_dollar_prefixed_field_validation.js
-      # - mongo/jstests/core/filemd5.js
+      - mongo/jstests/core/filemd5.js
       - mongo/jstests/core/find_with_resume_after_param.js
       - mongo/jstests/core/geo_parse_err.js
       - mongo/jstests/core/illegal_cmd_namespace.js
       - mongo/jstests/core/index/index_count_scan.js
       - mongo/jstests/core/index/index_filter_commands_invalidate_plan_cache_entries.js
-      # - mongo/jstests/core/index/index_multikey.js
       - mongo/jstests/core/index/partial_index_optimization.js
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js
       - mongo/jstests/core/index/wildcard/compound_wildcard_index_hiding.js
@@ -967,12 +965,12 @@ results:
       - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js
       - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js
       - mongo/jstests/core/index/wildcard/wildcard_index_update.js
-      # - mongo/jstests/core/query/array/array4.js
+      - mongo/jstests/core/query/array/array4.js
       - mongo/jstests/core/query/distinct/distinct_hint.js
       - mongo/jstests/core/query/explain/explain_delete.js
       - mongo/jstests/core/query/explain/explain_server_params.js
       - mongo/jstests/core/query/explode_for_sort_plan_cache.js
-      # - mongo/jstests/core/query/find/find_dedup.js
+      - mongo/jstests/core/query/find/find_dedup.js
       - mongo/jstests/core/query/index_key_expression.js
       - mongo/jstests/core/query/internal_hash_eq/expr_rewrites.js
       - mongo/jstests/core/query/internal_hash_eq/match_internal_eq_hash.js
