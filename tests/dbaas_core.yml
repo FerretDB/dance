@@ -939,7 +939,6 @@ results:
       expected_fail: 183
       expected_pass: 790
     fail:
-      - mongo/jstests/core/ddl/rename_collection_view.js
       - mongo/jstests/core/api/api_version_unstable_indexes.js
       - mongo/jstests/core/clustered/clustered_collection_bounded_scan.js
       - mongo/jstests/core/clustered/clustered_collection_collation.js
