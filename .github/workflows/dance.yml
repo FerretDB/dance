@@ -90,11 +90,11 @@ jobs:
       # but all subsequent steps in a job will have access.
       - name: Set FILE_CONCURRENCY for job
         run: |
-          if [[ ${{ matrix.test == 'dbaas_core' && matrix.db == 'ferretdb' }} ]]; then
+          if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
             echo "FILE_CONCURRENCY=40" >> $GITHUB_ENV
-          else
-            sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
-          fi
+          # else
+          #   sed -i "/FILE_CONCURRENCY=/d" $GITHUB_ENV
+          # fi
 
       - name: Dance!
         run: bin/task dance
