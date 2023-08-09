@@ -956,11 +956,6 @@ results:
       - mongo/jstests/core/sbe/sbe_ixscan_explain.js
       - mongo/jstests/core/sbe_plan_cache_autoparameterize_collscan.js
       - mongo/jstests/core/transaction_too_large_for_cache_query_exec.js
-      - mongo/jstests/core/id1.js
-      - mongo/jstests/core/index/indexf.js
-      - mongo/jstests/core/query/count/count5.js
-      - mongo/jstests/core/query/not/not3.js
-      - mongo/jstests/core/query/regex/regex7.js
 
   mongodb:
     stats:
