@@ -917,7 +917,6 @@ results:
       - mongo/jstests/core/query/regex/regex4.js
       - mongo/jstests/core/query/regex/regex5.js
       - mongo/jstests/core/query/regex/regex6.js
-      - mongo/jstests/core/query/regex/regex7.js
       - mongo/jstests/core/query/regex/regex_distinct.js
       - mongo/jstests/core/query/regex/regex_error.js
       - mongo/jstests/core/query/regex/regex_limit.js
