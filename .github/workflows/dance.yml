@@ -93,9 +93,6 @@ jobs:
           if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
             echo "FILE_CONCURRENCY=1" >> $GITHUB_ENV
           fi
-          if [[ ${{ matrix.test == 'java-example' || matrix.test == 'java-example-auth' }} ]]; then
-            echo "MAVEN_OPTS='-ea'" >> $GITHUB_ENV
-          fi
 
       - name: Dance!
         run: bin/task dance
@@ -103,7 +100,6 @@ jobs:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
           FILE_CONCURRENCY: ${{ env.FILE_CONCURRENCY }}
-          MAVEN_OPTS: ${{ env.MAVEN_OPTS }}
 
       - name: Collect logs
         if: failure()
