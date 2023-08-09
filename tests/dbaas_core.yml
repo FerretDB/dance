@@ -228,8 +228,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 699
-      expected_pass: 270
+      expected_fail: 719 
+      expected_pass: 254
     ignore:
     fail:
       - mongo/jstests/core/SERVER-23626.js # \x0D JavaScript code BSON type not implemented
@@ -933,6 +933,34 @@ results:
       - mongo/jstests/core/write/delete/batch_write_command_delete.js
       - mongo/jstests/core/write/delete/delete_hint.js
       - mongo/jstests/core/write/delete/remove_undefined.js
+      - mongo/jstests/core/columnstore/column_scan_skip_row_store_projection.js
+      - mongo/jstests/core/columnstore/column_store_index_compression.js
+      - mongo/jstests/core/columnstore/column_store_projection.js
+      - mongo/jstests/core/columnstore/columnstore_eligibility.js
+      - mongo/jstests/core/columnstore/columnstore_index.js
+      - mongo/jstests/core/columnstore/columnstore_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
+      - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_validindex.js
+      - mongo/jstests/core/ddl/rename_collection_view.js
+      - mongo/jstests/core/index/index_type_change.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_update.js
+      - mongo/jstests/core/query/plan_cache/cached_plan_trial_does_not_discard_work.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_sbe_hinted.js
+      - mongo/jstests/core/query/project/projection_semantics.js
+      - mongo/jstests/core/query/sbe_plan_cache_autoparameterize_ixscan.js
+      - mongo/jstests/core/sbe/from_plan_cache_flag.js
+      - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
+      - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
+      - mongo/jstests/core/sbe/sbe_ixscan_explain.js
+      - mongo/jstests/core/sbe_plan_cache_autoparameterize_collscan.js
+      - mongo/jstests/core/transaction_too_large_for_cache_query_exec.js
+      - mongo/jstests/core/id1.js
+      - mongo/jstests/core/index/indexf.js
+      - mongo/jstests/core/query/count/count5.js
+      - mongo/jstests/core/query/not/not3.js
+      - mongo/jstests/core/query/regex/regex7.js
 
   mongodb:
     stats:
