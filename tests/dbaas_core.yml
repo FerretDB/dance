@@ -228,7 +228,7 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 719 
+      expected_fail: 719
       expected_pass: 254
     ignore:
     fail:
@@ -265,7 +265,6 @@ results:
       - mongo/jstests/core/geo_parse_err.js # https://github.com/FerretDB/FerretDB/issues/128
       - mongo/jstests/core/hashed_partial_and_sparse_index.js # https://github.com/FerretDB/FerretDB/issues/2416
       - mongo/jstests/core/hostinfo.js # hostinfo.system.memSizeMB not implemented
-      - mongo/jstests/core/id1.js
       - mongo/jstests/core/id_partial_projection.js # https://github.com/FerretDB/FerretDB/issues/2948
       - mongo/jstests/core/illegal_cmd_namespace.js
       - mongo/jstests/core/list_commands.js # secondaryOk not implemented yet
@@ -432,7 +431,6 @@ results:
       - mongo/jstests/core/query/collection_uuid_find.js # https://github.com/FerretDB/FerretDB/issues/2815
       - mongo/jstests/core/query/count/count.js 
       - mongo/jstests/core/query/count/count11.js
-      - mongo/jstests/core/query/count/count5.js
       - mongo/jstests/core/query/count/count6.js
       - mongo/jstests/core/query/count/count_hint.js # https://github.com/FerretDB/FerretDB/issues/2448
       - mongo/jstests/core/query/count/countb.js
@@ -562,7 +560,6 @@ results:
       - mongo/jstests/core/query/neq_null_correctly_cache.js
       - mongo/jstests/core/query/nin/nin.js
       - mongo/jstests/core/query/not/not2.js
-      - mongo/jstests/core/query/not/not3.js
       - mongo/jstests/core/query/null_query_semantics.js
       - mongo/jstests/core/query/number/numberlong3.js
       - mongo/jstests/core/query/or/or2.js
@@ -867,7 +864,6 @@ results:
       - mongo/jstests/core/index/index_sparse2.js
       - mongo/jstests/core/index/indexapi.js
       - mongo/jstests/core/index/indexes_multiple_commands.js
-      - mongo/jstests/core/index/indexf.js
       - mongo/jstests/core/index/indexm.js
       - mongo/jstests/core/index/indexp.js
       - mongo/jstests/core/index/indexr.js
