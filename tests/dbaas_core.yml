@@ -157,8 +157,6 @@ args:
   - "!mongo/jstests/core/stage_debug/stages_mergesort.js"
   - "!mongo/jstests/core/stage_debug/stages_or.js"
   - "!mongo/jstests/core/write/collection_truncate.js"
-
-  # XXX culprit tests
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
   - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
 
