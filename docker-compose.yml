@@ -44,6 +44,7 @@ services:
         soft: 64000
         hard: 64000
       nproc: 64000
+    # set limits to match ubuntu-22.04 on CI
     deploy:
       resources:
         limits:
