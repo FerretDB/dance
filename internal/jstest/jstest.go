@@ -87,7 +87,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	tokens := 50
 
-	t := os.Getenv("FILE_CONCURRENCY")
+	t := os.Getenv("NUM_TOKENS")
 	if i, err := strconv.Atoi(t); err == nil {
 		tokens = i
 	}

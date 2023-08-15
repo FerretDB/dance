@@ -91,7 +91,7 @@ jobs:
       - name: Set GITHUB_ENV
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
-            echo "FILE_CONCURRENCY=1" >> $GITHUB_ENV
+            echo "NUM_TOKENS=1" >> $GITHUB_ENV
           fi
 
       - name: Dance!
@@ -99,7 +99,7 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          FILE_CONCURRENCY: ${{ env.FILE_CONCURRENCY }}
+          NUM_TOKENS: ${{ env.NUM_TOKENS }}
 
       - name: Collect logs
         if: failure()
