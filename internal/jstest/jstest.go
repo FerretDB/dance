@@ -21,10 +21,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"sync"
 
@@ -35,7 +33,7 @@ import (
 
 // Run runs `mongo`.
 // Args is a list of filepath.Glob file patterns with additional support for !exclude.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, workers int) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -85,14 +83,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	tokens := 50
-
-	t := os.Getenv("NUM_TOKENS")
-	if i, err := strconv.Atoi(t); err == nil {
-		tokens = i
-	}
-
-	sema := make(chan struct{}, tokens)
+	sema := make(chan struct{}, workers)
 
 	ch := make(chan *item, len(files))
 
