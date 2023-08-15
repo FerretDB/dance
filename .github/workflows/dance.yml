@@ -91,7 +91,7 @@ jobs:
       - name: Set GITHUB_ENV
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
-            echo "NUM_TOKENS=1" >> $GITHUB_ENV
+            echo "WORKERS=1" >> $GITHUB_ENV
           fi
 
       - name: Dance!
@@ -99,7 +99,7 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
-          NUM_TOKENS: ${{ env.NUM_TOKENS }}
+          WORKERS: ${{ env.WORKERS }}
 
       - name: Collect logs
         if: failure()
