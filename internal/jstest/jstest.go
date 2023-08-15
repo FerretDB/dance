@@ -24,7 +24,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"golang.org/x/exp/maps"
 
@@ -83,40 +82,38 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 		out  []byte
 	}
 
-	sema := make(chan struct{}, workers)
-
 	ch := make(chan *item, len(files))
-
-	var wg sync.WaitGroup
 	for _, f := range files {
-		wg.Add(1)
-
-		go func(f string) {
-			defer wg.Done()
-
-			sema <- struct{}{}
-			it := &item{
-				file: f,
-			}
-
-			// we set working_dir so use a relative path here instead
-			rel, err := filepath.Rel("mongo", f)
-			if err != nil {
-				panic(err)
-			}
-
-			it.out, it.err = runMongo(dir, rel)
-			ch <- it
-
-			<-sema // release the token
-		}(f)
+		ch <- &item{file: f}
 	}
 
-	wg.Wait()
+	unseenFiles := make(chan string)
 
-	close(ch)
+	for i := 0; i < workers; i++ {
+		go func() {
+			for f := range unseenFiles {
+				it := &item{
+					file: f,
+				}
 
+				// we set working_dir so use a relative path here instead
+				rel, err := filepath.Rel("mongo", it.file)
+				if err != nil {
+					panic(err)
+				}
+
+				it.out, it.err = runMongo(dir, rel)
+				ch <- it
+			}
+		}()
+	}
+
+	seen := make(map[string]bool)
 	for it := range ch {
+		if !seen[it.file] {
+			seen[it.file] = true
+			unseenFiles <- it.file
+		}
 		if it.err != nil {
 			var exitErr *exec.ExitError
 			if !errors.As(it.err, &exitErr) {
@@ -135,6 +132,9 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 			Output: string(it.out),
 		}
 	}
+
+	close(unseenFiles)
+	close(ch)
 
 	return res, nil
 }
