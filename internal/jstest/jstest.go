@@ -108,7 +108,9 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 		}()
 	}
 
+	// de-duplicates files
 	seen := make(map[string]bool)
+
 	for it := range ch {
 		if !seen[it.file] {
 			seen[it.file] = true
