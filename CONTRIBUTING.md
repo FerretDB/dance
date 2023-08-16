@@ -33,6 +33,30 @@ For example, see [mongo-go-driver tests configuration](https://github.com/Ferret
 `TEST` environment variable should have the value `mongo-go-driver`, or be empty.
 It defines what test configuration to run; empty value runs all configurations.
 
+## Running custom tests
+
+In order to test your application with FerretDB you must use the `command` runner and add your repository as a submodule. The `command` runner will invoke any command and CLI arguments. 
+
+For example if you want to test your Node.js application with FerretDB, you would do the following:
+
+1. Add the submodule to dance `git submodule add https://github.com/my-app`
+2. Create a YAML file called `my-app.yml` in the `tests` directory
+3. Define the runner and command line arguments in the YAML file, e.g.
+   ```
+    ----
+    runner: command
+
+    dir: my-app
+    args: ["sh", "-c", "MONGO_URL=mongodb://localhost:27017 npm i && npm test"]
+
+    results:
+    common:
+        stats:
+            expected_pass: 1
+   ```
+4. Start the environment `bin/task env-up DB=ferretdb`
+5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
+
 ## Starting environment with Docker Compose
 
 ```sh
