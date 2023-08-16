@@ -84,7 +84,6 @@ ferretdb:
 
 mongodb:
   stats:
-
 ```
 
 ## Starting environment with Docker Compose
