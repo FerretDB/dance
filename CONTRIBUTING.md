@@ -42,6 +42,7 @@ For example if you want to test your Node.js application with FerretDB, you woul
 1. Add the submodule to dance `git submodule add https://github.com/my-app`
 2. Create a YAML file called `my-app.yml` in the `tests` directory
 3. Define the runner and command line arguments in the YAML file, e.g.
+   
    ```
     ----
     runner: command
