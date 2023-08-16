@@ -44,7 +44,7 @@ For example if you want to test your Node.js application with FerretDB, you woul
 2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed for your test
 3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it
 
-### Shell script
+#### Shell script
 
 ```sh
 #!/bin/bash
@@ -59,7 +59,7 @@ env MONGO_URL=mongodb://localhost:27017
 npm test
 ```
 
-### YAML file
+#### YAML file
 
 ```yaml
  # example YAML file for my-app
@@ -84,8 +84,8 @@ npm test
 
 ```
 
-1. Start the environment `bin/task env-up DB=ferretdb`
-2. Run the test `bin/task dance DB=ferretdb TEST=my-app`
+4. Start the environment `bin/task env-up DB=ferretdb`
+5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
 
 ## Starting environment with Docker Compose
 
