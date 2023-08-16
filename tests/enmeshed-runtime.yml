@@ -1,6 +1,6 @@
 ---
 runner: command
-args: ../enmeshed-runtime.sh
+args: [../enmeshed-runtime.sh]
 
 results:
   common:

@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: python-example
-args: ../python-example-auth.sh
+args: [../python-example-auth.sh]
 
 results:
   ferretdb:

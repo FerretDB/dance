@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: python-example
-args: ../python-example.sh
+args: [../python-example.sh]
 
 results:
   common:
