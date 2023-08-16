@@ -22,3 +22,7 @@
 	path = tests/python-example
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
+[submodule "enmeshed-runtime"]
+	path = tests/enmeshed-runtime
+	url = https://github.com/nmshd/cns-runtime.git
+	branch = main
