@@ -33,7 +33,7 @@ For example, see [mongo-go-driver tests configuration](https://github.com/Ferret
 `TEST` environment variable should have the value `mongo-go-driver`, or be empty.
 It defines what test configuration to run; empty value runs all configurations.
 
-## Running custom tests
+### Running custom tests
 
 In order to test your application with FerretDB you must use the `command` runner and add your repository as a submodule.
 The `command` runner will invoke any command and CLI arguments.
@@ -43,6 +43,8 @@ For example if you want to test your Node.js application with FerretDB, you woul
 1. Add the submodule to dance `git submodule add https://github.com/my-app`
 2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed for your test
 3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it
+4. Start the environment `bin/task env-up DB=ferretdb`
+5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
 
 #### Shell script
 
@@ -62,30 +64,28 @@ npm test
 #### YAML file
 
 ```yaml
- # example YAML file for my-app
- ----
- runner: command
+# example YAML file for my-app
+----
+runner: command
 
- dir: my-app
- args: [../my-app.sh]
+# dir is where the runner is executed, setting dir is only necessary if the YAML file name differs from the repository name.
+dir: my-app
+args: [../my-app.sh]
 
- # we expect our test to pass so set expected_pass to 1
- results:
- common:
-     stats:
-         expected_pass: 1
+# we expect our test to pass so set expected_pass to 1
+results:
+common:
+  stats:
+      expected_pass: 1
 
- # backend specific stats
- ferretdb:
-     stats:
+# backend specific stats
+ferretdb:
+  stats:
 
- mongodb:
-     stats:
+mongodb:
+  stats:
 
 ```
-
-4. Start the environment `bin/task env-up DB=ferretdb`
-5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
 
 ## Starting environment with Docker Compose
 
