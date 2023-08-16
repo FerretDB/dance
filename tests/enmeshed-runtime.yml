@@ -1,6 +1,6 @@
 ---
 runner: command
-args: ["sh", "-c", "npm i && CONNECTION_STRING=mongodb://localhost:27017 npx jest -i"]
+args: ../enmeshed-runtime.sh
 
 results:
   common:
