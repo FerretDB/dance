@@ -58,7 +58,6 @@ env:
   GOMODCACHE: /home/runner/go/mod
   GOPROXY: https://proxy.golang.org
   GOTOOLCHAIN: local
-  GOEXPERIMENT: loopvar
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CONFORM_TOKEN: ${{ secrets.CONFORM_TOKEN }} # repo-scoped GITHUB_TOKEN is not enough to query org-level projects
 

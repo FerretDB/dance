@@ -25,7 +25,6 @@ env:
   GOMODCACHE: /home/runner/go/mod
   GOPROXY: https://proxy.golang.org
   GOTOOLCHAIN: local
-  GOEXPERIMENT: loopvar
 
 jobs:
   linters:
