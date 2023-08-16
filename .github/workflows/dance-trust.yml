@@ -1,0 +1,111 @@
+---
+# Tests that need access to secrets.
+
+name: Dance trusted
+on:
+  pull_request_target:
+    types:
+      # not for "labeled" to prevent two builds for "labeled" and "unlabeled" when labels are changed
+      - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "12 3 * * *" # after FerretDB's Docker workflow
+
+env:
+  GOPATH: /home/runner/go
+  GOCACHE: /home/runner/go/cache
+  GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
+  GOMODCACHE: /home/runner/go/mod
+  GOPROXY: https://proxy.golang.org
+  GOTOOLCHAIN: local
+  GOEXPERIMENT: loopvar
+
+jobs:
+  dance:
+    name: dance
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    # Do not run this job in parallel for any PR change or branch push
+    # to save some resources.
+    concurrency:
+      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+
+    if: >
+      github.event_name != 'pull_request_target' ||
+      (
+        contains(github.event.pull_request.labels.*.name, 'trust') &&
+        !contains(github.event.pull_request.labels.*.name, 'not ready')
+      )
+
+    strategy:
+      fail-fast: false
+      matrix:
+        db:
+          - ferretdb
+          - mongodb
+        test:
+          - enmeshed-runtime
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: dance
+
+      - name: Install Task
+        run: go generate -x
+        working-directory: tools
+
+      - name: Start environment
+        run: bin/task env-up-detach
+        env:
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+          DB: ${{ matrix.db }}
+
+      - name: Run init
+        run: bin/task init
+
+      - name: Dance!
+        run: bin/task dance
+        env:
+          DB: ${{ matrix.db }}
+          TEST: ${{ matrix.test }}
+          NMSHD_TEST_BASEURL: ${{ secrets.NMSHD_TEST_BASEURL }}
+          NMSHD_TEST_CLIENTID: ${{ secrets.NMSHD_TEST_CLIENTID }}
+          NMSHD_TEST_CLIENTSECRET: ${{ secrets.NMSHD_TEST_CLIENTSECRET }}
+
+      - name: Collect logs
+        if: failure()
+        run: |
+          bin/task env-logs-collect > /tmp/compose-logs.txt
+
+      - name: Compress logs before upload
+        if: failure()
+        run: zip -q -9 compose-logs.zip /tmp/compose-logs.txt
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+          path: compose-logs.zip
+          retention-days: 1
+
+      # ignore `go mod tidy` being applied to the Go driver, etc
+      - name: Check dirty
+        run: |
+          git status --ignore-submodules=none
+          git diff --ignore-submodules=all --exit-code
