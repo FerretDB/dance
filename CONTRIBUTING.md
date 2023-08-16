@@ -35,7 +35,8 @@ It defines what test configuration to run; empty value runs all configurations.
 
 ## Running custom tests
 
-In order to test your application with FerretDB you must use the `command` runner and add your repository as a submodule. The `command` runner will invoke any command and CLI arguments. 
+In order to test your application with FerretDB you must use the `command` runner and add your repository as a submodule.
+The `command` runner will invoke any command and CLI arguments.
 
 For example if you want to test your Node.js application with FerretDB, you would do the following:
 
