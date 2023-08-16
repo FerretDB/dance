@@ -39,6 +39,10 @@ labels:
     color: "#0052CC"
     description: PRs that should not be merged
 
+  - name: documentation
+    color: "#0052CC"
+    description: Something is badly or not documented
+
   - name: good first issue
     color: "#5319E7"
     description: Good issues for new external contributors
