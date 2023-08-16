@@ -41,23 +41,51 @@ The `command` runner will invoke any command and CLI arguments.
 For example if you want to test your Node.js application with FerretDB, you would do the following:
 
 1. Add the submodule to dance `git submodule add https://github.com/my-app`
-2. Create a YAML file called `my-app.yml` in the `tests` directory
-3. Define the runner and command line arguments in the YAML file, e.g.
-   
-   ```
-    ----
-    runner: command
+2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed for your test
+3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it
 
-    dir: my-app
-    args: ["sh", "-c", "MONGO_URL=mongodb://localhost:27017 npm i && npm test"]
+### Shell script
 
-    results:
-    common:
-        stats:
-            expected_pass: 1
-   ```
-4. Start the environment `bin/task env-up DB=ferretdb`
-5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
+```sh
+#!/bin/bash
+# example bash script for my-app
+
+set -ex
+
+npm i
+
+env MONGO_URL=mongodb://localhost:27017
+
+npm test
+```
+
+### YAML file
+
+```yaml
+ # example YAML file for my-app
+ ----
+ runner: command
+
+ dir: my-app
+ args: [../my-app.sh]
+
+ # we expect our test to pass so set expected_pass to 1
+ results:
+ common:
+     stats:
+         expected_pass: 1
+
+ # backend specific stats
+ ferretdb:
+     stats:
+
+ mongodb:
+     stats:
+
+```
+
+1. Start the environment `bin/task env-up DB=ferretdb`
+2. Run the test `bin/task dance DB=ferretdb TEST=my-app`
 
 ## Starting environment with Docker Compose
 
