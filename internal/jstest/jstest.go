@@ -82,40 +82,37 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 		out  []byte
 	}
 
-	ch := make(chan *item, len(files))
-	for _, f := range files {
-		ch <- &item{file: f}
-	}
-
-	unseenFiles := make(chan string)
+	input := make(chan string, len(files))
+	output := make(chan *item, len(files))
 
 	for i := 0; i < workers; i++ {
 		go func() {
-			for f := range unseenFiles {
+			for f := range input {
 				it := &item{
 					file: f,
 				}
 
 				// we set working_dir so use a relative path here instead
-				rel, err := filepath.Rel("mongo", it.file)
+				rel, err := filepath.Rel("mongo", f)
 				if err != nil {
 					panic(err)
 				}
 
 				it.out, it.err = runMongo(dir, rel)
-				ch <- it
+				output <- it
 			}
 		}()
 	}
 
-	// de-duplicates files
-	seen := make(map[string]bool)
+	for _, f := range files {
+		input <- f
+	}
 
-	for it := range ch {
-		if !seen[it.file] {
-			seen[it.file] = true
-			unseenFiles <- it.file
-		}
+	close(input)
+
+	for i := 0; i < len(files); i++ {
+		it := <-output
+
 		if it.err != nil {
 			var exitErr *exec.ExitError
 			if !errors.As(it.err, &exitErr) {
@@ -135,8 +132,7 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 		}
 	}
 
-	close(unseenFiles)
-	close(ch)
+	close(output)
 
 	return res, nil
 }
