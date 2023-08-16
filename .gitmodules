@@ -26,6 +26,3 @@
 	path = tests/enmeshed-runtime
 	url = https://github.com/nmshd/cns-runtime.git
 	branch = main
-[submodule "quick-example-of-testing-in-nodejs"]
-	path = quick-example-of-testing-in-nodejs
-	url = https://github.com/Lissy93/quick-example-of-testing-in-nodejs
