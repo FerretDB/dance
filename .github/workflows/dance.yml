@@ -91,7 +91,7 @@ jobs:
       - name: Set GITHUB_ENV
         run: |
           if [[ ${{ matrix.test == 'dbaas_core' }} ]]; then
-            echo "WORKERS=40" >> $GITHUB_ENV
+            echo "WORKERS=1" >> $GITHUB_ENV
           fi
 
       - name: Dance!
