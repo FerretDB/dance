@@ -44,9 +44,9 @@ func TestDatabaseName(t *testing.T) {
 				expected := mongo.CommandError{
 					Name:    "InvalidNamespace",
 					Code:    73,
-					Message: fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName),
+					Message: fmt.Sprintf(`Invalid namespace specified '%s.%s'`, dbName, collectionName),
 				}
-				alt := fmt.Sprintf(`Invalid namespace: %s.%s`, dbName, collectionName)
+				alt := fmt.Sprintf(`Invalid namespace specified '%s.%s'`, dbName, collectionName)
 				assertEqualAltError(t, expected, alt, err)
 			})
 
@@ -72,14 +72,13 @@ func TestCollectionName(t *testing.T) {
 
 			t.Run(name, func(t *testing.T) {
 				ctx, db := setup(t)
-				dbName := db.Name()
 				err := db.CreateCollection(ctx, collection)
 
 				t.Run("FerretDB", func(t *testing.T) {
 					expected := mongo.CommandError{
 						Name:    "InvalidNamespace",
 						Code:    73,
-						Message: fmt.Sprintf(`Invalid collection name: '%s.%s'`, dbName, collection),
+						Message: fmt.Sprintf(`Invalid collection name: %s`, collection),
 					}
 					assertEqualError(t, expected, err)
 				})
