@@ -1,10 +1,7 @@
 ---
 runner: command
 dir: python-example
-args:
-  - python3
-  - pymongo_test.py
-  - mongodb://localhost:27017/
+args: ["sh", "-c", "pip3 install pymongo && python3 pymongo_test.py mongodb://localhost:27017/"]
 
 results:
   common:

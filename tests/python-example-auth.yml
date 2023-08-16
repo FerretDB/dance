@@ -1,10 +1,7 @@
 ---
 runner: command
 dir: python-example
-args:
-  - python3
-  - pymongo_test.py
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+args: ["sh", "-c", "pip3 install pymongo && python3 pymongo_test.py mongodb://user:password@localhost:27017/?authMechanism=PLAIN"]
 
 results:
   ferretdb:

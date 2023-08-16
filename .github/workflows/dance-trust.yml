@@ -1,8 +1,11 @@
 ---
-name: Dance
+# Tests that need access to secrets.
+
+name: Dance trusted
 on:
-  pull_request:
+  pull_request_target:
     types:
+      # not for "labeled" to prevent two builds for "labeled" and "unlabeled" when labels are changed
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
       - opened
       - reopened
@@ -34,7 +37,12 @@ jobs:
       group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
-    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
+    if: >
+      github.event_name != 'pull_request_target' ||
+      (
+        contains(github.event.pull_request.labels.*.name, 'trust') &&
+        !contains(github.event.pull_request.labels.*.name, 'not ready')
+      )
 
     strategy:
       fail-fast: false
@@ -43,19 +51,7 @@ jobs:
           - ferretdb
           - mongodb
         test:
-          - dbaas_core
-          - diff
-          - dotnet-example
-          - dotnet-example-auth
-          - java-example
-          - java-example-auth
-          - mongo
-          - mongo-go-driver
-          - mongo-tools
-          - python-example
-          - python-example-auth
-          - ycsb-workloada
-          - ycsb-workloadc
+          - enmeshed-runtime
 
     steps:
       - name: Checkout code
@@ -87,6 +83,9 @@ jobs:
         env:
           DB: ${{ matrix.db }}
           TEST: ${{ matrix.test }}
+          NMSHD_TEST_BASEURL: ${{ secrets.NMSHD_TEST_BASEURL }}
+          NMSHD_TEST_CLIENTID: ${{ secrets.NMSHD_TEST_CLIENTID }}
+          NMSHD_TEST_CLIENTSECRET: ${{ secrets.NMSHD_TEST_CLIENTSECRET }}
 
       - name: Collect logs
         if: failure()
