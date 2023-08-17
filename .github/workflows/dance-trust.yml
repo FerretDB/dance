@@ -68,19 +68,16 @@ jobs:
         working-directory: tools
 
       - name: Start environment
-        run: bin/task env-up-detach
+        run: bin/task env-up-detach DB=${{ matrix.db }}
         env:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-          DB: ${{ matrix.db }}
 
       - name: Run init
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance
+        run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
         env:
-          DB: ${{ matrix.db }}
-          TEST: ${{ matrix.test }}
           NMSHD_TEST_BASEURL: ${{ secrets.NMSHD_TEST_BASEURL }}
           NMSHD_TEST_CLIENTID: ${{ secrets.NMSHD_TEST_CLIENTID }}
           NMSHD_TEST_CLIENTSECRET: ${{ secrets.NMSHD_TEST_CLIENTSECRET }}

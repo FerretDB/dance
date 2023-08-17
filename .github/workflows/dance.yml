@@ -24,8 +24,7 @@ env:
 jobs:
   dance:
     name: dance
-    runs-on:
-      labels: ubuntu-22.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 120
 
     # Do not run this job in parallel for any PR change or branch push
@@ -73,20 +72,15 @@ jobs:
         working-directory: tools
 
       - name: Start environment
-        run: bin/task env-up-detach
+        run: bin/task env-up-detach DB=${{ matrix.db }}
         env:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-          DB: ${{ matrix.db }}
 
       - name: Run init
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance
-        env:
-          DB: ${{ matrix.db }}
-          TEST: ${{ matrix.test }}
-          PARALLEL: 10
+        run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
 
       - name: Collect logs
         if: failure()
