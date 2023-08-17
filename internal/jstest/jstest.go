@@ -23,8 +23,8 @@ import (
 	"log"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
-	"sync"
 
 	"golang.org/x/exp/maps"
 
@@ -33,7 +33,7 @@ import (
 
 // Run runs `mongo`.
 // Args is a list of filepath.Glob file patterns with additional support for !exclude.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, parallel int) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,10 +73,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	files := maps.Keys(filesM)
 
-	log.Printf("Total number of tests to run %d\n", len(files))
-
 	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
+		TestResults: make(map[string]internal.TestResult, len(files)),
 	}
 
 	type item struct {
@@ -85,41 +83,43 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		out  []byte
 	}
 
-	// tokens is a counting semaphore used to enforce a limit of 20 concurrent calls to runShellWithScript.
-	tokens := make(chan struct{}, 20)
+	input := make(chan string, len(files))
+	output := make(chan *item, len(files))
 
-	ch := make(chan *item, len(files))
-
-	var wg sync.WaitGroup
-	for _, f := range files {
-		wg.Add(1)
-
-		go func(f string) {
-			defer wg.Done()
-
-			tokens <- struct{}{}
-			it := &item{
-				file: f,
-			}
-
-			// we set working_dir so use a relative path here instead
-			rel, err := filepath.Rel("mongo", f)
-			if err != nil {
-				panic(err)
-			}
-
-			it.out, it.err = runShellWithScript(dir, rel)
-			ch <- it
-
-			<-tokens // release the token
-		}(f)
+	if parallel <= 0 {
+		parallel = runtime.NumCPU()
 	}
 
-	wg.Wait()
+	log.Printf("Running up to %d tests in parallel.", parallel)
 
-	close(ch)
+	for i := 0; i < parallel; i++ {
+		go func() {
+			for f := range input {
+				it := &item{
+					file: f,
+				}
 
-	for it := range ch {
+				// we set working_dir so use a relative path here instead
+				rel, err := filepath.Rel("mongo", f)
+				if err != nil {
+					panic(err)
+				}
+
+				it.out, it.err = runMongo(dir, rel)
+				output <- it
+			}
+		}()
+	}
+
+	for _, f := range files {
+		input <- f
+	}
+
+	close(input)
+
+	for i := 0; i < len(files); i++ {
+		it := <-output
+
 		if it.err != nil {
 			var exitErr *exec.ExitError
 			if !errors.As(it.err, &exitErr) {
@@ -142,8 +142,8 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 	return res, nil
 }
 
-// runShellWithScript runs the mongo shell inside a container with script and returns the combined output.
-func runShellWithScript(dir, script string) ([]byte, error) {
+// runMongo runs the mongo shell inside a container with file and returns the combined output.
+func runMongo(dir, file string) ([]byte, error) {
 	bin, err := exec.LookPath("docker")
 	if err != nil {
 		return nil, err
@@ -152,7 +152,7 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
 		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
-		"--eval", evalBuilder(script), script,
+		"--eval", evalBuilder(file), file,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
 
@@ -165,11 +165,11 @@ func runShellWithScript(dir, script string) ([]byte, error) {
 }
 
 // evalBuilder creates the TestData object and sets the testName property for the shell.
-func evalBuilder(script string) string {
+func evalBuilder(file string) string {
 	var eb bytes.Buffer
 	fmt.Fprintf(&eb, "TestData = new Object(); ")
-	scriptName := filepath.Base(script)
-	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(scriptName, filepath.Ext(scriptName)))
+	fileName := filepath.Base(file)
+	fmt.Fprintf(&eb, "TestData.testName = %q;", strings.TrimSuffix(fileName, filepath.Ext(fileName)))
 
 	return eb.String()
 }

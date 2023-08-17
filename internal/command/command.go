@@ -29,12 +29,7 @@ import (
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
-	bin, err := exec.LookPath(args[0])
-	if err != nil {
-		return nil, err
-	}
-
-	cmd := exec.CommandContext(ctx, bin, args[1:]...)
+	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -49,7 +44,7 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 		},
 	}
 
-	if err = cmd.Run(); err != nil {
+	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = internal.TestResult{
 			Status: internal.Fail,
 			Output: err.Error(),

@@ -1,10 +1,6 @@
 ---
 runner: command
-dir: python-example
-args:
-  - python3
-  - pymongo_test.py
-  - mongodb://localhost:27017/
+args: [../python-example.sh]
 
 results:
   common:
