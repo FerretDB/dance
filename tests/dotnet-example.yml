@@ -1,6 +1,5 @@
 ---
 runner: command
-dir: dotnet-example
 args:
   - dotnet
   - run

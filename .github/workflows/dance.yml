@@ -1,15 +1,15 @@
 ---
 name: Dance
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types:
       - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
       - opened
       - reopened
       - synchronize
+  push:
+    branches:
+      - main
   schedule:
     - cron: "12 3 * * *" # after FerretDB's Docker workflow
 
@@ -19,6 +19,7 @@ env:
   GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
   GOMODCACHE: /home/runner/go/mod
   GOPROXY: https://proxy.golang.org
+  GOTOOLCHAIN: local
 
 jobs:
   dance:
@@ -48,11 +49,11 @@ jobs:
           - dotnet-example-auth
           - java-example
           - java-example-auth
-          - python-example
-          - python-example-auth
           - mongo
           - mongo-go-driver
           - mongo-tools
+          - python-example
+          - python-example-auth
           - ycsb-workloada
           - ycsb-workloadc
 
@@ -60,18 +61,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-          submodules: recursive
+          submodules: true
 
       - name: Setup Go
         uses: FerretDB/github-actions/setup-go@main
         with:
           cache-key: dance
-
-      # set up Python build environment
-      - name: Install Python dependencies
-        run: |
-          pip3 install pymongo
 
       - name: Install Task
         run: go generate -x

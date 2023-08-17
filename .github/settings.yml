@@ -1,0 +1,65 @@
+---
+# https://github.com/repository-settings/app
+
+repository:
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  delete_branch_on_merge: true
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+# https://docs.github.com/en/rest/issues/labels
+labels:
+  - name: badly estimated
+    color: "#FF3333"
+    description: Scope, difficulty and/or clarify were different
+
+  - name: code/chore
+    color: "#E99695"
+    description: Dance tool code or tests configuration maintenance improvements
+
+  - name: code/enhancement
+    color: "#FBCA04"
+    description: Some dance tool feature or tests configuration could work better
+
+  - name: code/feature
+    color: "#0E8A16"
+    description: Some dance tool feature or tests configuration is not implemented yet
+
+  - name: conflict
+    color: "#FF0000"
+    description: PRs that have merge conflicts
+
+  - name: deps
+    color: "#D4C5F9"
+    description: PRs that update dependencies
+
+  - name: do not merge
+    color: "#0052CC"
+    description: PRs that should not be merged
+
+  - name: documentation
+    color: "#0052CC"
+    description: Something is badly or not documented
+
+  - name: good first issue
+    color: "#5319E7"
+    description: Good issues for new external contributors
+
+  - name: help wanted
+    color: "#006B75"
+    description: Issues that require extra attention
+
+  - name: not ready
+    color: "#000000"
+    description: Issues that are not ready to be worked on; PRs that should skip CI
+
+  # https://hacktoberfest.com/participation/#spam
+  - name: spam
+    color: "#C5DEF5"
+    description: Spam issues and PRs
+
+  - name: trust
+    color: "#00FF00"
+    description: PRs that can access Actions secrets
