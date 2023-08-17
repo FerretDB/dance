@@ -69,7 +69,7 @@ func logResult(label string, res map[string]string) {
 func main() {
 	dbF := flag.String("db", "", "database to use: ferretdb, mongodb")
 	vF := flag.Bool("v", false, "be verbose")
-	wF := flag.Int("workers", 50, "the number of workers to run concurrently")
+	pF := flag.Int("p", 0, "number of tests to run in parallel")
 	log.SetFlags(0)
 	flag.Parse()
 
@@ -131,9 +131,9 @@ func main() {
 		case internal.RunnerTypeCommand:
 			runRes, err = command.Run(ctx, dir, config.Args)
 		case internal.RunnerTypeGoTest:
-			runRes, err = gotest.Run(ctx, dir, config.Args, *vF)
+			runRes, err = gotest.Run(ctx, dir, config.Args, *vF, *pF)
 		case internal.RunnerTypeJSTest:
-			runRes, err = jstest.Run(ctx, dir, config.Args, *wF)
+			runRes, err = jstest.Run(ctx, dir, config.Args, *pF)
 		case internal.RunnerTypeYCSB:
 			runRes, err = ycsb.Run(ctx, dir, config.Args)
 		default:

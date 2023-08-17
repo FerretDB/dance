@@ -19,9 +19,12 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
+	"strings"
 
 	"github.com/FerretDB/dance/internal"
 )
@@ -30,11 +33,17 @@ import (
 // Args contain additional arguments to `go test`.
 // `-v -json -count=1` are always added.
 // `-race` is added if possible.
-func Run(ctx context.Context, dir string, args []string, verbose bool) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
+	args = append([]string{"test", "-v", "-json", "-p=1", "-count=1"}, args...)
+
+	// implicitly defaults to GOMAXPROCS
+	if parallel > 0 {
+		log.Printf("Running up to %d tests in parallel.", parallel)
+		args = append(args, "-parallel="+strconv.Itoa(parallel))
+	}
 
 	// use the same condition as in FerretDB's Taskfile.yml
 	if runtime.GOOS != "windows" && runtime.GOARCH != "arm" && runtime.GOARCH != "riscv64" {
@@ -44,6 +53,9 @@ func Run(ctx context.Context, dir string, args []string, verbose bool) (*interna
 	cmd := exec.Command("go", args...)
 	cmd.Dir = dir
 	cmd.Stderr = os.Stderr
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
 	p, err := cmd.StdoutPipe()
 	if err != nil {
 		return nil, err

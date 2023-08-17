@@ -23,6 +23,7 @@ import (
 	"log"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"golang.org/x/exp/maps"
@@ -32,7 +33,7 @@ import (
 
 // Run runs `mongo`.
 // Args is a list of filepath.Glob file patterns with additional support for !exclude.
-func Run(ctx context.Context, dir string, args []string, workers int) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, parallel int) (*internal.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,7 +74,7 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 	files := maps.Keys(filesM)
 
 	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
+		TestResults: make(map[string]internal.TestResult, len(files)),
 	}
 
 	type item struct {
@@ -85,7 +86,13 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 	input := make(chan string, len(files))
 	output := make(chan *item, len(files))
 
-	for i := 0; i < workers; i++ {
+	if parallel <= 0 {
+		parallel = runtime.NumCPU()
+	}
+
+	log.Printf("Running up to %d tests in parallel.", parallel)
+
+	for i := 0; i < parallel; i++ {
 		go func() {
 			for f := range input {
 				it := &item{
@@ -131,8 +138,6 @@ func Run(ctx context.Context, dir string, args []string, workers int) (*internal
 			Output: string(it.out),
 		}
 	}
-
-	close(output)
 
 	return res, nil
 }

@@ -3,6 +3,9 @@ version: "3"
 
 vars:
   REPLSET: postgres mongodb_replset init_mongodb_replset
+  DB: ""
+  TEST: ""
+  PARALLEL: 0
 
 tasks:
   init-tools:
@@ -75,7 +78,7 @@ tasks:
     desc: "Run all integration tests"
     dir: tests
     cmds:
-      - go run ../cmd/dance -db={{.DB}} -workers={{.WORKERS}} {{.TEST}}
+      - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `ferretdb`, `mongodb`"

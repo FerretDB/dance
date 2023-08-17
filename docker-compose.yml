@@ -40,16 +40,10 @@ services:
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
+      nproc: 64000
       nofile:
         soft: 64000
         hard: 64000
-      nproc: 64000
-    # set limits to match ubuntu-22.04 on CI
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 7G
     ports:
       - 27017:27017
     environment:
