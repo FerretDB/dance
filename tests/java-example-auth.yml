@@ -1,12 +1,7 @@
 ---
 runner: command
 dir: java-example/java
-args:
-  - mvn
-  - compile
-  - exec:java
-  - -Dexec.mainClass=com.start.Connection
-  - -Dexec.args="mongodb://user:password@localhost:27017/?authMechanism=PLAIN"
+args: [../../java-example-auth.sh]
 
 results:
   ferretdb:
