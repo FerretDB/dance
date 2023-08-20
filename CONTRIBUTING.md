@@ -61,7 +61,7 @@ The `command` runner will invoke any command and CLI arguments.
 
 For example if you wanted to add your Node.js application to dance, you would do the following:
 
-1. Add the submodule to dance in the `tests` directory `git submodule add https://github.com/my-org/my-app.git`.
+1. Add the submodule to the `tests` directory `git submodule add https://github.com/my-org/my-app.git`.
 2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed to run your test.
 3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it.
 4. Start the environment and test it locally before submitting a PR to ensure that it works correctly. Refer to the above [section](https://github.com/FerretDB/dance/blob/main/CONTRIBUTING.md#starting-environment-with-docker-compose) on how to start the environment.
