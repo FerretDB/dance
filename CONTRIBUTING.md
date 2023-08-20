@@ -33,18 +33,39 @@ For example, see [mongo-go-driver tests configuration](https://github.com/Ferret
 `TEST` environment variable should have the value `mongo-go-driver`, or be empty.
 It defines what test configuration to run; empty value runs all configurations.
 
-### Running custom tests
+## Starting environment with Docker Compose
 
-In order to test your application with FerretDB you must use the `command` runner and add your repository as a submodule.
+```sh
+bin/task env-up DB=mongodb
+```
+
+That command will start MongoDB in Docker container.
+Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
+In short, that would be wrong.
+
+```sh
+bin/task env-up DB=ferretdb
+```
+
+That command will start FerretDB from `ferretdb-local` Docker image.
+
+To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository.
+To use a pre-built image you must set the `FERRETDB_IMAGE` environment variable, e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
+
+As mentioned above, this approach is not recommended.
+
+### Adding tests
+
+In order add your tests to dance you must use the `command` runner and add your repository as a submodule.
 The `command` runner will invoke any command and CLI arguments.
 
-For example if you want to test your Node.js application with FerretDB, you would do the following:
+For example if you wanted to add your Node.js application to dance, you would do the following:
 
-1. Add the submodule to dance `git submodule add https://github.com/my-app`
-2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed for your test
-3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it
-4. Start the environment `bin/task env-up DB=ferretdb`
-5. Run the test `bin/task dance DB=ferretdb TEST=my-app`
+1. Add the submodule to dance in the `tests` directory `git submodule add https://github.com/my-org/my-app.git`.
+2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed to run your test.
+3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it.
+4. Start the environment and test it locally before submitting a PR to ensure that it works correctly. Refer to the above [section](https://github.com/FerretDB/dance/blob/main/CONTRIBUTING.md#starting-environment-with-docker-compose) on how to start the environment.
+5. Run the test `bin/task dance DB=ferretdb TEST=my-app`.
 
 #### Shell script
 
@@ -85,24 +106,3 @@ ferretdb:
 mongodb:
   stats:
 ```
-
-## Starting environment with Docker Compose
-
-```sh
-bin/task env-up DB=mongodb
-```
-
-That command will start MongoDB in Docker container.
-Please note that running `bin/task dance DB=ferretdb` after that would run tests against that MongoDB, but results would be compared against results expected for FerretDB.
-In short, that would be wrong.
-
-```sh
-bin/task env-up DB=ferretdb
-```
-
-That command will start FerretDB from `ferretdb-local` Docker image.
-
-To build a local image use the `bin/task docker-local` command in the [FerretDB](https://github.com/FerretDB/FerretDB) repository.
-To use a pre-built image you must set the `FERRETDB_IMAGE` environment variable, e.g. `export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main`.
-
-As mentioned above, this approach is not recommended.
