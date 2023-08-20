@@ -54,7 +54,7 @@ To use a pre-built image you must set the `FERRETDB_IMAGE` environment variable,
 
 As mentioned above, this approach is not recommended.
 
-### Adding tests to CI
+### Adding tests
 
 In order add your tests to dance CI you must use the `command` runner and add your repository as a submodule.
 The `command` runner will invoke any command and CLI arguments.
@@ -67,7 +67,7 @@ For example if you wanted to add your Node.js application to dance, you would do
 4. Start the environment and test it locally before submitting a PR to ensure that it works correctly.
 Refer to the above [section](https://github.com/FerretDB/dance/blob/main/CONTRIBUTING.md#starting-environment-with-docker-compose) on how to start the environment.
 5. Run the test locally to verify the output `bin/task dance DB=ferretdb TEST=my-app`.
-6. Submit a PR to [dance](https://github.com/FerretDB/dance) with a title of the form "Run MyApp tests on CI".
+6. Submit a PR to [dance](https://github.com/FerretDB/dance) with a title of the form "Add MyApp tests".
 
 #### Shell script
 
