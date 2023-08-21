@@ -59,51 +59,55 @@ As mentioned above, this approach is not recommended.
 In order add your tests to dance CI you must use the `command` runner and add your repository as a submodule.
 The `command` runner will invoke any command and CLI arguments.
 
-For example if you wanted to add your Node.js application to dance, you would do the following:
+For example if you wanted to add your Java application to dance, you would do the following:
 
 1. Add the submodule to the `tests` directory `git submodule add https://github.com/my-org/my-app.git`.
 2. Create a shell script in the `tests` directory called `my-app-runtime.sh` with the required logic needed to run your test.
 3. Create a YAML file called `my-app.yml` in the `tests` directory and provide the `args` field with the shell script so that the runner can invoke it.
 4. Start the environment and test it locally before submitting a PR to ensure that it works correctly. Refer to the above [section](https://github.com/FerretDB/dance/blob/main/CONTRIBUTING.md#starting-environment-with-docker-compose) on how to start the environment.
 5. Run the test locally to verify the output `bin/task dance DB=ferretdb TEST=my-app`.
-6. Submit a PR to [dance](https://github.com/FerretDB/dance) with a title of the form "Add MyApp tests".
+6. Submit a PR to with a title of the form "Add MyApp tests".
 
 #### Shell script
 
+See more examples [here](https://github.com/FerretDB/dance/tree/main/tests).
+
 ```sh
-#!/bin/bash
-# example bash script for my-app
+#!/bin/sh
 
 set -ex
 
-npm i
+# enables Maven exceptions
+export MAVEN_OPTS='-ea'
 
-env MONGO_URL=mongodb://localhost:27017
-
-npm test
+mvn compile exec:java -Dexec.mainClass=com.start.Connection \
+-Dexec.args="mongodb://localhost:27017/"
 ```
 
 #### YAML file
 
 ```yaml
 # example YAML file for my-app
-----
+---
 runner: command
-
 # dir is where the runner is executed, setting dir is only necessary if the YAML file name differs from the repository name.
-dir: my-app
-args: [../my-app.sh]
+dir: java-example/java
+args: [../../java-example.sh]
 
 # we expect our test to pass so set expected_pass to 1
 results:
-common:
-  stats:
+  common:
+    stats:
       expected_pass: 1
 
-# backend specific stats
-ferretdb:
-  stats:
+  # backend specific stats
+  ferretdb:
+    stats:
 
-mongodb:
-  stats:
+  mongodb:
+    stats:
+      # PLAIN is used in MongoDB to perform LDAP authentication.
+      expected_fail: 1
+    fail:
+      - java-example
 ```
