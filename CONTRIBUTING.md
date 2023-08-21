@@ -106,8 +106,4 @@ results:
 
   mongodb:
     stats:
-      # PLAIN is used in MongoDB to perform LDAP authentication.
-      expected_fail: 1
-    fail:
-      - java-example
 ```
