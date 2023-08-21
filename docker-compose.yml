@@ -9,7 +9,6 @@ services:
     depends_on: ["postgres"]
     ports:
       - 27017:27017
-    command: -test.coverprofile=cover.txt --
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
@@ -39,6 +38,11 @@ services:
     command: --setParameter enableTestCommands=1
     container_name: dance_mongodb
     restart: unless-stopped
+    ulimits:
+      nproc: 64000
+      nofile:
+        soft: 64000
+        hard: 64000
     ports:
       - 27017:27017
     environment:
