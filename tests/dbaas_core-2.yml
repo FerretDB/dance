@@ -1,0 +1,64 @@
+# 6.0/dbaas_core.yml suite.
+---
+runner: jstest
+dir: mongo
+
+# To exclude a file, use the ! prefix and enclose the file name in quotes.
+# Put the exclusion patterns before inclusion patterns.
+args:
+  - "!mongo/jstests/core/clustered/clustered_collection_creation.js"
+  - "!mongo/jstests/core/ddl/collection_uuid_drop.js"
+  - "!mongo/jstests/core/write/collection_uuid_write_commands.js"
+  - "!mongo/jstests/core/index/index_stats.js"
+  - "!mongo/jstests/core/administrative/list_all_local_sessions.js"
+  - "!mongo/jstests/core/timeseries/timeseries_lookup.js"
+  - "!mongo/jstests/core/write/write_change_stream_pit_preimage.js"
+  - "!mongo/jstests/core/operation_latency_histogram.js"
+  - "!mongo/jstests/core/administrative/profile/profile_findandmodify.js"
+  # exclude_with_any_tags
+  - "!mongo/jstests/core/administrative/apply_ops/apply_ops1.js"
+  - "!mongo/jstests/core/administrative/apply_ops/apply_ops_system_dot_views.js"
+  - "!mongo/jstests/core/administrative/auth1.js"
+  - "!mongo/jstests/core/administrative/automation_setparameter.js"
+  - "!mongo/jstests/core/administrative/current_op/currentop.js"
+  - "!mongo/jstests/core/administrative/profile/profile1.js"
+  - "!mongo/jstests/core/administrative/profile/profile3.js"
+  - "!mongo/jstests/core/administrative/set_param1.js"
+  - "!mongo/jstests/core/catalog/list_collections_no_views.js"
+  - "!mongo/jstests/core/connection_status.js"
+  - "!mongo/jstests/core/dbhash2.js"
+  - "!mongo/jstests/core/ddl/create_indexes.js"
+  - "!mongo/jstests/core/ddl/killop_drop_collection.js"
+  - "!mongo/jstests/core/ddl/rename_collection_system_db.js"
+  - "!mongo/jstests/core/index/geo/geo_update_btree2.js"
+  - "!mongo/jstests/core/logprocessdetails.js"
+  - "!mongo/jstests/core/notablescan.js"
+  - "!mongo/jstests/core/notablescan_capped.js"
+  - "!mongo/jstests/core/role_management_helpers.js"
+  - "!mongo/jstests/core/shell/user_management_helpers.js"
+  - "!mongo/jstests/core/splitvector.js"
+  - "!mongo/jstests/core/views/duplicate_ns.js"
+  - "!mongo/jstests/core/views/invalid_system_views.js"
+  - "!mongo/jstests/core/views/invalid_view_prevents_creating_new_view.js"
+  - "!mongo/jstests/core/views/views_all_commands.js"
+  - "!mongo/jstests/core/views/views_change.js"
+  - "!mongo/jstests/core/views/views_creation.js"
+  - "!mongo/jstests/core/views/views_drop.js"
+
+  # include all tests in the following directories
+  - mongo/jstests/core/query/in/*.js
+  - mongo/jstests/core/query/inc/*.js
+  - mongo/jstests/core/query/internal_hash_eq/*.js
+  - mongo/jstests/core/query/js/*.js
+  - mongo/jstests/core/query/mr/*.js
+  - mongo/jstests/core/query/ne/*.js
+  - mongo/jstests/core/query/nin/*.js
+  - mongo/jstests/core/query/not/*.js
+  - mongo/jstests/core/query/number/*.js
+  - mongo/jstests/core/query/objid/*.js
+  - mongo/jstests/core/query/or/*.js
+  - mongo/jstests/core/query/plan_cache/*.js
+  - mongo/jstests/core/query/project/*.js
+  - mongo/jstests/core/query/pull/*.js
+  - mongo/jstests/core/query/regex/*.js
+  - mongo/jstests/core/query/rename/*.js

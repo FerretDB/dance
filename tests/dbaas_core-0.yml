@@ -1,0 +1,63 @@
+# 6.0/dbaas_core.yml suite.
+---
+runner: jstest
+dir: mongo
+
+# To exclude a file, use the ! prefix and enclose the file name in quotes.
+# Put the exclusion patterns before inclusion patterns.
+args:
+  - "!mongo/jstests/core/txns/*.js"
+  - "!mongo/jstests/core/txns/libs/*.js" # ignore libs too.
+  - "!mongo/jstests/core/txns/timeseries/*.js"
+  # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
+  - "!mongo/jstests/core/write/find_and_modify/find_and_modify.js"
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - "!mongo/jstests/core/api/apitest_db.js"
+  - "!mongo/jstests/core/api/apitest_dbcollection.js"
+  - "!mongo/jstests/core/query/basic6.js"
+  - "!mongo/jstests/core/write/batch_write_command_w0.js"
+  - "!mongo/jstests/core/administrative/check_shard_index.js"
+  - "!mongo/jstests/core/ddl/collmod_convert_to_ttl.js"
+  - "!mongo/jstests/core/count/count2.js"
+  - "!mongo/jstests/core/write/crud_api.js"
+  - "!mongo/jstests/core/datasize2.js"
+  - "!mongo/jstests/core/exhaust.js"
+  - "!mongo/jstests/core/jssymbol.js"
+  - "!mongo/jstests/core/match_numeric_components.js"
+  - "!mongo/jstests/core/positional_projection.js"
+  - "!mongo/jstests/core/ddl/rename_collection_capped.js"
+  # Tests excluded pre-5.1
+  - "!mongo/jstests/core/query/add_skip_stage_before_fetch.js"
+  - "!mongo/jstests/core/json_schema/bsontype.js"
+  - "!mongo/jstests/core/index/geoc.js"
+  - "!mongo/jstests/core/index/hashed_index_queries.js"
+  - "!mongo/jstests/core/index/index_arr2.js"
+  - "!mongo/jstests/core/api/api_version_parameters.js"
+  - "!mongo/jstests/core/api/api_version_test_expression.js"
+  - "!mongo/jstests/core/commands_with_uuid.js"
+  - "!mongo/jstests/core/comment_field.js"
+  - "!mongo/jstests/core/write/crud_ops_do_not_throw_locktimeout.js"
+  - "!mongo/jstests/core/administrative/current_op/currentop_cursors.js"
+  - "!mongo/jstests/core/administrative/current_op/currentop_shell.js"
+  - "!mongo/jstests/core/administrative/current_op/currentop_waiting_for_latch.js"
+  - "!mongo/jstests/core/disallow_system_views_user_writes.js"
+  - "!mongo/jstests/core/failcommand_failpoint.js"
+  - "!mongo/jstests/core/fsync.js"
+  - "!mongo/jstests/core/hash.js"
+
+  # include all tests in the following directories
+  - mongo/jstests/core/*.js
+  - mongo/jstests/core/administrative/*.js
+  - mongo/jstests/core/api/*.js
+  - mongo/jstests/core/capped/*.js
+  - mongo/jstests/core/catalog/*.js
+  - mongo/jstests/core/clustered/*.js
+  - mongo/jstests/core/columnstore/*.js
+  - mongo/jstests/core/ddl/*.js
+  - mongo/jstests/core/doc_validation/*.js
+  - mongo/jstests/core/index/*.js
+  - mongo/jstests/core/index/covered/*.js
+  - mongo/jstests/core/index/fts/*.js
+  - mongo/jstests/core/index/geo/*.js
+  - mongo/jstests/core/index/hashed/*.js
+  - mongo/jstests/core/index/wildcard/*.js

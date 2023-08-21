@@ -1,0 +1,64 @@
+# 6.0/dbaas_core.yml suite.
+---
+runner: jstest
+dir: mongo
+
+# To exclude a file, use the ! prefix and enclose the file name in quotes.
+# Put the exclusion patterns before inclusion patterns.
+args:
+  - "!mongo/jstests/core/write/validate_user_documents.js"
+  - "!mongo/jstests/core/administrative/compact_keeps_indexes.js"
+  - "!mongo/jstests/core/bench_test1.js"
+  - "!mongo/jstests/core/bench_test2.js"
+  - "!mongo/jstests/core/benchrun_pipeline_updates.js"
+  - "!mongo/jstests/core/connection_string_validation.js"
+  - "!mongo/jstests/core/index/geo/geo_update_btree.js"
+  - "!mongo/jstests/core/loadserverscripts.js"
+  - "!mongo/jstests/core/opcounters_write_cmd.js"
+  - "!mongo/jstests/core/query/awaitdata_getmore_cmd.js"
+  - "!mongo/jstests/core/query/count/count10.js"
+  - "!mongo/jstests/core/query/count/count_plan_summary.js"
+  - "!mongo/jstests/core/query/cursor/cursora.js"
+  - "!mongo/jstests/core/query/distinct/distinct3.js"
+  - "!mongo/jstests/core/query/mr/mr_killop.js"
+  - "!mongo/jstests/core/shell/shell_connection_strings.js"
+  - "!mongo/jstests/core/shell/shellstartparallel.js"
+  - "!mongo/jstests/core/write/delete/removeb.js"
+  - "!mongo/jstests/core/write/delete/removec.js"
+  - "!mongo/jstests/core/write/find_and_modify/find_and_modify_concurrent_update.js"
+  - "!mongo/jstests/core/write/update/updatef.js"
+  - "!mongo/jstests/core/administrative/list_all_sessions.js"
+  - "!mongo/jstests/core/administrative/list_sessions.js"
+  - "!mongo/jstests/core/capped/capped_empty.js"
+  - "!mongo/jstests/core/capped/capped_update.js"
+  - "!mongo/jstests/core/commands_namespace_parsing.js"
+  - "!mongo/jstests/core/kill_cursors.js"
+  - "!mongo/jstests/core/stage_debug/stages_and_hash.js"
+  - "!mongo/jstests/core/stage_debug/stages_and_sorted.js"
+  - "!mongo/jstests/core/stage_debug/stages_collection_scan.js"
+  - "!mongo/jstests/core/stage_debug/stages_delete.js"
+  - "!mongo/jstests/core/stage_debug/stages_fetch.js"
+  - "!mongo/jstests/core/stage_debug/stages_ixscan.js"
+  - "!mongo/jstests/core/stage_debug/stages_limit_skip.js"
+  - "!mongo/jstests/core/stage_debug/stages_mergesort.js"
+  - "!mongo/jstests/core/stage_debug/stages_or.js"
+  - "!mongo/jstests/core/write/collection_truncate.js"
+  - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
+  - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
+
+  # include all tests in the following directories
+  - mongo/jstests/core/query/set/*.js
+  - mongo/jstests/core/query/sort/*.js
+  - mongo/jstests/core/query/type/*.js
+  - mongo/jstests/core/query/unset/*.js
+  - mongo/jstests/core/query/where/*.js
+  - mongo/jstests/core/sbe/*.js
+  - mongo/jstests/core/shell/*.js
+  - mongo/jstests/core/txns/*.js
+  - mongo/jstests/core/txns/timeseries/*.js
+  - mongo/jstests/core/views/bulk/*.js
+  - mongo/jstests/core/write/*.js
+  - mongo/jstests/core/write/delete/*.js
+  - mongo/jstests/core/write/find_and_modify/*.js
+  - mongo/jstests/core/write/insert/*.js
+  - mongo/jstests/core/write/update/*.js
