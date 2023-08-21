@@ -199,3 +199,4 @@ results:
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
+      - mongo/jstests/readonly/get_more.js
