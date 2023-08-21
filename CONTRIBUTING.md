@@ -74,6 +74,7 @@ See more examples [here](https://github.com/FerretDB/dance/tree/main/tests).
 
 ```sh
 #!/bin/sh
+# example bash script for my-app
 
 set -ex
 
