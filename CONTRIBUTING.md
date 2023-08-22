@@ -68,43 +68,4 @@ For example if you wanted to add your Java application to dance, you would do th
 5. Run the test locally to verify the output `bin/task dance DB=ferretdb TEST=my-app`.
 6. Submit a PR to with a title of the form "Add MyApp tests".
 
-#### Shell script
-
-See more examples [here](https://github.com/FerretDB/dance/tree/main/tests).
-
-```sh
-#!/bin/sh
-# example bash script for my-app
-
-set -ex
-
-# enables Maven exceptions
-export MAVEN_OPTS='-ea'
-
-mvn compile exec:java -Dexec.mainClass=com.start.Connection \
--Dexec.args="mongodb://localhost:27017/"
-```
-
-#### YAML file
-
-```yaml
-# example YAML file for my-app
----
-runner: command
-# dir is where the runner is executed, setting dir is only necessary if the YAML file name differs from the repository name.
-dir: java-example/java
-args: [../../java-example.sh]
-
-# we expect our test to pass so set expected_pass to 1
-results:
-  common:
-    stats:
-      expected_pass: 1
-
-  # backend specific stats
-  ferretdb:
-    stats:
-
-  mongodb:
-    stats:
-```
+See an example [shell script](https://github.com/FerretDB/dance/blob/main/tests/java-example.sh) and [YAML](https://github.com/FerretDB/dance/blob/main/tests/java-example.yml) file.
