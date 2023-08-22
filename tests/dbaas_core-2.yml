@@ -160,7 +160,7 @@ args:
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
   - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
 
-  # include all tests in the following directories
+  # include all tests
   - mongo/jstests/core/write/update/update_modifier_pop.js
   - mongo/jstests/core/write/update/updatem.js
   - mongo/jstests/core/opcounters_active.js
@@ -597,6 +597,6 @@ results:
       - mongo/jstests/core/write/update/updateb.js
       - mongo/jstests/core/write/update/upsert_fields.js
       - mongo/jstests/core/write/write_result.js
-      
+
   mongodb:
     stats:
