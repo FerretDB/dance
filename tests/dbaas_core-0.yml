@@ -61,3 +61,10 @@ args:
   - mongo/jstests/core/index/geo/*.js
   - mongo/jstests/core/index/hashed/*.js
   - mongo/jstests/core/index/wildcard/*.js
+
+results:
+  ferretdb:
+    stats:
+    fail:
+  mongodb:
+    stats:

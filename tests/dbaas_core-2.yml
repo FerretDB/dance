@@ -62,3 +62,10 @@ args:
   - mongo/jstests/core/query/pull/*.js
   - mongo/jstests/core/query/regex/*.js
   - mongo/jstests/core/query/rename/*.js
+
+results:
+  ferretdb:
+    stats:
+    fail:
+  mongodb:
+    stats:

@@ -61,3 +61,10 @@ args:
   - mongo/jstests/core/query/explain/*.js
   - mongo/jstests/core/query/expr/*.js
   - mongo/jstests/core/query/find/*.js
+
+results:
+  ferretdb:
+    stats:
+    fail:
+  mongodb:
+    stats:

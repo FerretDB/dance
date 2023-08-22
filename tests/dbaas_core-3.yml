@@ -62,3 +62,10 @@ args:
   - mongo/jstests/core/write/find_and_modify/*.js
   - mongo/jstests/core/write/insert/*.js
   - mongo/jstests/core/write/update/*.js
+
+results:
+  ferretdb:
+    stats:
+    fail:
+  mongodb:
+    stats:
