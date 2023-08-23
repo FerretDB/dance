@@ -402,14 +402,10 @@ args:
   - mongo/jstests/core/write/delete/batch_write_command_delete.js
 
 results:
-  common:
-    stats:
-      expected_pass: 1
-
   ferretdb:
     stats:
-      expected_fail: 186
-      expected_pass: 53
+      expected_fail: 182
+      expected_pass: 56
     fail:
       - mongo/jstests/core/SERVER-23626.js
       - mongo/jstests/core/administrative/getlog2.js
@@ -514,7 +510,6 @@ results:
       - mongo/jstests/core/optimized_match_explain.js
       - mongo/jstests/core/partialFilterExpression_with_geoWithin.js
       - mongo/jstests/core/query/and/and2.js
-      - mongo/jstests/core/query/and/and_or_nested.js
       - mongo/jstests/core/query/array/array_comparison_correctness.js
       - mongo/jstests/core/query/array/arrayfind4.js
       - mongo/jstests/core/query/array/arrayfind6.js
@@ -560,7 +555,6 @@ results:
       - mongo/jstests/core/query/query_hash_stability.js
       - mongo/jstests/core/query/sbe_plan_cache_autoparameterize_ixscan.js
       - mongo/jstests/core/query/set/set7.js
-      - mongo/jstests/core/query/set/set_type_change.js
       - mongo/jstests/core/query/sort/sort9.js
       - mongo/jstests/core/query/sort/sort_dotted_paths.js
       - mongo/jstests/core/query/type/type8.js
@@ -576,7 +570,6 @@ results:
       - mongo/jstests/core/storefunc.js
       - mongo/jstests/core/string_with_nul_bytes.js
       - mongo/jstests/core/system_js_access.js
-      - mongo/jstests/core/test_command_line_test_helpers.js
       - mongo/jstests/core/top_drop.js
       - mongo/jstests/core/write/delete/batch_write_command_delete.js
       - mongo/jstests/core/write/delete/remove_undefined.js
