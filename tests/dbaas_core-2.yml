@@ -348,7 +348,6 @@ args:
   - mongo/jstests/core/index/covered/coveredIndex2.js
   - mongo/jstests/core/index/geo/geo_near_random1.js
   - mongo/jstests/core/json_schema/misc_validation.js
-  - mongo/jstests/core/catalog/list_indexes_invalidation.js
   - mongo/jstests/core/index/wildcard/wildcard_index_return_key.js
   - mongo/jstests/core/json_schema/encrypt.js
   - mongo/jstests/core/query/exists/exists5.js
@@ -410,8 +409,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 184
-      expected_pass: 61
+      expected_fail: 181
+      expected_pass: 63
     fail:
       - mongo/jstests/core/api/api_version_new_52_language_features.js
       - mongo/jstests/core/api/api_version_unstable_indexes.js
@@ -436,7 +435,6 @@ results:
       - mongo/jstests/core/ddl/collmod_without_uuid.js
       - mongo/jstests/core/ddl/convert_to_capped.js
       - mongo/jstests/core/ddl/create_indexes_with_unknown_field_names.js
-      - mongo/jstests/core/ddl/drop_index.js
       - mongo/jstests/core/ddl/rename_collection.js
       - mongo/jstests/core/ddl/rename_collection_to_itself.js
       - mongo/jstests/core/ddl/rollback_index_drop.js
