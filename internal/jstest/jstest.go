@@ -109,7 +109,7 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*interna
 				it.out, it.err = runMongo(dir, rel)
 
 				attempts := 4
-				n := 2
+				n := 2.5
 
 				// retry if connection attempt failed due to some transient error
 				for strings.Contains(string(it.out), "exception: connect failed") ||
