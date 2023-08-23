@@ -410,7 +410,7 @@ results:
   ferretdb:
     stats:
       expected_fail: 181
-      expected_pass: 63
+      expected_pass: 62
     fail:
       - mongo/jstests/core/api/api_version_new_52_language_features.js
       - mongo/jstests/core/api/api_version_unstable_indexes.js
