@@ -410,8 +410,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 183
-      expected_pass: 62
+      expected_fail: 179
+      expected_pass: 66
     fail:
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/api/api_params_getmore.js
@@ -421,7 +421,6 @@ results:
       - mongo/jstests/core/capped/capped_resize.js
       - mongo/jstests/core/catalog/list_catalog.js
       - mongo/jstests/core/catalog/list_collections1.js
-      - mongo/jstests/core/catalog/list_indexes_invalid.js
       - mongo/jstests/core/client_metadata_ismaster.js
       - mongo/jstests/core/clustered/clustered_collection_basic.js
       - mongo/jstests/core/compound_index_max_fields.js
@@ -556,7 +555,6 @@ results:
       - mongo/jstests/core/query/nan.js
       - mongo/jstests/core/query/not/not2.js
       - mongo/jstests/core/query/null_query_semantics.js
-      - mongo/jstests/core/query/objectfind.js
       - mongo/jstests/core/query/or/or2.js
       - mongo/jstests/core/query/or/or4.js
       - mongo/jstests/core/query/or/or_to_in.js
@@ -570,7 +568,6 @@ results:
       - mongo/jstests/core/query/sort/sort_dotted_paths_numeric.js
       - mongo/jstests/core/query/sort/sort_dotted_paths_parallel_arrays.js
       - mongo/jstests/core/query/sort/sort_merge_collation.js
-      - mongo/jstests/core/query/sort/sort_with_update_between_getmores.js
       - mongo/jstests/core/query/sort/sortk.js
       - mongo/jstests/core/query/where/where3.js
       - mongo/jstests/core/query/where/where_tolerates_js_exception.js
@@ -586,7 +583,6 @@ results:
       - mongo/jstests/core/write/batch_write_collation_estsize.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_empty_coll.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify_server6226.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_server6254.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_where.js
       - mongo/jstests/core/write/insert/insert_illegal_doc.js
