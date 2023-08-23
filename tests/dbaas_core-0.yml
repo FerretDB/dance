@@ -160,7 +160,7 @@ args:
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
   - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
 
-  # include all tests in the following directories
+  # include all tests
   - mongo/jstests/core/index/fts/fts_index.js
   - mongo/jstests/core/query/basic5.js
   - mongo/jstests/core/query/exists/existsb.js
@@ -410,8 +410,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 180
-      expected_pass: 65
+      expected_fail: 178
+      expected_pass: 67
     fail:
       - mongo/jstests/core/api/api_version_new_51_language_features.js
       - mongo/jstests/core/api/api_version_pipeline_stages.js
@@ -548,8 +548,6 @@ results:
       - mongo/jstests/core/query/ne/ne3.js
       - mongo/jstests/core/query/ne/ne_array.js
       - mongo/jstests/core/query/neq_null_correctly_cache.js
-      - mongo/jstests/core/query/nestedarr1.js
-      - mongo/jstests/core/query/nor.js
       - mongo/jstests/core/query/or/or3.js
       - mongo/jstests/core/query/or/or_inexact.js
       - mongo/jstests/core/query/or/orj.js
@@ -593,6 +591,6 @@ results:
       - mongo/jstests/core/write/update/update_setOnInsert.js
       - mongo/jstests/core/write/update/update_with_large_hint.js
       - mongo/jstests/core/write/verify_update_mods.js
-      
+
   mongodb:
     stats:
