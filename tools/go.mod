@@ -5,13 +5,13 @@ go 1.20
 require (
 	github.com/BurntSushi/go-sumtype v0.0.0-20221020234012-480526a59796
 	github.com/go-task/task/v3 v3.28.0
-	github.com/golangci/golangci-lint v1.54.1
+	github.com/golangci/golangci-lint v1.54.2
 	github.com/pingcap/go-ycsb v1.0.1
 	github.com/quasilyte/go-consistent v0.6.0
 	github.com/reviewdog/reviewdog v0.14.2
 	golang.org/x/perf v0.0.0-20230717203022-1ba3a21238c9
-	golang.org/x/tools v0.12.0
-	golang.org/x/vuln v1.0.0
+	golang.org/x/tools v0.12.1-0.20230815132531-74c255bcf846
+	golang.org/x/vuln v1.0.1
 	mvdan.cc/gofumpt v0.5.0
 )
 
@@ -28,8 +28,8 @@ require (
 	github.com/4meepo/tagalign v1.3.2 // indirect
 	github.com/Abirdcfly/dupword v0.0.12 // indirect
 	github.com/AndreasBriese/bbloom v0.0.0-20180913140656-343706a395b7 // indirect
-	github.com/Antonboom/errname v0.1.10 // indirect
-	github.com/Antonboom/nilnil v0.1.5 // indirect
+	github.com/Antonboom/errname v0.1.12 // indirect
+	github.com/Antonboom/nilnil v0.1.7 // indirect
 	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 // indirect
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.1.0 // indirect
@@ -77,6 +77,7 @@ require (
 	github.com/breml/errchkjson v0.3.1 // indirect
 	github.com/butuzov/ireturn v0.2.0 // indirect
 	github.com/butuzov/mirror v1.1.0 // indirect
+	github.com/ccojocar/zxcvbn-go v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.4.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -202,10 +203,9 @@ require (
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/moricho/tparallel v0.3.1 // indirect
 	github.com/nakabonne/nestif v0.3.1 // indirect
-	github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 // indirect
 	github.com/nishanths/exhaustive v0.11.0 // indirect
 	github.com/nishanths/predeclared v0.2.2 // indirect
-	github.com/nunnatsa/ginkgolinter v0.13.3 // indirect
+	github.com/nunnatsa/ginkgolinter v0.13.5 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
@@ -216,7 +216,7 @@ require (
 	github.com/pingcap/log v0.0.0-20211215031037-e024ba4eb0ee // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/polyfloyd/go-errorlint v1.4.3 // indirect
+	github.com/polyfloyd/go-errorlint v1.4.4 // indirect
 	github.com/prometheus/client_golang v1.13.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
@@ -235,8 +235,8 @@ require (
 	github.com/sajari/fuzzy v1.0.0 // indirect
 	github.com/sanposhiho/wastedassign/v2 v2.0.7 // indirect
 	github.com/sashamelentyev/interfacebloat v1.1.0 // indirect
-	github.com/sashamelentyev/usestdlibvars v1.23.0 // indirect
-	github.com/securego/gosec/v2 v2.16.0 // indirect
+	github.com/sashamelentyev/usestdlibvars v1.24.0 // indirect
+	github.com/securego/gosec/v2 v2.17.0 // indirect
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sivchari/containedctx v1.0.3 // indirect
@@ -260,7 +260,7 @@ require (
 	github.com/t-yuki/gocover-cobertura v0.0.0-20180217150009-aaee18c8195c // indirect
 	github.com/tdakkota/asciicheck v0.2.0 // indirect
 	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
-	github.com/tetafro/godot v1.4.11 // indirect
+	github.com/tetafro/godot v1.4.14 // indirect
 	github.com/tikv/client-go/v2 v2.0.1-0.20220720064224-aa9ded37d17d // indirect
 	github.com/tikv/pd/client v0.0.0-20220307081149-841fa61e9710 // indirect
 	github.com/timakin/bodyclose v0.0.0-20230421092635-574207250966 // indirect
@@ -288,7 +288,7 @@ require (
 	go.etcd.io/etcd/client/v3 v3.5.4 // indirect
 	go.mongodb.org/mongo-driver v1.11.3 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.tmz.dev/musttag v0.7.1 // indirect
+	go.tmz.dev/musttag v0.7.2 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
@@ -316,7 +316,7 @@ require (
 	gopkg.in/tomb.v2 v2.0.0-20161208151619-d5d1b5820637 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	honnef.co/go/tools v0.4.3 // indirect
+	honnef.co/go/tools v0.4.5 // indirect
 	mvdan.cc/interfacer v0.0.0-20180901003855-c20040233aed // indirect
 	mvdan.cc/lint v0.0.0-20170908181259-adc824a0674b // indirect
 	mvdan.cc/sh/v3 v3.7.0 // indirect
