@@ -111,9 +111,10 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*interna
 				attempts := 4
 				n := 2.5
 
-				// retry if connection attempt failed due to some transient error
+				// retry if connection attempt failed because of some transient error
 				for strings.Contains(string(it.out), "exception: connect failed") ||
-					strings.Contains(string(it.out), "handshake failed") {
+					strings.Contains(string(it.out), "handshake failed") ||
+					strings.Contains(string(it.out), "collection/table does not exist") {
 					time.Sleep(time.Second * time.Duration(n))
 
 					it.out, it.err = runMongo(dir, rel)
