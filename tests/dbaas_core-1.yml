@@ -159,7 +159,7 @@ args:
   - "!mongo/jstests/core/write/collection_truncate.js"
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
   - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
-  - "!mongo/jstests/core/local_tail_capped.js" # failed to return all documents within timeout - JSInterpreterFailure
+  - "!mongo/jstests/core/local_tail_capped.js" # can fail to return all documents within timeout
 
   # include all tests
   - mongo/jstests/core/query/explain/explain_count.js
