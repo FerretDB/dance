@@ -594,3 +594,49 @@ results:
 
   mongodb:
     stats:
+      expected_fail: 43
+      expected_pass: 202
+    fail:
+      - mongo/jstests/core/api/api_version_unstable_fields.js
+      - mongo/jstests/core/columnstore/columnstore_index.js
+      - mongo/jstests/core/columnstore/columnstore_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
+      - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
+      - mongo/jstests/core/ddl/drop_collection.js
+      - mongo/jstests/core/find_with_resume_after_param.js
+      - mongo/jstests/core/index/covered/covered_index_simple_3.js
+      - mongo/jstests/core/index/elemmatch_index.js
+      - mongo/jstests/core/index/hashed/hashed_index_collation.js
+      - mongo/jstests/core/index/hashed/hashed_index_queries.js
+      - mongo/jstests/core/index/hidden_index.js
+      - mongo/jstests/core/index/index_bounds_minkey.js
+      - mongo/jstests/core/index/index_check2.js
+      - mongo/jstests/core/index/index_partial_create_drop.js
+      - mongo/jstests/core/index/index_partial_read_ops.js
+      - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js
+      - mongo/jstests/core/index/wildcard/compound_wildcard_index_or.js
+      - mongo/jstests/core/index/wildcard/compound_wildcard_index_prefix.js
+      - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js
+      - mongo/jstests/core/index/wildcard/wildcard_and_text_indexes.js
+      - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_equality_to_empty_obj.js
+      - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js
+      - mongo/jstests/core/json_schema/json_schema.js
+      - mongo/jstests/core/query/distinct/distinct_index1.js
+      - mongo/jstests/core/query/explain/explain_sort_type.js
+      - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js
+      - mongo/jstests/core/query/explode_for_sort_plan_cache.js
+      - mongo/jstests/core/query/or/or3.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_clear.js
+      - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js
+      - mongo/jstests/core/query/sort/sort_array.js
+      - mongo/jstests/core/query/sort/sort_merge.js
+      - mongo/jstests/core/resume_query.js
+      - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
+      - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
+      - mongo/jstests/core/shell/collection_save.js
+      - mongo/jstests/core/top.js
+      - mongo/jstests/core/write/delete/delete_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
+      - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
