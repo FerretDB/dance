@@ -182,8 +182,8 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
   mongodb:
     stats:
-      expected_skip: 193
-      expected_pass: 1377
+      expected_skip: 432
+      expected_pass: 1940
 
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
