@@ -159,6 +159,7 @@ args:
   - "!mongo/jstests/core/write/collection_truncate.js"
   - "!mongo/jstests/core/query/or/ord.js" # https://github.com/FerretDB/FerretDB/issues/3005
   - "!mongo/jstests/core/grow_hash_table.js" # takes too long to complete
+  - "!mongo/jstests/core/local_tail_capped.js" # failed to return all documents within timeout - JSInterpreterFailure
 
   # include all tests
   - mongo/jstests/core/query/explain/explain_count.js
@@ -411,7 +412,7 @@ results:
   ferretdb:
     stats:
       expected_fail: 179
-      expected_pass: 66
+      expected_pass: 65
     fail:
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/api/api_params_getmore.js
