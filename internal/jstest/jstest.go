@@ -25,7 +25,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 
 	"golang.org/x/exp/maps"
 
@@ -107,25 +106,6 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*interna
 				}
 
 				it.out, it.err = runMongo(dir, rel)
-
-				attempts := 4
-				n := 2.5
-
-				// retry if connection attempt failed because of some transient error
-				for strings.Contains(string(it.out), "exception: connect failed") ||
-					strings.Contains(string(it.out), "handshake failed") ||
-					strings.Contains(string(it.out), "collection/table does not exist") {
-					time.Sleep(time.Second * time.Duration(n))
-
-					it.out, it.err = runMongo(dir, rel)
-
-					n *= n
-					attempts--
-
-					if attempts == 0 {
-						break
-					}
-				}
 				output <- it
 			}
 		}()
