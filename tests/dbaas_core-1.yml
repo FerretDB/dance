@@ -411,8 +411,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 179
-      expected_pass: 65
+      expected_fail: 178
+      expected_pass: 66
     fail:
       - mongo/jstests/core/administrative/builtin_roles_external.js
       - mongo/jstests/core/api/api_params_getmore.js
@@ -597,7 +597,7 @@ results:
   mongodb:
     stats:
       expected_fail: 43
-      expected_pass: 202
+      expected_pass: 201
     fail:
       - mongo/jstests/core/capped/capped_resize.js
       - mongo/jstests/core/covered_query_with_sort.js
