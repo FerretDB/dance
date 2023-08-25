@@ -25,7 +25,7 @@ jobs:
   dance:
     name: dance
     runs-on: ubuntu-22.04
-    timeout-minutes: 120
+    timeout-minutes: 45
 
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
@@ -42,7 +42,10 @@ jobs:
           - ferretdb
           - mongodb
         test:
-          - dbaas_core
+          - dbaas_core-0
+          - dbaas_core-1
+          - dbaas_core-2
+          - dbaas_core-3
           - diff
           - dotnet-example
           - dotnet-example-auth
