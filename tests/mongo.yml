@@ -49,8 +49,8 @@ args:
 results:
   ferretdb:
     stats:
-      expected_fail: 63
-      expected_pass: 38
+      expected_fail: 62
+      expected_pass: 39
 
     fail:
       # --- aggregation tests ---
@@ -165,10 +165,6 @@ results:
       # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
-
-      # uncaught exception: SyntaxError: import declarations may only appear at top level of a module
-      # all these syntax errors are fixed in MongoDB 7.0.
-      - mongo/jstests/readonly/get_more.js
 
   mongodb:
     stats:
