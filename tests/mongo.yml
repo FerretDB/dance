@@ -168,31 +168,16 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 21
-      expected_pass: 80
+      expected_fail: 8
+      expected_pass: 93
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
       - mongo/jstests/aggregation/explain.js
       - mongo/jstests/aggregation/match_swapping_renamed_fields.js
       - mongo/jstests/aggregation/use_query_project_and_sort.js
       - mongo/jstests/aggregation/use_query_projection.js
       - mongo/jstests/aggregation/use_query_sort.js
-      # uncaught exception: SyntaxError: import declarations may only appear at top level of a module
-      # all these syntax errors are fixed in MongoDB 7.0.
-      - mongo/jstests/aggregation/accumulators/min_n_max_n.js
-      - mongo/jstests/aggregation/bugs/cond.js
-      - mongo/jstests/aggregation/bugs/groupMissing.js
-      - mongo/jstests/aggregation/bugs/match.js
-      - mongo/jstests/aggregation/expressions/filter.js
-      - mongo/jstests/aggregation/expressions/set.js
-      - mongo/jstests/aggregation/ifnull.js
-      - mongo/jstests/aggregation/testall.js
-      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
-      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
-      - mongo/jstests/readonly/get_more.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
