@@ -88,13 +88,11 @@ results:
     stats:
       expected_fail: 10
       expected_skip: 16
-      expected_pass: 621
+      expected_pass: 632
 
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
-
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
 
       # returns unknown result.
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
@@ -155,10 +153,10 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     fail:
-      # panic: runtime error: invalid memory address or nil pointer dereference
+      # panics: runtime error: invalid memory address or nil pointer dereference - FerretDB
       - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
-
+      
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
