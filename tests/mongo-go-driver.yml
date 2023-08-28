@@ -153,7 +153,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     fail:
-      # panics: runtime error: invalid memory address or nil pointer dereference - FerretDB
+      # panics: runtime error: invalid memory address or nil pointer dereference
       - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
       
