@@ -12,4 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package configload provides functionality for loading and validating configuration data from YAML files.
 package configload
+
+import "github.com/FerretDB/dance/internal/config"
+
+func Load(s string) (*config.Config, error) {
+	return config.LoadConfig(s)
+}
