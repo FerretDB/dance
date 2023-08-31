@@ -18,17 +18,12 @@ package config
 import (
 	"errors"
 	"fmt"
-	"os"
 	"regexp"
 	"sort"
 	"strings"
 
 	"golang.org/x/exp/maps"
-	"gopkg.in/yaml.v3"
 )
-
-// RunnerType represents the type of test runner used in the configuration.
-type RunnerType string
 
 const (
 	// RunnerTypeCommand indicates a command-line test runner.
@@ -44,6 +39,21 @@ const (
 	RunnerTypeYCSB RunnerType = "ycsb"
 )
 
+// RunnerType represents the type of test runner used in the configuration.
+type RunnerType string
+
+// Stats represent the expected/actual amount of
+// failed, skipped and passed tests.
+type Stats struct {
+	UnexpectedRest int `yaml:"unexpected_rest"`
+	UnexpectedFail int `yaml:"unexpected_fail"`
+	UnexpectedSkip int `yaml:"unexpected_skip"`
+	UnexpectedPass int `yaml:"unexpected_pass"`
+	ExpectedFail   int `yaml:"expected_fail"`
+	ExpectedSkip   int `yaml:"expected_skip"`
+	ExpectedPass   int `yaml:"expected_pass"`
+}
+
 // Config represents the configuration settings for the test execution.
 //
 //nolint:govet // we don't care about alignment there
@@ -55,40 +65,68 @@ type Config struct {
 	Results Results
 }
 
-// Results represents expected results for different databases.
+// Results stores the expected test results for different databases.
 type Results struct {
 	Common   *TestsConfig
 	FerretDB *TestsConfig
 	MongoDB  *TestsConfig
 }
 
-// LoadConfig is used to load and validate the configuration from a YAML file.
-// It reads the YAML file, decodes it, and converts it into the internal Config representation.
-func LoadConfig(path string) (*Config, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load config: %w", err)
-	}
-	defer f.Close()
+// TestsConfig represents the configuration for tests categorized by status and regular expressions.
+type TestsConfig struct {
+	Default Status
+	Stats   *Stats
+	Pass    Tests
+	Skip    Tests
+	Fail    Tests
+	Ignore  Tests
+}
 
-	d := yaml.NewDecoder(f)
-	d.KnownFields(true)
+type TestResult struct {
+	Status Status
+	Output string
+}
 
-	var cf ConfigYAML
-	if err = d.Decode(&cf); err != nil {
-		return nil, fmt.Errorf("failed to decode config: %w", err)
-	}
+type TestResults struct {
+	// Test results by full test name.
+	TestResults map[string]TestResult
+}
 
-	c, err := cf.Convert()
-	if err != nil {
-		return nil, err
-	}
+// Tests are the tests from yaml category pass / fail / skip.
+type Tests struct {
+	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
+	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
+	NameNotRegexPattern []string // not_regex: "FerretDB$", the regex for the test name
+	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
+}
 
-	if err = c.fillAndValidate(); err != nil {
-		return nil, err
-	}
+type CompareResult struct {
+	ExpectedPass   map[string]string
+	ExpectedSkip   map[string]string
+	ExpectedFail   map[string]string
+	UnexpectedPass map[string]string
+	UnexpectedSkip map[string]string
+	UnexpectedFail map[string]string
+	UnexpectedRest map[string]TestResult
+	Stats          Stats
+}
 
-	return c, nil
+// Status represents single test status.
+type Status string
+
+// status values.
+const (
+	Pass    Status = "pass"
+	Skip    Status = "skip"
+	Fail    Status = "fail"
+	Ignore  Status = "ignore"
+	Unknown Status = "unknown"
+)
+
+var knownStatuses = map[Status]struct{}{
+	Pass: {},
+	Skip: {},
+	Fail: {},
 }
 
 // mergeTestConfigs merges the common test configurations into database-specific test configurations.
@@ -139,7 +177,7 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 	return nil
 }
 
-func (c *Config) fillAndValidate() error {
+func (c *Config) FillAndValidate() error {
 	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return err
 	}
@@ -158,7 +196,7 @@ func (c *Config) fillAndValidate() error {
 		}
 
 		origDefault := r.Default
-		r.Default = status(strings.ToLower(string(origDefault)))
+		r.Default = Status(strings.ToLower(string(origDefault)))
 		if r.Default == "" {
 			r.Default = Pass
 		}
@@ -193,75 +231,8 @@ func (r *Results) ForDB(db string) (*TestsConfig, error) {
 	return nil, fmt.Errorf("no expected results for %q", db)
 }
 
-// status represents single test status.
-type status string
-
-// status values.
-const (
-	Pass    status = "pass"
-	Skip    status = "skip"
-	Fail    status = "fail"
-	Ignore  status = "ignore"
-	Unknown status = "unknown"
-)
-
-var knownStatuses = map[status]struct{}{
-	Pass: {},
-	Skip: {},
-	Fail: {},
-}
-
-// TestResult represents single test result (status and output).
-type TestResult struct {
-	Status status
-	Output string
-}
-
 func (tr *TestResult) IndentedOutput() string {
 	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
-}
-
-// TestResults represents results of a multiple tests.
-//
-// They are returned by runners.
-type TestResults struct {
-	// Test results by full test name.
-	TestResults map[string]TestResult
-}
-
-// TestsConfig represents a part of the dance configuration for tests.
-// (i.e. ferretdb/mongodb/common tests).
-//
-// It's used to store information about expected test results for a
-// specific database.
-//
-// May contain prefixes; the longest prefix wins.
-type TestsConfig struct {
-	Default status
-	Stats   *Stats
-	Pass    Tests
-	Skip    Tests
-	Fail    Tests
-	Ignore  Tests
-}
-
-// Tests are the tests from yaml category pass / fail / skip.
-type Tests struct {
-	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
-	NameNotRegexPattern []string // not_regex: "FerretDB$", the regex for the test name
-	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
-}
-
-type CompareResult struct {
-	ExpectedPass   map[string]string
-	ExpectedSkip   map[string]string
-	ExpectedFail   map[string]string
-	UnexpectedPass map[string]string
-	UnexpectedSkip map[string]string
-	UnexpectedFail map[string]string
-	UnexpectedRest map[string]TestResult
-	Stats          Stats
 }
 
 func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
@@ -375,12 +346,12 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
 // If both of the regexps match, it panics.
-func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
+func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *Status {
 	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
-	var matchedStatus status // matched status by regex
+	var matchedStatus Status // matched status by regex
 
 	for _, expectedRes := range []struct {
-		expectedStatus status
+		expectedStatus Status
 		tests          Tests
 	}{
 		{Pass, tc.Pass},
@@ -463,11 +434,11 @@ func nextPrefix(path string) string {
 // toMap converts TestsConfig to the map of tests.
 // The map stores test names as a keys and their status (pass|skip|fail), as their value.
 // It returns an error if there's a test duplicate.
-func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
+func (tc *TestsConfig) toMap() (map[string]Status, error) {
+	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
 	for _, tcat := range []struct {
-		testsStatus status
+		testsStatus Status
 		tests       Tests
 	}{
 		{Pass, tc.Pass},
@@ -484,155 +455,4 @@ func (tc *TestsConfig) toMap() (map[string]status, error) {
 	}
 
 	return res, nil
-}
-
-// Stats represent the expected/actual amount of
-// failed, skipped and passed tests.
-type Stats struct {
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	UnexpectedFail int `yaml:"unexpected_fail"`
-	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
-	ExpectedFail   int `yaml:"expected_fail"`
-	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
-}
-
-// Structs and their internal equivalents:
-// - ConfigYAML -> Config
-// - ResultsYAML -> Results
-// - TestsConfigYAML -> TestsConfig.
-
-// ConfigYAML is a yaml tests representation of the Config struct.
-//
-// It is used only to fetch data from file. To get any of
-// the dance configuration data it should be converted to
-// Config struct with Convert() function.
-//
-//nolint:govet // we don't care about alignment there
-type ConfigYAML struct {
-	Runner  RunnerType  `yaml:"runner"`
-	Dir     string      `yaml:"dir"`
-	Args    []string    `yaml:"args"`
-	Results ResultsYAML `yaml:"results"`
-}
-
-// ResultsYAML is a yaml representation of the Results struct.
-type ResultsYAML struct {
-	Common   *TestsConfigYAML `yaml:"common"`
-	FerretDB *TestsConfigYAML `yaml:"ferretdb"`
-	MongoDB  *TestsConfigYAML `yaml:"mongodb"`
-}
-
-// TestsConfigYAML is a yaml representation of the TestsConfig struct.
-// It differs from it by using "any" type to be able to parse maps (i.e. "- output_regex: ...").
-//
-// To gain a data the struct should be first converted to TestsConfig with TestsConfigYAML.Convert() function.
-type TestsConfigYAML struct {
-	Default status `yaml:"default"`
-	Stats   *Stats `yaml:"stats"`
-	Pass    []any  `yaml:"pass"`
-	Skip    []any  `yaml:"skip"`
-	Fail    []any  `yaml:"fail"`
-	Ignore  []any  `yaml:"ignore"`
-}
-
-// Convert validates yaml and converts ConfigYAML to the
-// internal representation - Config.
-func (cf *ConfigYAML) Convert() (*Config, error) {
-	common, err := cf.Results.Common.Convert()
-	if err != nil {
-		return nil, err
-	}
-
-	ferretDB, err := cf.Results.FerretDB.Convert()
-	if err != nil {
-		return nil, err
-	}
-
-	mongoDB, err := cf.Results.MongoDB.Convert()
-	if err != nil {
-		return nil, err
-	}
-
-	return &Config{
-		Runner: cf.Runner,
-		Dir:    cf.Dir,
-		Args:   cf.Args,
-		Results: Results{
-			Common:   common,
-			FerretDB: ferretDB,
-			MongoDB:  mongoDB,
-		},
-	}, nil
-}
-
-// Convert validates yaml and converts TestsConfigYAML to the
-// internal representation - TestsConfig.
-func (ftc *TestsConfigYAML) Convert() (*TestsConfig, error) {
-	if ftc == nil {
-		return nil, nil
-	}
-
-	tc := TestsConfig{ftc.Default, ftc.Stats, Tests{}, Tests{}, Tests{}, Tests{}}
-
-	//nolint:govet // we don't care about alignment there
-	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
-		yamlTests []any  // taken from the file, yaml representation of tests, incoming tests
-		outTests  *Tests // yamlTests transformed to the internal representation
-	}{
-		{ftc.Pass, &tc.Pass},
-		{ftc.Skip, &tc.Skip},
-		{ftc.Fail, &tc.Fail},
-		{ftc.Ignore, &tc.Ignore},
-	} {
-		for _, test := range testCategory.yamlTests {
-			switch test := test.(type) {
-			case map[string]any:
-				keys := maps.Keys(test)
-				if len(keys) != 1 {
-					return nil, fmt.Errorf("invalid syntax: expected 1 element, got: %v", keys)
-				}
-
-				var arrPointer *[]string
-				k := keys[0]
-				switch k {
-				case "regex":
-					arrPointer = &testCategory.outTests.NameRegexPattern
-				case "not_regex":
-					arrPointer = &testCategory.outTests.NameNotRegexPattern
-				case "output_regex":
-					arrPointer = &testCategory.outTests.OutputRegexPattern
-				default:
-					return nil, fmt.Errorf("invalid field name %q", k)
-				}
-
-				mValue := test[k]
-
-				regexp, ok := mValue.(string)
-				if !ok {
-					// Arrays are illegal:
-					// - regex:
-					//   - foo
-					//   - bar
-					if _, ok := mValue.([]string); ok {
-						return nil, fmt.Errorf("invalid syntax: %s value shouldn't be an array", k)
-					}
-					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
-				}
-
-				// i.e. pointer to testCategory.outTests.RegexPattern = append(testCategory.outTests.RegexPattern, regexp)
-				*arrPointer = append(*arrPointer, regexp)
-				continue
-
-			case string:
-				testCategory.outTests.Names = append(testCategory.outTests.Names, test)
-				continue
-
-			default:
-				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", test)
-			}
-		}
-	}
-	return &tc, nil
 }
