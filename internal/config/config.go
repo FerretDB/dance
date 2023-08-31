@@ -111,10 +111,10 @@ type CompareResult struct {
 	Stats          Stats
 }
 
-// Status represents single test status.
+// Status represents the status of a single test.
 type Status string
 
-// status values.
+// Constants representing different test statuses.
 const (
 	Pass    Status = "pass"
 	Skip    Status = "skip"
