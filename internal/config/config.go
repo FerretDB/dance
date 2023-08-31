@@ -82,11 +82,13 @@ type TestsConfig struct {
 	Ignore  Tests
 }
 
+// TestResult represents the outcome of a single test.
 type TestResult struct {
 	Status Status
 	Output string
 }
 
+// TestResults represents the collection of results from multiple tests.
 type TestResults struct {
 	// Test results by full test name.
 	TestResults map[string]TestResult
@@ -100,6 +102,7 @@ type Tests struct {
 	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
 }
 
+// CompareResult encapsulates the comparison between expected and actual test outcomes.
 type CompareResult struct {
 	ExpectedPass   map[string]string
 	ExpectedSkip   map[string]string
@@ -135,6 +138,7 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		if ferretdb == nil || mongodb == nil {
 			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
 		}
+
 		return nil
 	}
 
@@ -174,9 +178,11 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		ferretdb.Stats = common.Stats
 		mongodb.Stats = common.Stats
 	}
+
 	return nil
 }
 
+// FillAndValidate populates the configuration with default values and performs validation.
 func (c *Config) FillAndValidate() error {
 	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return err
@@ -196,6 +202,7 @@ func (c *Config) FillAndValidate() error {
 		}
 
 		origDefault := r.Default
+
 		r.Default = Status(strings.ToLower(string(origDefault)))
 		if r.Default == "" {
 			r.Default = Pass
@@ -231,6 +238,7 @@ func (r *Results) ForDB(db string) (*TestsConfig, error) {
 	return nil, fmt.Errorf("no expected results for %q", db)
 }
 
+// IndentedOutput returns the output of a test result with indented lines.
 func (tr *TestResult) IndentedOutput() string {
 	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
 }

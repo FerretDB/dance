@@ -19,12 +19,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/FerretDB/dance/internal/config"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
+
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // ConfigYAML represents the YAML-based configuration for the testing framework.
+//
+//nolint:govet // we don't care about alignment there
 type ConfigYAML struct {
 	Runner  config.RunnerType `yaml:"runner"`
 	Dir     string            `yaml:"dir"`
@@ -116,7 +119,14 @@ func (tcy *TestsConfigYAML) convert() (*config.TestsConfig, error) {
 		return nil, nil
 	}
 
-	tc := config.TestsConfig{Default: tcy.Default, Stats: tcy.Stats, Pass: config.Tests{}, Skip: config.Tests{}, Fail: config.Tests{}, Ignore: config.Tests{}}
+	tc := config.TestsConfig{
+		Default: tcy.Default,
+		Stats:   tcy.Stats,
+		Pass:    config.Tests{},
+		Skip:    config.Tests{},
+		Fail:    config.Tests{},
+		Ignore:  config.Tests{},
+	}
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file

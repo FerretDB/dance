@@ -23,14 +23,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // Run runs `go-ycsb`.
 //
 // It loads and runs a YCSB workload.
 // Properties defined in the YAML file will override properties defined in the workload parameter file.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	bin := filepath.Join("..", "bin", "go-ycsb")
 	if _, err := os.Stat(bin); err != nil {
 		return nil, err
@@ -68,17 +68,17 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	res := &internal.TestResults{
-		TestResults: map[string]internal.TestResult{
+	res := &config.TestResults{
+		TestResults: map[string]config.TestResult{
 			dir: {
-				Status: internal.Pass,
+				Status: config.Pass,
 			},
 		},
 	}
 
 	if err := cmd.Run(); err != nil {
-		res.TestResults[dir] = internal.TestResult{
-			Status: internal.Fail,
+		res.TestResults[dir] = config.TestResult{
+			Status: config.Fail,
 			Output: err.Error(),
 		}
 	}

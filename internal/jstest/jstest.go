@@ -28,12 +28,12 @@ import (
 
 	"golang.org/x/exp/maps"
 
-	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // Run runs `mongo`.
 // Args is a list of filepath.Glob file patterns with additional support for !exclude.
-func Run(ctx context.Context, dir string, args []string, parallel int) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, parallel int) (*config.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,8 +73,8 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*interna
 
 	files := maps.Keys(filesM)
 
-	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult, len(files)),
+	res := &config.TestResults{
+		TestResults: make(map[string]config.TestResult, len(files)),
 	}
 
 	type item struct {
@@ -126,15 +126,15 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*interna
 				return nil, it.err
 			}
 
-			res.TestResults[it.file] = internal.TestResult{
-				Status: internal.Fail,
+			res.TestResults[it.file] = config.TestResult{
+				Status: config.Fail,
 				Output: string(it.out),
 			}
 			continue
 		}
 
-		res.TestResults[it.file] = internal.TestResult{
-			Status: internal.Pass,
+		res.TestResults[it.file] = config.TestResult{
+			Status: config.Pass,
 			Output: string(it.out),
 		}
 	}
