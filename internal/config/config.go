@@ -45,13 +45,13 @@ type RunnerType string
 // Stats represent the expected/actual amount of
 // failed, skipped and passed tests.
 type Stats struct {
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	UnexpectedFail int `yaml:"unexpected_fail"`
-	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
-	ExpectedFail   int `yaml:"expected_fail"`
-	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
+	UnexpectedRest int
+	UnexpectedFail int
+	UnexpectedSkip int
+	UnexpectedPass int
+	ExpectedFail   int
+	ExpectedSkip   int
+	ExpectedPass   int
 }
 
 // Config represents the configuration settings for the test execution.
@@ -70,6 +70,7 @@ type Results struct {
 	Common   *TestsConfig
 	FerretDB *TestsConfig
 	MongoDB  *TestsConfig
+	SQLite   *TestsConfig
 }
 
 // TestsConfig represents the configuration for tests categorized by status and regular expressions.
@@ -133,7 +134,7 @@ var knownStatuses = map[Status]struct{}{
 }
 
 // mergeTestConfigs merges the common test configurations into database-specific test configurations.
-func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
+func mergeTestConfigs(common, mongodb, ferretdb, sqlite *TestsConfig) error {
 	if common == nil {
 		if ferretdb == nil || mongodb == nil {
 			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
@@ -146,11 +147,12 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 		Common   *Tests
 		FerretDB *Tests
 		MongoDB  *Tests
+		SQLite   *Tests
 	}{
-		{&common.Skip, &ferretdb.Skip, &mongodb.Skip},
-		{&common.Fail, &ferretdb.Fail, &mongodb.Fail},
-		{&common.Pass, &ferretdb.Pass, &mongodb.Pass},
-		{&common.Ignore, &ferretdb.Ignore, &mongodb.Ignore},
+		{&common.Skip, &ferretdb.Skip, &mongodb.Skip, &sqlite.Skip},
+		{&common.Fail, &ferretdb.Fail, &mongodb.Fail, &sqlite.Fail},
+		{&common.Pass, &ferretdb.Pass, &mongodb.Pass, &ferretdb.Pass},
+		{&common.Ignore, &ferretdb.Ignore, &mongodb.Ignore, &sqlite.Ignore},
 	} {
 		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
 		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)
@@ -184,7 +186,7 @@ func mergeTestConfigs(common, mongodb, ferretdb *TestsConfig) error {
 
 // FillAndValidate populates the configuration with default values and performs validation.
 func (c *Config) FillAndValidate() error {
-	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
+	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB, c.Results.SQLite); err != nil {
 		return err
 	}
 
@@ -192,6 +194,7 @@ func (c *Config) FillAndValidate() error {
 		c.Results.Common,
 		c.Results.FerretDB,
 		c.Results.MongoDB,
+		c.Results.SQLite,
 	} {
 		if r == nil {
 			continue
@@ -225,6 +228,10 @@ func (r *Results) ForDB(db string) (*TestsConfig, error) {
 		}
 	case "mongodb":
 		if c := r.MongoDB; c != nil {
+			return c, nil
+		}
+	case "sqlite":
+		if c := r.SQLite; c != nil {
 			return c, nil
 		}
 	default:

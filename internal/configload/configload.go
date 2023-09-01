@@ -19,37 +19,48 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/FerretDB/dance/internal/config"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
-
-	"github.com/FerretDB/dance/internal/config"
 )
 
-// ConfigYAML represents the YAML-based configuration for the testing framework.
+// configYAML represents the YAML-based configuration for the testing framework.
 //
 //nolint:govet // we don't care about alignment there
-type ConfigYAML struct {
+type configYAML struct {
 	Runner  config.RunnerType `yaml:"runner"`
 	Dir     string            `yaml:"dir"`
 	Args    []string          `yaml:"args"`
-	Results ResultsYAML       `yaml:"results"`
+	Results results           `yaml:"results"`
 }
 
-// ResultsYAML represents the YAML-based configuration for expected test results.
-type ResultsYAML struct {
-	Common   *TestsConfigYAML `yaml:"common"`
-	FerretDB *TestsConfigYAML `yaml:"ferretdb"`
-	MongoDB  *TestsConfigYAML `yaml:"mongodb"`
+// results represents the YAML-based configuration for expected test results.
+type results struct {
+	Common   *testsConfig `yaml:"common"`
+	FerretDB *testsConfig `yaml:"ferretdb"`
+	MongoDB  *testsConfig `yaml:"mongodb"`
+	SQLite   *testsConfig `yaml:"sqlite"`
 }
 
-// TestsConfigYAML represents the YAML-based configuration for database-specific test configurations.
-type TestsConfigYAML struct {
+// testsConfig represents the YAML-based configuration for database-specific test configurations.
+type testsConfig struct {
 	Default config.Status `yaml:"default"`
-	Stats   *config.Stats `yaml:"stats"`
+	Stats   *stats        `yaml:"stats"`
 	Pass    []any         `yaml:"pass"`
 	Skip    []any         `yaml:"skip"`
 	Fail    []any         `yaml:"fail"`
 	Ignore  []any         `yaml:"ignore"`
+}
+
+// stats represents the YAML representation of Stats.
+type stats struct {
+	UnexpectedRest int `yaml:"unexpected_rest"`
+	UnexpectedFail int `yaml:"unexpected_fail"`
+	UnexpectedSkip int `yaml:"unexpected_skip"`
+	UnexpectedPass int `yaml:"unexpected_pass"`
+	ExpectedFail   int `yaml:"expected_fail"`
+	ExpectedSkip   int `yaml:"expected_skip"`
+	ExpectedPass   int `yaml:"expected_pass"`
 }
 
 // Load loads and validates the configuration from a YAML file.
@@ -67,12 +78,14 @@ func load(file string) (*config.Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var cf ConfigYAML
-	if err = d.Decode(&cf); err != nil {
+	// Parse the YAML file into a configuration struct.
+	var configYAML configYAML
+	if err = d.Decode(&configYAML); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	c, err := cf.convert()
+	// Convert the YAML-based configuration to the internal representation.
+	c, err := configYAML.convert()
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +98,7 @@ func load(file string) (*config.Config, error) {
 }
 
 // convert validates the YAML configuration and converts it to the internal configuration representation.
-func (cy *ConfigYAML) convert() (*config.Config, error) {
+func (cy *configYAML) convert() (*config.Config, error) {
 	common, err := cy.Results.Common.convert()
 	if err != nil {
 		return nil, err
@@ -101,6 +114,11 @@ func (cy *ConfigYAML) convert() (*config.Config, error) {
 		return nil, err
 	}
 
+	sqLite, err := cy.Results.SQLite.convert()
+	if err != nil {
+		return nil, err
+	}
+
 	return &config.Config{
 		Runner: cy.Runner,
 		Dir:    cy.Dir,
@@ -109,19 +127,20 @@ func (cy *ConfigYAML) convert() (*config.Config, error) {
 			Common:   common,
 			FerretDB: ferretDB,
 			MongoDB:  mongoDB,
+			SQLite:   sqLite,
 		},
 	}, nil
 }
 
-// convert converts TestsConfigYAML to the internal representation TestsConfig with validation.
-func (tcy *TestsConfigYAML) convert() (*config.TestsConfig, error) {
-	if tcy == nil {
+// convert converts testsConfig to the internal representation TestsConfig with validation.
+func (tc *testsConfig) convert() (*config.TestsConfig, error) {
+	if tc == nil {
 		return nil, nil
 	}
 
-	tc := config.TestsConfig{
-		Default: tcy.Default,
-		Stats:   tcy.Stats,
+	t := config.TestsConfig{
+		Default: tc.Default,
+		Stats:   tc.Stats.convertStats(),
 		Pass:    config.Tests{},
 		Skip:    config.Tests{},
 		Fail:    config.Tests{},
@@ -133,10 +152,10 @@ func (tcy *TestsConfigYAML) convert() (*config.TestsConfig, error) {
 		yamlTests []any         // taken from the file, yaml representation of tests, incoming tests
 		outTests  *config.Tests // yamlTests transformed to the internal representation
 	}{
-		{tcy.Pass, &tc.Pass},
-		{tcy.Skip, &tc.Skip},
-		{tcy.Fail, &tc.Fail},
-		{tcy.Ignore, &tc.Ignore},
+		{tc.Pass, &t.Pass},
+		{tc.Skip, &t.Skip},
+		{tc.Fail, &t.Fail},
+		{tc.Ignore, &t.Ignore},
 	} {
 		for _, test := range testCategory.yamlTests {
 			switch test := test.(type) {
@@ -186,5 +205,22 @@ func (tcy *TestsConfigYAML) convert() (*config.TestsConfig, error) {
 			}
 		}
 	}
-	return &tc, nil
+	return &t, nil
+}
+
+// convertStats converts stats to internal Stats.
+func (s *stats) convertStats() *config.Stats {
+	if s == nil {
+		return nil
+	}
+
+	return &config.Stats{
+		UnexpectedRest: s.UnexpectedRest,
+		UnexpectedFail: s.UnexpectedFail,
+		UnexpectedSkip: s.UnexpectedSkip,
+		UnexpectedPass: s.UnexpectedPass,
+		ExpectedFail:   s.ExpectedFail,
+		ExpectedSkip:   s.ExpectedSkip,
+		ExpectedPass:   s.ExpectedPass,
+	}
 }
