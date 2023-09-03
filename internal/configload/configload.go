@@ -111,7 +111,7 @@ func load(file string) (*config.Config, error) {
 	return c, nil
 }
 
-// convert validates the YAML configuration and converts it to the internal configuration representation.
+// convert validates the YAML configuration and converts it to the internal *config.Config.
 func (c *configYAML) convert() (*config.Config, error) {
 	common, err := c.Results.Common.convert()
 	if err != nil {
@@ -140,7 +140,7 @@ func (c *configYAML) convert() (*config.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal representation TestConfig with validation.
+// convert converts testConfig to the internal *TestConfig with validation.
 func (tc *testConfig) convert() (*config.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
