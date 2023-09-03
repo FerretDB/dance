@@ -134,10 +134,6 @@ var knownStatuses = map[Status]struct{}{
 	Skip: {},
 }
 
-func (t *Tests) appendNames(names ...string) {
-	t.Names = append(t.Names, names...)
-}
-
 // mergeTestConfigs merges the common test configurations into database-specific test configurations.
 func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 	for _, t := range testConfig {
@@ -151,25 +147,25 @@ func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 			continue
 		}
 
-		t.Pass.appendNames(common.Pass.Names...)
-		t.Fail.appendNames(common.Fail.Names...)
-		t.Skip.appendNames(common.Skip.Names...)
-		t.Ignore.appendNames(common.Ignore.Names...)
+		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
+		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
+		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
+		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
 
-		t.Pass.appendNames(common.Pass.NameRegexPattern...)
-		t.Fail.appendNames(common.Fail.NameRegexPattern...)
-		t.Skip.appendNames(common.Skip.NameRegexPattern...)
-		t.Ignore.appendNames(common.Ignore.NameRegexPattern...)
+		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
+		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
+		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
+		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
 
-		t.Pass.appendNames(common.Pass.NameNotRegexPattern...)
-		t.Fail.appendNames(common.Fail.NameNotRegexPattern...)
-		t.Skip.appendNames(common.Skip.NameNotRegexPattern...)
-		t.Ignore.appendNames(common.Ignore.NameNotRegexPattern...)
+		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
+		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
+		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
+		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
 
-		t.Pass.appendNames(common.Pass.OutputRegexPattern...)
-		t.Fail.appendNames(common.Fail.OutputRegexPattern...)
-		t.Skip.appendNames(common.Skip.OutputRegexPattern...)
-		t.Ignore.appendNames(common.Ignore.OutputRegexPattern...)
+		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
+		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
+		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
+		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
 	}
 
 	for _, t := range testConfig {
