@@ -49,7 +49,7 @@ type testConfig struct {
 	Ignore  []any         `yaml:"ignore"`
 }
 
-// stats represents the YAML representation of Stats.
+// stats represents the YAML representation of config.Stats.
 type stats struct {
 	UnexpectedRest int `yaml:"unexpected_rest"`
 	UnexpectedPass int `yaml:"unexpected_pass"`
@@ -60,7 +60,7 @@ type stats struct {
 	ExpectedSkip   int `yaml:"expected_skip"`
 }
 
-// convertStats converts stats to internal Stats.
+// convertStats converts stats to internal *config.Stats.
 func (s *stats) convertStats() *config.Stats {
 	if s == nil {
 		return nil
