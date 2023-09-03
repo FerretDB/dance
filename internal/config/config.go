@@ -134,7 +134,7 @@ var knownStatuses = map[Status]struct{}{
 	Skip: {},
 }
 
-// mergeTestConfigs merges the common test configurations into database-specific test configurations.
+// mergeTestConfigs merges the common test configuration into database-specific test configurations.
 func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 	for _, t := range testConfig {
 		if t == nil && common == nil {
