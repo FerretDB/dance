@@ -49,7 +49,7 @@ type testConfig struct {
 	Ignore  []any         `yaml:"ignore"`
 }
 
-// stats represents the YAML representation of config.Stats.
+// stats represents the YAML representation of internal config.Stats.
 type stats struct {
 	UnexpectedRest int `yaml:"unexpected_rest"`
 	UnexpectedPass int `yaml:"unexpected_pass"`
