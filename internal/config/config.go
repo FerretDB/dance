@@ -44,14 +44,16 @@ type RunnerType string
 
 // Stats represent the expected/actual amount of
 // failed, skipped and passed tests.
+//
+//nolint:musttag // we don't care about annotations there
 type Stats struct {
 	UnexpectedRest int
+	UnexpectedPass int
 	UnexpectedFail int
 	UnexpectedSkip int
-	UnexpectedPass int
+	ExpectedPass   int
 	ExpectedFail   int
 	ExpectedSkip   int
-	ExpectedPass   int
 }
 
 // Config represents the configuration settings for the test execution.
@@ -67,19 +69,18 @@ type Config struct {
 
 // Results stores the expected test results for different databases.
 type Results struct {
-	Common   *TestsConfig
-	FerretDB *TestsConfig
-	MongoDB  *TestsConfig
-	SQLite   *TestsConfig
+	Common   *TestConfig
+	FerretDB *TestConfig
+	MongoDB  *TestConfig
 }
 
-// TestsConfig represents the configuration for tests categorized by status and regular expressions.
-type TestsConfig struct {
+// TestConfig represents the configuration for tests categorized by status and regular expressions.
+type TestConfig struct {
 	Default Status
 	Stats   *Stats
 	Pass    Tests
-	Skip    Tests
 	Fail    Tests
+	Skip    Tests
 	Ignore  Tests
 }
 
@@ -106,11 +107,11 @@ type Tests struct {
 // CompareResult encapsulates the comparison between expected and actual test outcomes.
 type CompareResult struct {
 	ExpectedPass   map[string]string
-	ExpectedSkip   map[string]string
 	ExpectedFail   map[string]string
+	ExpectedSkip   map[string]string
 	UnexpectedPass map[string]string
-	UnexpectedSkip map[string]string
 	UnexpectedFail map[string]string
+	UnexpectedSkip map[string]string
 	UnexpectedRest map[string]TestResult
 	Stats          Stats
 }
@@ -121,64 +122,76 @@ type Status string
 // Constants representing different test statuses.
 const (
 	Pass    Status = "pass"
-	Skip    Status = "skip"
 	Fail    Status = "fail"
+	Skip    Status = "skip"
 	Ignore  Status = "ignore"
 	Unknown Status = "unknown"
 )
 
 var knownStatuses = map[Status]struct{}{
 	Pass: {},
-	Skip: {},
 	Fail: {},
+	Skip: {},
+}
+
+func (t *Tests) appendNames(names ...string) {
+	t.Names = append(t.Names, names...)
 }
 
 // mergeTestConfigs merges the common test configurations into database-specific test configurations.
-func mergeTestConfigs(common, mongodb, ferretdb, sqlite *TestsConfig) error {
-	if common == nil {
-		if ferretdb == nil || mongodb == nil {
-			return fmt.Errorf("both FerretDB and MongoDB results must be set (if common results are not set)")
+func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
+	for _, t := range testConfig {
+		if t == nil && common == nil {
+			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
+		}
+	}
+
+	for _, t := range testConfig {
+		if t == nil || common == nil {
+			continue
 		}
 
-		return nil
+		t.Pass.appendNames(common.Pass.Names...)
+		t.Fail.appendNames(common.Fail.Names...)
+		t.Skip.appendNames(common.Skip.Names...)
+		t.Ignore.appendNames(common.Ignore.Names...)
+
+		t.Pass.appendNames(common.Pass.NameRegexPattern...)
+		t.Fail.appendNames(common.Fail.NameRegexPattern...)
+		t.Skip.appendNames(common.Skip.NameRegexPattern...)
+		t.Ignore.appendNames(common.Ignore.NameRegexPattern...)
+
+		t.Pass.appendNames(common.Pass.NameNotRegexPattern...)
+		t.Fail.appendNames(common.Fail.NameNotRegexPattern...)
+		t.Skip.appendNames(common.Skip.NameNotRegexPattern...)
+		t.Ignore.appendNames(common.Ignore.NameNotRegexPattern...)
+
+		t.Pass.appendNames(common.Pass.OutputRegexPattern...)
+		t.Fail.appendNames(common.Fail.OutputRegexPattern...)
+		t.Skip.appendNames(common.Skip.OutputRegexPattern...)
+		t.Ignore.appendNames(common.Ignore.OutputRegexPattern...)
 	}
 
-	for _, t := range []struct {
-		Common   *Tests
-		FerretDB *Tests
-		MongoDB  *Tests
-		SQLite   *Tests
-	}{
-		{&common.Skip, &ferretdb.Skip, &mongodb.Skip, &sqlite.Skip},
-		{&common.Fail, &ferretdb.Fail, &mongodb.Fail, &sqlite.Fail},
-		{&common.Pass, &ferretdb.Pass, &mongodb.Pass, &ferretdb.Pass},
-		{&common.Ignore, &ferretdb.Ignore, &mongodb.Ignore, &sqlite.Ignore},
-	} {
-		t.FerretDB.Names = append(t.FerretDB.Names, t.Common.Names...)
-		t.FerretDB.NameRegexPattern = append(t.FerretDB.NameRegexPattern, t.Common.NameRegexPattern...)
-		t.FerretDB.NameNotRegexPattern = append(t.FerretDB.NameNotRegexPattern, t.Common.NameNotRegexPattern...)
-		t.FerretDB.OutputRegexPattern = append(t.FerretDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
+	for _, t := range testConfig {
+		if t == nil || common == nil {
+			continue
+		}
 
-		t.MongoDB.Names = append(t.MongoDB.Names, t.Common.Names...)
-		t.MongoDB.NameRegexPattern = append(t.MongoDB.NameRegexPattern, t.Common.NameRegexPattern...)
-		t.MongoDB.NameNotRegexPattern = append(t.MongoDB.NameNotRegexPattern, t.Common.NameNotRegexPattern...)
-		t.MongoDB.OutputRegexPattern = append(t.MongoDB.OutputRegexPattern, t.Common.OutputRegexPattern...)
-	}
-
-	if common.Default != "" {
-		if ferretdb.Default != "" || mongodb.Default != "" {
+		if common.Default != "" && t.Default != "" {
 			return errors.New("default value cannot be set in common, when it's set in database")
 		}
-		ferretdb.Default = common.Default
-		mongodb.Default = common.Default
-	}
 
-	if common.Stats != nil {
-		if ferretdb.Stats != nil || mongodb.Stats != nil {
+		if common.Default != "" {
+			t.Default = common.Default
+		}
+
+		if common.Stats != nil && t.Stats != nil {
 			return errors.New("stats value cannot be set in common, when it's set in database")
 		}
-		ferretdb.Stats = common.Stats
-		mongodb.Stats = common.Stats
+
+		if common.Stats != nil {
+			t.Stats = common.Stats
+		}
 	}
 
 	return nil
@@ -186,15 +199,14 @@ func mergeTestConfigs(common, mongodb, ferretdb, sqlite *TestsConfig) error {
 
 // FillAndValidate populates the configuration with default values and performs validation.
 func (c *Config) FillAndValidate() error {
-	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB, c.Results.SQLite); err != nil {
+	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return err
 	}
 
-	for _, r := range []*TestsConfig{
+	for _, r := range []*TestConfig{
 		c.Results.Common,
 		c.Results.FerretDB,
 		c.Results.MongoDB,
-		c.Results.SQLite,
 	} {
 		if r == nil {
 			continue
@@ -220,7 +232,7 @@ func (c *Config) FillAndValidate() error {
 }
 
 // ForDB returns the database-specific test configuration based on the provided database name.
-func (r *Results) ForDB(db string) (*TestsConfig, error) {
+func (r *Results) ForDB(db string) (*TestConfig, error) {
 	switch db {
 	case "ferretdb":
 		if c := r.FerretDB; c != nil {
@@ -228,10 +240,6 @@ func (r *Results) ForDB(db string) (*TestsConfig, error) {
 		}
 	case "mongodb":
 		if c := r.MongoDB; c != nil {
-			return c, nil
-		}
-	case "sqlite":
-		if c := r.SQLite; c != nil {
 			return c, nil
 		}
 	default:
@@ -250,7 +258,8 @@ func (tr *TestResult) IndentedOutput() string {
 	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
 }
 
-func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
+// Compare compares two TestResults structs and returns a CompareResult containing the differences.
+func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
 		ExpectedPass:   make(map[string]string),
 		ExpectedSkip:   make(map[string]string),
@@ -351,7 +360,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
 	// special case: zero in expected_pass means "don't check"
-	if tc.Stats.ExpectedPass == 0 {
+	if tc.Stats != nil && tc.Stats.ExpectedPass == 0 {
 		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
 	}
 
@@ -361,7 +370,7 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
 // If both of the regexps match, it panics.
-func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *Status {
+func (tc *TestConfig) getExpectedStatusRegex(testName string, result *TestResult) *Status {
 	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
 	var matchedStatus Status // matched status by regex
 
@@ -379,6 +388,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(testName) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one name regex: %s, %s",
@@ -395,6 +405,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if r.MatchString(testName) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one name not-regex: %s, %s",
@@ -411,6 +422,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(result.Output) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one output regex: %s, %s",
@@ -421,9 +433,11 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			matchedRegex = reg
 		}
 	}
+
 	if matchedStatus == "" {
 		return nil
 	}
+
 	return &matchedStatus
 }
 
@@ -443,13 +457,14 @@ func nextPrefix(path string) string {
 	}
 
 	i := strings.LastIndexAny(path, "/.")
+
 	return path[:i+1]
 }
 
 // toMap converts TestsConfig to the map of tests.
 // The map stores test names as a keys and their status (pass|skip|fail), as their value.
 // It returns an error if there's a test duplicate.
-func (tc *TestsConfig) toMap() (map[string]Status, error) {
+func (tc *TestConfig) toMap() (map[string]Status, error) {
 	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
 	for _, tcat := range []struct {
@@ -457,8 +472,8 @@ func (tc *TestsConfig) toMap() (map[string]Status, error) {
 		tests       Tests
 	}{
 		{Pass, tc.Pass},
-		{Skip, tc.Skip},
 		{Fail, tc.Fail},
+		{Skip, tc.Skip},
 		{Ignore, tc.Ignore},
 	} {
 		for _, t := range tcat.tests.Names {

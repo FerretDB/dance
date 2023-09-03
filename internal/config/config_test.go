@@ -15,6 +15,7 @@
 package config
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -56,4 +57,226 @@ func FuzzNextPrefix(f *testing.F) {
 			path = next
 		}
 	})
+}
+
+func TestFillAndValidate(t *testing.T) {
+	t.Parallel()
+
+	for name, tc := range map[string]struct {
+		in          *Results
+		expected    *Results
+		expectedErr error
+	}{
+		"FillAndValidateFilled": {
+			in: &Results{
+				Common: &TestConfig{
+					Pass:   Tests{Names: []string{"a", "b"}},
+					Skip:   Tests{Names: []string{"c", "d"}},
+					Fail:   Tests{Names: []string{"e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
+				},
+				FerretDB: &TestConfig{
+					Pass: Tests{Names: []string{"1", "2"}},
+					Skip: Tests{Names: []string{"3", "4"}},
+					Fail: Tests{Names: []string{"5"}},
+				},
+				MongoDB: &TestConfig{
+					Pass:   Tests{Names: []string{"A", "B"}},
+					Skip:   Tests{Names: []string{"C"}},
+					Fail:   Tests{Names: []string{"D", "E"}},
+					Ignore: Tests{Names: []string{"x", "z"}},
+				},
+			},
+			expected: &Results{
+				Common: &TestConfig{
+					Pass:   Tests{Names: []string{"a", "b"}},
+					Skip:   Tests{Names: []string{"c", "d"}},
+					Fail:   Tests{Names: []string{"e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
+				},
+				FerretDB: &TestConfig{
+					Pass:   Tests{Names: []string{"1", "2", "a", "b"}},
+					Skip:   Tests{Names: []string{"3", "4", "c", "d"}},
+					Fail:   Tests{Names: []string{"5", "e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h"}},
+				},
+				MongoDB: &TestConfig{
+					Pass:   Tests{Names: []string{"A", "B", "a", "b"}},
+					Skip:   Tests{Names: []string{"C", "c", "d"}},
+					Fail:   Tests{Names: []string{"D", "E", "e", "f"}},
+					Ignore: Tests{Names: []string{"g", "h", "x", "z"}},
+				},
+			},
+		},
+		"FillAndValidateNotSet": {
+			in: &Results{
+				Common:   nil,
+				FerretDB: &TestConfig{},
+			},
+			expectedErr: errors.New("all database-specific results must be set (if common results are not set)"),
+		},
+		"FillAndValidateDuplicatesPass": {
+			in: &Results{
+				Common: &TestConfig{
+					Pass: Tests{Names: []string{"a"}},
+				},
+				FerretDB: &TestConfig{
+					Pass: Tests{Names: []string{"a", "b"}},
+				},
+				MongoDB: &TestConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidateDuplicatesSkip": {
+			in: &Results{
+				Common: &TestConfig{
+					Skip: Tests{Names: []string{"a"}},
+				},
+				FerretDB: &TestConfig{
+					Skip: Tests{Names: []string{"a", "b"}},
+				},
+				MongoDB: &TestConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidateDuplicatesFail": {
+			in: &Results{
+				Common: &TestConfig{
+					Fail: Tests{Names: []string{"a"}},
+				},
+				FerretDB: &TestConfig{
+					Fail: Tests{Names: []string{"a", "b"}},
+				},
+				MongoDB: &TestConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidateDuplicatesAll": {
+			in: &Results{
+				FerretDB: &TestConfig{
+					Pass:   Tests{Names: []string{"a"}},
+					Skip:   Tests{Names: []string{"a"}},
+					Fail:   Tests{Names: []string{"a"}},
+					Ignore: Tests{Names: []string{"a"}},
+				},
+				MongoDB: &TestConfig{},
+			},
+			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+		},
+		"FillAndValidateDefault": {
+			in: &Results{
+				Common: &TestConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestConfig{},
+				MongoDB:  &TestConfig{},
+			},
+			expected: &Results{
+				Common: &TestConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestConfig{
+					Default: "pass",
+				},
+				MongoDB: &TestConfig{
+					Default: "pass",
+				},
+			},
+		},
+		"FillAndValidateDefaultDuplicate": {
+			in: &Results{
+				Common: &TestConfig{
+					Default: "pass",
+				},
+				FerretDB: &TestConfig{Default: "fail"},
+				MongoDB:  &TestConfig{},
+			},
+			expectedErr: errors.New("default value cannot be set in common, when it's set in database"),
+		},
+		"FillAndValidateStats": {
+			in: &Results{
+				Common: &TestConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				FerretDB: &TestConfig{},
+				MongoDB:  &TestConfig{},
+			},
+			expected: &Results{
+				Common: &TestConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				FerretDB: &TestConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+				MongoDB: &TestConfig{
+					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
+				},
+			},
+		},
+		"FillAndValidateStatsDuplicate": {
+			in: &Results{
+				Common: &TestConfig{
+					Stats: &Stats{},
+				},
+				FerretDB: &TestConfig{
+					Stats: &Stats{},
+				},
+				MongoDB: &TestConfig{
+					Stats: &Stats{},
+				},
+			},
+			expectedErr: errors.New("stats value cannot be set in common, when it's set in database"),
+		},
+	} {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			var c Config
+			c.Results = *tc.in
+
+			err := c.FillAndValidate()
+
+			if tc.expectedErr != nil {
+				assert.Equal(t, tc.expectedErr, err)
+				return
+			}
+
+			assert.NoError(t, err)
+
+			for _, tests := range []struct {
+				expected Tests
+				actual   Tests
+			}{
+				{tc.expected.FerretDB.Pass, tc.in.FerretDB.Pass},
+				{tc.expected.FerretDB.Skip, tc.in.FerretDB.Skip},
+				{tc.expected.FerretDB.Fail, tc.in.FerretDB.Fail},
+				{tc.expected.FerretDB.Ignore, tc.in.FerretDB.Ignore},
+
+				{tc.expected.MongoDB.Pass, tc.in.MongoDB.Pass},
+				{tc.expected.MongoDB.Skip, tc.in.MongoDB.Skip},
+				{tc.expected.MongoDB.Fail, tc.in.MongoDB.Fail},
+				{tc.expected.MongoDB.Ignore, tc.in.MongoDB.Ignore},
+			} {
+				for _, item := range tests.expected.Names {
+					assert.Contains(t, tests.actual.Names, item)
+				}
+				assert.Equal(t, len(tests.expected.Names), len(tests.actual.Names))
+
+				for _, item := range tests.expected.NameRegexPattern {
+					assert.Contains(t, tests.actual.NameRegexPattern, item)
+				}
+				assert.Equal(t, len(tests.expected.NameRegexPattern), len(tests.actual.NameRegexPattern))
+
+				for _, item := range tests.expected.NameNotRegexPattern {
+					assert.Contains(t, tests.actual.NameNotRegexPattern, item)
+				}
+				assert.Equal(t, len(tests.expected.NameNotRegexPattern), len(tests.actual.NameNotRegexPattern))
+
+				for _, item := range tests.expected.OutputRegexPattern {
+					assert.Contains(t, tests.actual.OutputRegexPattern, item)
+				}
+				assert.Equal(t, len(tests.expected.OutputRegexPattern), len(tests.actual.OutputRegexPattern))
+			}
+		})
+	}
 }

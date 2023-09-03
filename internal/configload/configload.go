@@ -19,9 +19,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/FerretDB/dance/internal/config"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
+
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // configYAML represents the YAML-based configuration for the testing framework.
@@ -31,36 +32,49 @@ type configYAML struct {
 	Runner  config.RunnerType `yaml:"runner"`
 	Dir     string            `yaml:"dir"`
 	Args    []string          `yaml:"args"`
-	Results results           `yaml:"results"`
+	Results struct {
+		Common   *testConfig `yaml:"common"`
+		FerretDB *testConfig `yaml:"ferretdb"`
+		MongoDB  *testConfig `yaml:"mongodb"`
+	} `yaml:"results"`
 }
 
-// results represents the YAML-based configuration for expected test results.
-type results struct {
-	Common   *testsConfig `yaml:"common"`
-	FerretDB *testsConfig `yaml:"ferretdb"`
-	MongoDB  *testsConfig `yaml:"mongodb"`
-	SQLite   *testsConfig `yaml:"sqlite"`
-}
-
-// testsConfig represents the YAML-based configuration for database-specific test configurations.
-type testsConfig struct {
+// testConfig represents the YAML-based configuration for database-specific test configurations.
+type testConfig struct {
 	Default config.Status `yaml:"default"`
 	Stats   *stats        `yaml:"stats"`
 	Pass    []any         `yaml:"pass"`
-	Skip    []any         `yaml:"skip"`
 	Fail    []any         `yaml:"fail"`
+	Skip    []any         `yaml:"skip"`
 	Ignore  []any         `yaml:"ignore"`
 }
 
 // stats represents the YAML representation of Stats.
 type stats struct {
 	UnexpectedRest int `yaml:"unexpected_rest"`
+	UnexpectedPass int `yaml:"unexpected_pass"`
 	UnexpectedFail int `yaml:"unexpected_fail"`
 	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
+	ExpectedPass   int `yaml:"expected_pass"`
 	ExpectedFail   int `yaml:"expected_fail"`
 	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
+}
+
+// convertStats converts stats to internal Stats.
+func (s *stats) convertStats() *config.Stats {
+	if s == nil {
+		return nil
+	}
+
+	return &config.Stats{
+		UnexpectedRest: s.UnexpectedRest,
+		UnexpectedPass: s.UnexpectedPass,
+		UnexpectedFail: s.UnexpectedFail,
+		UnexpectedSkip: s.UnexpectedSkip,
+		ExpectedPass:   s.ExpectedPass,
+		ExpectedFail:   s.ExpectedFail,
+		ExpectedSkip:   s.ExpectedSkip,
+	}
 }
 
 // Load loads and validates the configuration from a YAML file.
@@ -79,13 +93,13 @@ func load(file string) (*config.Config, error) {
 	d.KnownFields(true)
 
 	// Parse the YAML file into a configuration struct.
-	var configYAML configYAML
-	if err = d.Decode(&configYAML); err != nil {
+	var cfg configYAML
+	if err = d.Decode(&cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
 	// Convert the YAML-based configuration to the internal representation.
-	c, err := configYAML.convert()
+	c, err := cfg.convert()
 	if err != nil {
 		return nil, err
 	}
@@ -98,52 +112,46 @@ func load(file string) (*config.Config, error) {
 }
 
 // convert validates the YAML configuration and converts it to the internal configuration representation.
-func (cy *configYAML) convert() (*config.Config, error) {
-	common, err := cy.Results.Common.convert()
+func (c *configYAML) convert() (*config.Config, error) {
+	common, err := c.Results.Common.convert()
 	if err != nil {
 		return nil, err
 	}
 
-	ferretDB, err := cy.Results.FerretDB.convert()
+	ferretDB, err := c.Results.FerretDB.convert()
 	if err != nil {
 		return nil, err
 	}
 
-	mongoDB, err := cy.Results.MongoDB.convert()
-	if err != nil {
-		return nil, err
-	}
-
-	sqLite, err := cy.Results.SQLite.convert()
+	mongoDB, err := c.Results.MongoDB.convert()
 	if err != nil {
 		return nil, err
 	}
 
 	return &config.Config{
-		Runner: cy.Runner,
-		Dir:    cy.Dir,
-		Args:   cy.Args,
+		Runner: c.Runner,
+		Dir:    c.Dir,
+		Args:   c.Args,
 		Results: config.Results{
 			Common:   common,
 			FerretDB: ferretDB,
 			MongoDB:  mongoDB,
-			SQLite:   sqLite,
 		},
 	}, nil
 }
 
-// convert converts testsConfig to the internal representation TestsConfig with validation.
-func (tc *testsConfig) convert() (*config.TestsConfig, error) {
+// convert converts testConfig to the internal representation TestConfig with validation.
+func (tc *testConfig) convert() (*config.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
 	}
 
-	t := config.TestsConfig{
+	t := config.TestConfig{
 		Default: tc.Default,
 		Stats:   tc.Stats.convertStats(),
 		Pass:    config.Tests{},
-		Skip:    config.Tests{},
 		Fail:    config.Tests{},
+		Skip:    config.Tests{},
 		Ignore:  config.Tests{},
 	}
 
@@ -153,8 +161,8 @@ func (tc *testsConfig) convert() (*config.TestsConfig, error) {
 		outTests  *config.Tests // yamlTests transformed to the internal representation
 	}{
 		{tc.Pass, &t.Pass},
-		{tc.Skip, &t.Skip},
 		{tc.Fail, &t.Fail},
+		{tc.Skip, &t.Skip},
 		{tc.Ignore, &t.Ignore},
 	} {
 		for _, test := range testCategory.yamlTests {
@@ -166,6 +174,7 @@ func (tc *testsConfig) convert() (*config.TestsConfig, error) {
 				}
 
 				var arrPointer *[]string
+
 				k := keys[0]
 				switch k {
 				case "regex":
@@ -189,11 +198,13 @@ func (tc *testsConfig) convert() (*config.TestsConfig, error) {
 					if _, ok := mValue.([]string); ok {
 						return nil, fmt.Errorf("invalid syntax: %s value shouldn't be an array", k)
 					}
+
 					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
 				}
 
 				// i.e. pointer to testCategory.outTests.RegexPattern = append(testCategory.outTests.RegexPattern, regexp)
 				*arrPointer = append(*arrPointer, regexp)
+
 				continue
 
 			case string:
@@ -205,22 +216,6 @@ func (tc *testsConfig) convert() (*config.TestsConfig, error) {
 			}
 		}
 	}
+
 	return &t, nil
-}
-
-// convertStats converts stats to internal Stats.
-func (s *stats) convertStats() *config.Stats {
-	if s == nil {
-		return nil
-	}
-
-	return &config.Stats{
-		UnexpectedRest: s.UnexpectedRest,
-		UnexpectedFail: s.UnexpectedFail,
-		UnexpectedSkip: s.UnexpectedSkip,
-		UnexpectedPass: s.UnexpectedPass,
-		ExpectedFail:   s.ExpectedFail,
-		ExpectedSkip:   s.ExpectedSkip,
-		ExpectedPass:   s.ExpectedPass,
-	}
 }
