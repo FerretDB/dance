@@ -234,14 +234,8 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 // fillAndValidate populates the configuration with default values and performs validation.
 func (c *config) fillAndValidate() error {
 	if c.Results.Common == nil {
-		return nil
+		c.Results.Common = &testConfig{}
 	}
-
-	if c.Results.Common.Default == nil {
-		c.Results.Common.Default = new(ic.Status)
-	}
-
-	commonDefault := c.Results.Common.Default
 
 	validStatus := func(status ic.Status) bool {
 		s := ic.Status(strings.ToLower(string(status)))
@@ -250,9 +244,12 @@ func (c *config) fillAndValidate() error {
 		return ok
 	}
 
-	if *commonDefault == "" {
-		*commonDefault = ic.Pass
+	if c.Results.Common.Default == nil {
+		c.Results.Common.Default = new(ic.Status)
+		*c.Results.Common.Default = ic.Pass
 	}
+
+	commonDefault := c.Results.Common.Default
 
 	if !validStatus(*commonDefault) {
 		return fmt.Errorf("invalid default result: %q", *commonDefault)
