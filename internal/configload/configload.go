@@ -79,6 +79,9 @@ func (s *stats) convertStats() *ic.Stats {
 }
 
 // Load loads and validates the configuration from a YAML file.
+// It returns a pointer to the internal configuration struct (*ic.Config).
+// If any error occurs during this process, it returns an error along with an
+// error message indicating the nature of the failure.
 func Load(file string) (*ic.Config, error) {
 	return load(file)
 }
@@ -99,6 +102,7 @@ func load(file string) (*ic.Config, error) {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
+	// Validate and fill the configuration struct.
 	if err = cfg.fillAndValidate(); err != nil {
 		return nil, err
 	}
@@ -109,6 +113,7 @@ func load(file string) (*ic.Config, error) {
 		return nil, err
 	}
 
+	// Merge specific configuration sections.
 	if err := ic.MergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return nil, err
 	}
