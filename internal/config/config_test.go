@@ -183,7 +183,7 @@ func TestMergeTestConfigs(t *testing.T) {
 				},
 			},
 		},
-		// XXX broken because this error is returned in fillAndValidate
+		// XXX fails because this error is now returned in fillAndValidate
 		"MergeTestConfigsDefaultDuplicate": {
 			in: &Results{
 				Common: &TestConfig{
