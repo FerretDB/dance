@@ -277,6 +277,7 @@ func (c *config) fillAndValidate() error {
 
 		// XXX this doesn't work
 		r.Default = *commonDefault
+		origDefault = commonDefault
 	}
 
 	return nil
