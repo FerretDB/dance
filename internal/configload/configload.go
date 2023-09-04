@@ -16,22 +16,24 @@
 package configload
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/FerretDB/dance/internal/config"
+	ic "github.com/FerretDB/dance/internal/config"
 )
 
-// configYAML represents the YAML-based configuration for the testing framework.
+// config represents the YAML-based configuration for the testing framework.
 //
 //nolint:govet // we don't care about alignment there
-type configYAML struct {
-	Runner  config.RunnerType `yaml:"runner"`
-	Dir     string            `yaml:"dir"`
-	Args    []string          `yaml:"args"`
+type config struct {
+	Runner  ic.RunnerType `yaml:"runner"`
+	Dir     string        `yaml:"dir"`
+	Args    []string      `yaml:"args"`
 	Results struct {
 		Common   *testConfig `yaml:"common"`
 		FerretDB *testConfig `yaml:"ferretdb"`
@@ -41,12 +43,12 @@ type configYAML struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default config.Status `yaml:"default"`
-	Stats   *stats        `yaml:"stats"`
-	Pass    []any         `yaml:"pass"`
-	Fail    []any         `yaml:"fail"`
-	Skip    []any         `yaml:"skip"`
-	Ignore  []any         `yaml:"ignore"`
+	Default ic.Status `yaml:"default"`
+	Stats   *stats    `yaml:"stats"`
+	Pass    []any     `yaml:"pass"`
+	Fail    []any     `yaml:"fail"`
+	Skip    []any     `yaml:"skip"`
+	Ignore  []any     `yaml:"ignore"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -61,12 +63,12 @@ type stats struct {
 }
 
 // convertStats converts stats to internal *config.Stats.
-func (s *stats) convertStats() *config.Stats {
+func (s *stats) convertStats() *ic.Stats {
 	if s == nil {
 		return nil
 	}
 
-	return &config.Stats{
+	return &ic.Stats{
 		UnexpectedRest: s.UnexpectedRest,
 		UnexpectedPass: s.UnexpectedPass,
 		UnexpectedFail: s.UnexpectedFail,
@@ -78,11 +80,11 @@ func (s *stats) convertStats() *config.Stats {
 }
 
 // Load loads and validates the configuration from a YAML file.
-func Load(file string) (*config.Config, error) {
+func Load(file string) (*ic.Config, error) {
 	return load(file)
 }
 
-func load(file string) (*config.Config, error) {
+func load(file string) (*ic.Config, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
@@ -93,9 +95,13 @@ func load(file string) (*config.Config, error) {
 	d.KnownFields(true)
 
 	// Parse the YAML file into a configuration struct.
-	var cfg configYAML
+	var cfg config
 	if err = d.Decode(&cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
+	}
+
+	if err = cfg.fillAndValidate(); err != nil {
+		return nil, err
 	}
 
 	// Convert the YAML-based configuration to the internal representation.
@@ -104,7 +110,7 @@ func load(file string) (*config.Config, error) {
 		return nil, err
 	}
 
-	if err = c.FillAndValidate(); err != nil {
+	if err := ic.MergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
 		return nil, err
 	}
 
@@ -112,7 +118,7 @@ func load(file string) (*config.Config, error) {
 }
 
 // convert validates the YAML configuration and converts it to the internal *config.Config.
-func (c *configYAML) convert() (*config.Config, error) {
+func (c *config) convert() (*ic.Config, error) {
 	common, err := c.Results.Common.convert()
 	if err != nil {
 		return nil, err
@@ -128,11 +134,11 @@ func (c *configYAML) convert() (*config.Config, error) {
 		return nil, err
 	}
 
-	return &config.Config{
+	return &ic.Config{
 		Runner: c.Runner,
 		Dir:    c.Dir,
 		Args:   c.Args,
-		Results: config.Results{
+		Results: ic.Results{
 			Common:   common,
 			FerretDB: ferretDB,
 			MongoDB:  mongoDB,
@@ -140,25 +146,25 @@ func (c *configYAML) convert() (*config.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal *TestConfig with validation.
-func (tc *testConfig) convert() (*config.TestConfig, error) {
+// convert converts testConfig to the internal *config.TestConfig with validation.
+func (tc *testConfig) convert() (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
 	}
 
-	t := config.TestConfig{
+	t := ic.TestConfig{
 		Default: tc.Default,
 		Stats:   tc.Stats.convertStats(),
-		Pass:    config.Tests{},
-		Fail:    config.Tests{},
-		Skip:    config.Tests{},
-		Ignore:  config.Tests{},
+		Pass:    ic.Tests{},
+		Fail:    ic.Tests{},
+		Skip:    ic.Tests{},
+		Ignore:  ic.Tests{},
 	}
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
-		yamlTests []any         // taken from the file, yaml representation of tests, incoming tests
-		outTests  *config.Tests // yamlTests transformed to the internal representation
+		yamlTests []any     // taken from the file, yaml representation of tests, incoming tests
+		outTests  *ic.Tests // yamlTests transformed to the internal representation
 	}{
 		{tc.Pass, &t.Pass},
 		{tc.Fail, &t.Fail},
@@ -218,4 +224,35 @@ func (tc *testConfig) convert() (*config.TestConfig, error) {
 	}
 
 	return &t, nil
+}
+
+// fillAndValidate populates the configuration with default values and performs validation.
+func (c *config) fillAndValidate() error {
+	if c.Results.Common.Default == "" {
+		c.Results.Common.Default = ic.Pass
+	}
+
+	for _, r := range []*testConfig{
+		c.Results.FerretDB,
+		c.Results.MongoDB,
+	} {
+		if r == nil {
+			continue
+		}
+
+		if r.Default != "" {
+			return errors.New("default value cannot be set in common, when it's set in database")
+		}
+
+		r.Default = c.Results.Common.Default
+
+		origDefault := r.Default
+		r.Default = ic.Status(strings.ToLower(string(origDefault)))
+
+		if _, ok := ic.KnownStatuses[r.Default]; !ok {
+			return fmt.Errorf("invalid default result: %q", origDefault)
+		}
+	}
+
+	return nil
 }
