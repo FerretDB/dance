@@ -128,13 +128,6 @@ const (
 	Unknown Status = "unknown"
 )
 
-// KnownStatuses is a map that contains known statuses.
-var KnownStatuses = map[Status]struct{}{
-	Pass: {},
-	Fail: {},
-	Skip: {},
-}
-
 // MergeTestConfigs merges the common test configuration into database-specific test configurations.
 func MergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 	for _, t := range testConfig {
