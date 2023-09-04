@@ -59,7 +59,7 @@ func FuzzNextPrefix(f *testing.F) {
 	})
 }
 
-func TestFillAndValidate(t *testing.T) {
+func TestMergeTestConfigs(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
@@ -67,7 +67,7 @@ func TestFillAndValidate(t *testing.T) {
 		expected    *Results
 		expectedErr error
 	}{
-		"FillAndValidateFilled": {
+		"MergeTestConfigsFilled": {
 			in: &Results{
 				Common: &TestConfig{
 					Pass:   Tests{Names: []string{"a", "b"}},
@@ -108,14 +108,14 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidateNotSet": {
+		"MergeTestConfigsNotSet": {
 			in: &Results{
 				Common:   nil,
 				FerretDB: &TestConfig{},
 			},
 			expectedErr: errors.New("all database-specific results must be set (if common results are not set)"),
 		},
-		"FillAndValidateDuplicatesPass": {
+		"MergeTestConfigsDuplicatesPass": {
 			in: &Results{
 				Common: &TestConfig{
 					Pass: Tests{Names: []string{"a"}},
@@ -127,7 +127,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidateDuplicatesSkip": {
+		"MergeTestConfigsDuplicatesSkip": {
 			in: &Results{
 				Common: &TestConfig{
 					Skip: Tests{Names: []string{"a"}},
@@ -139,7 +139,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidateDuplicatesFail": {
+		"MergeTestConfigsDuplicatesFail": {
 			in: &Results{
 				Common: &TestConfig{
 					Fail: Tests{Names: []string{"a"}},
@@ -151,19 +151,19 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("duplicate test or prefix: \"a\""),
 		},
-		"FillAndValidateDuplicatesAll": {
+		"MergeTestConfigsDuplicatesAll": {
 			in: &Results{
 				FerretDB: &TestConfig{
-					Pass:   Tests{Names: []string{"a"}},
-					Skip:   Tests{Names: []string{"a"}},
-					Fail:   Tests{Names: []string{"a"}},
-					Ignore: Tests{Names: []string{"a"}},
+					Pass:   Tests{Names: []string{"x"}},
+					Skip:   Tests{Names: []string{"x"}},
+					Fail:   Tests{Names: []string{"x"}},
+					Ignore: Tests{Names: []string{"x"}},
 				},
 				MongoDB: &TestConfig{},
 			},
-			expectedErr: errors.New("duplicate test or prefix: \"a\""),
+			expectedErr: errors.New("duplicate test or prefix: \"x\""),
 		},
-		"FillAndValidateDefault": {
+		"MergeTestConfigsDefault": {
 			in: &Results{
 				Common: &TestConfig{
 					Default: "pass",
@@ -183,7 +183,8 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidateDefaultDuplicate": {
+		// FIXME error is not returned here
+		"MergeTestConfigsDefaultDuplicate": {
 			in: &Results{
 				Common: &TestConfig{
 					Default: "pass",
@@ -193,7 +194,7 @@ func TestFillAndValidate(t *testing.T) {
 			},
 			expectedErr: errors.New("default value cannot be set in common, when it's set in database"),
 		},
-		"FillAndValidateStats": {
+		"MergeTestConfigsStats": {
 			in: &Results{
 				Common: &TestConfig{
 					Stats: &Stats{1, 2, 3, 4, 5, 6, 7},
@@ -213,7 +214,7 @@ func TestFillAndValidate(t *testing.T) {
 				},
 			},
 		},
-		"FillAndValidateStatsDuplicate": {
+		"MergeTestConfigsStatsDuplicate": {
 			in: &Results{
 				Common: &TestConfig{
 					Stats: &Stats{},
@@ -234,7 +235,7 @@ func TestFillAndValidate(t *testing.T) {
 			var c Config
 			c.Results = *tc.in
 
-			err := c.FillAndValidate()
+			err := MergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB)
 
 			if tc.expectedErr != nil {
 				assert.Equal(t, tc.expectedErr, err)
