@@ -128,14 +128,14 @@ const (
 	Unknown Status = "unknown"
 )
 
-var knownStatuses = map[Status]struct{}{
+var KnownStatuses = map[Status]struct{}{
 	Pass: {},
 	Fail: {},
 	Skip: {},
 }
 
-// mergeTestConfigs merges the common test configuration into database-specific test configurations.
-func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
+// MergeTestConfigs merges the common test configuration into database-specific test configurations.
+func MergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 	for _, t := range testConfig {
 		if t == nil && common == nil {
 			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
@@ -173,14 +173,6 @@ func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 			continue
 		}
 
-		if common.Default != "" && t.Default != "" {
-			return errors.New("default value cannot be set in common, when it's set in database")
-		}
-
-		if common.Default != "" {
-			t.Default = common.Default
-		}
-
 		if common.Stats != nil && t.Stats != nil {
 			return errors.New("stats value cannot be set in common, when it's set in database")
 		}
@@ -190,37 +182,9 @@ func mergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 		}
 	}
 
-	return nil
-}
-
-// FillAndValidate populates the configuration with default values and performs validation.
-func (c *Config) FillAndValidate() error {
-	if err := mergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
-		return err
-	}
-
-	for _, r := range []*TestConfig{
-		c.Results.Common,
-		c.Results.FerretDB,
-		c.Results.MongoDB,
-	} {
-		if r == nil {
-			continue
-		}
-
-		if _, err := r.toMap(); err != nil {
+	for _, t := range testConfig {
+		if _, err := t.toMap(); err != nil {
 			return err
-		}
-
-		origDefault := r.Default
-
-		r.Default = Status(strings.ToLower(string(origDefault)))
-		if r.Default == "" {
-			r.Default = Pass
-		}
-
-		if _, ok := knownStatuses[r.Default]; !ok {
-			return fmt.Errorf("invalid default result: %q", origDefault)
 		}
 	}
 
@@ -457,7 +421,7 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
-// toMap converts TestsConfig to the map of tests.
+// toMap converts TestConfig to the map of tests.
 // The map stores test names as a keys and their status (pass|skip|fail), as their value.
 // It returns an error if there's a test duplicate.
 func (tc *TestConfig) toMap() (map[string]Status, error) {
