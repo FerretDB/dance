@@ -174,12 +174,6 @@ func MergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
 			continue
 		}
 
-		if common.Default != "" && t.Default != "" {
-			return errors.New("default value cannot be set in common, when it's set in database")
-		}
-
-		t.Default = common.Default
-
 		if common.Stats != nil && t.Stats != nil {
 			return errors.New("stats value cannot be set in common, when it's set in database")
 		}

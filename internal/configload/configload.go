@@ -43,12 +43,12 @@ type config struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default ic.Status `yaml:"default"`
-	Stats   *stats    `yaml:"stats"`
-	Pass    []any     `yaml:"pass"`
-	Fail    []any     `yaml:"fail"`
-	Skip    []any     `yaml:"skip"`
-	Ignore  []any     `yaml:"ignore"`
+	Default *ic.Status `yaml:"default"`
+	Stats   *stats     `yaml:"stats"`
+	Pass    []any      `yaml:"pass"`
+	Fail    []any      `yaml:"fail"`
+	Skip    []any      `yaml:"skip"`
+	Ignore  []any      `yaml:"ignore"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -158,7 +158,7 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 	}
 
 	t := ic.TestConfig{
-		Default: tc.Default,
+		Default: *tc.Default,
 		Stats:   tc.Stats.convertStats(),
 		Pass:    ic.Tests{},
 		Fail:    ic.Tests{},
@@ -237,7 +237,11 @@ func (c *config) fillAndValidate() error {
 		return nil
 	}
 
-	commonDefault := &c.Results.Common.Default
+	if c.Results.Common.Default == nil {
+		c.Results.Common.Default = new(ic.Status)
+	}
+
+	commonDefault := c.Results.Common.Default
 
 	validStatus := func(status ic.Status) bool {
 		s := ic.Status(strings.ToLower(string(status)))
@@ -261,23 +265,23 @@ func (c *config) fillAndValidate() error {
 		if r == nil {
 			continue
 		}
-		origDefault := &r.Default
 
-		if *origDefault == "" {
+		// if the default value is not present use the common default and skip validation
+		if r.Default == nil {
+			r.Default = commonDefault
 			continue
 		}
+		origDefault := r.Default
 
-		if !validStatus(r.Default) {
+		if !validStatus(*r.Default) {
 			return fmt.Errorf("invalid default result: %q", *origDefault)
 		}
 
-		if *commonDefault != "" && r.Default != "" {
+		if *commonDefault != "" && *r.Default != "" {
 			return errors.New("default value cannot be set in common, when it's set in database")
 		}
 
-		// XXX this doesn't work
-		r.Default = *commonDefault
-		origDefault = commonDefault
+		r.Default = commonDefault
 	}
 
 	return nil
