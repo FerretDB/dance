@@ -183,7 +183,6 @@ func TestMergeTestConfigs(t *testing.T) {
 				},
 			},
 		},
-		// XXX error is not returned here
 		"MergeTestConfigsDefaultDuplicate": {
 			in: &Results{
 				Common: &TestConfig{
