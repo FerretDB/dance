@@ -80,9 +80,8 @@ func (s *stats) convertStats() *ic.Stats {
 }
 
 // Load loads and validates the configuration from a YAML file.
-// It returns a pointer to the internal configuration struct (*ic.Config).
-// If any error occurs during this process, it returns an error along with an
-// error message indicating the nature of the failure.
+// It returns a pointer to the internal configuration struct *config.Config.
+// It returns an error along with an error message indicating the nature of the failure.
 func Load(file string) (*ic.Config, error) {
 	return load(file)
 }
@@ -233,20 +232,32 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 
 // fillAndValidate populates the configuration with default values and performs validation.
 func (c *config) fillAndValidate() error {
+	// initialize common field if it's nil
 	if c.Results.Common == nil {
 		c.Results.Common = &testConfig{}
 	}
 
+	var knownStatuses = map[ic.Status]struct{}{
+		ic.Pass: {},
+		ic.Fail: {},
+		ic.Skip: {},
+	}
+
 	validStatus := func(status *ic.Status) bool {
 		s := ic.Status(strings.ToLower(string(*status)))
-		_, ok := ic.KnownStatuses[s]
+		_, ok := knownStatuses[s]
 
 		return ok
 	}
 
+	// allows us to set default values outside of common
+	commonWasNil := false
+
+	// initialize default common field if it's nil
 	if c.Results.Common.Default == nil {
 		c.Results.Common.Default = new(ic.Status)
 		*c.Results.Common.Default = ic.Pass
+		commonWasNil = true
 	}
 
 	commonDefault := c.Results.Common.Default
@@ -274,10 +285,16 @@ func (c *config) fillAndValidate() error {
 			return fmt.Errorf("invalid default result: %q", *origDefault)
 		}
 
+		if commonWasNil && *r.Default != "" {
+			continue
+		}
+
+		// this will cause a conflict so return an error
 		if *commonDefault != "" && *r.Default != "" {
 			return errors.New("default value cannot be set in common, when it's set in database")
 		}
 
+		// no default found so set to common default
 		r.Default = commonDefault
 	}
 
