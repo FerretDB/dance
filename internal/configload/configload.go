@@ -79,9 +79,9 @@ func (s *stats) convertStats() *ic.Stats {
 	}
 }
 
-// Load loads and validates the configuration from a YAML file.
-// It returns a pointer to the internal configuration struct *config.Config.
-// It returns an error along with an error message indicating the nature of the failure.
+// Load reads and validates the configuration from a YAML file,
+// returning a pointer to the internal configuration struct *config.Config.
+// Any error encountered during the process is also returned.
 func Load(file string) (*ic.Config, error) {
 	return load(file)
 }
