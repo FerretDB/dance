@@ -16,7 +16,6 @@
 package configload
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -228,9 +227,8 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 
 // fillAndValidate populates the configuration with default values and performs validation.
 func (c *config) fillAndValidate() error {
-	if c.Results.Common.Default == "" {
-		c.Results.Common.Default = ic.Pass
-	}
+	// TODO validate common default
+	commonDefault := &c.Results.Common.Default
 
 	for _, r := range []*testConfig{
 		c.Results.FerretDB,
@@ -239,19 +237,20 @@ func (c *config) fillAndValidate() error {
 		if r == nil {
 			continue
 		}
+		origDefault := r.Default
 
-		if r.Default != "" {
-			return errors.New("default value cannot be set in common, when it's set in database")
+		if origDefault == "" {
+			continue
 		}
 
-		r.Default = c.Results.Common.Default
-
-		origDefault := r.Default
 		r.Default = ic.Status(strings.ToLower(string(origDefault)))
-
 		if _, ok := ic.KnownStatuses[r.Default]; !ok {
 			return fmt.Errorf("invalid default result: %q", origDefault)
 		}
+	}
+
+	if *commonDefault == "" {
+		*commonDefault = ic.Pass
 	}
 
 	return nil
