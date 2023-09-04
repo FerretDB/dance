@@ -237,8 +237,8 @@ func (c *config) fillAndValidate() error {
 		c.Results.Common = &testConfig{}
 	}
 
-	validStatus := func(status ic.Status) bool {
-		s := ic.Status(strings.ToLower(string(status)))
+	validStatus := func(status *ic.Status) bool {
+		s := ic.Status(strings.ToLower(string(*status)))
 		_, ok := ic.KnownStatuses[s]
 
 		return ok
@@ -251,7 +251,7 @@ func (c *config) fillAndValidate() error {
 
 	commonDefault := c.Results.Common.Default
 
-	if !validStatus(*commonDefault) {
+	if !validStatus(commonDefault) {
 		return fmt.Errorf("invalid default result: %q", *commonDefault)
 	}
 
@@ -270,7 +270,7 @@ func (c *config) fillAndValidate() error {
 		}
 		origDefault := r.Default
 
-		if !validStatus(*r.Default) {
+		if !validStatus(r.Default) {
 			return fmt.Errorf("invalid default result: %q", *origDefault)
 		}
 
