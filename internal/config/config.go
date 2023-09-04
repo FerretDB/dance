@@ -128,7 +128,7 @@ const (
 	Unknown Status = "unknown"
 )
 
-// KnownStatuses is a map that contains known status values.
+// KnownStatuses is a map that contains known statuses.
 var KnownStatuses = map[Status]struct{}{
 	Pass: {},
 	Fail: {},
