@@ -183,7 +183,7 @@ func TestMergeTestConfigs(t *testing.T) {
 				},
 			},
 		},
-		// FIXME error is not returned here
+		// XXX error is not returned here
 		"MergeTestConfigsDefaultDuplicate": {
 			in: &Results{
 				Common: &TestConfig{
