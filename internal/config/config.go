@@ -16,7 +16,6 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"sort"
@@ -69,7 +68,7 @@ type Config struct {
 
 // Results stores the expected test results for different databases.
 type Results struct {
-	Common   *TestConfig
+	// Common   *TestConfig
 	FerretDB *TestConfig
 	MongoDB  *TestConfig
 }
@@ -128,63 +127,6 @@ const (
 	Unknown Status = "unknown"
 )
 
-// MergeTestConfigs merges the common test configuration into database-specific test configurations.
-func MergeTestConfigs(common *TestConfig, testConfig ...*TestConfig) error {
-	for _, t := range testConfig {
-		if t == nil && common == nil {
-			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
-		}
-	}
-
-	for _, t := range testConfig {
-		if t == nil || common == nil {
-			continue
-		}
-
-		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
-		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
-		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
-		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
-
-		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
-		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
-		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
-		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
-
-		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
-		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
-		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
-		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
-
-		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
-		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
-		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
-		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
-	}
-
-	for _, t := range testConfig {
-		if t == nil || common == nil {
-			continue
-		}
-
-		if common.Stats != nil && t.Stats != nil {
-			return errors.New("stats value cannot be set in common, when it's set in database")
-		}
-
-		if common.Stats != nil {
-			t.Stats = common.Stats
-		}
-	}
-
-	for _, t := range testConfig {
-		if _, err := t.toMap(); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // ForDB returns the database-specific test configuration based on the provided database name.
 func (r *Results) ForDB(db string) (*TestConfig, error) {
 	switch db {
@@ -198,10 +140,6 @@ func (r *Results) ForDB(db string) (*TestConfig, error) {
 		}
 	default:
 		return nil, fmt.Errorf("unknown database %q", db)
-	}
-
-	if c := r.Common; c != nil {
-		return c, nil
 	}
 
 	return nil, fmt.Errorf("no expected results for %q", db)
@@ -439,4 +377,14 @@ func (tc *TestConfig) toMap() (map[string]Status, error) {
 	}
 
 	return res, nil
+}
+
+// CheckDuplicates checks for duplicate test names or prefixes within a *TestConfig instance.
+// It returns an error if any duplicates are found.
+func (tc *TestConfig) CheckDuplicates() error {
+	if _, err := tc.toMap(); err != nil {
+		return err
+	}
+
+	return nil
 }
