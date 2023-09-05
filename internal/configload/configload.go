@@ -144,7 +144,6 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 	}, nil
 }
 
-// XXX this could be refactored more by breaking it down into smaller functions.
 // convert converts testConfig to the internal *config.TestConfig with validation.
 func (tc *testConfig) convert() (*ic.TestConfig, error) {
 	if tc == nil {
@@ -296,7 +295,7 @@ func (c *config) fillAndValidate() error {
 	return nil
 }
 
-// mergeCommon merges the common test configuration into database-specific test configurations,
+// mergeCommon merges the common test configuration into database-specific test configurations
 // and performs validation.
 func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
 	for _, t := range configs {

@@ -122,7 +122,7 @@ func main() {
 			log.Printf("\tDir changed to %s", dir)
 		}
 
-		expectedConfig, err := cfg.Results.ForDB(*dbF)
+		expectedConfig, err := cfg.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)
 		}

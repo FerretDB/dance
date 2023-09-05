@@ -126,9 +126,13 @@ const (
 	Unknown Status = "unknown"
 )
 
-// ForDB returns the database-specific test configuration based on the provided database name.
-func (r *Results) ForDB(db string) (*TestConfig, error) {
-	switch db {
+// ForDB returns the database-specific test configuration based on the provided dbName.
+func (c *Config) ForDB(dbName string) (*TestConfig, error) {
+	return c.Results.forDB(dbName)
+}
+
+func (r *Results) forDB(dbName string) (*TestConfig, error) {
+	switch dbName {
 	case "ferretdb":
 		if c := r.FerretDB; c != nil {
 			return c, nil
@@ -138,10 +142,10 @@ func (r *Results) ForDB(db string) (*TestConfig, error) {
 			return c, nil
 		}
 	default:
-		return nil, fmt.Errorf("unknown database %q", db)
+		return nil, fmt.Errorf("unknown database %q", dbName)
 	}
 
-	return nil, fmt.Errorf("no expected results for %q", db)
+	return nil, fmt.Errorf("no expected results for %q", dbName)
 }
 
 // IndentedOutput returns the output of a test result with indented lines.
