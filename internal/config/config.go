@@ -68,7 +68,6 @@ type Config struct {
 
 // Results stores the expected test results for different databases.
 type Results struct {
-	// Common   *TestConfig
 	FerretDB *TestConfig
 	MongoDB  *TestConfig
 }
