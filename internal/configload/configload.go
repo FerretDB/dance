@@ -108,21 +108,12 @@ func load(file string) (*ic.Config, error) {
 	}
 
 	// Convert the YAML-based configuration to the internal representation.
-	c, err := cfg.convert()
-	if err != nil {
-		return nil, err
-	}
-
-	// Merge specific configuration sections.
-	if err := ic.MergeTestConfigs(c.Results.Common, c.Results.FerretDB, c.Results.MongoDB); err != nil {
-		return nil, err
-	}
-
-	return c, nil
+	return cfg.convertAndMerge()
 }
 
-// convert validates the YAML configuration and converts it to the internal *config.Config.
-func (c *config) convert() (*ic.Config, error) {
+// convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
+// and merges database-specific configurations.
+func (c *config) convertAndMerge() (*ic.Config, error) {
 	common, err := c.Results.Common.convert()
 	if err != nil {
 		return nil, err
@@ -138,18 +129,22 @@ func (c *config) convert() (*ic.Config, error) {
 		return nil, err
 	}
 
+	if err := mergeCommon(common, ferretDB, mongoDB); err != nil {
+		return nil, err
+	}
+
 	return &ic.Config{
 		Runner: c.Runner,
 		Dir:    c.Dir,
 		Args:   c.Args,
 		Results: ic.Results{
-			Common:   common,
 			FerretDB: ferretDB,
 			MongoDB:  mongoDB,
 		},
 	}, nil
 }
 
+// XXX this could be refactored more by breaking it down into smaller functions.
 // convert converts testConfig to the internal *config.TestConfig with validation.
 func (tc *testConfig) convert() (*ic.TestConfig, error) {
 	if tc == nil {
@@ -296,6 +291,64 @@ func (c *config) fillAndValidate() error {
 
 		// no default found so set to common default
 		r.Default = commonDefault
+	}
+
+	return nil
+}
+
+// mergeCommon merges the common test configuration into database-specific test configurations,
+// and performs validation.
+func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
+	for _, t := range configs {
+		if t == nil && common == nil {
+			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
+		}
+	}
+
+	for _, t := range configs {
+		if t == nil || common == nil {
+			continue
+		}
+
+		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
+		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
+		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
+		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
+
+		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
+		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
+		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
+		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
+
+		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
+		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
+		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
+		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
+
+		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
+		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
+		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
+		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
+	}
+
+	for _, t := range configs {
+		if t == nil || common == nil {
+			continue
+		}
+
+		if common.Stats != nil && t.Stats != nil {
+			return errors.New("stats value cannot be set in common, when it's set in database")
+		}
+
+		if common.Stats != nil {
+			t.Stats = common.Stats
+		}
+	}
+
+	for _, t := range configs {
+		if err := t.CheckDuplicates(); err != nil {
+			return err
+		}
 	}
 
 	return nil
