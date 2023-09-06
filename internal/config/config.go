@@ -154,7 +154,7 @@ func (tr *TestResult) IndentedOutput() string {
 	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
 }
 
-// Compare compares two TestResults structs and returns a CompareResult containing the differences.
+// Compare compares two *TestResults and returns a *CompareResult containing the differences.
 func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
 		ExpectedSkip:   make(map[string]string),
@@ -354,8 +354,8 @@ func nextPrefix(path string) string {
 	return path[:i+1]
 }
 
-// toMap converts TestConfig to the map of tests.
-// The map stores test names as a keys and their status (pass|skip|fail), as their value.
+// toMap converts *TestConfig to the map of tests.
+// The map stores test names as a keys and their status (fail|skip|pass), as their value.
 func (tc *TestConfig) toMap() map[string]Status {
 	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
