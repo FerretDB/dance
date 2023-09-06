@@ -45,21 +45,21 @@ type config struct {
 type testConfig struct {
 	Default *ic.Status `yaml:"default"`
 	Stats   *stats     `yaml:"stats"`
-	Pass    []any      `yaml:"pass"`
 	Fail    []any      `yaml:"fail"`
 	Skip    []any      `yaml:"skip"`
+	Pass    []any      `yaml:"pass"`
 	Ignore  []any      `yaml:"ignore"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
 type stats struct {
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
 	UnexpectedFail int `yaml:"unexpected_fail"`
 	UnexpectedSkip int `yaml:"unexpected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
+	UnexpectedPass int `yaml:"unexpected_pass"`
+	UnexpectedRest int `yaml:"unexpected_rest"`
 	ExpectedFail   int `yaml:"expected_fail"`
 	ExpectedSkip   int `yaml:"expected_skip"`
+	ExpectedPass   int `yaml:"expected_pass"`
 }
 
 // convertStats converts stats to internal *config.Stats.
@@ -69,13 +69,13 @@ func (s *stats) convertStats() *ic.Stats {
 	}
 
 	return &ic.Stats{
-		UnexpectedRest: s.UnexpectedRest,
-		UnexpectedPass: s.UnexpectedPass,
 		UnexpectedFail: s.UnexpectedFail,
 		UnexpectedSkip: s.UnexpectedSkip,
-		ExpectedPass:   s.ExpectedPass,
+		UnexpectedPass: s.UnexpectedPass,
+		UnexpectedRest: s.UnexpectedRest,
 		ExpectedFail:   s.ExpectedFail,
 		ExpectedSkip:   s.ExpectedSkip,
+		ExpectedPass:   s.ExpectedPass,
 	}
 }
 
@@ -153,9 +153,9 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 	t := ic.TestConfig{
 		Default: *tc.Default,
 		Stats:   tc.Stats.convertStats(),
-		Pass:    ic.Tests{},
 		Fail:    ic.Tests{},
 		Skip:    ic.Tests{},
+		Pass:    ic.Tests{},
 		Ignore:  ic.Tests{},
 	}
 
@@ -164,9 +164,9 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 		yamlTests []any     // taken from the file, yaml representation of tests, incoming tests
 		outTests  *ic.Tests // yamlTests transformed to the internal representation
 	}{
-		{tc.Pass, &t.Pass},
 		{tc.Fail, &t.Fail},
 		{tc.Skip, &t.Skip},
+		{tc.Pass, &t.Pass},
 		{tc.Ignore, &t.Ignore},
 	} {
 		for _, test := range testCategory.yamlTests {
@@ -232,9 +232,9 @@ func (c *config) fillAndValidate() error {
 	}
 
 	var knownStatuses = map[ic.Status]struct{}{
-		ic.Pass: {},
 		ic.Fail: {},
 		ic.Skip: {},
+		ic.Pass: {},
 	}
 
 	validStatus := func(status *ic.Status) bool {
@@ -309,24 +309,24 @@ func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
 			continue
 		}
 
-		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
 		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
 		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
+		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
 		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
 
-		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
 		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
 		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
+		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
 		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
 
-		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
 		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
 		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
+		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
 		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
 
-		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
 		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
 		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
+		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
 		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
 	}
 
