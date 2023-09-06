@@ -166,10 +166,7 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
-	tcMap, err := tc.toMap()
-	if err != nil {
-		return nil, err
-	}
+	tcMap := tc.toMap()
 
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
@@ -360,7 +357,7 @@ func nextPrefix(path string) string {
 // toMap converts TestConfig to the map of tests.
 // The map stores test names as a keys and their status (pass|skip|fail), as their value.
 // It returns an error if there's a test duplicate.
-func (tc *TestConfig) toMap() (map[string]Status, error) {
+func (tc *TestConfig) toMap() map[string]Status {
 	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
 	for _, tcat := range []struct {
@@ -373,12 +370,9 @@ func (tc *TestConfig) toMap() (map[string]Status, error) {
 		{Ignore, tc.Ignore},
 	} {
 		for _, t := range tcat.tests.Names {
-			if _, ok := res[t]; ok {
-				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-			}
 			res[t] = tcat.testsStatus
 		}
 	}
 
-	return res, nil
+	return res
 }
