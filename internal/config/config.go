@@ -95,7 +95,7 @@ type TestResults struct {
 	TestResults map[string]TestResult
 }
 
-// Tests holds information about tests of a specific status (pass, skip, fail).
+// Tests holds information about tests of a specific status (fail, skip, pass).
 type Tests struct {
 	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
