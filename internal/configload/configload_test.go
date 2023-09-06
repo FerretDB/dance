@@ -15,6 +15,7 @@
 package configload
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -50,6 +51,18 @@ func TestMergeCommon(t *testing.T) {
 				Pass: ic.Tests{Names: []string{"i"}},
 			},
 			expectedErr: nil,
+		},
+		"AllStats": {
+			common: &ic.TestConfig{
+				Stats: &ic.Stats{},
+			},
+			config1: &ic.TestConfig{
+				Stats: &ic.Stats{},
+			},
+			config2: &ic.TestConfig{
+				Stats: &ic.Stats{},
+			},
+			expectedErr: errors.New("stats value cannot be set in common, when it's set in database"),
 		},
 	} {
 		name, tc := name, tc
