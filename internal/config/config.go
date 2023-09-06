@@ -382,13 +382,3 @@ func (tc *TestConfig) toMap() (map[string]Status, error) {
 
 	return res, nil
 }
-
-// CheckDuplicates checks for duplicate test names or prefixes within a *TestConfig instance.
-// It returns an error if any duplicates are found.
-func (tc *TestConfig) CheckDuplicates() error {
-	if _, err := tc.toMap(); err != nil {
-		return err
-	}
-
-	return nil
-}

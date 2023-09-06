@@ -344,8 +344,30 @@ func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
 		}
 	}
 
+	checkDuplicates := func(tc *ic.TestConfig) error {
+		seen := make(map[string]struct{})
+
+		for _, tcat := range []struct {
+			tests ic.Tests
+		}{
+			{tc.Fail},
+			{tc.Skip},
+			{tc.Pass},
+			{tc.Ignore},
+		} {
+			for _, t := range tcat.tests.Names {
+				if _, ok := seen[t]; ok {
+					return fmt.Errorf("duplicate test or prefix: %q", t)
+				}
+				seen[t] = struct{}{}
+			}
+		}
+
+		return nil
+	}
+
 	for _, t := range configs {
-		if err := t.CheckDuplicates(); err != nil {
+		if err := checkDuplicates(t); err != nil {
 			return err
 		}
 	}
