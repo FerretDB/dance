@@ -31,14 +31,12 @@ func TestMergeCommon(t *testing.T) {
 		common      *ic.TestConfig
 		config1     *ic.TestConfig
 		config2     *ic.TestConfig
-		expected    []*ic.TestConfig
 		expectedErr error
 	}{
 		"AllNil": {
 			common:      nil,
 			config1:     nil,
 			config2:     nil,
-			expected:    nil,
 			expectedErr: fmt.Errorf("all database-specific results must be set (if common results are not set)"),
 		},
 		"AllPass": {
@@ -50,14 +48,6 @@ func TestMergeCommon(t *testing.T) {
 			},
 			config2: &ic.TestConfig{
 				Pass: ic.Tests{Names: []string{"i"}},
-			},
-			expected: []*ic.TestConfig{
-				{
-					Pass: ic.Tests{Names: []string{"e", "a"}},
-				},
-				{
-					Pass: ic.Tests{Names: []string{"i", "a"}},
-				},
 			},
 			expectedErr: nil,
 		},
@@ -75,15 +65,13 @@ func TestMergeCommon(t *testing.T) {
 			assert.NoError(t, err)
 
 			for _, tests := range []struct {
-				expected []*ic.TestConfig
-				actual   ic.Tests
+				actual ic.Tests
 			}{
-				{tc.expected, tc.common.Pass},
+				{tc.config1.Pass},
+				{tc.config2.Pass},
 			} {
-				for _, item := range tests.expected {
-					for _, name := range tc.common.Pass.Names {
-						assert.Contains(t, item.Pass.Names, name)
-					}
+				for _, name := range tc.common.Pass.Names {
+					assert.Contains(t, tests.actual.Names, name)
 				}
 			}
 		})
