@@ -52,6 +52,18 @@ func TestMergeCommon(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
+		"DuplicatesPass": {
+			common: &ic.TestConfig{
+				Pass: ic.Tests{Names: []string{"a"}},
+			},
+			config1: &ic.TestConfig{
+				Pass: ic.Tests{Names: []string{"e", "a"}},
+			},
+			config2: &ic.TestConfig{
+				Pass: ic.Tests{Names: []string{"i"}},
+			},
+			expectedErr: fmt.Errorf("duplicate test or prefix: \"a\""),
+		},
 		"FailOutputRegexPattern": {
 			common: &ic.TestConfig{
 				Fail: ic.Tests{OutputRegexPattern: []string{"skipping due to environmental constraints.*"}},
