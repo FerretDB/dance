@@ -52,6 +52,18 @@ func TestMergeCommon(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
+		"FailOutputRegexPattern": {
+			common: &ic.TestConfig{
+				Fail: ic.Tests{OutputRegexPattern: []string{"skipping due to environmental constraints.*"}},
+			},
+			config1: &ic.TestConfig{
+				Fail: ic.Tests{OutputRegexPattern: []string{"a"}},
+			},
+			config2: &ic.TestConfig{
+				Fail: ic.Tests{OutputRegexPattern: []string{"b"}},
+			},
+			expectedErr: nil,
+		},
 		"AllStats": {
 			common: &ic.TestConfig{
 				Stats: &ic.Stats{},
@@ -85,6 +97,35 @@ func TestMergeCommon(t *testing.T) {
 			} {
 				for _, name := range tc.common.Pass.Names {
 					assert.Contains(t, tests.actual.Names, name)
+				}
+				for _, name := range tc.common.Pass.NameRegexPattern {
+					assert.Contains(t, tests.actual.NameRegexPattern, name)
+				}
+				for _, name := range tc.common.Pass.NameNotRegexPattern {
+					assert.Contains(t, tests.actual.NameNotRegexPattern, name)
+				}
+				for _, name := range tc.common.Pass.OutputRegexPattern {
+					assert.Contains(t, tests.actual.OutputRegexPattern, name)
+				}
+			}
+
+			for _, tests := range []struct {
+				actual ic.Tests
+			}{
+				{tc.config1.Fail},
+				{tc.config2.Fail},
+			} {
+				for _, name := range tc.common.Fail.Names {
+					assert.Contains(t, tests.actual.Names, name)
+				}
+				for _, name := range tc.common.Fail.NameRegexPattern {
+					assert.Contains(t, tests.actual.NameRegexPattern, name)
+				}
+				for _, name := range tc.common.Fail.NameNotRegexPattern {
+					assert.Contains(t, tests.actual.NameNotRegexPattern, name)
+				}
+				for _, name := range tc.common.Fail.OutputRegexPattern {
+					assert.Contains(t, tests.actual.OutputRegexPattern, name)
 				}
 			}
 		})
