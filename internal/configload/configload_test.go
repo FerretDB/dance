@@ -27,7 +27,6 @@ import (
 func TestMergeCommon(t *testing.T) {
 	t.Parallel()
 
-	//nolint:govet // we don't care about alignment there
 	for name, tc := range map[string]struct {
 		common      *ic.TestConfig
 		config1     *ic.TestConfig
