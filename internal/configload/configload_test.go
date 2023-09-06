@@ -50,7 +50,6 @@ func TestMergeCommon(t *testing.T) {
 			config2: &ic.TestConfig{
 				Pass: ic.Tests{Names: []string{"i"}},
 			},
-			expectedErr: nil,
 		},
 		"DuplicatesPass": {
 			common: &ic.TestConfig{
@@ -74,7 +73,6 @@ func TestMergeCommon(t *testing.T) {
 			config2: &ic.TestConfig{
 				Fail: ic.Tests{OutputRegexPattern: []string{"b"}},
 			},
-			expectedErr: nil,
 		},
 		"AllStats": {
 			common: &ic.TestConfig{
@@ -87,6 +85,15 @@ func TestMergeCommon(t *testing.T) {
 				Stats: &ic.Stats{},
 			},
 			expectedErr: errors.New("stats value cannot be set in common, when it's set in database"),
+		},
+		"ExpectedPassStats": {
+			common: &ic.TestConfig{
+				Stats: &ic.Stats{
+					ExpectedPass: 1,
+				},
+			},
+			config1: &ic.TestConfig{},
+			config2: &ic.TestConfig{},
 		},
 	} {
 		name, tc := name, tc
@@ -138,6 +145,17 @@ func TestMergeCommon(t *testing.T) {
 				}
 				for _, name := range tc.common.Fail.OutputRegexPattern {
 					assert.Contains(t, tests.actual.OutputRegexPattern, name)
+				}
+			}
+
+			if tc.common.Stats != nil {
+				for _, tests := range []struct {
+					actual ic.Stats
+				}{
+					{*tc.config1.Stats},
+					{*tc.config2.Stats},
+				} {
+					assert.Equal(t, tests.actual.ExpectedPass, tc.common.Stats.ExpectedPass)
 				}
 			}
 		})
