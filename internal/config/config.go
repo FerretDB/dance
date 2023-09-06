@@ -356,7 +356,6 @@ func nextPrefix(path string) string {
 
 // toMap converts TestConfig to the map of tests.
 // The map stores test names as a keys and their status (pass|skip|fail), as their value.
-// It returns an error if there's a test duplicate.
 func (tc *TestConfig) toMap() map[string]Status {
 	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
