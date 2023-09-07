@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ycsb provides utilities to run YCSB (Yahoo! Cloud Serving Benchmark) workloads.
+// Package ycsb contains `ycsb` runner.
 package ycsb
 
 import (

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package command runs generic test commands.
+// Package command contains generic test runner.
 package command
 
 import (
@@ -25,8 +25,9 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// Run executes a generic test command with arguments in a specified directory.
-// It captures the combined output and determines the test result based on the exit code.
+// Run runs generic test.
+// It runs a command with arguments in a directory and returns the combined output as is.
+// If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir

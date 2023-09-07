@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package jstest provides utilities to run JavaScript tests using the `mongo` shell.
+// Package jstest contains `mongo` runner.
 package jstest
 
 import (
