@@ -8,7 +8,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	go.mongodb.org/mongo-driver v1.12.1
 	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
-	golang.org/x/sys v0.11.0
+	golang.org/x/sys v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
