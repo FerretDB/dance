@@ -21,6 +21,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/AlekSi/pointer"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -249,8 +250,7 @@ func (c *config) fillAndValidate() error {
 
 	// initialize default common field if it's nil
 	if c.Results.Common.Default == nil {
-		c.Results.Common.Default = new(ic.Status)
-		*c.Results.Common.Default = ic.Pass
+		c.Results.Common.Default = pointer.To(ic.Pass)
 		commonWasNil = true
 	}
 
