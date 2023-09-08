@@ -231,7 +231,7 @@ func (c *config) fillAndValidate() error {
 		c.Results.Common = &testConfig{}
 	}
 
-	var knownStatuses = map[ic.Status]struct{}{
+	knownStatuses := map[ic.Status]struct{}{
 		ic.Fail: {},
 		ic.Skip: {},
 		ic.Pass: {},
