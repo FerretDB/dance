@@ -20,12 +20,14 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/pmezard/go-difflib/difflib"
+	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -200,6 +202,22 @@ func main() {
 		}
 		if diff != "" {
 			log.Fatalf("\nUnexpected stats:\n%s", diff)
+		}
+
+		totalRun := compareRes.Stats.ExpectedFail + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
+		msg := fmt.Sprintf(
+			"%.2f%% (%d/%d) tests passed.",
+			float64(compareRes.Stats.ExpectedPass)/float64(totalRun)*100,
+			compareRes.Stats.ExpectedPass,
+			totalRun,
+		)
+		log.Print(msg)
+
+		// Make percentage more visible on GitHub Actions.
+		// https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+		if os.Getenv("GITHUB_ACTIONS") == "true" {
+			action := githubactions.New()
+			action.Noticef("%s", msg)
 		}
 	}
 }
