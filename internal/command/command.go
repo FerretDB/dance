@@ -22,13 +22,13 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // Run runs generic test.
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
-func Run(ctx context.Context, dir string, args []string) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
@@ -36,17 +36,17 @@ func Run(ctx context.Context, dir string, args []string) (*internal.TestResults,
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	res := &internal.TestResults{
-		TestResults: map[string]internal.TestResult{
+	res := &config.TestResults{
+		TestResults: map[string]config.TestResult{
 			dir: {
-				Status: internal.Pass,
+				Status: config.Pass,
 			},
 		},
 	}
 
 	if err := cmd.Run(); err != nil {
-		res.TestResults[dir] = internal.TestResult{
-			Status: internal.Fail,
+		res.TestResults[dir] = config.TestResult{
+			Status: config.Fail,
 			Output: err.Error(),
 		}
 	}
