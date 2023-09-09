@@ -29,8 +29,9 @@ import (
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/FerretDB/dance/internal"
 	"github.com/FerretDB/dance/internal/command"
+	"github.com/FerretDB/dance/internal/config"
+	"github.com/FerretDB/dance/internal/configload"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
 	"github.com/FerretDB/dance/internal/ycsb"
@@ -111,33 +112,34 @@ func main() {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)
 
-		config, err := internal.LoadConfig(match)
+		cfg, err := configload.Load(match)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if config.Dir != "" {
-			dir = config.Dir
+		if cfg.Dir != "" {
+			dir = cfg.Dir
 			log.Printf("\tDir changed to %s", dir)
 		}
 
-		expectedConfig, err := config.Results.ForDB(*dbF)
+		expectedConfig, err := cfg.ForDB(*dbF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		var runRes *internal.TestResults
-		switch config.Runner {
-		case internal.RunnerTypeCommand:
-			runRes, err = command.Run(ctx, dir, config.Args)
-		case internal.RunnerTypeGoTest:
-			runRes, err = gotest.Run(ctx, dir, config.Args, *vF, *pF)
-		case internal.RunnerTypeJSTest:
-			runRes, err = jstest.Run(ctx, dir, config.Args, *pF)
-		case internal.RunnerTypeYCSB:
-			runRes, err = ycsb.Run(ctx, dir, config.Args)
+		var runRes *config.TestResults
+
+		switch cfg.Runner {
+		case config.RunnerTypeCommand:
+			runRes, err = command.Run(ctx, dir, cfg.Args)
+		case config.RunnerTypeGoTest:
+			runRes, err = gotest.Run(ctx, dir, cfg.Args, *vF, *pF)
+		case config.RunnerTypeJSTest:
+			runRes, err = jstest.Run(ctx, dir, cfg.Args, *pF)
+		case config.RunnerTypeYCSB:
+			runRes, err = ycsb.Run(ctx, dir, cfg.Args)
 		default:
-			log.Fatalf("unknown runner: %q", config.Runner)
+			log.Fatalf("unknown runner: %q", cfg.Runner)
 		}
 
 		if err != nil {

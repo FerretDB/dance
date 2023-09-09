@@ -26,14 +26,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/FerretDB/dance/internal"
+	"github.com/FerretDB/dance/internal/config"
 )
 
 // Run runs `go test`.
 // Args contain additional arguments to `go test`.
 // `-v -json -count=1` are always added.
 // `-race` is added if possible.
-func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*internal.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*config.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,8 +73,8 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 	d := json.NewDecoder(r)
 	d.DisallowUnknownFields()
 
-	res := &internal.TestResults{
-		TestResults: make(map[string]internal.TestResult),
+	res := &config.TestResults{
+		TestResults: make(map[string]config.TestResult),
 	}
 
 	for {
@@ -96,15 +96,15 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 		result.Output += event.Output
 		switch event.Action {
 		case actionPass:
-			result.Status = internal.Pass
+			result.Status = config.Pass
 		case actionFail:
-			result.Status = internal.Fail
+			result.Status = config.Fail
 		case actionSkip:
-			result.Status = internal.Skip
+			result.Status = config.Skip
 		case actionBench, actionCont, actionOutput, actionPause, actionRun:
 			fallthrough
 		default:
-			result.Status = internal.Unknown
+			result.Status = config.Unknown
 		}
 		res.TestResults[testName] = result
 	}

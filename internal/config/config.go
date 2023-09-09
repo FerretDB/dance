@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package internal
+// Package config provides functionality for handling and validating configuration data for test execution.
+package config
 
 import (
 	"fmt"
@@ -23,23 +24,78 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-// TestsConfig represents a part of the dance configuration for tests.
-// (i.e. ferretdb/mongodb/common tests).
+const (
+	// RunnerTypeCommand indicates a command-line test runner.
+	RunnerTypeCommand RunnerType = "command"
+
+	// RunnerTypeGoTest indicates a Go test runner.
+	RunnerTypeGoTest RunnerType = "gotest"
+
+	// RunnerTypeJSTest indicates a JavaScript test runner.
+	RunnerTypeJSTest RunnerType = "jstest"
+
+	// RunnerTypeYCSB indicates a YCSB test runner.
+	RunnerTypeYCSB RunnerType = "ycsb"
+)
+
+// RunnerType represents the type of test runner used in the configuration.
+type RunnerType string
+
+// Stats represent the expected/actual amount of
+// failed, skipped and passed tests.
+// The ordering is significant and ordering improves readability, so please maintain it.
 //
-// It's used to store information about expected test results for a
-// specific database.
+//nolint:musttag // we don't care about annotations there
+type Stats struct {
+	UnexpectedFail int
+	UnexpectedSkip int
+	UnexpectedPass int
+	UnexpectedRest int
+	ExpectedFail   int
+	ExpectedSkip   int
+	ExpectedPass   int
+}
+
+// Config represents the configuration settings for the test execution.
 //
-// May contain prefixes; the longest prefix wins.
-type TestsConfig struct {
-	Default status
+//nolint:govet // we don't care about alignment there
+type Config struct {
+	Runner RunnerType
+	Dir    string
+	// Args contains additional arguments for the test runner.
+	Args    []string
+	Results Results
+}
+
+// Results stores the expected test results for different databases.
+type Results struct {
+	FerretDB *TestConfig
+	MongoDB  *TestConfig
+}
+
+// TestConfig represents the configuration for tests categorized by status and regular expressions.
+type TestConfig struct {
+	Default Status
 	Stats   *Stats
-	Pass    Tests
-	Skip    Tests
 	Fail    Tests
+	Skip    Tests
+	Pass    Tests
 	Ignore  Tests
 }
 
-// Tests are the tests from yaml category pass / fail / skip.
+// TestResult represents the outcome of a single test.
+type TestResult struct {
+	Status Status
+	Output string
+}
+
+// TestResults represents the collection of results from multiple tests.
+type TestResults struct {
+	// Test results by full test name.
+	TestResults map[string]TestResult
+}
+
+// Tests holds information about tests of a specific status (fail, skip, pass).
 type Tests struct {
 	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
@@ -47,32 +103,70 @@ type Tests struct {
 	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
 }
 
+// CompareResult encapsulates the comparison between expected and actual test outcomes.
 type CompareResult struct {
-	ExpectedPass   map[string]string
-	ExpectedSkip   map[string]string
 	ExpectedFail   map[string]string
-	UnexpectedPass map[string]string
-	UnexpectedSkip map[string]string
+	ExpectedSkip   map[string]string
+	ExpectedPass   map[string]string
 	UnexpectedFail map[string]string
+	UnexpectedSkip map[string]string
+	UnexpectedPass map[string]string
 	UnexpectedRest map[string]TestResult
 	Stats          Stats
 }
 
-func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
+// Status represents the status of a single test.
+type Status string
+
+// Constants representing different test statuses.
+const (
+	Fail    Status = "fail"
+	Skip    Status = "skip"
+	Pass    Status = "pass"
+	Ignore  Status = "ignore"
+	Unknown Status = "unknown"
+)
+
+// ForDB returns the database-specific test configuration based on the provided dbName.
+func (c *Config) ForDB(dbName string) (*TestConfig, error) {
+	return c.Results.forDB(dbName)
+}
+
+func (r *Results) forDB(dbName string) (*TestConfig, error) {
+	switch dbName {
+	case "ferretdb":
+		if c := r.FerretDB; c != nil {
+			return c, nil
+		}
+	case "mongodb":
+		if c := r.MongoDB; c != nil {
+			return c, nil
+		}
+	default:
+		return nil, fmt.Errorf("unknown database %q", dbName)
+	}
+
+	return nil, fmt.Errorf("no expected results for %q", dbName)
+}
+
+// IndentedOutput returns the output of a test result with indented lines.
+func (tr *TestResult) IndentedOutput() string {
+	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
+}
+
+// Compare compares two *TestResults and returns a *CompareResult containing the differences.
+func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
-		ExpectedPass:   make(map[string]string),
 		ExpectedSkip:   make(map[string]string),
 		ExpectedFail:   make(map[string]string),
-		UnexpectedPass: make(map[string]string),
+		ExpectedPass:   make(map[string]string),
 		UnexpectedSkip: make(map[string]string),
 		UnexpectedFail: make(map[string]string),
+		UnexpectedPass: make(map[string]string),
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
-	tcMap, err := tc.toMap()
-	if err != nil {
-		return nil, err
-	}
+	tcMap := tc.toMap()
 
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
@@ -95,16 +189,14 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 		testResOutput := testRes.IndentedOutput()
 
 		switch expectedRes {
-		case Ignore:
-			continue
-		case Pass:
+		case Fail:
 			switch testRes.Status {
+			case Fail:
+				compareResult.ExpectedFail[test] = testResOutput
 			case Pass:
-				compareResult.ExpectedPass[test] = testResOutput
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Skip:
 				compareResult.UnexpectedSkip[test] = testResOutput
-			case Fail:
-				compareResult.UnexpectedFail[test] = testResOutput
 			case Ignore:
 				fallthrough
 			case Unknown:
@@ -114,27 +206,12 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 			}
 		case Skip:
 			switch testRes.Status {
-			case Pass:
-				compareResult.UnexpectedPass[test] = testResOutput
-			case Skip:
-				compareResult.ExpectedSkip[test] = testResOutput
 			case Fail:
 				compareResult.UnexpectedFail[test] = testResOutput
-			case Ignore:
-				fallthrough
-			case Unknown:
-				fallthrough
-			default:
-				compareResult.UnexpectedRest[test] = testRes
-			}
-		case Fail:
-			switch testRes.Status {
+			case Skip:
+				compareResult.ExpectedSkip[test] = testResOutput
 			case Pass:
 				compareResult.UnexpectedPass[test] = testResOutput
-			case Skip:
-				compareResult.UnexpectedSkip[test] = testResOutput
-			case Fail:
-				compareResult.ExpectedFail[test] = testResOutput
 			case Ignore:
 				fallthrough
 			case Unknown:
@@ -142,6 +219,23 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 			default:
 				compareResult.UnexpectedRest[test] = testRes
 			}
+		case Pass:
+			switch testRes.Status {
+			case Fail:
+				compareResult.UnexpectedFail[test] = testResOutput
+			case Skip:
+				compareResult.UnexpectedSkip[test] = testResOutput
+			case Pass:
+				compareResult.ExpectedPass[test] = testResOutput
+			case Ignore:
+				fallthrough
+			case Unknown:
+				fallthrough
+			default:
+				compareResult.UnexpectedRest[test] = testRes
+			}
+		case Ignore:
+			continue
 		case Unknown:
 			fallthrough
 		default:
@@ -150,16 +244,16 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 	}
 
 	compareResult.Stats = Stats{
-		UnexpectedRest: len(compareResult.UnexpectedRest),
 		UnexpectedFail: len(compareResult.UnexpectedFail),
 		UnexpectedSkip: len(compareResult.UnexpectedSkip),
 		UnexpectedPass: len(compareResult.UnexpectedPass),
+		UnexpectedRest: len(compareResult.UnexpectedRest),
 		ExpectedFail:   len(compareResult.ExpectedFail),
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
 	}
 	// special case: zero in expected_pass means "don't check"
-	if tc.Stats.ExpectedPass == 0 {
+	if tc.Stats != nil && tc.Stats.ExpectedPass == 0 {
 		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
 	}
 
@@ -169,17 +263,17 @@ func (tc *TestsConfig) Compare(results *TestResults) (*CompareResult, error) {
 // getExpectedStatusRegex compiles result output with expected outputs and return expected status.
 // If no output matches expected - returns nil.
 // If both of the regexps match, it panics.
-func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResult) *status {
+func (tc *TestConfig) getExpectedStatusRegex(testName string, result *TestResult) *Status {
 	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
-	var matchedStatus status // matched status by regex
+	var matchedStatus Status // matched status by regex
 
 	for _, expectedRes := range []struct {
-		expectedStatus status
+		expectedStatus Status
 		tests          Tests
 	}{
+		{Fail, tc.Fail},
 		{Pass, tc.Pass},
 		{Skip, tc.Skip},
-		{Fail, tc.Fail},
 	} {
 		for _, reg := range expectedRes.tests.NameRegexPattern {
 			r := regexp.MustCompile(reg)
@@ -187,6 +281,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(testName) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one name regex: %s, %s",
@@ -203,6 +298,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if r.MatchString(testName) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one name not-regex: %s, %s",
@@ -219,6 +315,7 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			if !r.MatchString(result.Output) {
 				continue
 			}
+
 			if matchedRegex != "" {
 				panic(fmt.Sprintf(
 					"test %s\n(output: %s)\nmatches more than one output regex: %s, %s",
@@ -229,9 +326,11 @@ func (tc *TestsConfig) getExpectedStatusRegex(testName string, result *TestResul
 			matchedRegex = reg
 		}
 	}
+
 	if matchedStatus == "" {
 		return nil
 	}
+
 	return &matchedStatus
 }
 
@@ -251,31 +350,28 @@ func nextPrefix(path string) string {
 	}
 
 	i := strings.LastIndexAny(path, "/.")
+
 	return path[:i+1]
 }
 
-// toMap converts TestsConfig to the map of tests.
-// The map stores test names as a keys and their status (pass|skip|fail), as their value.
-// It returns an error if there's a test duplicate.
-func (tc *TestsConfig) toMap() (map[string]status, error) {
-	res := make(map[string]status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
+// toMap converts *TestConfig to the map of tests.
+// The map stores test names as a keys and their status (fail|skip|pass), as their value.
+func (tc *TestConfig) toMap() map[string]Status {
+	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
 
 	for _, tcat := range []struct {
-		testsStatus status
+		testsStatus Status
 		tests       Tests
 	}{
-		{Pass, tc.Pass},
-		{Skip, tc.Skip},
 		{Fail, tc.Fail},
+		{Skip, tc.Skip},
+		{Pass, tc.Pass},
 		{Ignore, tc.Ignore},
 	} {
 		for _, t := range tcat.tests.Names {
-			if _, ok := res[t]; ok {
-				return nil, fmt.Errorf("duplicate test or prefix: %q", t)
-			}
 			res[t] = tcat.testsStatus
 		}
 	}
 
-	return res, nil
+	return res
 }
