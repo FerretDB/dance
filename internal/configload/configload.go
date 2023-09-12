@@ -222,6 +222,9 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 			case string:
 				testCategory.outTests.Names = append(testCategory.outTests.Names, test)
 				continue
+			case []any:
+				// TODO flatten the nested list
+				continue
 
 			default:
 				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", test)

@@ -46,17 +46,13 @@ args:
   - mongo/jstests/core/write/update/update[2-9].js
   - mongo/jstests/core/write/update/update[a-z].js
 
-  # NOTE: Anchors must be defined before they can be referenced.
-  # When defining an anchor, it's best to use a mapping that contains
-  # the most common items in both sets, typically the intersection.
-  # This is because YAML anchors work additively.
-
 results:
   sqlite:
     stats: &stats
       expected_fail: 61
       expected_pass: 40
-    fail:
+    fail: 
+    - &fail
      # --- aggregation tests ---
       - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
       - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
@@ -149,9 +145,10 @@ results:
   ferretdb:
     stats:
       <<: *stats
-      expected_fail: 62
-      expected_pass: 39
-    fail:
+      expected_fail: 69
+      expected_pass: 31
+    fail: 
+      - *fail # is a slice
       - mongo/jstests/core/write/update/updatej.js
   mongodb:
     stats:
