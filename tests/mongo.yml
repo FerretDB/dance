@@ -48,11 +48,11 @@ args:
 
 results:
   ferretdb:
-    stats:
+    stats: &stats
       expected_fail: 62
       expected_pass: 39
 
-    fail:
+    fail: &fail
       # --- aggregation tests ---
       - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
       - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
@@ -151,7 +151,7 @@ results:
 
       # https://github.com/FerretDB/FerretDB/issues/1855
       - mongo/jstests/core/write/update/update8.js
-      - mongo/jstests/core/write/update/updatej.js
+      - mongo/jstests/core/write/update/updatej.js # passed on SQLite
 
       # https://github.com/FerretDB/FerretDB/issues/1742
       - mongo/jstests/core/write/update/updateb.js
@@ -165,6 +165,11 @@ results:
       # same issue, see below.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+
+  # TODO overide values that differ
+  sqlite:
+    stats: *stats
+    fail: *fail
 
   mongodb:
     stats:
