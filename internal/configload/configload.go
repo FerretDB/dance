@@ -38,6 +38,7 @@ type config struct {
 	Results struct {
 		Common   *testConfig `yaml:"common"`
 		FerretDB *testConfig `yaml:"ferretdb"`
+		SQLite   *testConfig `yaml:"sqlite"`
 		MongoDB  *testConfig `yaml:"mongodb"`
 	} `yaml:"results"`
 }
@@ -125,12 +126,17 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		return nil, err
 	}
 
+	sqLite, err := c.Results.SQLite.convert()
+	if err != nil {
+		return nil, err
+	}
+
 	mongoDB, err := c.Results.MongoDB.convert()
 	if err != nil {
 		return nil, err
 	}
 
-	if err := mergeCommon(common, ferretDB, mongoDB); err != nil {
+	if err := mergeCommon(common, ferretDB, sqLite, mongoDB); err != nil {
 		return nil, err
 	}
 
@@ -140,6 +146,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		Args:   c.Args,
 		Results: ic.Results{
 			FerretDB: ferretDB,
+			SQLite:   sqLite,
 			MongoDB:  mongoDB,
 		},
 	}, nil
@@ -262,6 +269,7 @@ func (c *config) fillAndValidate() error {
 
 	for _, r := range []*testConfig{
 		c.Results.FerretDB,
+		c.Results.SQLite,
 		c.Results.MongoDB,
 	} {
 		if r == nil {
