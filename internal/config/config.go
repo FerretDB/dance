@@ -140,7 +140,7 @@ func (r *Results) forDB(dbName string) (*TestConfig, error) {
 			return c, nil
 		}
 	case "sqlite":
-		if c := r.FerretDB; c != nil {
+		if c := r.SQLite; c != nil {
 			return c, nil
 		}
 	case "mongodb":
