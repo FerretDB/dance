@@ -16,6 +16,21 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  sqlite:
+    image: ${FERRETDB_IMAGE:-ferretdb-local}
+    container_name: dance_sqlite
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_HANDLER=sqlite
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - .data:/data
+
   postgres:
     build:
       context: ./build/deps
