@@ -78,7 +78,7 @@ func TestInsertObjectIDHexString(t *testing.T) {
 		expected := mongo.WriteException{WriteErrors: []mongo.WriteError{{
 			Index:   0,
 			Code:    11000,
-			Message: `E11000 duplicate key error collection: TestInsertObjectIDHexString.insert-duplicate-id`,
+			Message: `E11000 duplicate key error collection: testinsertobjectidhexstring.insert-duplicate-id`,
 		}}}
 
 		assert.Equal(t, expected, unsetRaw(t, err))
