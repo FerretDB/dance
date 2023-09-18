@@ -36,21 +36,23 @@ type config struct {
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
 	Results struct {
-		Common   *testConfig `yaml:"common"`
-		FerretDB *testConfig `yaml:"ferretdb"`
-		SQLite   *testConfig `yaml:"sqlite"`
-		MongoDB  *testConfig `yaml:"mongodb"`
+		Includes map[string][]string `yaml:"includes"`
+		Common   *testConfig         `yaml:"common"`
+		FerretDB *testConfig         `yaml:"ferretdb"`
+		SQLite   *testConfig         `yaml:"sqlite"`
+		MongoDB  *testConfig         `yaml:"mongodb"`
 	} `yaml:"results"`
 }
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default *ic.Status `yaml:"default"`
-	Stats   *stats     `yaml:"stats"`
-	Fail    []any      `yaml:"fail"`
-	Skip    []any      `yaml:"skip"`
-	Pass    []any      `yaml:"pass"`
-	Ignore  []any      `yaml:"ignore"`
+	Default     *ic.Status `yaml:"default"`
+	Stats       *stats     `yaml:"stats"`
+	Fail        []any      `yaml:"fail"`
+	Skip        []any      `yaml:"skip"`
+	Pass        []any      `yaml:"pass"`
+	Ignore      []any      `yaml:"ignore"`
+	IncludeFail []any      `yaml:"include_fail"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -116,22 +118,24 @@ func load(file string) (*ic.Config, error) {
 // convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
 // and merges database-specific configurations.
 func (c *config) convertAndMerge() (*ic.Config, error) {
-	common, err := c.Results.Common.convert()
+	common, err := c.Results.Common.convert(nil)
 	if err != nil {
 		return nil, err
 	}
 
-	ferretDB, err := c.Results.FerretDB.convert()
+	includes := c.Results.Includes
+
+	ferretDB, err := c.Results.FerretDB.convert(includes)
 	if err != nil {
 		return nil, err
 	}
 
-	sqLite, err := c.Results.SQLite.convert()
+	sqLite, err := c.Results.SQLite.convert(includes)
 	if err != nil {
 		return nil, err
 	}
 
-	mongoDB, err := c.Results.MongoDB.convert()
+	mongoDB, err := c.Results.MongoDB.convert(includes)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +157,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 }
 
 // convert converts testConfig to the internal *config.TestConfig with validation.
-func (tc *testConfig) convert() (*ic.TestConfig, error) {
+func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
 	}
@@ -165,6 +169,11 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 		Skip:    ic.Tests{},
 		Pass:    ic.Tests{},
 		Ignore:  ic.Tests{},
+	}
+
+	for _, k := range tc.IncludeFail {
+		includeFail := includes[k.(string)]
+		t.Fail.Names = append(t.Fail.Names, includeFail...)
 	}
 
 	//nolint:govet // we don't care about alignment there
@@ -221,9 +230,6 @@ func (tc *testConfig) convert() (*ic.TestConfig, error) {
 
 			case string:
 				testCategory.outTests.Names = append(testCategory.outTests.Names, test)
-				continue
-			case []any:
-				// TODO flatten the nested list
 				continue
 
 			default:
