@@ -20,6 +20,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -39,6 +40,45 @@ func TestInsertDuplicateKeys(t *testing.T) {
 			Index:   0,
 			Code:    2,
 			Message: `invalid key: "foo" (duplicate keys are not allowed)`,
+		}}}
+
+		assert.Equal(t, expected, unsetRaw(t, err))
+	})
+
+	t.Run("MongoDB", func(t *testing.T) {
+		t.Parallel()
+
+		require.NoError(t, err)
+	})
+}
+
+func TestInsertObjectIDHexString(t *testing.T) {
+	t.Parallel()
+
+	ctx, db := setup(t)
+	coll := db.Collection("insert-duplicate-id")
+
+	hex := "000102030405060708091011"
+
+	objID, err := primitive.ObjectIDFromHex(hex)
+	require.NoError(t, err)
+
+	_, err = coll.InsertOne(ctx, bson.D{
+		{"_id", objID},
+	})
+	require.NoError(t, err)
+
+	_, err = coll.InsertOne(ctx, bson.D{
+		{"_id", hex},
+	})
+
+	t.Run("FerretDB", func(t *testing.T) {
+		t.Parallel()
+
+		expected := mongo.WriteException{WriteErrors: []mongo.WriteError{{
+			Index:   0,
+			Code:    11000,
+			Message: `E11000 duplicate key error collection: testinsertobjectidhexstring.insert-duplicate-id`,
 		}}}
 
 		assert.Equal(t, expected, unsetRaw(t, err))
