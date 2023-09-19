@@ -123,7 +123,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		return nil, err
 	}
 
-	var includes = c.Results.Includes
+	includes := c.Results.Includes
 
 	postgreSQL, err := c.Results.PostgreSQL.convert(includes)
 	if err != nil {
