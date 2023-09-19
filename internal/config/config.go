@@ -69,9 +69,9 @@ type Config struct {
 
 // Results stores the expected test results for different databases.
 type Results struct {
-	FerretDB *TestConfig
-	SQLite   *TestConfig
-	MongoDB  *TestConfig
+	PostgreSQL *TestConfig
+	SQLite     *TestConfig
+	MongoDB    *TestConfig
 }
 
 // TestConfig represents the configuration for tests categorized by status and regular expressions.
@@ -135,8 +135,8 @@ func (c *Config) ForDB(dbName string) (*TestConfig, error) {
 
 func (r *Results) forDB(dbName string) (*TestConfig, error) {
 	switch dbName {
-	case "ferretdb":
-		if c := r.FerretDB; c != nil {
+	case "postgresql":
+		if c := r.PostgreSQL; c != nil {
 			return c, nil
 		}
 	case "sqlite":

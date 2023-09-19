@@ -36,11 +36,11 @@ type config struct {
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
 	Results struct {
-		Includes map[string][]string `yaml:"includes"`
-		Common   *testConfig         `yaml:"common"`
-		FerretDB *testConfig         `yaml:"ferretdb"`
-		SQLite   *testConfig         `yaml:"sqlite"`
-		MongoDB  *testConfig         `yaml:"mongodb"`
+		Includes   map[string][]string `yaml:"includes"`
+		Common     *testConfig         `yaml:"common"`   // TODO https://github.com/FerretDB/dance/issues/591
+		PostgreSQL *testConfig         `yaml:"ferretdb"` // TODO preserving YAML tag for compatibility, will update later
+		SQLite     *testConfig         `yaml:"sqlite"`
+		MongoDB    *testConfig         `yaml:"mongodb"`
 	} `yaml:"results"`
 }
 
@@ -123,9 +123,9 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		return nil, err
 	}
 
-	includes := c.Results.Includes
+	var includes = c.Results.Includes
 
-	ferretDB, err := c.Results.FerretDB.convert(includes)
+	postgreSQL, err := c.Results.PostgreSQL.convert(includes)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +140,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		return nil, err
 	}
 
-	if err := mergeCommon(common, ferretDB, sqLite, mongoDB); err != nil {
+	if err := mergeCommon(common, postgreSQL, sqLite, mongoDB); err != nil {
 		return nil, err
 	}
 
@@ -149,9 +149,9 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		Dir:    c.Dir,
 		Args:   c.Args,
 		Results: ic.Results{
-			FerretDB: ferretDB,
-			SQLite:   sqLite,
-			MongoDB:  mongoDB,
+			PostgreSQL: postgreSQL,
+			SQLite:     sqLite,
+			MongoDB:    mongoDB,
 		},
 	}, nil
 }
@@ -277,7 +277,7 @@ func (c *config) fillAndValidate() error {
 	}
 
 	for _, r := range []*testConfig{
-		c.Results.FerretDB,
+		c.Results.PostgreSQL,
 		c.Results.SQLite,
 		c.Results.MongoDB,
 	} {
