@@ -2,7 +2,7 @@
 version: "3.8"
 
 services:
-  ferretdb:
+  postgresql:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
     container_name: dance_ferretdb
     restart: unless-stopped
