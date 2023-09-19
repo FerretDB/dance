@@ -4,7 +4,7 @@ version: "3.8"
 services:
   postgresql:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
-    container_name: dance_ferretdb
+    container_name: dance_postgresql
     restart: unless-stopped
     depends_on: ["postgres"]
     ports:
