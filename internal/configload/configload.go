@@ -19,10 +19,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/AlekSi/pointer"
-	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
 	ic "github.com/FerretDB/dance/internal/config"
@@ -46,13 +46,14 @@ type config struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default     *ic.Status `yaml:"default"`
-	Stats       *stats     `yaml:"stats"`
-	Fail        []any      `yaml:"fail"`
-	Skip        []any      `yaml:"skip"`
-	Pass        []any      `yaml:"pass"`
-	Ignore      []any      `yaml:"ignore"`
-	IncludeFail []any      `yaml:"include_fail"`
+	Default       *ic.Status `yaml:"default"`
+	Stats         *stats     `yaml:"stats"`
+	Fail          []string   `yaml:"fail"`
+	Skip          []string   `yaml:"skip"`
+	Pass          []string   `yaml:"pass"`
+	Ignore        []string   `yaml:"ignore"`
+	IncludeFail   []string   `yaml:"include_fail"`
+	IncludeRegexp []string   `yaml:"include_regexp"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -118,12 +119,14 @@ func load(file string) (*ic.Config, error) {
 // convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
 // and merges database-specific configurations.
 func (c *config) convertAndMerge() (*ic.Config, error) {
-	common, err := c.Results.Common.convert(nil)
+	// includes is a mapping which allows us to merge two sequences together,
+	// which is currently no possible in the YAML spec - https://github.com/yaml/yaml/issues/48
+	includes := c.Results.Includes
+
+	common, err := c.Results.Common.convert(includes)
 	if err != nil {
 		return nil, err
 	}
-
-	includes := c.Results.Includes
 
 	postgreSQL, err := c.Results.PostgreSQL.convert(includes)
 	if err != nil {
@@ -156,7 +159,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal *ic.TestConfig with validation.
+// convert converts testConfig to the internal *config.TestConfig with validation.
 func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
@@ -172,70 +175,35 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 	}
 
 	for _, k := range tc.IncludeFail {
-		includeFail := includes[k.(string)]
+		includeFail := includes[k]
 		t.Fail.Names = append(t.Fail.Names, includeFail...)
 	}
 
-	//nolint:govet // we don't care about alignment there
-	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
-		yamlTests []any     // taken from the file, yaml representation of tests, incoming tests
-		outTests  *ic.Tests // yamlTests transformed to the internal representation
-	}{
-		{tc.Fail, &t.Fail},
-		{tc.Skip, &t.Skip},
-		{tc.Pass, &t.Pass},
-		{tc.Ignore, &t.Ignore},
-	} {
-		for _, test := range testCategory.yamlTests {
-			switch test := test.(type) {
-			case map[string]any:
-				keys := maps.Keys(test)
-				if len(keys) != 1 {
-					return nil, fmt.Errorf("invalid syntax: expected 1 element, got: %v", keys)
+	knownFields := map[string]struct{}{
+		"regex":        {},
+		"not_regex":    {},
+		"output_regex": {},
+	}
+
+	validRegex := func(s ...string) bool {
+		for _, ss := range s {
+			if _, ok := knownFields[ss]; ok {
+				if _, err := regexp.Compile(ss); err != nil {
+					return false
 				}
-
-				var arrPointer *[]string
-
-				k := keys[0]
-				switch k {
-				case "regex":
-					arrPointer = &testCategory.outTests.NameRegexPattern
-				case "not_regex":
-					arrPointer = &testCategory.outTests.NameNotRegexPattern
-				case "output_regex":
-					arrPointer = &testCategory.outTests.OutputRegexPattern
-				default:
-					return nil, fmt.Errorf("invalid field name %q", k)
-				}
-
-				mValue := test[k]
-
-				regexp, ok := mValue.(string)
-				if !ok {
-					// Arrays are illegal:
-					// - regex:
-					//   - foo
-					//   - bar
-					if _, ok := mValue.([]string); ok {
-						return nil, fmt.Errorf("invalid syntax: %s value shouldn't be an array", k)
-					}
-
-					return nil, fmt.Errorf("invalid syntax: expected string, got: %T", mValue)
-				}
-
-				// i.e. pointer to testCategory.outTests.RegexPattern = append(testCategory.outTests.RegexPattern, regexp)
-				*arrPointer = append(*arrPointer, regexp)
-
-				continue
-
-			case string:
-				testCategory.outTests.Names = append(testCategory.outTests.Names, test)
-				continue
-
-			default:
-				return nil, fmt.Errorf("invalid type of %[1]q: %[1]T", test)
 			}
 		}
+
+		return true
+	}
+
+	for _, k := range tc.IncludeRegexp {
+		includeSkip := includes[k]
+		if !validRegex(includeSkip...) {
+			return nil, fmt.Errorf("invalid include_regexp value: %q", k)
+		}
+
+		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, includeSkip...)
 	}
 
 	return &t, nil
