@@ -156,7 +156,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal *config.TestConfig with validation.
+// convert converts testConfig to the internal *ic.TestConfig with validation.
 func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
