@@ -53,6 +53,7 @@ type testConfig struct {
 	Ignore      []string   `yaml:"ignore"`
 	IncludeFail []string   `yaml:"include_fail"`
 	IncludeSkip []string   `yaml:"include_skip"`
+	IncludePass []string   `yaml:"include_pass"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -181,6 +182,11 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 	for _, k := range tc.IncludeSkip {
 		includeSkip := includes[k]
 		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, includeSkip...)
+	}
+
+	for _, k := range tc.IncludePass {
+		IncludePass := includes[k]
+		t.Pass.Names = append(t.Pass.Names, IncludePass...)
 	}
 
 	//nolint:govet // we don't care about alignment there
