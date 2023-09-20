@@ -19,7 +19,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/AlekSi/pointer"
@@ -46,14 +45,14 @@ type config struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default       *ic.Status `yaml:"default"`
-	Stats         *stats     `yaml:"stats"`
-	Fail          []string   `yaml:"fail"`
-	Skip          []string   `yaml:"skip"`
-	Pass          []string   `yaml:"pass"`
-	Ignore        []string   `yaml:"ignore"`
-	IncludeFail   []string   `yaml:"include_fail"`
-	IncludeRegexp []string   `yaml:"include_regexp"`
+	Default     *ic.Status `yaml:"default"`
+	Stats       *stats     `yaml:"stats"`
+	Fail        []string   `yaml:"fail"`
+	Skip        []string   `yaml:"skip"`
+	Pass        []string   `yaml:"pass"`
+	Ignore      []string   `yaml:"ignore"`
+	IncludeFail []string   `yaml:"include_fail"`
+	IncludeSkip []string   `yaml:"include_skip"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -119,8 +118,8 @@ func load(file string) (*ic.Config, error) {
 // convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
 // and merges database-specific configurations.
 func (c *config) convertAndMerge() (*ic.Config, error) {
-	// includes is a mapping which allows us to merge two sequences together,
-	// which is currently no possible in the YAML spec - https://github.com/yaml/yaml/issues/48
+	// includes is a mapping that allows us to merge sequences together,
+	// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 	includes := c.Results.Includes
 
 	common, err := c.Results.Common.convert(includes)
@@ -159,7 +158,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal *config.TestConfig with validation.
+// convert converts testConfig to the internal *ic.TestConfig with validation. .
 func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
@@ -179,31 +178,22 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 		t.Fail.Names = append(t.Fail.Names, includeFail...)
 	}
 
-	knownFields := map[string]struct{}{
-		"regex":        {},
-		"not_regex":    {},
-		"output_regex": {},
-	}
-
-	validRegex := func(s ...string) bool {
-		for _, ss := range s {
-			if _, ok := knownFields[ss]; ok {
-				if _, err := regexp.Compile(ss); err != nil {
-					return false
-				}
-			}
-		}
-
-		return true
-	}
-
-	for _, k := range tc.IncludeRegexp {
+	for _, k := range tc.IncludeSkip {
 		includeSkip := includes[k]
-		if !validRegex(includeSkip...) {
-			return nil, fmt.Errorf("invalid include_regexp value: %q", k)
-		}
-
 		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, includeSkip...)
+	}
+
+	//nolint:govet // we don't care about alignment there
+	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
+		yamlTests []string  // taken from the file, yaml representation of tests, incoming tests
+		outTests  *ic.Tests // yamlTests transformed to the internal representation
+	}{
+		{tc.Fail, &t.Fail},
+		{tc.Skip, &t.Skip},
+		{tc.Pass, &t.Pass},
+		{tc.Ignore, &t.Ignore},
+	} {
+		testCategory.outTests.Names = append(testCategory.outTests.Names, testCategory.yamlTests...)
 	}
 
 	return &t, nil
