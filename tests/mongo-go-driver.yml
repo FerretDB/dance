@@ -11,94 +11,33 @@ args:
   - ./mongo/integration/unified
 
 results:
-  common:
-    ignore:
-      # indicates flaky tests that should be ignored
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+  includes:
+    output_regex: 
+      - skipping due to environmental constraints.*
+    fail:
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+      # (NotImplemented) `aggregate` stage "$project" is not implemented yet
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
 
-      # test fails frequently, skipping; see GODRIVER-2852
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
+      # Should be true
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
 
-    skip:
-      - output_regex: skipping due to environmental constraints.*
+      # query array inconsistencies
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
 
-      # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient
+      - go.mongodb.org/mongo-driver/mongo/TestClient
 
-      # needs replica set
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+      # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
+      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
+      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
+      # panic: runtime error: invalid memory address or nil pointer dereference
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
 
-      # OCSP
-      - go.mongodb.org/mongo-driver/mongo/TestOCSP
-
-      # test requires that close does not aggressively close used connections
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
-
-      # event ordering incompatible with load-balancer SDAM spec test
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
-
-      # test requires that connections established by minPoolSize
-      # are immediately used to satisfy check-out requests
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
-
-      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
-
-      # skip if CRYPT_SHARED_LIB_PATH is not set
-      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
-
-      # skip if no compressor specified
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
-
-      # always skipped
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
-
-      # skip because authentication is required
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-
-      # test must be skipped: "timeoutMode not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
-
-      # test must be skipped: "cursorType not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-
-  ferretdb:
-    stats:
-      expected_fail: 10
-      expected_skip: 19
-      expected_pass: 633
-
-    ignore:
-      # returns unknown result.
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
-
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
-
-      # returns unknown result.
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
-
+      # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
     pass:
       - go.mongodb.org/mongo-driver/mongo/TestClient/
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
@@ -156,35 +95,116 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
+
+  common:
+    ignore:
+      # indicates flaky tests that should be ignored
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
+      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+
+      # test fails frequently, skipping; see GODRIVER-2852
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
+
+    skip:
+      # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
+
+      # needs replica set
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestTransactionExamples
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+
+      # OCSP
+      - go.mongodb.org/mongo-driver/mongo/TestOCSP
+
+      # test requires that close does not aggressively close used connections
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
+
+      # event ordering incompatible with load-balancer SDAM spec test
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+
+      # test requires that connections established by minPoolSize
+      # are immediately used to satisfy check-out requests
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
+
+      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
+
+      # skip if CRYPT_SHARED_LIB_PATH is not set
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+
+      # skip if no compressor specified
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
+
+      # always skipped
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
+
+      # skip because authentication is required
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
+
+      # test must be skipped: "timeoutMode not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
+
+      # test must be skipped: "cursorType not supported"
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+    include_skip: 
+      - output_regex
+
+  ferretdb:
+    stats:
+      expected_fail: 10
+      expected_skip: 19
+      expected_pass: 633
+    ignore:
+      # returns unknown result.
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
+      # returns unknown result.
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
     fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+    include_fail:
+      - fail
+    pass:
+    include_pass:
+      - pass
 
-      # (NotImplemented) `aggregate` stage "$project" is not implemented yet
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
-
-      # Should be true
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-
-      # query array inconsistencies
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
-
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient
-      - go.mongodb.org/mongo-driver/mongo/TestClient
-
-      # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
-      # panic: runtime error: invalid memory address or nil pointer dereference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
-
-      # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+  sqlite:
+    stats:
+      expected_fail: 12
+      expected_skip: 19
+      expected_pass: 643
+    fail:
+      # sql: Scan error on column index 0, name "SizeTables": converting NULL to int64 is unsupported
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
+    include_fail:
+      - fail
+    pass:
+    include_pass:
+      - pass
+  
   mongodb:
     stats:
       expected_skip: 432
       expected_pass: 1940
-
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
@@ -291,7 +311,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueMultiple_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueSize_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueTimeoutMS_should_be_included_in_connection_pool_created_message_when_specified
-
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
