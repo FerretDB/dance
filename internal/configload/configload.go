@@ -35,6 +35,8 @@ type config struct {
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
 	Results struct {
+		// includes is a mapping that allows us to merge sequences together,
+		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
 		Common     *testConfig         `yaml:"common"`   // TODO https://github.com/FerretDB/dance/issues/591
 		PostgreSQL *testConfig         `yaml:"ferretdb"` // TODO preserving YAML tag for compatibility, will update later
@@ -119,8 +121,6 @@ func load(file string) (*ic.Config, error) {
 // convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
 // and merges database-specific configurations.
 func (c *config) convertAndMerge() (*ic.Config, error) {
-	// includes is a mapping that allows us to merge sequences together,
-	// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 	includes := c.Results.Includes
 
 	common, err := c.Results.Common.convert(includes)
@@ -159,7 +159,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 	}, nil
 }
 
-// convert converts testConfig to the internal *ic.TestConfig with validation.
+// convert converts *testConfig to the internal *ic.TestConfig.
 func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
 	if tc == nil {
 		return nil, nil
