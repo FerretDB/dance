@@ -35,7 +35,7 @@ type config struct {
 	Dir     string        `yaml:"dir"`
 	Args    []string      `yaml:"args"`
 	Results struct {
-		// includes is a mapping that allows us to merge sequences together,
+		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
 		Common     *testConfig         `yaml:"common"`   // TODO https://github.com/FerretDB/dance/issues/591
