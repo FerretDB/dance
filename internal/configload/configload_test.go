@@ -187,6 +187,22 @@ func TestIncludes(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
+		"IncludeSkip": {
+			in: &testConfig{
+				Default:     (*ic.Status)(pointer.ToString("skip")),
+				Skip:        []string{"x"},
+				IncludeSkip: []string{"include_skip"},
+			},
+			includes: map[string][]string{
+				"include_skip": {"a", "b", "c"},
+			},
+			expected: &ic.TestConfig{
+				Skip: ic.Tests{
+					Names: []string{"a", "b", "c", "x"},
+				},
+			},
+			expectedErr: nil,
+		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
