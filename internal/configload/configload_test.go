@@ -173,13 +173,12 @@ func TestIncludes(t *testing.T) {
 	}{
 		"IncludeFail": {
 			in: &testConfig{
-				Default: (*ic.Status)(pointer.ToString("pass")),
-				Fail:    []string{"a"},
+				Default:     (*ic.Status)(pointer.ToString("fail")),
+				Fail:        []string{"a"},
+				IncludeFail: []string{"x", "y", "z"},
 			},
 			includes: map[string][]string{
-				"include_fail": {
-					"x", "y", "z",
-				},
+				"include_fail": {},
 			},
 			expected: &ic.TestConfig{
 				Fail: ic.Tests{
@@ -196,6 +195,13 @@ func TestIncludes(t *testing.T) {
 			out, err := tc.in.convert(tc.includes)
 
 			t.Log(out, err)
+
+			if tc.expectedErr != nil {
+				assert.Equal(t, tc.expectedErr, err)
+				return
+			}
+
+			assert.Equal(t, tc.expected.Fail, out.Fail)
 		})
 	}
 }
