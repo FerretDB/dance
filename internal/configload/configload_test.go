@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/AlekSi/pointer"
 	"github.com/stretchr/testify/assert"
 
 	ic "github.com/FerretDB/dance/internal/config"
@@ -157,6 +158,64 @@ func TestMergeCommon(t *testing.T) {
 					assert.Equal(t, tests.actual.ExpectedPass, tc.common.Stats.ExpectedPass)
 				}
 			}
+		})
+	}
+}
+
+func TestIncludes(t *testing.T) {
+	t.Parallel()
+
+	for name, tc := range map[string]struct {
+		in          *testConfig
+		includes    map[string][]string
+		expected    *ic.TestConfig
+		expectedErr error
+	}{
+		"IncludeFail": {
+			in: &testConfig{
+				Default:     (*ic.Status)(pointer.ToString("fail")),
+				Fail:        []string{"a"},
+				IncludeFail: []string{"include_fail"},
+			},
+			includes: map[string][]string{
+				"include_fail": {"x", "y", "z"},
+			},
+			expected: &ic.TestConfig{
+				Fail: ic.Tests{
+					Names: []string{"x", "y", "z", "a"},
+				},
+			},
+			expectedErr: nil,
+		},
+		"IncludeSkip": {
+			in: &testConfig{
+				Default:     (*ic.Status)(pointer.ToString("skip")),
+				Skip:        []string{"x"},
+				IncludeSkip: []string{"include_skip"},
+			},
+			includes: map[string][]string{
+				"include_skip": {"a", "b", "c"},
+			},
+			expected: &ic.TestConfig{
+				Skip: ic.Tests{
+					Names: []string{"a", "b", "c", "x"},
+				},
+			},
+			expectedErr: nil,
+		},
+	} {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			out, err := tc.in.convert(tc.includes)
+
+			if tc.expectedErr != nil {
+				assert.Equal(t, tc.expectedErr, err)
+				return
+			}
+
+			assert.Equal(t, tc.expected.Fail, out.Fail)
 		})
 	}
 }
