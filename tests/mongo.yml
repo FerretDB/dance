@@ -140,6 +140,7 @@ results:
     misc:
       # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/core/uniqueness.js
+
   ferretdb:
     stats:
       expected_fail: 62
