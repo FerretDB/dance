@@ -162,282 +162,255 @@ args:
   - "!mongo/jstests/core/local_tail_capped.js" # can fail to return all documents within timeout
 
   # include all tests
-  - mongo/jstests/core/index/fts/fts_index.js
-  - mongo/jstests/core/query/basic5.js
-  - mongo/jstests/core/query/exists/existsb.js
-  - mongo/jstests/core/index/indexg.js
-  - mongo/jstests/core/query/basic7.js
-  - mongo/jstests/core/index/geo/geo_sort1.js
-  - mongo/jstests/core/json_schema/additional_items.js
-  - mongo/jstests/core/query/explain/explain_multi_plan.js
-  - mongo/jstests/core/show_record_id.js
-  - mongo/jstests/core/index/hidden_index.js
-  - mongo/jstests/core/query/cursor/tailable_skip_limit.js
-  - mongo/jstests/core/shell/bson.js
-  - mongo/jstests/core/index/geo/geo_max.js
-  - mongo/jstests/core/index/wildcard/wildcard_index_equality_to_empty_obj.js
-  - mongo/jstests/core/query/plan_cache/plan_cache_positional_projection.js
-  - mongo/jstests/core/query/regex/regexc.js
-  - mongo/jstests/core/write/update/update_multi_halts.js
-  - mongo/jstests/core/index/index_partial_create_drop.js
-  - mongo/jstests/core/query/basica.js
-  - mongo/jstests/core/query/collection_uuid_find.js
-  - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js
-  - mongo/jstests/core/query/in/in5.js
-  - mongo/jstests/core/query/mr/mr_fail_invalid_js.js
-  - mongo/jstests/core/ddl/rename_collection_long_name.js
-  - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js
-  - mongo/jstests/core/query/regex/regex6.js
-  - mongo/jstests/core/index/geo/geo_exactfetch.js
-  - mongo/jstests/core/query/js/js2.js
-  - mongo/jstests/core/command_json_schema_field.js
-  - mongo/jstests/core/query/or/orc.js
-  - mongo/jstests/core/index/geo/geo_circle4.js
-  - mongo/jstests/core/query/nor.js
-  - mongo/jstests/core/query/count/countb.js
-  - mongo/jstests/core/query/ne/ne_array.js
-  - mongo/jstests/core/monotonic_date_operations.js
-  - mongo/jstests/core/ddl/drop3.js
-  - mongo/jstests/core/ddl/rename_collection_view.js
-  - mongo/jstests/core/index/geo/geo_box2.js
-  - mongo/jstests/core/index/hashed/hashed_index_queries.js
-  - mongo/jstests/core/query/always_true_false.js
-  - mongo/jstests/core/query/regex/regex_options.js
-  - mongo/jstests/core/write/update/update_addToSet3.js
-  - mongo/jstests/core/json_schema/json_schema.js
-  - mongo/jstests/core/query/find/find8.js
-  - mongo/jstests/core/write/update/update_with_large_hint.js
-  - mongo/jstests/core/index/geo/geo_s2meridian.js
-  - mongo/jstests/core/query/mr/mr_correctness.js
-  - mongo/jstests/core/write/update/update_metrics.js
-  - mongo/jstests/core/benchrun_cmd_param_error.js
-  - mongo/jstests/core/command_let_variables_merge_only.js
-  - mongo/jstests/core/query/internal_apply_oplog_update.js
-  - mongo/jstests/core/query/minmax.js
-  - mongo/jstests/core/query/explain/explain_validation.js
-  - mongo/jstests/core/query/number/numberlong.js
-  - mongo/jstests/core/query/regex/regex.js
-  - mongo/jstests/core/testminmax.js
   - mongo/jstests/core/api/api_version_new_51_language_features.js
-  - mongo/jstests/core/index/geo/geo_box3.js
-  - mongo/jstests/core/index/geo/geo_validate.js
-  - mongo/jstests/core/write/update/collation_update.js
   - mongo/jstests/core/api/api_version_pipeline_stages.js
-  - mongo/jstests/core/ddl/capped_convertToCapped1.js
-  - mongo/jstests/core/ddl/drop_collection.js
-  - mongo/jstests/core/index/fts/fts6.js
-  - mongo/jstests/core/query/exists/exists.js
-  - mongo/jstests/core/query/sort/sort_with_meta_operator.js
-  - mongo/jstests/core/query/in/in7.js
-  - mongo/jstests/core/query/sort/sortb.js
-  - mongo/jstests/core/ddl/create_collection_fail_cleanup.js
-  - mongo/jstests/core/index/geo/geo_multinest1.js
-  - mongo/jstests/core/query/explode_for_sort_plan_cache.js
-  - mongo/jstests/core/query/or/or3.js
-  - mongo/jstests/core/index/index8.js
-  - mongo/jstests/core/query/exists/exists3.js
-  - mongo/jstests/core/query/explain/explain1.js
-  - mongo/jstests/core/query/in/in.js
-  - mongo/jstests/core/query/ne/ne1.js
-  - mongo/jstests/core/write/insert/insert_id_undefined.js
-  - mongo/jstests/core/write/update/update6.js
   - mongo/jstests/core/api/api_version_unstable_fields.js
-  - mongo/jstests/core/query/objid/objid1.js
-  - mongo/jstests/core/query/all/all5.js
-  - mongo/jstests/core/index/geo/geo_s2nearcorrect.js
-  - mongo/jstests/core/index/wildcard/wildcard_and_text_indexes.js
-  - mongo/jstests/core/query/basic4.js
-  - mongo/jstests/core/query/distinct/distinct_index1.js
-  - mongo/jstests/core/query/pull/pull_remove1.js
-  - mongo/jstests/core/query/unset/unset.js
-  - mongo/jstests/core/server7756.js
-  - mongo/jstests/core/index/index_check5.js
-  - mongo/jstests/core/index/geo/geo9.js
-  - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js
-  - mongo/jstests/core/query/array/arrayfind8.js
-  - mongo/jstests/core/query/find/find_getmore_bsonsize.js
-  - mongo/jstests/core/index/geo/geo_mindistance.js
-  - mongo/jstests/core/query/array/array1.js
-  - mongo/jstests/core/query/js/js8.js
-  - mongo/jstests/core/query/set/set6.js
-  - mongo/jstests/core/query/where/where_multiple_plans.js
-  - mongo/jstests/core/list_commands.js
-  - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js
-  - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
-  - mongo/jstests/core/query/type/type_array.js
-  - mongo/jstests/core/dbadmin.js
-  - mongo/jstests/core/merge_sort_collation.js
-  - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js
-  - mongo/jstests/core/query/explain/explain_uuid.js
-  - mongo/jstests/core/query/mr/mr_sort.js
-  - mongo/jstests/core/columnstore/columnstore_index_correctness.js
-  - mongo/jstests/core/index/index2.js
-  - mongo/jstests/core/index/fts/fts_spanish.js
-  - mongo/jstests/core/query/dbref/ref.js
-  - mongo/jstests/core/index/geo/geo_s2cursorlimitskip.js
-  - mongo/jstests/core/index/hashed/hashed_index_collation.js
-  - mongo/jstests/core/index/wildcard/compound_wildcard_index_or.js
-  - mongo/jstests/core/query/sort/sort_merge.js
-  - mongo/jstests/core/query/sort/sortf.js
-  - mongo/jstests/core/query/null_field_name.js
-  - mongo/jstests/core/write/update/updateg.js
-  - mongo/jstests/core/query/and/andor.js
-  - mongo/jstests/core/write/update/batch_write_command_update.js
-  - mongo/jstests/core/index/geo/geo10.js
-  - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js
-  - mongo/jstests/core/query/collation_with_reverse_index.js
-  - mongo/jstests/core/query/js/js3.js
-  - mongo/jstests/core/pop_server_13516.js
-  - mongo/jstests/core/index/index_check7.js
-  - mongo/jstests/core/query/js/js_jit.js
-  - mongo/jstests/core/query/ne/ne2.js
-  - mongo/jstests/core/query/or/orp.js
-  - mongo/jstests/core/catalog/list_indexes_non_existent_ns.js
-  - mongo/jstests/core/index/index_check2.js
-  - mongo/jstests/core/index/fts/fts_phrase.js
-  - mongo/jstests/core/query/exists/exists4.js
-  - mongo/jstests/core/write/update/update_multi4.js
-  - mongo/jstests/core/index/index_partial_read_ops.js
-  - mongo/jstests/core/index/covered/covered_index_simple_3.js
-  - mongo/jstests/core/query/array/array_match1.js
-  - mongo/jstests/core/query/exists/exists7.js
-  - mongo/jstests/core/query/explain/explain_upsert.js
-  - mongo/jstests/core/top.js
-  - mongo/jstests/core/query/sort/sort4.js
-  - mongo/jstests/core/write/update/update_arraymatch4.js
-  - mongo/jstests/core/write/update/updatee.js
-  - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
-  - mongo/jstests/core/index/index13.js
-  - mongo/jstests/core/query/mr/mr_replace_into_other_db.js
-  - mongo/jstests/core/query/ne/ne3.js
-  - mongo/jstests/core/index/elemmatch_index.js
-  - mongo/jstests/core/query/plan_cache/plan_cache_clear.js
-  - mongo/jstests/core/shell/shelltypes.js
-  - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
-  - mongo/jstests/core/write/update/update_arraymatch7.js
-  - mongo/jstests/core/dbstats.js
-  - mongo/jstests/core/query/neq_null_correctly_cache.js
-  - mongo/jstests/core/query/array/arrayfind2.js
-  - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
+  - mongo/jstests/core/benchrun_cmd_param_error.js
+  - mongo/jstests/core/capped/cappeda.js
+  - mongo/jstests/core/capped/capped.js
   - mongo/jstests/core/catalog/list_collections_name_only.js
-  - mongo/jstests/core/index/index_bounds_minkey.js
-  - mongo/jstests/core/index/index_partial_write_ops.js
-  - mongo/jstests/core/index/fts/fts_trailing_fields.js
-  - mongo/jstests/core/query/or/orj.js
-  - mongo/jstests/core/query/sort/sorta.js
-  - mongo/jstests/core/index/index1.js
-  - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
-  - mongo/jstests/core/find_with_resume_after_param.js
+  - mongo/jstests/core/catalog/list_indexes_non_existent_ns.js
+  - mongo/jstests/core/columnstore/columnstore_index_correctness.js
+  - mongo/jstests/core/columnstore/columnstore_index.js
+  - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
+  - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
+  - mongo/jstests/core/command_json_schema_field.js
+  - mongo/jstests/core/command_let_variables_merge_only.js
+  - mongo/jstests/core/constructors.js
+  - mongo/jstests/core/dbadmin.js
+  - mongo/jstests/core/dbstats.js
+  - mongo/jstests/core/ddl/capped_convertToCapped1.js
+  - mongo/jstests/core/ddl/collation_convert_to_capped.js
+  - mongo/jstests/core/ddl/create_collection_fail_cleanup.js
+  - mongo/jstests/core/ddl/drop3.js
+  - mongo/jstests/core/ddl/drop_collection.js
+  - mongo/jstests/core/ddl/index_create_too_many.js
   - mongo/jstests/core/ddl/rename_collection_different_dbs.js
+  - mongo/jstests/core/ddl/rename_collection_long_name.js
+  - mongo/jstests/core/ddl/rename_collection_view.js
+  - mongo/jstests/core/doc_validation/doc_validation_invalid_validators.js
+  - mongo/jstests/core/find_with_resume_after_param.js
+  - mongo/jstests/core/index/covered/covered_index_simple_3.js
+  - mongo/jstests/core/index/elemmatch_index.js
+  - mongo/jstests/core/index/fts/fts6.js
+  - mongo/jstests/core/index/fts/fts_blogwild.js
+  - mongo/jstests/core/index/fts/fts_casesensitive.js
+  - mongo/jstests/core/index/fts/fts_dotted_prefix_fields.js
+  - mongo/jstests/core/index/fts/fts_index.js
+  - mongo/jstests/core/index/fts/fts_index_wildcard_and_weight.js
+  - mongo/jstests/core/index/fts/fts_phrase.js
+  - mongo/jstests/core/index/fts/fts_spanish.js
+  - mongo/jstests/core/index/fts/fts_trailing_fields.js
+  - mongo/jstests/core/index/geo/geo10.js
+  - mongo/jstests/core/index/geo/geo1.js
+  - mongo/jstests/core/index/geo/geo9.js
+  - mongo/jstests/core/index/geo/geo_allowedcomparisons.js
+  - mongo/jstests/core/index/geo/geo_array0.js
+  - mongo/jstests/core/index/geo/geo_box2.js
+  - mongo/jstests/core/index/geo/geo_box3.js
+  - mongo/jstests/core/index/geo/geo_circle2.js
+  - mongo/jstests/core/index/geo/geo_circle4.js
+  - mongo/jstests/core/index/geo/geoc.js
+  - mongo/jstests/core/index/geo/geo_exactfetch.js
+  - mongo/jstests/core/index/geo/geo_max.js
+  - mongo/jstests/core/index/geo/geo_mindistance.js
+  - mongo/jstests/core/index/geo/geo_multinest1.js
+  - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js
+  - mongo/jstests/core/index/geo/geonear_key.js
+  - mongo/jstests/core/index/geo/geo_s2cursorlimitskip.js
   - mongo/jstests/core/index/geo/geo_s2indexoldformat.js
-  - mongo/jstests/core/query/in/in4.js
+  - mongo/jstests/core/index/geo/geo_s2meridian.js
+  - mongo/jstests/core/index/geo/geo_s2multi.js
+  - mongo/jstests/core/index/geo/geo_s2nearcorrect.js
+  - mongo/jstests/core/index/geo/geo_sort1.js
+  - mongo/jstests/core/index/geo/geo_validate.js
+  - mongo/jstests/core/index/hashed/hashed_index_collation.js
+  - mongo/jstests/core/index/hashed/hashed_index_queries.js
+  - mongo/jstests/core/index/hidden_index.js
+  - mongo/jstests/core/index/index13.js
+  - mongo/jstests/core/index/index1.js
+  - mongo/jstests/core/index/index2.js
+  - mongo/jstests/core/index/index4.js
+  - mongo/jstests/core/index/index8.js
+  - mongo/jstests/core/index/index_bigkeys.js
+  - mongo/jstests/core/index/indexb.js
+  - mongo/jstests/core/index/index_bounds_minkey.js
+  - mongo/jstests/core/index/index_check2.js
+  - mongo/jstests/core/index/index_check5.js
+  - mongo/jstests/core/index/index_check6.js
+  - mongo/jstests/core/index/index_check7.js
+  - mongo/jstests/core/index/indexc.js
+  - mongo/jstests/core/index/indexg.js
+  - mongo/jstests/core/index/indexl.js
+  - mongo/jstests/core/index/index_partial_create_drop.js
+  - mongo/jstests/core/index/index_partial_read_ops.js
+  - mongo/jstests/core/index/index_partial_validate.js
+  - mongo/jstests/core/index/index_partial_write_ops.js
+  - mongo/jstests/core/index/indext.js
+  - mongo/jstests/core/index/wildcard/compound_wildcard_index_count.js
+  - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js
+  - mongo/jstests/core/index/wildcard/compound_wildcard_index_or.js
+  - mongo/jstests/core/index/wildcard/compound_wildcard_index_prefix.js
+  - mongo/jstests/core/index/wildcard/compound_wildcard_sort.js
+  - mongo/jstests/core/index/wildcard/wildcard_and_text_indexes.js
+  - mongo/jstests/core/index/wildcard/wildcard_and_with_not.js
+  - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
+  - mongo/jstests/core/index/wildcard/wildcard_index_equality_to_empty_obj.js
+  - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js
+  - mongo/jstests/core/json_schema/additional_items.js
+  - mongo/jstests/core/json_schema/json_schema.js
+  - mongo/jstests/core/json_schema/pattern_properties.js
+  - mongo/jstests/core/list_commands.js
+  - mongo/jstests/core/merge_sort_collation.js
   - mongo/jstests/core/mixed_version_replica_set.js
   - mongo/jstests/core/mod_special_values.js
-  - mongo/jstests/core/index/geo/geo1.js
-  - mongo/jstests/core/query/where/where2.js
-  - mongo/jstests/core/ddl/collation_convert_to_capped.js
-  - mongo/jstests/core/index/fts/fts_casesensitive.js
-  - mongo/jstests/core/query/or/oro.js
-  - mongo/jstests/core/index/wildcard/compound_wildcard_index_prefix.js
-  - mongo/jstests/core/query/explain/explain_winning_plan.js
-  - mongo/jstests/core/query/objid/objid2.js
-  - mongo/jstests/core/query/objid/objid7.js
-  - mongo/jstests/core/query/type/type4.js
-  - mongo/jstests/core/write/insert/insert_one.js
-  - mongo/jstests/core/write/update/update2.js
-  - mongo/jstests/core/index/wildcard/compound_wildcard_index_count.js
-  - mongo/jstests/core/query/nestedarr1.js
-  - mongo/jstests/core/query/sort/sort_array.js
-  - mongo/jstests/core/write/update/update_mul_examples.js
-  - mongo/jstests/core/index/indexl.js
-  - mongo/jstests/core/index/geo/geonear_key.js
-  - mongo/jstests/core/index/wildcard/compound_wildcard_index_filter.js
-  - mongo/jstests/core/query/cursor/cursor6.js
-  - mongo/jstests/core/query/find/find6.js
-  - mongo/jstests/core/write/verify_update_mods.js
-  - mongo/jstests/core/index/geo/geo_allowedcomparisons.js
-  - mongo/jstests/core/index/geo/geo_s2multi.js
-  - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
-  - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js
-  - mongo/jstests/core/capped/cappeda.js
-  - mongo/jstests/core/ddl/index_create_too_many.js
-  - mongo/jstests/core/index/index_partial_validate.js
-  - mongo/jstests/core/index/indexb.js
-  - mongo/jstests/core/index/fts/fts_dotted_prefix_fields.js
+  - mongo/jstests/core/monotonic_date_operations.js
+  - mongo/jstests/core/pop_server_13516.js
+  - mongo/jstests/core/query/all/all5.js
+  - mongo/jstests/core/query/always_true_false.js
+  - mongo/jstests/core/query/and/andor.js
+  - mongo/jstests/core/query/array/array1.js
   - mongo/jstests/core/query/array/array3.js
-  - mongo/jstests/core/query/explain/explain_sort_type.js
-  - mongo/jstests/core/index/geo/geoc.js
-  - mongo/jstests/core/query/dbref/dbref1.js
-  - mongo/jstests/core/query/find/find5.js
-  - mongo/jstests/core/write/update/update_setOnInsert.js
-  - mongo/jstests/core/server9547.js
-  - mongo/jstests/core/columnstore/columnstore_index.js
-  - mongo/jstests/core/index/fts/fts_blogwild.js
-  - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js
-  - mongo/jstests/core/json_schema/pattern_properties.js
-  - mongo/jstests/core/query/mr/mr_merge.js
-  - mongo/jstests/core/query/objid/objid6.js
-  - mongo/jstests/core/write/update/update9.js
-  - mongo/jstests/core/constructors.js
-  - mongo/jstests/core/server25192.js
-  - mongo/jstests/core/query/number/numberint.js
-  - mongo/jstests/core/query/or/or_inexact.js
-  - mongo/jstests/core/query/or/org.js
-  - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
-  - mongo/jstests/core/index/index4.js
-  - mongo/jstests/core/index/indext.js
-  - mongo/jstests/core/query/in/in_with_mixed_values.js
-  - mongo/jstests/core/shell/collection_save.js
-  - mongo/jstests/core/write/collation_find_and_modify.js
-  - mongo/jstests/core/index/indexc.js
-  - mongo/jstests/core/resume_query.js
-  - mongo/jstests/core/capped/capped.js
-  - mongo/jstests/core/doc_validation/doc_validation_invalid_validators.js
-  - mongo/jstests/core/index/fts/fts_index_wildcard_and_weight.js
-  - mongo/jstests/core/query/find/find7.js
-  - mongo/jstests/core/query/mr/mr_bigobject.js
-  - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
-  - mongo/jstests/core/server22053.js
-  - mongo/jstests/core/query/dbref/dbref3.js
-  - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js
-  - mongo/jstests/core/write/delete/delete_hint.js
-  - mongo/jstests/core/index/index_bigkeys.js
-  - mongo/jstests/core/index/geo/geo_circle2.js
+  - mongo/jstests/core/query/array/arrayfind2.js
+  - mongo/jstests/core/query/array/arrayfind8.js
+  - mongo/jstests/core/query/array/array_match1.js
+  - mongo/jstests/core/query/basic4.js
+  - mongo/jstests/core/query/basic5.js
+  - mongo/jstests/core/query/basic7.js
+  - mongo/jstests/core/query/basica.js
+  - mongo/jstests/core/query/collation_with_reverse_index.js
+  - mongo/jstests/core/query/collection_uuid_find.js
+  - mongo/jstests/core/query/count/countb.js
   - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js
+  - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js
+  - mongo/jstests/core/query/cursor/cursor6.js
+  - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
+  - mongo/jstests/core/query/cursor/tailable_skip_limit.js
+  - mongo/jstests/core/query/dbref/dbref1.js
+  - mongo/jstests/core/query/dbref/dbref3.js
+  - mongo/jstests/core/query/dbref/ref.js
+  - mongo/jstests/core/query/distinct/distinct_index1.js
+  - mongo/jstests/core/query/exists/exists3.js
+  - mongo/jstests/core/query/exists/exists4.js
+  - mongo/jstests/core/query/exists/exists7.js
+  - mongo/jstests/core/query/exists/existsb.js
+  - mongo/jstests/core/query/exists/exists.js
+  - mongo/jstests/core/query/explain/explain1.js
+  - mongo/jstests/core/query/explain/explain_multi_plan.js
+  - mongo/jstests/core/query/explain/explain_sort_type.js
+  - mongo/jstests/core/query/explain/explain_upsert.js
+  - mongo/jstests/core/query/explain/explain_uuid.js
+  - mongo/jstests/core/query/explain/explain_validation.js
+  - mongo/jstests/core/query/explain/explain_winning_plan.js
+  - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js
+  - mongo/jstests/core/query/explode_for_sort_plan_cache.js
+  - mongo/jstests/core/query/find/find5.js
+  - mongo/jstests/core/query/find/find6.js
+  - mongo/jstests/core/query/find/find7.js
+  - mongo/jstests/core/query/find/find8.js
+  - mongo/jstests/core/query/find/find_getmore_bsonsize.js
+  - mongo/jstests/core/query/in/in4.js
+  - mongo/jstests/core/query/in/in5.js
+  - mongo/jstests/core/query/in/in7.js
+  - mongo/jstests/core/query/in/in.js
+  - mongo/jstests/core/query/in/in_with_mixed_values.js
+  - mongo/jstests/core/query/internal_apply_oplog_update.js
+  - mongo/jstests/core/query/js/js2.js
+  - mongo/jstests/core/query/js/js3.js
+  - mongo/jstests/core/query/js/js8.js
+  - mongo/jstests/core/query/js/js_jit.js
+  - mongo/jstests/core/query/minmax.js
+  - mongo/jstests/core/query/mr/mr_bigobject.js
+  - mongo/jstests/core/query/mr/mr_correctness.js
+  - mongo/jstests/core/query/mr/mr_fail_invalid_js.js
+  - mongo/jstests/core/query/mr/mr_merge.js
+  - mongo/jstests/core/query/mr/mr_reduce_merge_other_db.js
+  - mongo/jstests/core/query/mr/mr_replace_into_other_db.js
+  - mongo/jstests/core/query/mr/mr_sort.js
+  - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js
+  - mongo/jstests/core/query/ne/ne1.js
+  - mongo/jstests/core/query/ne/ne2.js
+  - mongo/jstests/core/query/ne/ne3.js
+  - mongo/jstests/core/query/ne/ne_array.js
+  - mongo/jstests/core/query/neq_null_correctly_cache.js
+  - mongo/jstests/core/query/nestedarr1.js
+  - mongo/jstests/core/query/nor.js
+  - mongo/jstests/core/query/null_field_name.js
+  - mongo/jstests/core/query/number/numberint.js
+  - mongo/jstests/core/query/number/numberlong.js
+  - mongo/jstests/core/query/objid/objid1.js
+  - mongo/jstests/core/query/objid/objid2.js
+  - mongo/jstests/core/query/objid/objid6.js
+  - mongo/jstests/core/query/objid/objid7.js
+  - mongo/jstests/core/query/or/or3.js
+  - mongo/jstests/core/query/or/orc.js
+  - mongo/jstests/core/query/or/org.js
+  - mongo/jstests/core/query/or/or_inexact.js
+  - mongo/jstests/core/query/or/orj.js
+  - mongo/jstests/core/query/or/oro.js
+  - mongo/jstests/core/query/or/orp.js
+  - mongo/jstests/core/query/plan_cache/plan_cache_clear.js
+  - mongo/jstests/core/query/plan_cache/plan_cache_positional_projection.js
+  - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js
+  - mongo/jstests/core/query/pull/pull_remove1.js
+  - mongo/jstests/core/query/regex/regex6.js
+  - mongo/jstests/core/query/regex/regexc.js
+  - mongo/jstests/core/query/regex/regex.js
+  - mongo/jstests/core/query/regex/regex_options.js
+  - mongo/jstests/core/query/set/set6.js
+  - mongo/jstests/core/query/sort/sort4.js
+  - mongo/jstests/core/query/sort/sorta.js
+  - mongo/jstests/core/query/sort/sort_array.js
+  - mongo/jstests/core/query/sort/sortb.js
+  - mongo/jstests/core/query/sort/sortf.js
+  - mongo/jstests/core/query/sort/sort_merge.js
+  - mongo/jstests/core/query/sort/sort_with_meta_operator.js
+  - mongo/jstests/core/query/type/type4.js
+  - mongo/jstests/core/query/type/type_array.js
+  - mongo/jstests/core/query/unset/unset.js
+  - mongo/jstests/core/query/where/where2.js
+  - mongo/jstests/core/query/where/where_multiple_plans.js
+  - mongo/jstests/core/resume_query.js
+  - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
+  - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
+  - mongo/jstests/core/server22053.js
+  - mongo/jstests/core/server25192.js
+  - mongo/jstests/core/server7756.js
+  - mongo/jstests/core/server9547.js
+  - mongo/jstests/core/shell/bson.js
+  - mongo/jstests/core/shell/collection_save.js
+  - mongo/jstests/core/shell/shelltypes.js
+  - mongo/jstests/core/show_record_id.js
+  - mongo/jstests/core/testminmax.js
+  - mongo/jstests/core/top.js
+  - mongo/jstests/core/write/collation_find_and_modify.js
+  - mongo/jstests/core/write/delete/delete_hint.js
+  - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
+  - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
+  - mongo/jstests/core/write/insert/insert_id_undefined.js
+  - mongo/jstests/core/write/insert/insert_one.js
+  - mongo/jstests/core/write/update/batch_write_command_update.js
+  - mongo/jstests/core/write/update/collation_update.js
+  - mongo/jstests/core/write/update/update2.js
+  - mongo/jstests/core/write/update/update6.js
+  - mongo/jstests/core/write/update/update9.js
+  - mongo/jstests/core/write/update/update_addToSet3.js
+  - mongo/jstests/core/write/update/update_arraymatch4.js
+  - mongo/jstests/core/write/update/update_arraymatch7.js
   - mongo/jstests/core/write/update/updatec.js
-  - mongo/jstests/core/index/index_check6.js
-  - mongo/jstests/core/index/geo/geo_array0.js
+  - mongo/jstests/core/write/update/updatee.js
+  - mongo/jstests/core/write/update/updateg.js
+  - mongo/jstests/core/write/update/update_metrics.js
+  - mongo/jstests/core/write/update/update_mul_examples.js
+  - mongo/jstests/core/write/update/update_multi4.js
+  - mongo/jstests/core/write/update/update_multi_halts.js
+  - mongo/jstests/core/write/update/update_setOnInsert.js
+  - mongo/jstests/core/write/update/update_with_large_hint.js
+  - mongo/jstests/core/write/verify_update_mods.js
 
 results:
-  ferretdb:
-    stats:
-      expected_fail: 178
-      expected_pass: 67
-    fail:
-      - mongo/jstests/core/api/api_version_new_51_language_features.js
-      - mongo/jstests/core/api/api_version_pipeline_stages.js
-      - mongo/jstests/core/api/api_version_unstable_fields.js
-      - mongo/jstests/core/capped/capped.js
-      - mongo/jstests/core/capped/cappeda.js
-      - mongo/jstests/core/catalog/list_collections_name_only.js
-      - mongo/jstests/core/columnstore/columnstore_index.js
-      - mongo/jstests/core/columnstore/columnstore_index_correctness.js
-      - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
-      - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
-      - mongo/jstests/core/command_json_schema_field.js
-      - mongo/jstests/core/command_let_variables_merge_only.js
-      - mongo/jstests/core/constructors.js
-      - mongo/jstests/core/dbstats.js
-      - mongo/jstests/core/ddl/capped_convertToCapped1.js
-      - mongo/jstests/core/ddl/collation_convert_to_capped.js
-      - mongo/jstests/core/ddl/create_collection_fail_cleanup.js
-      - mongo/jstests/core/ddl/drop_collection.js
-      - mongo/jstests/core/ddl/index_create_too_many.js
-      - mongo/jstests/core/ddl/rename_collection_different_dbs.js
-      - mongo/jstests/core/ddl/rename_collection_long_name.js
-      - mongo/jstests/core/ddl/rename_collection_view.js
-      - mongo/jstests/core/doc_validation/doc_validation_invalid_validators.js
-      - mongo/jstests/core/find_with_resume_after_param.js
+  includes:
+    index:
       - mongo/jstests/core/index/covered/covered_index_simple_3.js
       - mongo/jstests/core/index/elemmatch_index.js
       - mongo/jstests/core/index/fts/fts6.js
@@ -449,8 +422,8 @@ results:
       - mongo/jstests/core/index/fts/fts_phrase.js
       - mongo/jstests/core/index/fts/fts_spanish.js
       - mongo/jstests/core/index/fts/fts_trailing_fields.js
-      - mongo/jstests/core/index/geo/geo1.js
       - mongo/jstests/core/index/geo/geo10.js
+      - mongo/jstests/core/index/geo/geo1.js
       - mongo/jstests/core/index/geo/geo9.js
       - mongo/jstests/core/index/geo/geo_allowedcomparisons.js
       - mongo/jstests/core/index/geo/geo_array0.js
@@ -458,11 +431,13 @@ results:
       - mongo/jstests/core/index/geo/geo_box3.js
       - mongo/jstests/core/index/geo/geo_circle2.js
       - mongo/jstests/core/index/geo/geo_circle4.js
+      - mongo/jstests/core/index/geo/geoc.js
       - mongo/jstests/core/index/geo/geo_exactfetch.js
       - mongo/jstests/core/index/geo/geo_max.js
       - mongo/jstests/core/index/geo/geo_mindistance.js
       - mongo/jstests/core/index/geo/geo_multinest1.js
       - mongo/jstests/core/index/geo/geo_near_bounds_overflow.js
+      - mongo/jstests/core/index/geo/geonear_key.js
       - mongo/jstests/core/index/geo/geo_s2cursorlimitskip.js
       - mongo/jstests/core/index/geo/geo_s2indexoldformat.js
       - mongo/jstests/core/index/geo/geo_s2meridian.js
@@ -470,19 +445,24 @@ results:
       - mongo/jstests/core/index/geo/geo_s2nearcorrect.js
       - mongo/jstests/core/index/geo/geo_sort1.js
       - mongo/jstests/core/index/geo/geo_validate.js
-      - mongo/jstests/core/index/geo/geoc.js
-      - mongo/jstests/core/index/geo/geonear_key.js
       - mongo/jstests/core/index/hashed/hashed_index_collation.js
       - mongo/jstests/core/index/hashed/hashed_index_queries.js
       - mongo/jstests/core/index/hidden_index.js
       - mongo/jstests/core/index/index13.js
+      - mongo/jstests/core/index/index1.js
+      - mongo/jstests/core/index/index2.js
       - mongo/jstests/core/index/index4.js
       - mongo/jstests/core/index/index8.js
       - mongo/jstests/core/index/index_bigkeys.js
+      - mongo/jstests/core/index/indexb.js
       - mongo/jstests/core/index/index_bounds_minkey.js
       - mongo/jstests/core/index/index_check2.js
+      - mongo/jstests/core/index/index_check5.js
       - mongo/jstests/core/index/index_check6.js
       - mongo/jstests/core/index/index_check7.js
+      - mongo/jstests/core/index/indexc.js
+      - mongo/jstests/core/index/indexg.js
+      - mongo/jstests/core/index/indexl.js
       - mongo/jstests/core/index/index_partial_create_drop.js
       - mongo/jstests/core/index/index_partial_read_ops.js
       - mongo/jstests/core/index/index_partial_validate.js
@@ -498,28 +478,36 @@ results:
       - mongo/jstests/core/index/wildcard/wildcard_index_dedup.js
       - mongo/jstests/core/index/wildcard/wildcard_index_equality_to_empty_obj.js
       - mongo/jstests/core/index/wildcard/wildcard_index_validindex.js
-      - mongo/jstests/core/json_schema/additional_items.js
-      - mongo/jstests/core/json_schema/json_schema.js
-      - mongo/jstests/core/json_schema/pattern_properties.js
-      - mongo/jstests/core/list_commands.js
-      - mongo/jstests/core/merge_sort_collation.js
-      - mongo/jstests/core/mod_special_values.js
-      - mongo/jstests/core/monotonic_date_operations.js
+    query:
       - mongo/jstests/core/query/all/all5.js
       - mongo/jstests/core/query/always_true_false.js
+      - mongo/jstests/core/query/and/andor.js
       - mongo/jstests/core/query/array/array1.js
+      - mongo/jstests/core/query/array/array3.js
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind8.js
+      - mongo/jstests/core/query/array/array_match1.js
+      - mongo/jstests/core/query/basic4.js
+      - mongo/jstests/core/query/basic5.js
+      - mongo/jstests/core/query/basic7.js
+      - mongo/jstests/core/query/basica.js
+      - mongo/jstests/core/query/collation_with_reverse_index.js
       - mongo/jstests/core/query/collection_uuid_find.js
       - mongo/jstests/core/query/count/countb.js
       - mongo/jstests/core/query/cursor/aggregation_accepts_write_concern.js
+      - mongo/jstests/core/query/cursor/aggregation_getmore_batchsize.js
+      - mongo/jstests/core/query/cursor/cursor6.js
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
       - mongo/jstests/core/query/cursor/tailable_skip_limit.js
       - mongo/jstests/core/query/dbref/dbref1.js
       - mongo/jstests/core/query/dbref/dbref3.js
       - mongo/jstests/core/query/dbref/ref.js
       - mongo/jstests/core/query/distinct/distinct_index1.js
+      - mongo/jstests/core/query/exists/exists3.js
+      - mongo/jstests/core/query/exists/exists4.js
       - mongo/jstests/core/query/exists/exists7.js
+      - mongo/jstests/core/query/exists/existsb.js
+      - mongo/jstests/core/query/exists/exists.js
       - mongo/jstests/core/query/explain/explain1.js
       - mongo/jstests/core/query/explain/explain_multi_plan.js
       - mongo/jstests/core/query/explain/explain_sort_type.js
@@ -529,13 +517,21 @@ results:
       - mongo/jstests/core/query/explain/explain_winning_plan.js
       - mongo/jstests/core/query/explain/explain_writecmd_nonexistent_collection.js
       - mongo/jstests/core/query/explode_for_sort_plan_cache.js
+      - mongo/jstests/core/query/find/find5.js
       - mongo/jstests/core/query/find/find6.js
+      - mongo/jstests/core/query/find/find7.js
       - mongo/jstests/core/query/find/find8.js
       - mongo/jstests/core/query/find/find_getmore_bsonsize.js
+      - mongo/jstests/core/query/in/in4.js
+      - mongo/jstests/core/query/in/in5.js
+      - mongo/jstests/core/query/in/in7.js
+      - mongo/jstests/core/query/in/in.js
       - mongo/jstests/core/query/in/in_with_mixed_values.js
       - mongo/jstests/core/query/internal_apply_oplog_update.js
+      - mongo/jstests/core/query/js/js2.js
       - mongo/jstests/core/query/js/js3.js
       - mongo/jstests/core/query/js/js8.js
+      - mongo/jstests/core/query/js/js_jit.js
       - mongo/jstests/core/query/minmax.js
       - mongo/jstests/core/query/mr/mr_bigobject.js
       - mongo/jstests/core/query/mr/mr_correctness.js
@@ -545,53 +541,146 @@ results:
       - mongo/jstests/core/query/mr/mr_replace_into_other_db.js
       - mongo/jstests/core/query/mr/mr_sort.js
       - mongo/jstests/core/query/mr/mr_tolerates_js_exception.js
+      - mongo/jstests/core/query/ne/ne1.js
       - mongo/jstests/core/query/ne/ne2.js
       - mongo/jstests/core/query/ne/ne3.js
       - mongo/jstests/core/query/ne/ne_array.js
       - mongo/jstests/core/query/neq_null_correctly_cache.js
+      - mongo/jstests/core/query/nestedarr1.js
+      - mongo/jstests/core/query/nor.js
+      - mongo/jstests/core/query/null_field_name.js
+      - mongo/jstests/core/query/number/numberint.js
+      - mongo/jstests/core/query/number/numberlong.js
+      - mongo/jstests/core/query/objid/objid1.js
+      - mongo/jstests/core/query/objid/objid2.js
+      - mongo/jstests/core/query/objid/objid6.js
+      - mongo/jstests/core/query/objid/objid7.js
       - mongo/jstests/core/query/or/or3.js
+      - mongo/jstests/core/query/or/orc.js
+      - mongo/jstests/core/query/or/org.js
       - mongo/jstests/core/query/or/or_inexact.js
       - mongo/jstests/core/query/or/orj.js
       - mongo/jstests/core/query/or/oro.js
+      - mongo/jstests/core/query/or/orp.js
       - mongo/jstests/core/query/plan_cache/plan_cache_clear.js
       - mongo/jstests/core/query/plan_cache/plan_cache_positional_projection.js
       - mongo/jstests/core/query/plan_cache/plan_cache_stats_shard_and_host.js
       - mongo/jstests/core/query/pull/pull_remove1.js
-      - mongo/jstests/core/query/regex/regex.js
       - mongo/jstests/core/query/regex/regex6.js
+      - mongo/jstests/core/query/regex/regexc.js
+      - mongo/jstests/core/query/regex/regex.js
       - mongo/jstests/core/query/regex/regex_options.js
       - mongo/jstests/core/query/set/set6.js
-      - mongo/jstests/core/query/sort/sort_array.js
-      - mongo/jstests/core/query/sort/sort_merge.js
-      - mongo/jstests/core/query/sort/sort_with_meta_operator.js
+      - mongo/jstests/core/query/sort/sort4.js
       - mongo/jstests/core/query/sort/sorta.js
+      - mongo/jstests/core/query/sort/sort_array.js
       - mongo/jstests/core/query/sort/sortb.js
       - mongo/jstests/core/query/sort/sortf.js
+      - mongo/jstests/core/query/sort/sort_merge.js
+      - mongo/jstests/core/query/sort/sort_with_meta_operator.js
+      - mongo/jstests/core/query/type/type4.js
       - mongo/jstests/core/query/type/type_array.js
+      - mongo/jstests/core/query/unset/unset.js
       - mongo/jstests/core/query/where/where2.js
       - mongo/jstests/core/query/where/where_multiple_plans.js
-      - mongo/jstests/core/resume_query.js
-      - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
-      - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
-      - mongo/jstests/core/server22053.js
-      - mongo/jstests/core/server7756.js
-      - mongo/jstests/core/server9547.js
-      - mongo/jstests/core/shell/collection_save.js
-      - mongo/jstests/core/show_record_id.js
-      - mongo/jstests/core/top.js
+    write:
       - mongo/jstests/core/write/collation_find_and_modify.js
       - mongo/jstests/core/write/delete/delete_hint.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_hint.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify_pipeline_update.js
       - mongo/jstests/core/write/insert/insert_id_undefined.js
+      - mongo/jstests/core/write/insert/insert_one.js
       - mongo/jstests/core/write/update/batch_write_command_update.js
       - mongo/jstests/core/write/update/collation_update.js
+      - mongo/jstests/core/write/update/update2.js
+      - mongo/jstests/core/write/update/update6.js
+      - mongo/jstests/core/write/update/update9.js
+      - mongo/jstests/core/write/update/update_addToSet3.js
       - mongo/jstests/core/write/update/update_arraymatch4.js
       - mongo/jstests/core/write/update/update_arraymatch7.js
+      - mongo/jstests/core/write/update/updatec.js
+      - mongo/jstests/core/write/update/updatee.js
+      - mongo/jstests/core/write/update/updateg.js
       - mongo/jstests/core/write/update/update_metrics.js
+      - mongo/jstests/core/write/update/update_mul_examples.js
+      - mongo/jstests/core/write/update/update_multi4.js
+      - mongo/jstests/core/write/update/update_multi_halts.js
       - mongo/jstests/core/write/update/update_setOnInsert.js
       - mongo/jstests/core/write/update/update_with_large_hint.js
       - mongo/jstests/core/write/verify_update_mods.js
+    misc:
+      - mongo/jstests/core/api/api_version_new_51_language_features.js
+      - mongo/jstests/core/api/api_version_pipeline_stages.js
+      - mongo/jstests/core/api/api_version_unstable_fields.js
+      - mongo/jstests/core/benchrun_cmd_param_error.js
+      - mongo/jstests/core/capped/cappeda.js
+      - mongo/jstests/core/capped/capped.js
+      - mongo/jstests/core/catalog/list_collections_name_only.js
+      - mongo/jstests/core/catalog/list_indexes_non_existent_ns.js
+      - mongo/jstests/core/columnstore/columnstore_index_correctness.js
+      - mongo/jstests/core/columnstore/columnstore_index.js
+      - mongo/jstests/core/columnstore/columnstore_index_per_path_filters.js
+      - mongo/jstests/core/columnstore/columnstore_large_array_index_correctness.js
+      - mongo/jstests/core/command_json_schema_field.js
+      - mongo/jstests/core/command_let_variables_merge_only.js
+      - mongo/jstests/core/constructors.js
+      - mongo/jstests/core/dbadmin.js
+      - mongo/jstests/core/dbstats.js
+      - mongo/jstests/core/ddl/capped_convertToCapped1.js
+      - mongo/jstests/core/ddl/collation_convert_to_capped.js
+      - mongo/jstests/core/ddl/create_collection_fail_cleanup.js
+      - mongo/jstests/core/ddl/drop3.js
+      - mongo/jstests/core/ddl/drop_collection.js
+      - mongo/jstests/core/ddl/index_create_too_many.js
+      - mongo/jstests/core/ddl/rename_collection_different_dbs.js
+      - mongo/jstests/core/ddl/rename_collection_long_name.js
+      - mongo/jstests/core/ddl/rename_collection_view.js
+      - mongo/jstests/core/doc_validation/doc_validation_invalid_validators.js
+      - mongo/jstests/core/find_with_resume_after_param.js
+      - mongo/jstests/core/json_schema/additional_items.js
+      - mongo/jstests/core/json_schema/json_schema.js
+      - mongo/jstests/core/json_schema/pattern_properties.js
+      - mongo/jstests/core/list_commands.js
+      - mongo/jstests/core/merge_sort_collation.js
+      - mongo/jstests/core/mixed_version_replica_set.js
+      - mongo/jstests/core/mod_special_values.js
+      - mongo/jstests/core/monotonic_date_operations.js
+      - mongo/jstests/core/pop_server_13516.js
+      - mongo/jstests/core/resume_query.js
+      - mongo/jstests/core/sbe/plan_cache_sbe_with_or_queries.js
+      - mongo/jstests/core/sbe/sbe_explain_rejected_plans.js
+      - mongo/jstests/core/server22053.js
+      - mongo/jstests/core/server25192.js
+      - mongo/jstests/core/server7756.js
+      - mongo/jstests/core/server9547.js
+      - mongo/jstests/core/shell/bson.js
+      - mongo/jstests/core/shell/collection_save.js
+      - mongo/jstests/core/shell/shelltypes.js
+      - mongo/jstests/core/show_record_id.js
+      - mongo/jstests/core/testminmax.js
+      - mongo/jstests/core/top.js
+
+  ferretdb:
+    stats:
+      expected_fail: 178
+      expected_pass: 67
+    fail:
+    include_fail:
+      - index
+      - query
+      - write
+      - misc
+
+  sqlite:
+    stats:
+      expected_fail: 178
+      expected_pass: 67
+    fail:
+    include_fail:
+      - query
+      - write
+      - auth
+      - misc
 
   mongodb:
     stats:
