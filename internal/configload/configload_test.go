@@ -175,10 +175,10 @@ func TestIncludes(t *testing.T) {
 			in: &testConfig{
 				Default:     (*ic.Status)(pointer.ToString("fail")),
 				Fail:        []string{"a"},
-				IncludeFail: []string{"x", "y", "z"},
+				IncludeFail: []string{"include_fail"},
 			},
 			includes: map[string][]string{
-				"include_fail": {},
+				"include_fail": {"x", "y", "z"},
 			},
 			expected: &ic.TestConfig{
 				Fail: ic.Tests{
