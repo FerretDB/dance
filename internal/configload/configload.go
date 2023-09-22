@@ -348,6 +348,10 @@ func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
 	}
 
 	for _, t := range configs {
+		if t == nil {
+			continue
+		}
+
 		if err := checkDuplicates(t); err != nil {
 			return err
 		}
