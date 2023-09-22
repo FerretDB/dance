@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/AlekSi/pointer"
 	"github.com/stretchr/testify/assert"
 
 	ic "github.com/FerretDB/dance/internal/config"
@@ -165,19 +166,26 @@ func TestIncludes(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
-		cfg         *testConfig
+		in          *testConfig
 		includes    map[string][]string
 		expected    *ic.TestConfig
 		expectedErr error
 	}{
 		"IncludeFail": {
-			cfg: &testConfig{Fail: []string{"a"}},
+			in: &testConfig{
+				Default: (*ic.Status)(pointer.ToString("pass")),
+				Fail:    []string{"a"},
+			},
 			includes: map[string][]string{
 				"include_fail": {
 					"x", "y", "z",
 				},
 			},
-			expected:    &ic.TestConfig{},
+			expected: &ic.TestConfig{
+				Fail: ic.Tests{
+					Names: []string{"a", "x", "y", "z"},
+				},
+			},
 			expectedErr: nil,
 		},
 	} {
@@ -185,7 +193,9 @@ func TestIncludes(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			t.Log(tc, name)
+			out, err := tc.in.convert(tc.includes)
+
+			t.Log(out, err)
 		})
 	}
 }
