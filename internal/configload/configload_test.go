@@ -160,3 +160,32 @@ func TestMergeCommon(t *testing.T) {
 		})
 	}
 }
+
+func TestIncludes(t *testing.T) {
+	t.Parallel()
+
+	for name, tc := range map[string]struct {
+		cfg         *testConfig
+		includes    map[string][]string
+		expected    *ic.TestConfig
+		expectedErr error
+	}{
+		"IncludeFail": {
+			cfg: &testConfig{Fail: []string{"a"}},
+			includes: map[string][]string{
+				"include_fail": {
+					"x", "y", "z",
+				},
+			},
+			expected:    &ic.TestConfig{},
+			expectedErr: nil,
+		},
+	} {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			t.Log(tc, name)
+		})
+	}
+}
