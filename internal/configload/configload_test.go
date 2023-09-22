@@ -210,8 +210,6 @@ func TestIncludes(t *testing.T) {
 
 			out, err := tc.in.convert(tc.includes)
 
-			t.Log(out, err)
-
 			if tc.expectedErr != nil {
 				assert.Equal(t, tc.expectedErr, err)
 				return
