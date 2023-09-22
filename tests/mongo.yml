@@ -47,13 +47,8 @@ args:
   - mongo/jstests/core/write/update/update[a-z].js
 
 results:
-  ferretdb:
-    stats:
-      expected_fail: 62
-      expected_pass: 39
-
-    fail:
-      # --- aggregation tests ---
+  includes:
+    aggregation:
       - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
       - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
       - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where.
@@ -76,10 +71,8 @@ results:
       - mongo/jstests/aggregation/use_query_project_and_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
-      # --- end of aggregation tests ---
-
+    query:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
-
       # https://docs.ferretdb.io/diff/
       # 3. FerretDB does not support nested arrays.
       - mongo/jstests/core/query/all/all2.js
@@ -89,10 +82,8 @@ results:
       - mongo/jstests/core/query/array/arrayfind1.js
       - mongo/jstests/core/query/array/arrayfind2.js
       - mongo/jstests/core/query/array/arrayfind4.js
-
       # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/array/arrayfind5.js
-
       # https://github.com/FerretDB/FerretDB/issues/1710
       # https://github.com/FerretDB/FerretDB/issues/731
       - mongo/jstests/core/query/array/arrayfind3.js
@@ -100,71 +91,80 @@ results:
       - mongo/jstests/core/query/array/arrayfind7.js
       - mongo/jstests/core/query/array/arrayfind8.js
       - mongo/jstests/core/query/array/arrayfind9.js
-
-      # https://github.com/FerretDB/FerretDB/issues/1492
-      - mongo/jstests/core/administrative/auth1.js
-
-      # https://github.com/FerretDB/FerretDB/issues/161
+     # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
-
       # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/query/cursor/cursora.js
-
       # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
-
       # https://github.com/FerretDB/FerretDB/issues/2283
       # https://github.com/FerretDB/FerretDB/issues/2284
       - mongo/jstests/core/query/awaitdata_getmore_cmd.js
-
       # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
       - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
-
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
-
       # https://github.com/FerretDB/FerretDB/issues/1710
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
-
       # https://github.com/FerretDB/dance/issues/295
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
-
+      # https://jira.mongodb.org/browse/SERVER-14832
+      - mongo/jstests/core/query/distinct/distinct_array1.js
+      # https://github.com/FerretDB/FerretDB/issues/2231
+      - mongo/jstests/core/query/distinct/distinct4.js
+      # https://github.com/FerretDB/FerretDB/issues/1242
+      - mongo/jstests/core/query/unset/unset2.js
+    write:
       # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/write/find_and_modify/find_and_modify.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
-
-      # https://jira.mongodb.org/browse/SERVER-14832
-      - mongo/jstests/core/query/distinct/distinct_array1.js
-
-      # https://github.com/FerretDB/FerretDB/issues/2231
-      - mongo/jstests/core/query/distinct/distinct4.js
-
-      # https://github.com/FerretDB/FerretDB/issues/1384
-      - mongo/jstests/core/uniqueness.js
-
-      # https://github.com/FerretDB/FerretDB/issues/1242
-      - mongo/jstests/core/query/unset/unset2.js
-
       # https://github.com/FerretDB/FerretDB/issues/1855
       - mongo/jstests/core/write/update/update8.js
-      - mongo/jstests/core/write/update/updatej.js
-
       # https://github.com/FerretDB/FerretDB/issues/1742
       - mongo/jstests/core/write/update/updateb.js
       - mongo/jstests/core/write/update/updatel.js
-
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
       # document keys must not contain $ or . signs;
       - mongo/jstests/core/write/update/updateh.js
-
-      # same issue, see below.
+    auth:
+      # https://github.com/FerretDB/FerretDB/issues/1492
+      - mongo/jstests/core/administrative/auth1.js
+      # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
+    misc:
+      # https://github.com/FerretDB/FerretDB/issues/1384
+      - mongo/jstests/core/uniqueness.js
+
+  ferretdb:
+    stats:
+      expected_fail: 62
+      expected_pass: 39
+    fail:
+      - mongo/jstests/core/write/update/updatej.js
+    include_fail:
+      - aggregation
+      - query
+      - write
+      - auth
+      - misc
+
+  sqlite:
+    stats:
+      expected_fail: 61
+      expected_pass: 40
+    fail:
+    include_fail:
+      - aggregation
+      - query
+      - write
+      - auth
+      - misc
 
   mongodb:
     stats:

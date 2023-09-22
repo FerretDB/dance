@@ -39,7 +39,8 @@ jobs:
       fail-fast: false
       matrix:
         db:
-          - ferretdb
+          - postgresql
+          - sqlite
           - mongodb
         test:
           - dbaas_core-0
