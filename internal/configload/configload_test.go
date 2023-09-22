@@ -182,7 +182,7 @@ func TestIncludes(t *testing.T) {
 			},
 			expected: &ic.TestConfig{
 				Fail: ic.Tests{
-					Names: []string{"a", "x", "y", "z"},
+					Names: []string{"x", "y", "z", "a"},
 				},
 			},
 			expectedErr: nil,
