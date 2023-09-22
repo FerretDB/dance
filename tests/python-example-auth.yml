@@ -7,6 +7,10 @@ results:
   ferretdb:
     stats:
       expected_pass: 1
+  
+  sqlite:
+    stats:
+      expected_pass: 1
 
   mongodb:
     stats:
