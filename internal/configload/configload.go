@@ -179,11 +179,6 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 		t.Fail.Names = append(t.Fail.Names, includeFail...)
 	}
 
-	for _, k := range tc.IncludeSkip {
-		includeSkip := includes[k]
-		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, includeSkip...)
-	}
-
 	for _, k := range tc.IncludePass {
 		IncludePass := includes[k]
 		t.Pass.Names = append(t.Pass.Names, IncludePass...)
@@ -294,21 +289,6 @@ func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
 		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
 		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
 		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
-
-		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
-		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
-		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
-		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
-
-		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
-		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
-		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
-		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
-
-		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
-		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
-		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
-		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
 	}
 
 	for _, t := range configs {

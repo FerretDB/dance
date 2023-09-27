@@ -17,7 +17,6 @@ package config
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 	"strings"
 
@@ -171,25 +170,12 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
-	tcMap := tc.toMap()
-
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
 
 	for _, test := range tests {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
-
-		if expStatus := tc.getExpectedStatusRegex(test, &testRes); expStatus != nil {
-			expectedRes = *expStatus
-		} else {
-			for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
-				if res, ok := tcMap[prefix]; ok {
-					expectedRes = res
-					break
-				}
-			}
-		}
 
 		testResOutput := testRes.IndentedOutput()
 
@@ -265,80 +251,6 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	return compareResult, nil
 }
 
-// getExpectedStatusRegex compiles result output with expected outputs and return expected status.
-// If no output matches expected - returns nil.
-// If both of the regexps match, it panics.
-func (tc *TestConfig) getExpectedStatusRegex(testName string, result *TestResult) *Status {
-	var matchedRegex string  // name of regex that matched the test (it's required to print it on panic)
-	var matchedStatus Status // matched status by regex
-
-	for _, expectedRes := range []struct {
-		expectedStatus Status
-		tests          Tests
-	}{
-		{Fail, tc.Fail},
-		{Pass, tc.Pass},
-		{Skip, tc.Skip},
-	} {
-		for _, reg := range expectedRes.tests.NameRegexPattern {
-			r := regexp.MustCompile(reg)
-
-			if !r.MatchString(testName) {
-				continue
-			}
-
-			if matchedRegex != "" {
-				panic(fmt.Sprintf(
-					"test %s\n(output: %s)\nmatches more than one name regex: %s, %s",
-					testName, result.Output, matchedRegex, reg,
-				))
-			}
-			matchedStatus = expectedRes.expectedStatus
-			matchedRegex = reg
-		}
-
-		for _, reg := range expectedRes.tests.NameNotRegexPattern {
-			r := regexp.MustCompile(reg)
-
-			if r.MatchString(testName) {
-				continue
-			}
-
-			if matchedRegex != "" {
-				panic(fmt.Sprintf(
-					"test %s\n(output: %s)\nmatches more than one name not-regex: %s, %s",
-					testName, result.Output, matchedRegex, reg,
-				))
-			}
-			matchedStatus = expectedRes.expectedStatus
-			matchedRegex = reg
-		}
-
-		for _, reg := range expectedRes.tests.OutputRegexPattern {
-			r := regexp.MustCompile(reg)
-
-			if !r.MatchString(result.Output) {
-				continue
-			}
-
-			if matchedRegex != "" {
-				panic(fmt.Sprintf(
-					"test %s\n(output: %s)\nmatches more than one output regex: %s, %s",
-					testName, result.Output, matchedRegex, reg,
-				))
-			}
-			matchedStatus = expectedRes.expectedStatus
-			matchedRegex = reg
-		}
-	}
-
-	if matchedStatus == "" {
-		return nil
-	}
-
-	return &matchedStatus
-}
-
 // nextPrefix returns the next prefix of the given path, stopping on / and .
 // It panics for empty string.
 func nextPrefix(path string) string {
@@ -357,26 +269,4 @@ func nextPrefix(path string) string {
 	i := strings.LastIndexAny(path, "/.")
 
 	return path[:i+1]
-}
-
-// toMap converts *TestConfig to the map of tests.
-// The map stores test names as a keys and their status (fail|skip|pass), as their value.
-func (tc *TestConfig) toMap() map[string]Status {
-	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
-
-	for _, tcat := range []struct {
-		testsStatus Status
-		tests       Tests
-	}{
-		{Fail, tc.Fail},
-		{Skip, tc.Skip},
-		{Pass, tc.Pass},
-		{Ignore, tc.Ignore},
-	} {
-		for _, t := range tcat.tests.Names {
-			res[t] = tcat.testsStatus
-		}
-	}
-
-	return res
 }
