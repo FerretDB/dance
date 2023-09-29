@@ -185,7 +185,10 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 		t.Pass.Names = append(t.Pass.Names, includePass...)
 	}
 
-	t.Ignore.Names = nil
+	for _, k := range tc.IncludeIgnore {
+		includeIgnore := includes[k]
+		t.Ignore.Names = append(t.Ignore.Names, includeIgnore...)
+	}
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
