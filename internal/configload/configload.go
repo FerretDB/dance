@@ -47,15 +47,16 @@ type config struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default     *ic.Status `yaml:"default"`
-	Stats       *stats     `yaml:"stats"`
-	Fail        []string   `yaml:"fail"`
-	Skip        []string   `yaml:"skip"`
-	Pass        []string   `yaml:"pass"`
-	Ignore      []string   `yaml:"ignore"`
-	IncludeFail []string   `yaml:"include_fail"`
-	IncludeSkip []string   `yaml:"include_skip"`
-	IncludePass []string   `yaml:"include_pass"`
+	Default       *ic.Status `yaml:"default"`
+	Stats         *stats     `yaml:"stats"`
+	Fail          []string   `yaml:"fail"`
+	Skip          []string   `yaml:"skip"`
+	Pass          []string   `yaml:"pass"`
+	Ignore        []string   `yaml:"ignore"`
+	IncludeFail   []string   `yaml:"include_fail"`
+	IncludeSkip   []string   `yaml:"include_skip"`
+	IncludePass   []string   `yaml:"include_pass"`
+	IncludeIgnore []string   `yaml:"include_ignore"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -180,9 +181,11 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 	}
 
 	for _, k := range tc.IncludePass {
-		IncludePass := includes[k]
-		t.Pass.Names = append(t.Pass.Names, IncludePass...)
+		includePass := includes[k]
+		t.Pass.Names = append(t.Pass.Names, includePass...)
 	}
+
+	t.Ignore.Names = nil
 
 	//nolint:govet // we don't care about alignment there
 	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
