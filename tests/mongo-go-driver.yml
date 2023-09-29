@@ -110,10 +110,6 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
-
-      # returns unknown result
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse unknown
-
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
@@ -169,6 +165,7 @@ results:
 
   ferretdb:
     stats:
+      unexpected_skip: 19 
       expected_fail: 11
       expected_pass: 644
     fail:
@@ -200,17 +197,23 @@ results:
 
   sqlite:
     stats:
+      unexpected_skip: 19 
       expected_fail: 12
-      expected_skip: 19
       expected_pass: 643
     fail:
       # sql: Scan error on column index 0, name "SizeTables": converting NULL to int64 is unsupported
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
+    skip:
+    include_skip:
+      - skip
     pass:
     include_pass:
       - pass
+    ignore:
+    include_ignore:
+      - ignore
   
   mongodb:
     stats:
