@@ -170,12 +170,21 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedRest: make(map[string]TestResult),
 	}
 
+	tcMap := tc.toMap()
+
 	tests := maps.Keys(results.TestResults)
 	sort.Strings(tests)
 
 	for _, test := range tests {
 		expectedRes := tc.Default
 		testRes := results.TestResults[test]
+
+		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
+			if res, ok := tcMap[prefix]; ok {
+				expectedRes = res
+				break
+			}
+		}
 
 		testResOutput := testRes.IndentedOutput()
 
@@ -249,6 +258,28 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	}
 
 	return compareResult, nil
+}
+
+// toMap converts *TestConfig to the map of tests.
+// The map stores test names as a keys and their status (fail|skip|pass), as their value.
+func (tc *TestConfig) toMap() map[string]Status {
+	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
+
+	for _, tcat := range []struct {
+		testsStatus Status
+		tests       Tests
+	}{
+		{Fail, tc.Fail},
+		{Skip, tc.Skip},
+		{Pass, tc.Pass},
+		{Ignore, tc.Ignore},
+	} {
+		for _, t := range tcat.tests.Names {
+			res[t] = tcat.testsStatus
+		}
+	}
+
+	return res
 }
 
 // nextPrefix returns the next prefix of the given path, stopping on / and .
