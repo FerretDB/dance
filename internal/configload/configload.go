@@ -16,14 +16,13 @@
 package configload
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
 
-	"github.com/AlekSi/pointer"
 	"gopkg.in/yaml.v3"
 
+	"github.com/AlekSi/pointer"
 	ic "github.com/FerretDB/dance/internal/config"
 )
 
@@ -115,18 +114,12 @@ func load(file string) (*ic.Config, error) {
 	}
 
 	// Convert the YAML-based configuration to the internal representation.
-	return cfg.convertAndMerge()
+	return cfg.convertAndValidate()
 }
 
-// convertAndMerge validates the YAML configuration, converts it to the internal *ic.Config,
-// and merges database-specific configurations.
-func (c *config) convertAndMerge() (*ic.Config, error) {
+// convertAndValidate validates the YAML configuration, converts it to the internal *ic.Config.
+func (c *config) convertAndValidate() (*ic.Config, error) {
 	includes := c.Results.Includes
-
-	common, err := c.Results.Common.convert(includes)
-	if err != nil {
-		return nil, err
-	}
 
 	postgreSQL, err := c.Results.PostgreSQL.convert(includes)
 	if err != nil {
@@ -143,7 +136,7 @@ func (c *config) convertAndMerge() (*ic.Config, error) {
 		return nil, err
 	}
 
-	if err := mergeCommon(common, postgreSQL, sqLite, mongoDB); err != nil {
+	if err := validate(postgreSQL, sqLite, mongoDB); err != nil {
 		return nil, err
 	}
 
@@ -207,11 +200,6 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 
 // fillAndValidate populates the configuration with default values and performs validation.
 func (c *config) fillAndValidate() error {
-	// initialize common field if it's nil
-	if c.Results.Common == nil {
-		c.Results.Common = &testConfig{}
-	}
-
 	knownStatuses := map[ic.Status]struct{}{
 		ic.Fail: {},
 		ic.Skip: {},
@@ -225,21 +213,6 @@ func (c *config) fillAndValidate() error {
 		return ok
 	}
 
-	// allows us to set default values outside of common
-	commonWasNil := false
-
-	// initialize default common field if it's nil
-	if c.Results.Common.Default == nil {
-		c.Results.Common.Default = pointer.To(ic.Pass)
-		commonWasNil = true
-	}
-
-	commonDefault := c.Results.Common.Default
-
-	if !validStatus(commonDefault) {
-		return fmt.Errorf("invalid default result: %q", *commonDefault)
-	}
-
 	for _, r := range []*testConfig{
 		c.Results.PostgreSQL,
 		c.Results.SQLite,
@@ -249,9 +222,9 @@ func (c *config) fillAndValidate() error {
 			continue
 		}
 
-		// if the default value is not present use the common default and skip validation
+		// if the default value is not present use pass
 		if r.Default == nil {
-			r.Default = commonDefault
+			r.Default = (*ic.Status)(pointer.ToString("pass"))
 			continue
 		}
 		origDefault := r.Default
@@ -259,72 +232,12 @@ func (c *config) fillAndValidate() error {
 		if !validStatus(r.Default) {
 			return fmt.Errorf("invalid default result: %q", *origDefault)
 		}
-
-		if commonWasNil && *r.Default != "" {
-			continue
-		}
-
-		// this will cause a conflict so return an error
-		if *commonDefault != "" && *r.Default != "" {
-			return errors.New("default value cannot be set in common, when it's set in database")
-		}
-
-		// no default found so set to common default
-		r.Default = commonDefault
 	}
 
 	return nil
 }
 
-// mergeCommon merges the common test configuration into database-specific test configurations
-// and performs validation.
-func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
-	for _, t := range configs {
-		if t == nil && common == nil {
-			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
-		}
-	}
-
-	for _, t := range configs {
-		if t == nil || common == nil {
-			continue
-		}
-
-		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
-		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
-		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
-		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
-
-		t.Fail.NameRegexPattern = append(t.Fail.NameRegexPattern, common.Fail.NameRegexPattern...)
-		t.Skip.NameRegexPattern = append(t.Skip.NameRegexPattern, common.Skip.NameRegexPattern...)
-		t.Pass.NameRegexPattern = append(t.Pass.NameRegexPattern, common.Pass.NameRegexPattern...)
-		t.Ignore.NameRegexPattern = append(t.Ignore.NameRegexPattern, common.Ignore.NameRegexPattern...)
-
-		t.Fail.NameNotRegexPattern = append(t.Fail.NameNotRegexPattern, common.Fail.NameNotRegexPattern...)
-		t.Skip.NameNotRegexPattern = append(t.Skip.NameNotRegexPattern, common.Skip.NameNotRegexPattern...)
-		t.Pass.NameNotRegexPattern = append(t.Pass.NameNotRegexPattern, common.Pass.NameNotRegexPattern...)
-		t.Ignore.NameNotRegexPattern = append(t.Ignore.NameNotRegexPattern, common.Ignore.NameNotRegexPattern...)
-
-		t.Fail.OutputRegexPattern = append(t.Fail.OutputRegexPattern, common.Fail.OutputRegexPattern...)
-		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, common.Skip.OutputRegexPattern...)
-		t.Pass.OutputRegexPattern = append(t.Pass.OutputRegexPattern, common.Pass.OutputRegexPattern...)
-		t.Ignore.OutputRegexPattern = append(t.Ignore.OutputRegexPattern, common.Ignore.OutputRegexPattern...)
-	}
-
-	for _, t := range configs {
-		if t == nil || common == nil {
-			continue
-		}
-
-		if common.Stats != nil && t.Stats != nil {
-			return errors.New("stats value cannot be set in common, when it's set in database")
-		}
-
-		if common.Stats != nil {
-			t.Stats = common.Stats
-		}
-	}
-
+func validate(configs ...*ic.TestConfig) error {
 	checkDuplicates := func(tc *ic.TestConfig) error {
 		seen := make(map[string]struct{})
 
