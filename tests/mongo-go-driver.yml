@@ -12,6 +12,8 @@ args:
 
 results:
   includes:
+    output_regex: 
+      - skipping due to environmental constraints.*
     fail:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
 
@@ -94,6 +96,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
 
+  common:
     ignore:
       # indicates flaky tests that should be ignored
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
@@ -110,6 +113,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
+
     skip:
       # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
@@ -162,66 +166,46 @@ results:
       # test must be skipped: "cursorType not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+    include_skip: 
+      - output_regex
 
   ferretdb:
     stats:
-      unexpected_skip: 19 
-      expected_fail: 11
-      expected_pass: 644
-    fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
-      - go.mongodb.org/mongo-driver/mongo/TestClient
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
-    skip:
-    include_skip:
-      - skip
-    pass:
-    include_pass:
-      - pass
+      expected_fail: 10
+      expected_skip: 19
+      expected_pass: 633
     ignore:
-    include_ignore:
-      - ignore
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
       # returns unknown result.
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+    fail:
+    include_fail:
+      - fail
+    pass:
+    include_pass:
+      - pass
 
   sqlite:
     stats:
-      unexpected_skip: 19 
       expected_fail: 12
+      expected_skip: 19
       expected_pass: 643
     fail:
       # sql: Scan error on column index 0, name "SizeTables": converting NULL to int64 is unsupported
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
-    skip:
-    include_skip:
-      - skip
     pass:
     include_pass:
       - pass
-    ignore:
-    include_ignore:
-      - ignore
   
   mongodb:
     stats:
-      unexpected_skip: 435
-      expected_pass: 2259
+      expected_skip: 432
+      expected_pass: 1940
     skip:
-    include_skip:
-      - skip
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-errorResponse.json/findOneAndUpdate_document_validation_errInfo_is_accessible
@@ -328,8 +312,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueSize_should_be_included_in_connection_pool_created_message_when_specified
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json/waitQueueTimeoutMS_should_be_included_in_connection_pool_created_message_when_specified
     pass:
-    include_pass:
-      - pass
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
@@ -342,5 +324,3 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
-    ignore:
-    include_ignore:
