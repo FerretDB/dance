@@ -93,9 +93,12 @@ func TestConvertAndValidate(t *testing.T) {
 			t.Parallel()
 
 			_, err := tc.in.convertAndValidate()
-			if err != nil {
-				assert.Equal(t, err, tc.expectedErr)
+			if tc.expectedErr != nil {
+				assert.Equal(t, tc.expectedErr, err)
+				return
 			}
+
+			assert.NoError(t, err)
 		})
 	}
 }
@@ -180,6 +183,8 @@ func TestIncludes(t *testing.T) {
 			if out.Ignore.Names != nil {
 				assert.Equal(t, tc.expected.Ignore, out.Ignore)
 			}
+
+			assert.NoError(t, err)
 		})
 	}
 }
