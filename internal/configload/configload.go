@@ -46,15 +46,16 @@ type config struct {
 
 // testConfig represents the YAML-based configuration for database-specific test configurations.
 type testConfig struct {
-	Default     *ic.Status `yaml:"default"`
-	Stats       *stats     `yaml:"stats"`
-	Fail        []string   `yaml:"fail"`
-	Skip        []string   `yaml:"skip"`
-	Pass        []string   `yaml:"pass"`
-	Ignore      []string   `yaml:"ignore"`
-	IncludeFail []string   `yaml:"include_fail"`
-	IncludeSkip []string   `yaml:"include_skip"`
-	IncludePass []string   `yaml:"include_pass"`
+	Default       *ic.Status `yaml:"default"`
+	Stats         *stats     `yaml:"stats"`
+	Fail          []string   `yaml:"fail"`
+	Skip          []string   `yaml:"skip"`
+	Pass          []string   `yaml:"pass"`
+	Ignore        []string   `yaml:"ignore"`
+	IncludeFail   []string   `yaml:"include_fail"`
+	IncludeSkip   []string   `yaml:"include_skip"`
+	IncludePass   []string   `yaml:"include_pass"`
+	IncludeIgnore []string   `yaml:"include_ignore"`
 }
 
 // stats represents the YAML representation of internal config.Stats.
@@ -172,14 +173,14 @@ func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, err
 		t.Fail.Names = append(t.Fail.Names, includeFail...)
 	}
 
-	for _, k := range tc.IncludeSkip {
-		includeSkip := includes[k]
-		t.Skip.OutputRegexPattern = append(t.Skip.OutputRegexPattern, includeSkip...)
+	for _, k := range tc.IncludePass {
+		includePass := includes[k]
+		t.Pass.Names = append(t.Pass.Names, includePass...)
 	}
 
-	for _, k := range tc.IncludePass {
-		IncludePass := includes[k]
-		t.Pass.Names = append(t.Pass.Names, IncludePass...)
+	for _, k := range tc.IncludeIgnore {
+		includeIgnore := includes[k]
+		t.Ignore.Names = append(t.Ignore.Names, includeIgnore...)
 	}
 
 	//nolint:govet // we don't care about alignment there
@@ -237,7 +238,40 @@ func (c *config) fillAndValidate() error {
 	return nil
 }
 
-func validate(configs ...*ic.TestConfig) error {
+// mergeCommon merges the common test configuration into database-specific test configurations
+// and performs validation.
+func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
+	for _, t := range configs {
+		if t == nil && common == nil {
+			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
+		}
+	}
+
+	for _, t := range configs {
+		if t == nil || common == nil {
+			continue
+		}
+
+		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
+		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
+		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
+		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
+	}
+
+	for _, t := range configs {
+		if t == nil || common == nil {
+			continue
+		}
+
+		if common.Stats != nil && t.Stats != nil {
+			return errors.New("stats value cannot be set in common, when it's set in database")
+		}
+
+		if common.Stats != nil {
+			t.Stats = common.Stats
+		}
+	}
+
 	checkDuplicates := func(tc *ic.TestConfig) error {
 		seen := make(map[string]struct{})
 
