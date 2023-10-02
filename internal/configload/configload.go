@@ -20,9 +20,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/AlekSi/pointer"
 	"gopkg.in/yaml.v3"
 
-	"github.com/AlekSi/pointer"
 	ic "github.com/FerretDB/dance/internal/config"
 )
 
