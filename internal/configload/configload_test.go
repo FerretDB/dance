@@ -77,8 +77,11 @@ func TestConvertAndValidate(t *testing.T) {
 					SQLite     *testConfig         "yaml:\"sqlite\""
 					MongoDB    *testConfig         "yaml:\"mongodb\""
 				}{
-					Includes:   map[string][]string{},
-					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("fail")), Fail: []string{"a"}, Pass: []string{"a"}},
+					Includes: map[string][]string{},
+					PostgreSQL: &testConfig{
+						Default: (*ic.Status)(pointer.ToString("fail")),
+						Fail:    []string{"a"},
+						Pass:    []string{"a"}},
 				},
 			},
 			expectedErr: fmt.Errorf("duplicate test or prefix: %q", "a"),
