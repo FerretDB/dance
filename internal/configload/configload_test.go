@@ -38,12 +38,12 @@ func TestFillAndValidate(t *testing.T) {
 		"InvalidDefault": {
 			in: &config{
 				Results: struct {
-					Includes   map[string][]string "yaml:\"includes\""
-					PostgreSQL *testConfig         "yaml:\"ferretdb\""
-					SQLite     *testConfig         "yaml:\"sqlite\""
-					MongoDB    *testConfig         "yaml:\"mongodb\""
+					Includes   map[string][]string `yaml:"includes"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					SQLite     *testConfig         `yaml:"sqlite"`
+					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
-					Includes:   map[string][]string{},
+					Includes:   make(map[string][]string),
 					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("foo"))},
 				},
 			},
@@ -72,16 +72,17 @@ func TestConvertAndValidate(t *testing.T) {
 		"DuplicatePrefix": {
 			in: &config{
 				Results: struct {
-					Includes   map[string][]string "yaml:\"includes\""
-					PostgreSQL *testConfig         "yaml:\"ferretdb\""
-					SQLite     *testConfig         "yaml:\"sqlite\""
-					MongoDB    *testConfig         "yaml:\"mongodb\""
+					Includes   map[string][]string `yaml:"includes"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					SQLite     *testConfig         `yaml:"sqlite"`
+					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
-					Includes: map[string][]string{},
+					Includes: make(map[string][]string),
 					PostgreSQL: &testConfig{
 						Default: (*ic.Status)(pointer.ToString("fail")),
 						Fail:    []string{"a"},
-						Pass:    []string{"a"}},
+						Pass:    []string{"a"},
+					},
 				},
 			},
 			expectedErr: fmt.Errorf("duplicate test or prefix: %q", "a"),
