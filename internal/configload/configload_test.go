@@ -158,17 +158,17 @@ func TestIncludes(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
-		"IncludeSkip": {
+		"IncludePass": {
 			in: &testConfig{
-				Default:     (*ic.Status)(pointer.ToString("skip")),
-				Skip:        []string{"x"},
-				IncludeSkip: []string{"include_skip"},
+				Default:     (*ic.Status)(pointer.ToString("pass")),
+				Pass:        []string{"x"},
+				IncludePass: []string{"include_pass"},
 			},
 			includes: map[string][]string{
-				"include_skip": {"a", "b", "c"},
+				"include_pass": {"a", "b", "c"},
 			},
 			expected: &ic.TestConfig{
-				Skip: ic.Tests{
+				Pass: ic.Tests{
 					Names: []string{"a", "b", "c", "x"},
 				},
 			},
@@ -186,7 +186,13 @@ func TestIncludes(t *testing.T) {
 				return
 			}
 
-			assert.Equal(t, tc.expected.Fail, out.Fail)
+			if out.Fail.Names != nil {
+				assert.Equal(t, tc.expected.Fail, out.Fail)
+			}
+
+			if out.Pass.Names != nil {
+				assert.Equal(t, tc.expected.Pass, out.Pass)
+			}
 		})
 	}
 }
