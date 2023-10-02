@@ -174,6 +174,22 @@ func TestIncludes(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
+		"IncludeIgnore": {
+			in: &testConfig{
+				Default:       (*ic.Status)(pointer.ToString("ignore")),
+				Ignore:        []string{"i"},
+				IncludeIgnore: []string{"include_ignore"},
+			},
+			includes: map[string][]string{
+				"include_ignore": {"a", "b", "c"},
+			},
+			expected: &ic.TestConfig{
+				Ignore: ic.Tests{
+					Names: []string{"a", "b", "c", "i"},
+				},
+			},
+			expectedErr: nil,
+		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
@@ -192,6 +208,10 @@ func TestIncludes(t *testing.T) {
 
 			if out.Pass.Names != nil {
 				assert.Equal(t, tc.expected.Pass, out.Pass)
+			}
+
+			if out.Ignore.Names != nil {
+				assert.Equal(t, tc.expected.Ignore, out.Ignore)
 			}
 		})
 	}
