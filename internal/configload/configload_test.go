@@ -15,7 +15,6 @@
 package configload
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
@@ -25,110 +24,81 @@ import (
 	ic "github.com/FerretDB/dance/internal/config"
 )
 
-func TestMergeCommon(t *testing.T) {
+func TestFillAndValidate(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
-		common      *ic.TestConfig
-		config1     *ic.TestConfig
-		config2     *ic.TestConfig
+		in          *config
 		expectedErr error
 	}{
-		"AllNil": {
-			common:      nil,
-			config1:     nil,
-			config2:     nil,
-			expectedErr: fmt.Errorf("all database-specific results must be set (if common results are not set)"),
+		"Nil": {
+			in:          &config{},
+			expectedErr: nil,
 		},
-		"AllPass": {
-			common: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"a"}},
-			},
-			config1: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"e"}},
-			},
-			config2: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"i"}},
-			},
-		},
-		"DuplicatesPass": {
-			common: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"a"}},
-			},
-			config1: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"e", "a"}},
-			},
-			config2: &ic.TestConfig{
-				Pass: ic.Tests{Names: []string{"i"}},
-			},
-			expectedErr: fmt.Errorf("duplicate test or prefix: \"a\""),
-		},
-		"AllStats": {
-			common: &ic.TestConfig{
-				Stats: &ic.Stats{},
-			},
-			config1: &ic.TestConfig{
-				Stats: &ic.Stats{},
-			},
-			config2: &ic.TestConfig{
-				Stats: &ic.Stats{},
-			},
-			expectedErr: errors.New("stats value cannot be set in common, when it's set in database"),
-		},
-		"ExpectedPassStats": {
-			common: &ic.TestConfig{
-				Stats: &ic.Stats{
-					ExpectedPass: 1,
+		"InvalidDefault": {
+			in: &config{
+				Results: struct {
+					Includes   map[string][]string `yaml:"includes"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					SQLite     *testConfig         `yaml:"sqlite"`
+					MongoDB    *testConfig         `yaml:"mongodb"`
+				}{
+					Includes:   make(map[string][]string),
+					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("foo"))},
 				},
 			},
-			config1: &ic.TestConfig{},
-			config2: &ic.TestConfig{},
+			expectedErr: fmt.Errorf("invalid default result: %q", "foo"),
 		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			err := mergeCommon(tc.common, tc.config1, tc.config2)
+			err := tc.in.fillAndValidate()
+			if err != nil {
+				assert.Equal(t, err, tc.expectedErr)
+			}
+		})
+	}
+}
+
+func TestConvertAndValidate(t *testing.T) {
+	t.Parallel()
+
+	for name, tc := range map[string]struct {
+		in          *config
+		expectedErr error
+	}{
+		"DuplicatePrefix": {
+			in: &config{
+				Results: struct {
+					Includes   map[string][]string `yaml:"includes"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					SQLite     *testConfig         `yaml:"sqlite"`
+					MongoDB    *testConfig         `yaml:"mongodb"`
+				}{
+					Includes: make(map[string][]string),
+					PostgreSQL: &testConfig{
+						Default: (*ic.Status)(pointer.ToString("fail")),
+						Fail:    []string{"a"},
+						Pass:    []string{"a"},
+					},
+				},
+			},
+			expectedErr: fmt.Errorf("duplicate test or prefix: %q", "a"),
+		},
+	} {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			_, err := tc.in.convertAndValidate()
 			if tc.expectedErr != nil {
 				assert.Equal(t, tc.expectedErr, err)
 				return
 			}
 
 			assert.NoError(t, err)
-
-			for _, tests := range []struct {
-				actual ic.Tests
-			}{
-				{tc.config1.Pass},
-				{tc.config2.Pass},
-			} {
-				for _, name := range tc.common.Pass.Names {
-					assert.Contains(t, tests.actual.Names, name)
-				}
-			}
-
-			for _, tests := range []struct {
-				actual ic.Tests
-			}{
-				{tc.config1.Fail},
-				{tc.config2.Fail},
-			} {
-				for _, name := range tc.common.Fail.Names {
-					assert.Contains(t, tests.actual.Names, name)
-				}
-			}
-
-			if tc.common.Stats != nil {
-				for _, tests := range []struct {
-					actual ic.Stats
-				}{
-					{*tc.config1.Stats},
-					{*tc.config2.Stats},
-				} {
-					assert.Equal(t, tests.actual.ExpectedPass, tc.common.Stats.ExpectedPass)
-				}
-			}
 		})
 	}
 }
@@ -158,18 +128,34 @@ func TestIncludes(t *testing.T) {
 			},
 			expectedErr: nil,
 		},
-		"IncludeSkip": {
+		"IncludePass": {
 			in: &testConfig{
-				Default:     (*ic.Status)(pointer.ToString("skip")),
-				Skip:        []string{"x"},
-				IncludeSkip: []string{"include_skip"},
+				Default:     (*ic.Status)(pointer.ToString("pass")),
+				Pass:        []string{"x"},
+				IncludePass: []string{"include_pass"},
 			},
 			includes: map[string][]string{
-				"include_skip": {"a", "b", "c"},
+				"include_pass": {"a", "b", "c"},
 			},
 			expected: &ic.TestConfig{
-				Skip: ic.Tests{
+				Pass: ic.Tests{
 					Names: []string{"a", "b", "c", "x"},
+				},
+			},
+			expectedErr: nil,
+		},
+		"IncludeIgnore": {
+			in: &testConfig{
+				Default:       (*ic.Status)(pointer.ToString("ignore")),
+				Ignore:        []string{"i"},
+				IncludeIgnore: []string{"include_ignore"},
+			},
+			includes: map[string][]string{
+				"include_ignore": {"a", "b", "c"},
+			},
+			expected: &ic.TestConfig{
+				Ignore: ic.Tests{
+					Names: []string{"a", "b", "c", "i"},
 				},
 			},
 			expectedErr: nil,
@@ -186,7 +172,19 @@ func TestIncludes(t *testing.T) {
 				return
 			}
 
-			assert.Equal(t, tc.expected.Fail, out.Fail)
+			if out.Fail.Names != nil {
+				assert.Equal(t, tc.expected.Fail, out.Fail)
+			}
+
+			if out.Pass.Names != nil {
+				assert.Equal(t, tc.expected.Pass, out.Pass)
+			}
+
+			if out.Ignore.Names != nil {
+				assert.Equal(t, tc.expected.Ignore, out.Ignore)
+			}
+
+			assert.NoError(t, err)
 		})
 	}
 }
