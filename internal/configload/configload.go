@@ -37,7 +37,6 @@ type config struct {
 		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
-		Common     *testConfig         `yaml:"common"`   // TODO https://github.com/FerretDB/dance/issues/591
 		PostgreSQL *testConfig         `yaml:"ferretdb"` // TODO preserving YAML tag for compatibility, will update later
 		SQLite     *testConfig         `yaml:"sqlite"`
 		MongoDB    *testConfig         `yaml:"mongodb"`
@@ -238,40 +237,7 @@ func (c *config) fillAndValidate() error {
 	return nil
 }
 
-// mergeCommon merges the common test configuration into database-specific test configurations
-// and performs validation.
-func mergeCommon(common *ic.TestConfig, configs ...*ic.TestConfig) error {
-	for _, t := range configs {
-		if t == nil && common == nil {
-			return fmt.Errorf("all database-specific results must be set (if common results are not set)")
-		}
-	}
-
-	for _, t := range configs {
-		if t == nil || common == nil {
-			continue
-		}
-
-		t.Fail.Names = append(t.Fail.Names, common.Fail.Names...)
-		t.Skip.Names = append(t.Skip.Names, common.Skip.Names...)
-		t.Pass.Names = append(t.Pass.Names, common.Pass.Names...)
-		t.Ignore.Names = append(t.Ignore.Names, common.Ignore.Names...)
-	}
-
-	for _, t := range configs {
-		if t == nil || common == nil {
-			continue
-		}
-
-		if common.Stats != nil && t.Stats != nil {
-			return errors.New("stats value cannot be set in common, when it's set in database")
-		}
-
-		if common.Stats != nil {
-			t.Stats = common.Stats
-		}
-	}
-
+func validate(configs ...*ic.TestConfig) error {
 	checkDuplicates := func(tc *ic.TestConfig) error {
 		seen := make(map[string]struct{})
 
