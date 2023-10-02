@@ -45,8 +45,6 @@ func TestFillAndValidate(t *testing.T) {
 				}{
 					Includes:   map[string][]string{},
 					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("foo"))},
-					SQLite:     &testConfig{},
-					MongoDB:    &testConfig{},
 				},
 			},
 			expectedErr: fmt.Errorf("invalid default result: %q", "foo"),
@@ -57,6 +55,40 @@ func TestFillAndValidate(t *testing.T) {
 			t.Parallel()
 
 			err := tc.in.fillAndValidate()
+			if err != nil {
+				assert.Equal(t, err, tc.expectedErr)
+			}
+		})
+	}
+}
+
+func TestConvertAndValidate(t *testing.T) {
+	t.Parallel()
+
+	for name, tc := range map[string]struct {
+		in          *config
+		expectedErr error
+	}{
+		"DuplicatePrefix": {
+			in: &config{
+				Results: struct {
+					Includes   map[string][]string "yaml:\"includes\""
+					PostgreSQL *testConfig         "yaml:\"ferretdb\""
+					SQLite     *testConfig         "yaml:\"sqlite\""
+					MongoDB    *testConfig         "yaml:\"mongodb\""
+				}{
+					Includes:   map[string][]string{},
+					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("fail")), Fail: []string{"a"}, Pass: []string{"a"}},
+				},
+			},
+			expectedErr: fmt.Errorf("duplicate test or prefix: %q", "a"),
+		},
+	} {
+		name, tc := name, tc
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			_, err := tc.in.convertAndValidate()
 			if err != nil {
 				assert.Equal(t, err, tc.expectedErr)
 			}
