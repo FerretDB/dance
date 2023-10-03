@@ -660,7 +660,7 @@ results:
       - mongo/jstests/core/testminmax.js
       - mongo/jstests/core/top.js
 
-  ferretdb:
+  postgresql:
     stats:
       expected_fail: 178
       expected_pass: 67

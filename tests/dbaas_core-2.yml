@@ -658,7 +658,7 @@ results:
       - mongo/jstests/core/ts1.js
       - mongo/jstests/core/type_bracket.js
 
-  ferretdb:
+  postgresql:
     stats:
       expected_fail: 181
       expected_pass: 62

@@ -648,7 +648,7 @@ results:
       - mongo/jstests/core/test_command_line_test_helpers.js
       - mongo/jstests/core/top_drop.js
 
-  ferretdb:
+  postgresql:
     stats:
       expected_fail: 181
       expected_pass: 57

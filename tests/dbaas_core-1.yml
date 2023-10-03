@@ -660,7 +660,7 @@ results:
       - mongo/jstests/core/uniqueness.js
       - mongo/jstests/core/validate_js_timestamp.js
 
-  ferretdb:
+  postgresql:
     stats:
       expected_fail: 178
       expected_pass: 66
