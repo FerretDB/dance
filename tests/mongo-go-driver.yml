@@ -96,7 +96,6 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
 
-  common:
     ignore:
       # indicates flaky tests that should be ignored
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
@@ -171,15 +170,16 @@ results:
 
   ferretdb:
     stats:
+      unexpected_skip: 21
       expected_fail: 10
-      expected_skip: 19
+      expected_skip: 0
       expected_pass: 633
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
-      # returns unknown result.
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     fail:
     include_fail:
       - fail
