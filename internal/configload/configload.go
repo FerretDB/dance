@@ -37,7 +37,7 @@ type config struct {
 		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
-		PostgreSQL *testConfig         `yaml:"postgresql"` // TODO preserving YAML tag for compatibility, will update later
+		PostgreSQL *testConfig         `yaml:"postgresql"`
 		SQLite     *testConfig         `yaml:"sqlite"`
 		MongoDB    *testConfig         `yaml:"mongodb"`
 	} `yaml:"results"`
