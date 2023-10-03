@@ -168,7 +168,7 @@ results:
     include_skip: 
       - output_regex
 
-  ferretdb:
+  postgresql:
     stats:
       unexpected_skip: 21
       expected_fail: 10
@@ -189,12 +189,17 @@ results:
 
   sqlite:
     stats:
-      expected_fail: 12
-      expected_skip: 19
-      expected_pass: 643
+      unexpected_skip: 21
+      expected_fail: 10
+      expected_skip: 0
+      expected_pass: 632
+    ignore:
+      # returns unknown result.
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
+      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     fail:
-      # sql: Scan error on column index 0, name "SizeTables": converting NULL to int64 is unsupported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
     pass:
