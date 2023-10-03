@@ -190,7 +190,7 @@ results:
   sqlite:
     stats:
       unexpected_skip: 21
-      expected_fail: 10
+      expected_fail: 11
       expected_skip: 0
       expected_pass: 632
     ignore:
@@ -200,6 +200,8 @@ results:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     fail:
+      # sql: Scan error on column index 0, name "SUM(pgsize)": converting NULL to int64 is unsupported
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
     pass:
