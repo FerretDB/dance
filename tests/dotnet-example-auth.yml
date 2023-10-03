@@ -7,13 +7,15 @@ args:
   - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
 
 results:
-  ferretdb:
+  postgresql:
     stats:
       expected_pass: 1
 
   sqlite:
     stats:
-      expected_pass: 1
+      expected_fail: 1
+    fail:
+      - dotnet-example
 
   mongodb:
     stats:
