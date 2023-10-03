@@ -39,7 +39,7 @@ func TestFillAndValidate(t *testing.T) {
 			in: &config{
 				Results: struct {
 					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					PostgreSQL *testConfig         `yaml:"postgresql"`
 					SQLite     *testConfig         `yaml:"sqlite"`
 					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
@@ -55,9 +55,12 @@ func TestFillAndValidate(t *testing.T) {
 			t.Parallel()
 
 			err := tc.in.fillAndValidate()
-			if err != nil {
+			if tc.expectedErr != nil {
 				assert.Equal(t, err, tc.expectedErr)
+				return
 			}
+
+			assert.NoError(t, err)
 		})
 	}
 }
@@ -73,7 +76,7 @@ func TestConvertAndValidate(t *testing.T) {
 			in: &config{
 				Results: struct {
 					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"ferretdb"`
+					PostgreSQL *testConfig         `yaml:"postgresql"`
 					SQLite     *testConfig         `yaml:"sqlite"`
 					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
