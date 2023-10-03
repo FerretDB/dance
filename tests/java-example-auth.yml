@@ -4,7 +4,7 @@ dir: java-example/java
 args: [../../java-example-auth.sh]
 
 results:
-  ferretdb:
+  postgresql:
     stats:
       expected_pass: 1
 

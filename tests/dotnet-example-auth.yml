@@ -13,9 +13,7 @@ results:
 
   sqlite:
     stats:
-      expected_fail: 1
-    fail:
-      - dotnet-example
+      expected_pass: 1
 
   mongodb:
     stats:
