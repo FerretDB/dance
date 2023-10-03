@@ -3,15 +3,14 @@ runner: gotest
 args: ["-timeout=20m", "-shuffle=on", "./..."]
 
 results:
-  common:
+  postgresql:
     stats:
       expected_pass: 6
 
-  ferretdb:
-    stats:
-
   sqlite:
     stats:
+      expected_pass: 6
 
   mongodb:
     stats:
+      expected_pass: 6
