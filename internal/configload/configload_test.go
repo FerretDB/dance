@@ -39,7 +39,7 @@ func TestFillAndValidate(t *testing.T) {
 			in: &config{
 				Results: struct {
 					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"postgresql"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
 					SQLite     *testConfig         `yaml:"sqlite"`
 					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
@@ -76,7 +76,7 @@ func TestConvertAndValidate(t *testing.T) {
 			in: &config{
 				Results: struct {
 					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"postgresql"`
+					PostgreSQL *testConfig         `yaml:"ferretdb"`
 					SQLite     *testConfig         `yaml:"sqlite"`
 					MongoDB    *testConfig         `yaml:"mongodb"`
 				}{
