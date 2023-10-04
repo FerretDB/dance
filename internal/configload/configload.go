@@ -117,7 +117,7 @@ func load(file string) (*ic.Config, error) {
 	return cfg.convertAndValidate()
 }
 
-// convertAndValidate validates the YAML configuration, converts it to the internal *ic.Config.
+// convertAndValidate converts *config to the internal *ic.Config, and validates the YAML configuration.
 func (c *config) convertAndValidate() (*ic.Config, error) {
 	includes := c.Results.Includes
 
