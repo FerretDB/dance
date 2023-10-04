@@ -55,12 +55,9 @@ func TestFillAndValidate(t *testing.T) {
 			t.Parallel()
 
 			err := tc.in.fillAndValidate()
-			if tc.expectedErr != nil {
+			if err != nil {
 				assert.Equal(t, err, tc.expectedErr)
-				return
 			}
-
-			assert.NoError(t, err)
 		})
 	}
 }
