@@ -15,87 +15,38 @@
 package configload
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 
-	"github.com/AlekSi/pointer"
 	"github.com/stretchr/testify/assert"
 
 	ic "github.com/FerretDB/dance/internal/config"
 )
 
-func TestFillAndValidate(t *testing.T) {
+func TestConvertBackend(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
-		in          *config
-		expectedErr error
-	}{
-		"Nil": {
-			in:          &config{},
-			expectedErr: nil,
-		},
-		"InvalidDefault": {
-			in: &config{
-				Results: struct {
-					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"postgresql"`
-					SQLite     *testConfig         `yaml:"sqlite"`
-					MongoDB    *testConfig         `yaml:"mongodb"`
-				}{
-					Includes:   make(map[string][]string),
-					PostgreSQL: &testConfig{Default: (*ic.Status)(pointer.ToString("foo"))},
-				},
-			},
-			expectedErr: fmt.Errorf("invalid default result: %q", "foo"),
-		},
-	} {
-		name, tc := name, tc
-		t.Run(name, func(t *testing.T) {
-			t.Parallel()
-
-			err := tc.in.fillAndValidate()
-			if tc.expectedErr != nil {
-				assert.Equal(t, tc.expectedErr, err)
-				return
-			}
-
-			assert.NoError(t, err)
-		})
-	}
-}
-
-func TestConvertAndValidate(t *testing.T) {
-	t.Parallel()
-
-	for name, tc := range map[string]struct {
-		in          *config
+		b           *backend
+		expected    *ic.TestConfig
 		expectedErr error
 	}{
 		"DuplicatePrefix": {
-			in: &config{
-				Results: struct {
-					Includes   map[string][]string `yaml:"includes"`
-					PostgreSQL *testConfig         `yaml:"postgresql"`
-					SQLite     *testConfig         `yaml:"sqlite"`
-					MongoDB    *testConfig         `yaml:"mongodb"`
-				}{
-					Includes: make(map[string][]string),
-					PostgreSQL: &testConfig{
-						Default: (*ic.Status)(pointer.ToString("fail")),
-						Fail:    []string{"a"},
-						Pass:    []string{"a"},
-					},
-				},
-			},
-			expectedErr: fmt.Errorf("duplicate test or prefix: %q", "a"),
+			b:           &backend{Fail: []string{"a"}, Pass: []string{"a", "b"}},
+			expected:    &ic.TestConfig{},
+			expectedErr: errors.New("duplicate test name: \"a\""),
+		},
+		"InvalidStatus": {
+			b:           &backend{Default: ic.Status("foo"), Fail: []string{"a"}},
+			expected:    &ic.TestConfig{},
+			expectedErr: errors.New("invalid status \"foo\""),
 		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			_, err := tc.in.convertAndValidate()
+			_, err := tc.b.convert(nil)
 			if tc.expectedErr != nil {
 				assert.Equal(t, tc.expectedErr, err)
 				return
@@ -110,14 +61,14 @@ func TestIncludes(t *testing.T) {
 	t.Parallel()
 
 	for name, tc := range map[string]struct {
-		in          *testConfig
+		in          *backend
 		includes    map[string][]string
 		expected    *ic.TestConfig
 		expectedErr error
 	}{
 		"IncludeFail": {
-			in: &testConfig{
-				Default:     (*ic.Status)(pointer.ToString("fail")),
+			in: &backend{
+				Default:     ic.Pass,
 				Fail:        []string{"a"},
 				IncludeFail: []string{"include_fail"},
 			},
@@ -126,14 +77,14 @@ func TestIncludes(t *testing.T) {
 			},
 			expected: &ic.TestConfig{
 				Fail: ic.Tests{
-					Names: []string{"x", "y", "z", "a"},
+					Names: []string{"a", "x", "y", "z"},
 				},
 			},
 			expectedErr: nil,
 		},
 		"IncludePass": {
-			in: &testConfig{
-				Default:     (*ic.Status)(pointer.ToString("pass")),
+			in: &backend{
+				Default:     ic.Pass,
 				Pass:        []string{"x"},
 				IncludePass: []string{"include_pass"},
 			},
@@ -148,8 +99,8 @@ func TestIncludes(t *testing.T) {
 			expectedErr: nil,
 		},
 		"IncludeIgnore": {
-			in: &testConfig{
-				Default:       (*ic.Status)(pointer.ToString("ignore")),
+			in: &backend{
+				Default:       ic.Ignore,
 				Ignore:        []string{"i"},
 				IncludeIgnore: []string{"include_ignore"},
 			},

@@ -18,9 +18,7 @@ package configload
 import (
 	"fmt"
 	"os"
-	"strings"
 
-	"github.com/AlekSi/pointer"
 	"gopkg.in/yaml.v3"
 
 	ic "github.com/FerretDB/dance/internal/config"
@@ -37,62 +35,16 @@ type config struct {
 		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
-		PostgreSQL *testConfig         `yaml:"postgresql"`
-		SQLite     *testConfig         `yaml:"sqlite"`
-		MongoDB    *testConfig         `yaml:"mongodb"`
+		PostgreSQL *backend            `yaml:"postgresql"`
+		SQLite     *backend            `yaml:"sqlite"`
+		MongoDB    *backend            `yaml:"mongodb"`
 	} `yaml:"results"`
-}
-
-// testConfig represents the YAML-based configuration for database-specific test configurations.
-type testConfig struct {
-	Default       *ic.Status `yaml:"default"`
-	Stats         *stats     `yaml:"stats"`
-	Fail          []string   `yaml:"fail"`
-	Skip          []string   `yaml:"skip"`
-	Pass          []string   `yaml:"pass"`
-	Ignore        []string   `yaml:"ignore"`
-	IncludeFail   []string   `yaml:"include_fail"`
-	IncludeSkip   []string   `yaml:"include_skip"`
-	IncludePass   []string   `yaml:"include_pass"`
-	IncludeIgnore []string   `yaml:"include_ignore"`
-}
-
-// stats represents the YAML representation of internal config.Stats.
-type stats struct {
-	UnexpectedFail int `yaml:"unexpected_fail"`
-	UnexpectedSkip int `yaml:"unexpected_skip"`
-	UnexpectedPass int `yaml:"unexpected_pass"`
-	UnexpectedRest int `yaml:"unexpected_rest"`
-	ExpectedFail   int `yaml:"expected_fail"`
-	ExpectedSkip   int `yaml:"expected_skip"`
-	ExpectedPass   int `yaml:"expected_pass"`
-}
-
-// convertStats converts stats to internal *config.Stats.
-func (s *stats) convertStats() *ic.Stats {
-	if s == nil {
-		return nil
-	}
-
-	return &ic.Stats{
-		UnexpectedFail: s.UnexpectedFail,
-		UnexpectedSkip: s.UnexpectedSkip,
-		UnexpectedPass: s.UnexpectedPass,
-		UnexpectedRest: s.UnexpectedRest,
-		ExpectedFail:   s.ExpectedFail,
-		ExpectedSkip:   s.ExpectedSkip,
-		ExpectedPass:   s.ExpectedPass,
-	}
 }
 
 // Load reads and validates the configuration from a YAML file,
 // returning a pointer to the internal configuration struct *config.Config.
 // Any error encountered during the process is also returned.
 func Load(file string) (*ic.Config, error) {
-	return load(file)
-}
-
-func load(file string) (*ic.Config, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
@@ -102,173 +54,34 @@ func load(file string) (*ic.Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	// Parse the YAML file into a configuration struct.
 	var cfg config
 	if err = d.Decode(&cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	// Validate and fill the configuration struct.
-	if err = cfg.fillAndValidate(); err != nil {
-		return nil, err
-	}
-
-	// Convert the YAML-based configuration to the internal representation.
-	return cfg.convertAndValidate()
-}
-
-// convertAndValidate converts *config to the internal *ic.Config, and validates the YAML configuration.
-func (c *config) convertAndValidate() (*ic.Config, error) {
-	includes := c.Results.Includes
-
-	postgreSQL, err := c.Results.PostgreSQL.convert(includes)
+	postgreSQL, err := cfg.Results.PostgreSQL.convert(cfg.Results.Includes)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
 	}
 
-	sqLite, err := c.Results.SQLite.convert(includes)
+	sqLite, err := cfg.Results.SQLite.convert(cfg.Results.Includes)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
 	}
 
-	mongoDB, err := c.Results.MongoDB.convert(includes)
+	mongoDB, err := cfg.Results.MongoDB.convert(cfg.Results.Includes)
 	if err != nil {
-		return nil, err
-	}
-
-	if err := validate(postgreSQL, sqLite, mongoDB); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to convert MongoDB config: %w", err)
 	}
 
 	return &ic.Config{
-		Runner: c.Runner,
-		Dir:    c.Dir,
-		Args:   c.Args,
+		Runner: cfg.Runner,
+		Dir:    cfg.Dir,
+		Args:   cfg.Args,
 		Results: ic.Results{
 			PostgreSQL: postgreSQL,
 			SQLite:     sqLite,
 			MongoDB:    mongoDB,
 		},
 	}, nil
-}
-
-// convert converts *testConfig to the internal *ic.TestConfig.
-func (tc *testConfig) convert(includes map[string][]string) (*ic.TestConfig, error) {
-	if tc == nil {
-		return nil, nil
-	}
-
-	t := ic.TestConfig{
-		Default: *tc.Default,
-		Stats:   tc.Stats.convertStats(),
-		Fail:    ic.Tests{},
-		Skip:    ic.Tests{},
-		Pass:    ic.Tests{},
-		Ignore:  ic.Tests{},
-	}
-
-	for _, k := range tc.IncludeFail {
-		includeFail := includes[k]
-		t.Fail.Names = append(t.Fail.Names, includeFail...)
-	}
-
-	for _, k := range tc.IncludePass {
-		includePass := includes[k]
-		t.Pass.Names = append(t.Pass.Names, includePass...)
-	}
-
-	for _, k := range tc.IncludeIgnore {
-		includeIgnore := includes[k]
-		t.Ignore.Names = append(t.Ignore.Names, includeIgnore...)
-	}
-
-	//nolint:govet // we don't care about alignment there
-	for _, testCategory := range []struct { // testCategory examples: pass, skip sections in the yaml file
-		yamlTests []string  // taken from the file, yaml representation of tests, incoming tests
-		outTests  *ic.Tests // yamlTests transformed to the internal representation
-	}{
-		{tc.Fail, &t.Fail},
-		{tc.Skip, &t.Skip},
-		{tc.Pass, &t.Pass},
-		{tc.Ignore, &t.Ignore},
-	} {
-		testCategory.outTests.Names = append(testCategory.outTests.Names, testCategory.yamlTests...)
-	}
-
-	return &t, nil
-}
-
-// fillAndValidate populates the configuration with default values and performs validation.
-func (c *config) fillAndValidate() error {
-	knownStatuses := map[ic.Status]struct{}{
-		ic.Fail: {},
-		ic.Skip: {},
-		ic.Pass: {},
-	}
-
-	validStatus := func(status *ic.Status) bool {
-		s := ic.Status(strings.ToLower(string(*status)))
-		_, ok := knownStatuses[s]
-
-		return ok
-	}
-
-	for _, r := range []*testConfig{
-		c.Results.PostgreSQL,
-		c.Results.SQLite,
-		c.Results.MongoDB,
-	} {
-		if r == nil {
-			continue
-		}
-
-		// if the default value is not present use pass
-		if r.Default == nil {
-			r.Default = (*ic.Status)(pointer.ToString("pass"))
-			continue
-		}
-		origDefault := r.Default
-
-		if !validStatus(r.Default) {
-			return fmt.Errorf("invalid default result: %q", *origDefault)
-		}
-	}
-
-	return nil
-}
-
-func validate(configs ...*ic.TestConfig) error {
-	checkDuplicates := func(tc *ic.TestConfig) error {
-		seen := make(map[string]struct{})
-
-		for _, tcat := range []struct {
-			tests ic.Tests
-		}{
-			{tc.Fail},
-			{tc.Skip},
-			{tc.Pass},
-			{tc.Ignore},
-		} {
-			for _, t := range tcat.tests.Names {
-				if _, ok := seen[t]; ok {
-					return fmt.Errorf("duplicate test or prefix: %q", t)
-				}
-				seen[t] = struct{}{}
-			}
-		}
-
-		return nil
-	}
-
-	for _, t := range configs {
-		if t == nil {
-			continue
-		}
-
-		if err := checkDuplicates(t); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }

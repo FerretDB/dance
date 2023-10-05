@@ -92,8 +92,14 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 		}
 
 		testName := event.Package + "/" + event.Test
+
 		result := res.TestResults[testName]
+		if result.Status == "" {
+			result.Status = config.Unknown
+		}
+
 		result.Output += event.Output
+
 		switch event.Action {
 		case actionPass:
 			result.Status = config.Pass
@@ -106,6 +112,7 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 		default:
 			result.Status = config.Unknown
 		}
+
 		res.TestResults[testName] = result
 	}
 

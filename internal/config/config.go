@@ -97,22 +97,22 @@ type TestResults struct {
 
 // Tests holds information about tests of a specific status (fail, skip, pass).
 type Tests struct {
-	Names               []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-	NameRegexPattern    []string // regex: "FerretDB$", the regex for the test name
-	NameNotRegexPattern []string // not_regex: "FerretDB$", the regex for the test name
-	OutputRegexPattern  []string // output_regex: "^server version \"5.0.9\" is (lower|higher).*"
+	Names []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
 }
 
 // CompareResult encapsulates the comparison between expected and actual test outcomes.
 type CompareResult struct {
-	ExpectedFail   map[string]string
-	ExpectedSkip   map[string]string
-	ExpectedPass   map[string]string
+	ExpectedFail map[string]string
+	ExpectedSkip map[string]string
+	ExpectedPass map[string]string
+
 	UnexpectedFail map[string]string
 	UnexpectedSkip map[string]string
 	UnexpectedPass map[string]string
+
 	UnexpectedRest map[string]TestResult
-	Stats          Stats
+
+	Stats Stats
 }
 
 // Status represents the status of a single test.
@@ -123,8 +123,8 @@ const (
 	Fail    Status = "fail"
 	Skip    Status = "skip"
 	Pass    Status = "pass"
-	Ignore  Status = "ignore"
-	Unknown Status = "unknown"
+	Ignore  Status = "ignore"  // for fluky tests
+	Unknown Status = "unknown" // result can't be parsed
 )
 
 // ForDB returns the database-specific test configuration based on the provided dbName.
