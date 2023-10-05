@@ -17,6 +17,7 @@ package configload
 import (
 	"fmt"
 	"slices"
+	"sort"
 
 	ic "github.com/FerretDB/dance/internal/config"
 )
@@ -95,6 +96,7 @@ func (b *backend) convert(includes map[string][]string) (*ic.TestConfig, error) 
 				names[name] = struct{}{}
 
 				*dst = append(*dst, name)
+				sort.Strings(*dst)
 			}
 		}
 	}
