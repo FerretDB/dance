@@ -36,6 +36,11 @@ func TestConvertBackend(t *testing.T) {
 			expected:    &ic.TestConfig{},
 			expectedErr: errors.New("duplicate test name: \"a\""),
 		},
+		"InvalidStatus": {
+			b:           &backend{Default: ic.Status("foo"), Fail: []string{"a"}},
+			expected:    &ic.TestConfig{},
+			expectedErr: errors.New("invalid status \"foo\""),
+		},
 	} {
 		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {

@@ -60,7 +60,7 @@ func (b *backend) convert(includes map[string][]string) (*ic.TestConfig, error) 
 
 	expected := []ic.Status{ic.Fail, ic.Skip, ic.Pass, ic.Ignore} // no unknown
 	if !slices.Contains(expected, t.Default) {
-		return nil, fmt.Errorf("unexpected status %q", t.Default)
+		return nil, fmt.Errorf("invalid status %q", t.Default)
 	}
 
 	names := make(map[string]struct{})
