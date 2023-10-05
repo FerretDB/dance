@@ -37,7 +37,7 @@ type config struct {
 		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
 		Includes   map[string][]string `yaml:"includes"`
-		PostgreSQL *testConfig         `yaml:"ferretdb"` // TODO preserving YAML tag for compatibility, will update later
+		PostgreSQL *testConfig         `yaml:"postgresql"`
 		SQLite     *testConfig         `yaml:"sqlite"`
 		MongoDB    *testConfig         `yaml:"mongodb"`
 	} `yaml:"results"`
@@ -117,7 +117,7 @@ func load(file string) (*ic.Config, error) {
 	return cfg.convertAndValidate()
 }
 
-// convertAndValidate validates the YAML configuration, converts it to the internal *ic.Config.
+// convertAndValidate converts *config to the internal *ic.Config, and validates the YAML configuration.
 func (c *config) convertAndValidate() (*ic.Config, error) {
 	includes := c.Results.Includes
 
