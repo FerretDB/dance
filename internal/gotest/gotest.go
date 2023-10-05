@@ -108,6 +108,9 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 		case actionSkip:
 			result.Status = config.Skip
 		case actionBench, actionCont, actionOutput, actionPause, actionRun:
+			fallthrough
+		default:
+			result.Status = config.Unknown
 		}
 
 		res.TestResults[testName] = result
