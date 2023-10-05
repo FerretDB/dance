@@ -68,7 +68,7 @@ func TestIncludes(t *testing.T) {
 	}{
 		"IncludeFail": {
 			in: &backend{
-				Default:     ic.Status("pass"),
+				Default:     ic.Pass,
 				Fail:        []string{"a"},
 				IncludeFail: []string{"include_fail"},
 			},
@@ -84,7 +84,7 @@ func TestIncludes(t *testing.T) {
 		},
 		"IncludePass": {
 			in: &backend{
-				Default:     ic.Status("pass"),
+				Default:     ic.Pass,
 				Pass:        []string{"x"},
 				IncludePass: []string{"include_pass"},
 			},
@@ -93,14 +93,14 @@ func TestIncludes(t *testing.T) {
 			},
 			expected: &ic.TestConfig{
 				Pass: ic.Tests{
-					Names: []string{"x", "a", "b", "c"},
+					Names: []string{"a", "b", "c", "x"},
 				},
 			},
 			expectedErr: nil,
 		},
 		"IncludeIgnore": {
 			in: &backend{
-				Default:       ic.Status("ignore"),
+				Default:       ic.Ignore,
 				Ignore:        []string{"i"},
 				IncludeIgnore: []string{"include_ignore"},
 			},
@@ -109,7 +109,7 @@ func TestIncludes(t *testing.T) {
 			},
 			expected: &ic.TestConfig{
 				Ignore: ic.Tests{
-					Names: []string{"i", "a", "b", "c"},
+					Names: []string{"a", "b", "c", "i"},
 				},
 			},
 			expectedErr: nil,
