@@ -96,9 +96,10 @@ func (b *backend) convert(includes map[string][]string) (*ic.TestConfig, error) 
 				names[name] = struct{}{}
 
 				*dst = append(*dst, name)
-				sort.Strings(*dst)
 			}
 		}
+
+		sort.Strings(*dst)
 	}
 
 	return t, nil
