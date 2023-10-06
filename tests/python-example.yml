@@ -3,12 +3,14 @@ runner: command
 args: [../python-example.sh]
 
 results:
-  common:
+  postgresql:
     stats:
       expected_pass: 1
 
-  ferretdb:
+  sqlite:
     stats:
+      expected_pass: 1
 
   mongodb:
     stats:
+      expected_pass: 1

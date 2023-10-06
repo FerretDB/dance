@@ -4,7 +4,11 @@ dir: python-example
 args: [../python-example-auth.sh]
 
 results:
-  ferretdb:
+  postgresql:
+    stats:
+      expected_pass: 1
+  
+  sqlite:
     stats:
       expected_pass: 1
 
