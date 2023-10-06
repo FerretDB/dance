@@ -96,6 +96,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
 
+  common:
     ignore:
       # indicates flaky tests that should be ignored
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
@@ -168,18 +169,17 @@ results:
     include_skip: 
       - output_regex
 
-  postgresql:
+  ferretdb:
     stats:
-      unexpected_skip: 21
       expected_fail: 10
-      expected_skip: 0
+      expected_skip: 19
       expected_pass: 633
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
+      # returns unknown result.
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
     fail:
     include_fail:
       - fail
@@ -189,18 +189,11 @@ results:
 
   sqlite:
     stats:
-      unexpected_skip: 21
-      expected_fail: 11
-      expected_skip: 0
-      expected_pass: 632
-    ignore:
-      # returns unknown result.
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+      expected_fail: 12
+      expected_skip: 19
+      expected_pass: 643
     fail:
-      # sql: Scan error on column index 0, name "SUM(pgsize)": converting NULL to int64 is unsupported
+      # sql: Scan error on column index 0, name "SizeTables": converting NULL to int64 is unsupported
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
@@ -210,9 +203,8 @@ results:
   
   mongodb:
     stats:
-      unexpected_skip: 352
-      expected_skip: 83
-      expected_pass: 2259
+      expected_skip: 432
+      expected_pass: 1940
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled

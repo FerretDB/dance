@@ -141,7 +141,7 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/1384
       - mongo/jstests/core/uniqueness.js
 
-  postgresql:
+  ferretdb:
     stats:
       expected_fail: 62
       expected_pass: 39

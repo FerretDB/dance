@@ -10,8 +10,5 @@ results:
   ferretdb:
     stats:
 
-  sqlite:
-    stats:
-
   mongodb:
     stats:

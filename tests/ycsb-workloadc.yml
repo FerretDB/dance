@@ -7,14 +7,12 @@ args:
   - recordcount=5000
 
 results:
-  postgresql:
+  common:
     stats:
       expected_pass: 1
 
-  sqlite:
+  ferretdb:
     stats:
-      expected_pass: 1
 
   mongodb:
     stats:
-      expected_pass: 1

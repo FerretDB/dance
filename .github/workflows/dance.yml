@@ -43,12 +43,11 @@ jobs:
           - sqlite
           - mongodb
         test:
-          # temporarily disabling to avoid CI noise 
-          # - dbaas_core-0
-          # - dbaas_core-1
-          # - dbaas_core-2
-          # - dbaas_core-3
-          # - diff
+          - dbaas_core-0
+          - dbaas_core-1
+          - dbaas_core-2
+          - dbaas_core-3
+          - diff
           - dotnet-example
           - dotnet-example-auth
           - java-example
