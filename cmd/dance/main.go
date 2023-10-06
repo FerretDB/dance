@@ -168,18 +168,18 @@ func main() {
 		logResult("Unexpectedly passed", compareRes.UnexpectedPass)
 
 		if *vF {
-			logResult("Expectedly failed", compareRes.ExpectedFail)
-			logResult("Expectedly skipped", compareRes.ExpectedSkip)
-			logResult("Expectedly passed", compareRes.ExpectedPass)
+			logResult("Expectedly failed", compareRes.Fail)
+			logResult("Expectedly skipped", compareRes.Skip)
+			logResult("Expectedly passed", compareRes.Pass)
 		}
 
 		log.Printf("Unexpected/unknown results: %d.", len(compareRes.UnexpectedRest))
 		log.Printf("Unexpectedly failed: %d.", len(compareRes.UnexpectedFail))
 		log.Printf("Unexpectedly skipped: %d.", len(compareRes.UnexpectedSkip))
 		log.Printf("Unexpectedly passed: %d.", len(compareRes.UnexpectedPass))
-		log.Printf("Expectedly failed: %d.", len(compareRes.ExpectedFail))
-		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
-		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
+		log.Printf("Expectedly failed: %d.", len(compareRes.Fail))
+		log.Printf("Expectedly skipped: %d.", len(compareRes.Skip))
+		log.Printf("Expectedly passed: %d.", len(compareRes.Pass))
 
 		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
 		if err != nil {
@@ -204,11 +204,11 @@ func main() {
 			log.Fatalf("\nUnexpected stats:\n%s", diff)
 		}
 
-		totalRun := compareRes.Stats.ExpectedFail + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
+		totalRun := compareRes.Stats.Fail + compareRes.Stats.Skip + compareRes.Stats.Pass
 		msg := fmt.Sprintf(
 			"%.2f%% (%d/%d) tests passed.",
-			float64(compareRes.Stats.ExpectedPass)/float64(totalRun)*100,
-			compareRes.Stats.ExpectedPass,
+			float64(compareRes.Stats.Pass)/float64(totalRun)*100,
+			compareRes.Stats.Pass,
 			totalRun,
 		)
 		log.Print(msg)
