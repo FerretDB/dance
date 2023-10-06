@@ -30,8 +30,8 @@ func (s *stats) convert() *ic.Stats {
 	}
 
 	return &ic.Stats{
-		ExpectedFail: s.Fail,
-		ExpectedSkip: s.Skip,
-		ExpectedPass: s.Pass,
+		Fail: s.Fail,
+		Skip: s.Skip,
+		Pass: s.Pass,
 	}
 }
