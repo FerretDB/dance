@@ -171,9 +171,9 @@ results:
   postgresql:
     stats:
       unexpected_skip: 21
-      expected_fail: 10
-      expected_skip: 0
-      expected_pass: 633
+      fail: 10
+      skip: 0
+      pass: 633
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
@@ -190,9 +190,9 @@ results:
   sqlite:
     stats:
       unexpected_skip: 21
-      expected_fail: 11
-      expected_skip: 0
-      expected_pass: 632
+      fail: 11
+      skip: 0
+      pass: 632
     ignore:
       # returns unknown result.
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
@@ -211,8 +211,8 @@ results:
   mongodb:
     stats:
       unexpected_skip: 352
-      expected_skip: 83
-      expected_pass: 2259
+      skip: 83
+      pass: 2259
     skip:
       # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled

@@ -6,12 +6,12 @@ args: [../../java-example.sh]
 results:
   postgresql:
     stats:
-      expected_pass: 1
+      pass: 1
 
   sqlite:
     stats:
-      expected_pass: 1
+      pass: 1
 
   mongodb:
     stats:
-      expected_pass: 1
+      pass: 1

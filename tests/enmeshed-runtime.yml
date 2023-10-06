@@ -5,7 +5,7 @@ args: [../enmeshed-runtime.sh]
 results:
   common:
     stats:
-      expected_pass: 1
+      pass: 1
 
   ferretdb:
     stats:
