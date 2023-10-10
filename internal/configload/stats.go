@@ -18,10 +18,9 @@ import ic "github.com/FerretDB/dance/internal/config"
 
 // stats represents the YAML representation of expected stats.
 type stats struct {
-	UnexpectedSkip int `yaml:"unexpected_skip"` // handles accounting for skips that relied on regex support.
-	Fail           int `yaml:"fail"`
-	Skip           int `yaml:"skip"`
-	Pass           int `yaml:"pass"`
+	Fail int `yaml:"fail"`
+	Skip int `yaml:"skip"`
+	Pass int `yaml:"pass"`
 }
 
 // convert converts stats to [*config.Stats].
@@ -31,9 +30,8 @@ func (s *stats) convert() *ic.Stats {
 	}
 
 	return &ic.Stats{
-		UnexpectedSkip: s.UnexpectedSkip,
-		ExpectedFail:   s.Fail,
-		ExpectedSkip:   s.Skip,
-		ExpectedPass:   s.Pass,
+		ExpectedFail: s.Fail,
+		ExpectedSkip: s.Skip,
+		ExpectedPass: s.Pass,
 	}
 }
