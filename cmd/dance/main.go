@@ -204,7 +204,7 @@ func main() {
 			log.Fatalf("\nUnexpected stats:\n%s", diff)
 		}
 
-		totalRun := compareRes.Stats.ExpectedPass + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
+		totalRun := compareRes.Stats.ExpectedFail + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
 		msg := fmt.Sprintf(
 			"%.2f%% (%d/%d) tests passed.",
 			float64(compareRes.Stats.ExpectedPass)/float64(totalRun)*100,
