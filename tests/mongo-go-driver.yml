@@ -170,9 +170,9 @@ results:
 
   postgresql:
     stats:
-      unexpected_skip: 21
+      unexpected_skip: 12
       fail: 10
-      skip: 0
+      skip: 9
       pass: 633
     ignore:
       # returns unknown result.
