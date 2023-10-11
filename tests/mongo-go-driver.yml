@@ -148,7 +148,7 @@ results:
   sqlite:
     stats:
       fail: 11
-      skip: 0
+      skip: 19
       pass: 632
     ignore:
     include_ignore:
@@ -158,6 +158,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
+    skip:
+    include_skip:
+      - skip
     pass:
     include_pass:
       - pass
