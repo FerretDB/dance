@@ -660,8 +660,8 @@ results:
 
   postgresql:
     stats:
-      expected_fail: 181
-      expected_pass: 62
+      fail: 181
+      pass: 62
     fail:
     include_fail:
       - query
@@ -671,8 +671,8 @@ results:
 
   sqlite:
     stats:
-      expected_fail: 181
-      expected_pass: 62
+      fail: 181
+      pass: 62
     fail:
     include_fail:
       - query
@@ -682,8 +682,8 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 43
-      expected_pass: 200
+      fail: 43
+      pass: 200
     fail:
       - mongo/jstests/core/api/api_version_unstable_indexes.js
       - mongo/jstests/core/clustered/clustered_collection_hint.js

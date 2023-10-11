@@ -5,12 +5,12 @@ args: ["-timeout=20m", "-shuffle=on", "./..."]
 results:
   postgresql:
     stats:
-      expected_pass: 6
+      pass: 6
 
   sqlite:
     stats:
-      expected_pass: 6
+      pass: 6
 
   mongodb:
     stats:
-      expected_pass: 6
+      pass: 6

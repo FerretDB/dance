@@ -650,8 +650,8 @@ results:
 
   postgresql:
     stats:
-      expected_fail: 181
-      expected_pass: 57
+      fail: 181
+      pass: 57
     fail:
     include_fail:
       - query
@@ -661,8 +661,8 @@ results:
 
   sqlite:
     stats:
-      expected_fail: 181
-      expected_pass: 57
+      fail: 181
+      pass: 57
     fail:
     include_fail:
       - query
@@ -672,8 +672,8 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 54
-      expected_pass: 184
+      fail: 54
+      pass: 184
     fail:
       - mongo/jstests/core/api/api_version_new_50_language_features.js
       - mongo/jstests/core/api/apitest_db_profile_level.js

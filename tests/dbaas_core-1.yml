@@ -673,8 +673,8 @@ results:
 
   sqlite:
     stats:
-      expected_fail: 178
-      expected_pass: 66
+      fail: 178
+      pass: 66
     fail:
     include_fail:
       - query
@@ -684,8 +684,8 @@ results:
 
   mongodb:
     stats:
-      expected_fail: 43
-      expected_pass: 201
+      fail: 43
+      pass: 201
     fail:
       - mongo/jstests/core/capped/capped_resize.js
       - mongo/jstests/core/covered_query_with_sort.js

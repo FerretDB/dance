@@ -9,15 +9,15 @@ args:
 results:
   postgresql:
     stats:
-      expected_pass: 1
+      pass: 1
 
   sqlite:
     stats:
-      expected_pass: 1
+      pass: 1
 
   mongodb:
     stats:
       # PLAIN is used in MongoDB to perform LDAP authentication.
-      expected_fail: 1
+      fail: 1
     fail:
       - dotnet-example
