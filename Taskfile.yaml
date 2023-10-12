@@ -43,7 +43,7 @@ tasks:
         --build {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
+        msg: "Please set DB variable to one of `postgresql`, `sqlite`, `mongodb`"
 
   env-pull:
     cmds:
