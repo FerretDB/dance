@@ -166,10 +166,9 @@ results:
 
   postgresql:
     stats:
-      fail: 72
+      fail: 71
       pass: 41
     fail:
-      - mongo/jstests/core/write/update/updatej.js
     include_fail:
       - aggregation
       - capped
