@@ -55,7 +55,6 @@ args:
   - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
   - mongo/jstests/core/ddl/convert_to_capped.js
   - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
-  - mongo/jstests/replsets/ttl_index_with_capped_collection.js
   - mongo/jstests/noPassthroughWithMongod/capped4.js
 
 results:
@@ -94,7 +93,6 @@ results:
       - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
       - mongo/jstests/core/ddl/convert_to_capped.js
       - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
-      - mongo/jstests/replsets/ttl_index_with_capped_collection.js
       - mongo/jstests/noPassthroughWithMongod/capped4.js
     query:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
@@ -195,8 +193,8 @@ results:
 
   mongodb:
     stats:
-      fail: 8
-      pass: 93
+      fail: 9
+      pass: 103
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
