@@ -45,6 +45,7 @@ args:
   - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
   - mongo/jstests/core/write/update/update[2-9].js
   - mongo/jstests/core/write/update/update[a-z].js
+  - mongo/jstests/core/capped*.js
 
 results:
   includes:
@@ -71,6 +72,18 @@ results:
       - mongo/jstests/aggregation/use_query_project_and_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
+    capped:
+      - capped1.js
+      - capped5.js
+      - cappeda.js
+      - capped_empty.js
+      - capped.js
+      - capped_large_docs.js
+      - capped_max1.js
+      - capped_queries_and_id_index.js
+      - capped_resize.js
+      - capped_update.js
+      - capped_upsert.js
     query:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
       # https://docs.ferretdb.io/diff/
