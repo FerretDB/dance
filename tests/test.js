@@ -6,16 +6,16 @@ const b = db.b;
 const c = db.c;
 const x = db.x;
 
-// insert once
+// skip
 if (!a.findOne({a: 1})) {
     a.insert({a: 1});
 }
 
+// 2. run B.
 if (a.findOne({useNewBackend: true})) {
     // assert A.
     assertA();
 
-    // run B.
     c.insert({a: 1});
     c.createIndex({a: 1});
     assert.eq(2, c.getIndexes().length);
@@ -29,7 +29,7 @@ if (a.findOne({useNewBackend: true})) {
     a.update({useNewBackend: true}, {$set: {useNewBackend: false}});
 }
 
-// run A.
+// 1. run A.
 a.createIndex({a: 1});
 assert.eq(2, a.getIndexes().length);
 
@@ -47,8 +47,8 @@ assert.eq(2, db.getCollectionNames().length);
 
 a.insert({useNewBackend: true});
 
+// 3. assert B on old backend.
 if (x.findOne({useNewBackend: false})) {
-    // assert B on old backend to verify compatibility.
     assertB();
 }
 
