@@ -168,8 +168,8 @@ results:
 
   postgresql:
     stats:
-      fail: 62
-      pass: 39
+      fail: 72
+      pass: 41
     fail:
       - mongo/jstests/core/write/update/updatej.js
     include_fail:
@@ -182,8 +182,8 @@ results:
 
   sqlite:
     stats:
-      fail: 61
-      pass: 40
+      fail: 72
+      pass: 41
     fail:
     include_fail:
       - aggregation
