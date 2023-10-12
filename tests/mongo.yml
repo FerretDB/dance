@@ -180,7 +180,7 @@ results:
 
   sqlite:
     stats:
-      fail: 72
+      fail: 71
       pass: 41
     fail:
     include_fail:
