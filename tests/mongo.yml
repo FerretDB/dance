@@ -45,11 +45,17 @@ args:
   - mongo/jstests/core/write/find_and_modify/find_and_modify[2-4].js
   - mongo/jstests/core/write/update/update[2-9].js
   - mongo/jstests/core/write/update/update[a-z].js
-  - mongo/jstests/core/capped/capped*.js
+  - mongo/jstests/core/capped/cappeda.js
+  - mongo/jstests/core/capped/capped_large_docs.js
+  - mongo/jstests/core/capped/capped_queries_and_id_index.js
+  - mongo/jstests/core/capped/capped_resize.js
+  - mongo/jstests/core/capped/capped_update.js
+  - mongo/jstests/core/capped/capped_upsert.js
   - mongo/jstests/noPassthroughWithMongod/capped6.js
   - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
   - mongo/jstests/core/ddl/convert_to_capped.js
   - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
+  - mongo/jstests/replsets/ttl_index_with_capped_collection.js
   - mongo/jstests/noPassthroughWithMongod/capped4.js
 
 results:
@@ -78,21 +84,17 @@ results:
       - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
     capped:
-      - mongo/jstests/capped1.js
-      - mongo/jstests/capped5.js
-      - mongo/jstests/cappeda.js
-      - mongo/jstests/capped_empty.js
-      - mongo/jstests/capped.js
-      - mongo/jstests/capped_large_docs.js
-      - mongo/jstests/capped_max1.js
-      - mongo/jstests/capped_queries_and_id_index.js
-      - mongo/jstests/capped_resize.js
-      - mongo/jstests/capped_update.js
-      - mongo/jstests/capped_upsert.js
+      - mongo/jstests/core/capped/cappeda.js
+      - mongo/jstests/core/capped/capped_large_docs.js
+      - mongo/jstests/core/capped/capped_queries_and_id_index.js
+      - mongo/jstests/core/capped/capped_resize.js
+      - mongo/jstests/core/capped/capped_update.js
+      - mongo/jstests/core/capped/capped_upsert.js
       - mongo/jstests/noPassthroughWithMongod/capped6.js
       - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
       - mongo/jstests/core/ddl/convert_to_capped.js
       - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
+      - mongo/jstests/replsets/ttl_index_with_capped_collection.js
       - mongo/jstests/noPassthroughWithMongod/capped4.js
     query:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
@@ -172,6 +174,7 @@ results:
       - mongo/jstests/core/write/update/updatej.js
     include_fail:
       - aggregation
+      - capped
       - query
       - write
       - auth
@@ -184,6 +187,7 @@ results:
     fail:
     include_fail:
       - aggregation
+      - capped
       - query
       - write
       - auth
@@ -191,8 +195,8 @@ results:
 
   mongodb:
     stats:
-      fail: 9
-      pass: 108
+      fail: 8
+      pass: 93
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
