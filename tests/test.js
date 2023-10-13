@@ -30,29 +30,32 @@ start();
 
 // 2. run B.
 function runB() {
-    if (a.findOne({runB: true})) {
-        assert.eq(true, isNewBackend(), 'B must use new backend');
-      
-        jsTestLog('running A on new backend');
-      
-        // assert A on new backend.
-        assertA();
-      
-        jsTestLog('running B on new backend');
-      
-        c.insert({_id: 1, a: 1});
-        c.createIndex({a: 1});
-        assert.eq(2, c.getIndexes().length);
-      
-        b.update({a: 2}, {$set: {a: 3}});
-        assert.eq(3, b.findOne({a: 3}).a);
-      
-        x.insert({verify: true});
-        assert.eq(4, db.getCollectionNames().length);
-      
-        // skips B.
-        a.update({runB: true}, {$set: {runB: false}});
-    };
+    if (!a.findOne({runB: true})) {
+        return;
+    }
+
+    assert.eq(true, isNewBackend(), 'B must use new backend');
+    
+    jsTestLog('running A on new backend');
+    
+    // assert A on new backend.
+    assertA();
+    
+    jsTestLog('running B on new backend');
+    
+    c.insert({_id: 1, a: 1});
+    c.createIndex({a: 1});
+    assert.eq(2, c.getIndexes().length);
+    
+    b.update({a: 2}, {$set: {a: 3}});
+    assert.eq(3, b.findOne({a: 3}).a);
+    
+    x.insert({verify: true});
+    assert.eq(4, db.getCollectionNames().length);
+    
+    // skips B.
+    a.update({runB: true}, {$set: {runB: false}});
+
     return;
 }
 
