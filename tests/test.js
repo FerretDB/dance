@@ -9,37 +9,51 @@ const a = db.a;
 const b = db.b;
 const c = db.c;
 const x = db.x;
+const y = db.y;
 
+function start() {
 // ensures that do not run A more than once.
 if (!a.findOne({a: 1})) {
-  assert.eq(false, isNewBackend(), 'first run of A must use old backend');
-  a.insert({_id: 1, a: 1});
-  runA();
-};
+    assert.eq(false, isNewBackend(), 'first run of A must use old backend');
+    a.insert({_id: 1, a: 1});
+    runA();
+  };
+
+  y.insert({runB: true});
+}
+
+if (y.findOne({runB: true})) {
+    runB();
+}
+
+start();
 
 // 2. run B.
-if (a.findOne({runB: true})) {
-  assert.eq(true, isNewBackend(), 'B must use new backend');
-
-  jsTestLog('running A on new backend');
-
-  // assert A on new backend.
-  assertA();
-
-  jsTestLog('running B on new backend');
-
-  c.insert({_id: 1, a: 1});
-  c.createIndex({a: 1});
-  assert.eq(2, c.getIndexes().length);
-
-  b.update({a: 2}, {$set: {a: 3}});
-  assert.eq(3, b.findOne({a: 3}).a);
-
-  x.insert({verify: true});
-  assert.eq(4, db.getCollectionNames().length);
-
-  // skips B.
-  a.update({runB: true}, {$set: {runB: false}});
+function runB() {
+    if (a.findOne({runB: true})) {
+        assert.eq(true, isNewBackend(), 'B must use new backend');
+      
+        jsTestLog('running A on new backend');
+      
+        // assert A on new backend.
+        assertA();
+      
+        jsTestLog('running B on new backend');
+      
+        c.insert({_id: 1, a: 1});
+        c.createIndex({a: 1});
+        assert.eq(2, c.getIndexes().length);
+      
+        b.update({a: 2}, {$set: {a: 3}});
+        assert.eq(3, b.findOne({a: 3}).a);
+      
+        x.insert({verify: true});
+        assert.eq(4, db.getCollectionNames().length);
+      
+        // skips B.
+        a.update({runB: true}, {$set: {runB: false}});
+    };
+    return;
 }
 
 // 1. run A.
@@ -63,10 +77,10 @@ function runA() {
 
   let res = assert.commandWorked(db.runCommand({count: 'a'}));
   assert.eq(1, res.n);
-  res = assert.commandWorked(db.runCommand(db.runCommand({count: 'b'})));
+  res = assert.commandWorked((db.runCommand({count: 'b'})));
   assert.eq(1, res.n);
   res = assert.commandWorked(db.runCommand({aggregate: 'a', pipeline: [{$project: {a: 1}}, {$count: 'n'}], cursor: {}}));
-  assert.eq(1, res.n);
+  assert.eq(1, res.cursor.firstBatch[0].n);
   res = assert.commandWorked(db.runCommand({find: 'a', filter: {}}));
   assert.docEq({_id: 1, a: 2}, res.cursor.firstBatch[0]);
   a.insert({delete: true});
@@ -92,8 +106,7 @@ function isNewBackend() {
   a.find(); // to get the backend’s version
   let getLog = db.runCommand({getLog: 'startupWarnings'}).log[0];
   getLog = JSON.parse(getLog);
-  const isNew = isNumeric(getLog.msg[0].slice(-2));
-  return isNew;
+  return isNumeric(getLog.msg[0].slice(-2));
 }
 
 function isNumeric(n) {
