@@ -12,17 +12,15 @@ const x = db.x;
 const y = db.y;
 
 function start() {
-// ensures that do not run A more than once.
-if (!a.findOne({a: 1})) {
+// ensures that we do not run A more than once.
+if (!a.findOne({runA: true})) {
     assert.eq(false, isNewBackend(), 'first run of A must use old backend');
-    a.insert({_id: 1, a: 1});
     runA();
   };
-
-  y.insert({runB: true});
+  return;
 }
 
-if (y.findOne({runB: true})) {
+if (b.findOne({runB: true})) {
     runB();
 }
 
@@ -30,12 +28,7 @@ start();
 
 // 2. run B.
 function runB() {
-    if (!a.findOne({runB: true})) {
-        return;
-    }
-
     assert.eq(true, isNewBackend(), 'B must use new backend');
-    
     jsTestLog('running A on new backend');
     
     // assert A on new backend.
@@ -53,29 +46,24 @@ function runB() {
     x.insert({verify: true});
     assert.eq(4, db.getCollectionNames().length);
     
-    // skips B.
     a.update({runB: true}, {$set: {runB: false}});
-
     return;
-}
+};
 
 // 1. run A.
 function runA() {
   jsTestLog('running A on old backend');
 
+  a.insert({_id: 1, a: 1});
   a.createIndex({a: 1});
   assert.eq(2, a.getIndexes().length);
-
   a.update({a: 1}, {$set: {a: 2}});
   assert.eq(2, a.findOne({a: 2}).a);
-
   b.insert({_id: 1, a: 1});
   b.createIndex({a: 1});
   assert.eq(2, b.getIndexes().length);
-
   b.update({a: 1}, {$set: {a: 2}});
   assert.eq(2, b.findOne({a: 2}).a);
-
   assert.eq(2, db.getCollectionNames().length);
 
   let res = assert.commandWorked(db.runCommand({count: 'a'}));
@@ -93,9 +81,14 @@ function runA() {
   assert.docEq({_id: 1, a: 1}, a.findOne({a: 1}));
   res = assert.commandWorked(db.runCommand({findAndModify: 'a', query: {a: 1}, remove: false, update: {a: 2}}));
   assert.docEq({_id: 1, a: 2}, a.findOne({a: 2}));
-  a.insert({runB: true});
+
+  a.update({runA: true}, {$set: {runA: false}});
+  
+  if (!a.findOne({runB: true})) { 
+    a.insert({runB: true});
+  };
   return;
-}
+};
 
 // 3. assert B on old backend. END.
 if (x.findOne({verify: true})) {
@@ -103,18 +96,19 @@ if (x.findOne({verify: true})) {
   jsTestLog('running B on old backend');
   assertB();
   jsTestLog('DONE');
-}
+};
 
 function isNewBackend() {
-  a.find(); // to get the backend’s version
+  db.foo.find(); // to get the backend’s version
   let getLog = db.runCommand({getLog: 'startupWarnings'}).log[0];
   getLog = JSON.parse(getLog);
-  return isNumeric(getLog.msg[0].slice(-2));
-}
+  let charAt = getLog.msg.length - 2;
+  return isNumeric(getLog.msg[charAt]);
+};
 
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
-}
+};
 
 function assertA() {
   assert.eq(2, a.getIndexes().length);
@@ -122,7 +116,7 @@ function assertA() {
   assert.eq(2, b.findOne({a: 2}).a);
   assert.eq(2, db.getCollectionNames().length);
   return;
-}
+};
 
 function assertB() {
   assert.eq(2, a.getIndexes().length);
@@ -130,4 +124,4 @@ function assertB() {
   assert.eq(3, b.findOne({a: 3}).a);
   assert.eq(4, db.getCollectionNames().length);
   return;
-}
+};
