@@ -39,11 +39,11 @@ tasks:
       # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
       # https://github.com/docker/compose/issues/10269#issuecomment-1495205234
       - >
-        docker compose up --remove-orphans -t 0 --detach
+        docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
     preconditions:
       - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `postgresql`, `sqlite`, `mongodb`"
+        msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
 
   env-pull:
     cmds:
@@ -81,7 +81,7 @@ tasks:
       - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
     preconditions:
       - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `postgresql`, `sqlite`, `mongodb`"
+        msg: "Please set DB variable to one of `ferretdb`, `mongodb`"
 
   lint:
     desc: "Run linters"
