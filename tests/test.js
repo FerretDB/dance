@@ -1,10 +1,3 @@
-// Test new PostgreSQL backend compatibility by performing some operations.
-//
-// This file must be run 3 times in the following order:
-// 1. on old backend FERRETDB_POSTGRESQL_OLD=true
-// 2. on new backend unset FERRETDB_POSTGRESQL_OLD or FERRETDB_POSTGRESQL_OLD=false
-// 3. on old backend FERRETDB_POSTGRESQL_OLD=true
-
 const a = db.a;
 const b = db.b;
 const c = db.c;
@@ -90,7 +83,7 @@ function runA() {
   return;
 };
 
-// 3. assert B on old backend. END.
+// 3. assert B on old backend. DONE.
 if (x.findOne({verify: true})) {
   assert.eq(false, isNewBackend(), 'verify must use old backend');
   jsTestLog('running B on old backend');
@@ -99,15 +92,13 @@ if (x.findOne({verify: true})) {
 };
 
 function isNewBackend() {
-  db.foo.find(); // to get the backend’s version
+  db.foo.insert({});
+  db.foo.find();
+
+  const substr = 'PostgreSQL'; // old backend uses PG-x.y.
   let getLog = db.runCommand({getLog: 'startupWarnings'}).log[0];
   getLog = JSON.parse(getLog);
-  let charAt = getLog.msg.length - 2;
-  return isNumeric(getLog.msg[charAt]);
-};
-
-function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  return getLog.msg.includes(substr);
 };
 
 function assertA() {
