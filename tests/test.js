@@ -6,14 +6,14 @@ const y = db.y;
 
 function start() {
 // ensures that we do not run A more than once.
-if (!a.findOne({runA: true})) {
+if (!a.findOne({runA: true}) && !x.findOne({verify: true})) {
     assert.eq(false, isNewBackend(), 'first run of A must use old backend');
     runA();
   };
   return;
 }
 
-if (b.findOne({runB: true})) {
+if (a.findOne({runB: true})) {
     runB();
 }
 
@@ -37,7 +37,7 @@ function runB() {
     assert.eq(3, b.findOne({a: 3}).a);
     
     x.insert({verify: true});
-    assert.eq(4, db.getCollectionNames().length);
+    assert.eq(5, db.getCollectionNames().length);
     
     a.update({runB: true}, {$set: {runB: false}});
     return;
@@ -57,7 +57,7 @@ function runA() {
   assert.eq(2, b.getIndexes().length);
   b.update({a: 1}, {$set: {a: 2}});
   assert.eq(2, b.findOne({a: 2}).a);
-  assert.eq(2, db.getCollectionNames().length);
+  assert.eq(3, db.getCollectionNames().length);
 
   let res = assert.commandWorked(db.runCommand({count: 'a'}));
   assert.eq(1, res.n);
@@ -92,7 +92,7 @@ if (x.findOne({verify: true})) {
 };
 
 function isNewBackend() {
-  db.foo.insert({});
+  db.foo.insert({}); // connect to the database/schema
   db.foo.find();
 
   const substr = 'PostgreSQL'; // old backend uses PG-x.y.
@@ -105,7 +105,7 @@ function assertA() {
   assert.eq(2, a.getIndexes().length);
   assert.eq(2, b.getIndexes().length);
   assert.eq(2, b.findOne({a: 2}).a);
-  assert.eq(2, db.getCollectionNames().length);
+  assert.eq(3, db.getCollectionNames().length);
   return;
 };
 
@@ -113,6 +113,6 @@ function assertB() {
   assert.eq(2, a.getIndexes().length);
   assert.eq(2, b.getIndexes().length);
   assert.eq(3, b.findOne({a: 3}).a);
-  assert.eq(4, db.getCollectionNames().length);
+  assert.eq(5, db.getCollectionNames().length);
   return;
 };
