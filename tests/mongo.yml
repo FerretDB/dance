@@ -124,7 +124,7 @@ results:
       - mongo/jstests/core/query/array/arrayfind7.js
       - mongo/jstests/core/query/array/arrayfind8.js
       - mongo/jstests/core/query/array/arrayfind9.js
-     # https://github.com/FerretDB/FerretDB/issues/161
+      # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
       # \x0D JavaScript code BSON type not implemented
       - mongo/jstests/core/query/cursor/cursora.js
@@ -196,13 +196,14 @@ results:
 
   sqlite:
     stats:
-      fail: 71
+      fail: 78
       pass: 41
     fail:
     include_fail:
       - aggregation
       - capped
       - query
+      - tailable
       - write
       - auth
       - misc
