@@ -182,7 +182,7 @@ results:
 
   postgresql:
     stats:
-      fail: 71
+      fail: 78
       pass: 41
     fail:
     include_fail:
