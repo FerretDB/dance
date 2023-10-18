@@ -57,6 +57,14 @@ args:
   - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
   - mongo/jstests/noPassthroughWithMongod/capped4.js
   - mongo/aggregation/sources/collStats/query_exec_stats.js
+  - mongo/core/notablescan_capped.js
+  - mongo/core/local_tail_capped.js
+  - mongo/core/query/awaitdata_getmore_cmd.js
+  - mongo/core/query/cursor/getmore_cmd_maxtimems.js
+  - mongo/core/query/cursor/tailable_cursor_invalidation.js
+  - mongo/core/query/cursor/tailable_getmore_batch_size.js
+  - mongo/core/query/cursor/tailable_skip_limit.js
+  - mongo/core/write/crud_api.js
 
 results:
   includes:
