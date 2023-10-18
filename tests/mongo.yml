@@ -56,15 +56,15 @@ args:
   - mongo/jstests/core/ddl/convert_to_capped.js
   - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
   - mongo/jstests/noPassthroughWithMongod/capped4.js
-  - mongo/aggregation/sources/collStats/query_exec_stats.js
-  - mongo/core/notablescan_capped.js
-  - mongo/core/local_tail_capped.js
-  - mongo/core/query/awaitdata_getmore_cmd.js
-  - mongo/core/query/cursor/getmore_cmd_maxtimems.js
-  - mongo/core/query/cursor/tailable_cursor_invalidation.js
-  - mongo/core/query/cursor/tailable_getmore_batch_size.js
-  - mongo/core/query/cursor/tailable_skip_limit.js
-  - mongo/core/write/crud_api.js
+  - mongo/jstests/aggregation/sources/collStats/query_exec_stats.js
+  - mongo/jstests/core/notablescan_capped.js
+  - mongo/jstests/core/local_tail_capped.js
+  - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+  - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
+  - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js
+  - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js
+  - mongo/jstests/core/query/cursor/tailable_skip_limit.js
+  - mongo/jstests/core/write/crud_api.js
 
 results:
   includes:
@@ -130,12 +130,8 @@ results:
       - mongo/jstests/core/query/cursor/cursora.js
       # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
-      # https://github.com/FerretDB/FerretDB/issues/2283
-      # https://github.com/FerretDB/FerretDB/issues/2284
-      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
       # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
-      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
       # https://github.com/FerretDB/FerretDB/issues/1710
@@ -149,6 +145,16 @@ results:
       - mongo/jstests/core/query/distinct/distinct4.js
       # https://github.com/FerretDB/FerretDB/issues/1242
       - mongo/jstests/core/query/unset/unset2.js
+    tailable:
+      - mongo/jstests/aggregation/sources/collStats/query_exec_stats.js
+      - mongo/jstests/core/notablescan_capped.js
+      - mongo/jstests/core/local_tail_capped.js
+      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
+      - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js
+      - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js
+      - mongo/jstests/core/query/cursor/tailable_skip_limit.js
+      - mongo/jstests/core/write/crud_api.js
     write:
       # https://github.com/FerretDB/FerretDB/issues/1745
       - mongo/jstests/core/write/find_and_modify/find_and_modify.js
@@ -183,6 +189,7 @@ results:
       - aggregation
       - capped
       - query
+      - tailable
       - write
       - auth
       - misc
