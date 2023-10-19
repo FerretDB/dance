@@ -126,7 +126,7 @@ results:
       - mongo/jstests/core/query/array/arrayfind9.js
       # https://github.com/FerretDB/FerretDB/issues/161
       - mongo/jstests/core/query/basic1.js
-      # \x0D JavaScript code BSON type not implemented
+      # https://github.com/FerretDB/FerretDB/issues/3611
       - mongo/jstests/core/query/cursor/cursora.js
       # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
@@ -181,7 +181,7 @@ results:
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
     misc:
-      # TODO create issue
+      # https://github.com/FerretDB/FerretDB/issues/3619
       - mongo/jstests/core/uniqueness.js
 
   postgresql:
