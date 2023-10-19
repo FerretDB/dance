@@ -69,22 +69,22 @@ args:
 results:
   includes:
     aggregation:
-      - mongo/jstests/aggregation/ifnull.js # unhandled element type `Undefined (value) Deprecated`
+      - mongo/jstests/aggregation/ifnull.js # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
-      - mongo/jstests/aggregation/agg_infinite_recursion.js # unknown top level operator: $where.
+      - mongo/jstests/aggregation/agg_infinite_recursion.js # https://github.com/FerretDB/FerretDB/issues/3611
       - mongo/jstests/aggregation/bugs/cond.js # https://github.com/FerretDB/FerretDB/issues/2892
       - mongo/jstests/aggregation/bugs/firstlast.js # https://github.com/FerretDB/FerretDB/issues/2894
       - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
       - mongo/jstests/aggregation/bugs/match.js # https://github.com/FerretDB/FerretDB/issues/2780
       - mongo/jstests/aggregation/explain.js # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/expressions/convert.js # https://github.com/FerretDB/FerretDB/issues/66
-      - mongo/jstests/aggregation/expressions/filter.js # unhandled element type `Undefined (value) Deprecated`
+      - mongo/jstests/aggregation/expressions/filter.js # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/aggregation/expressions/n_expressions.js # https://github.com/FerretDB/FerretDB/issues/2125
       - mongo/jstests/aggregation/expressions/not.js # https://github.com/FerretDB/FerretDB/issues/2917
       - mongo/jstests/aggregation/expressions/rand.js # https://github.com/FerretDB/FerretDB/issues/541
       - mongo/jstests/aggregation/expressions/set.js # https://github.com/FerretDB/FerretDB/issues/2916
       - mongo/jstests/aggregation/match_swapping_renamed_fields.js # https://github.com/FerretDB/FerretDB/issues/2768
-      - mongo/jstests/aggregation/aggregation_with_uuids.js # we do not generate collection UUIDs yet
+      - mongo/jstests/aggregation/aggregation_with_uuids.js # https://github.com/FerretDB/FerretDB/issues/3613
       - mongo/jstests/aggregation/illegal_reference_in_match.js # https://github.com/FerretDB/FerretDB/issues/2919
       - mongo/jstests/aggregation/max_subpipeline_depth.js # https://github.com/FerretDB/FerretDB/issues/2916
       - mongo/jstests/aggregation/testall.js # https://github.com/FerretDB/FerretDB/issues/2914
@@ -130,7 +130,7 @@ results:
       - mongo/jstests/core/query/cursor/cursora.js
       # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
-      # TODO: create issue BSON field 'batchSize' is the wrong type 'double', expected type 'int'
+      # https://github.com/FerretDB/FerretDB/issues/3615
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
@@ -141,7 +141,7 @@ results:
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
-      # https://github.com/FerretDB/FerretDB/issues/2231
+      # https://github.com/FerretDB/FerretDB/issues/3616
       - mongo/jstests/core/query/distinct/distinct4.js
       # https://github.com/FerretDB/FerretDB/issues/1242
       - mongo/jstests/core/query/unset/unset2.js
@@ -181,7 +181,7 @@ results:
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
     misc:
-      # https://github.com/FerretDB/FerretDB/issues/1384
+      # TODO create issue
       - mongo/jstests/core/uniqueness.js
 
   postgresql:
