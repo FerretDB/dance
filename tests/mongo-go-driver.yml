@@ -147,7 +147,7 @@ results:
 
   sqlite:
     stats:
-      fail: 10
+      fail: 11
       skip: 19
       pass: 633
     ignore:
