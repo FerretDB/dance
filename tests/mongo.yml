@@ -69,28 +69,50 @@ args:
 results:
   includes:
     aggregation:
-      - mongo/jstests/aggregation/ifnull.js # https://github.com/FerretDB/FerretDB/issues/2286
-      - mongo/jstests/aggregation/accumulators/min_n_max_n.js # https://github.com/FerretDB/FerretDB/issues/2125
-      - mongo/jstests/aggregation/agg_infinite_recursion.js # https://github.com/FerretDB/FerretDB/issues/3611
-      - mongo/jstests/aggregation/bugs/cond.js # https://github.com/FerretDB/FerretDB/issues/2892
-      - mongo/jstests/aggregation/bugs/firstlast.js # https://github.com/FerretDB/FerretDB/issues/2894
-      - mongo/jstests/aggregation/bugs/groupMissing.js # https://github.com/FerretDB/FerretDB/issues/2768
-      - mongo/jstests/aggregation/bugs/match.js # https://github.com/FerretDB/FerretDB/issues/2780
-      - mongo/jstests/aggregation/explain.js # https://github.com/FerretDB/FerretDB/issues/2915
-      - mongo/jstests/aggregation/expressions/convert.js # https://github.com/FerretDB/FerretDB/issues/66
-      - mongo/jstests/aggregation/expressions/filter.js # https://github.com/FerretDB/FerretDB/issues/2286
-      - mongo/jstests/aggregation/expressions/n_expressions.js # https://github.com/FerretDB/FerretDB/issues/2125
-      - mongo/jstests/aggregation/expressions/not.js # https://github.com/FerretDB/FerretDB/issues/2917
-      - mongo/jstests/aggregation/expressions/rand.js # https://github.com/FerretDB/FerretDB/issues/541
-      - mongo/jstests/aggregation/expressions/set.js # https://github.com/FerretDB/FerretDB/issues/2916
-      - mongo/jstests/aggregation/match_swapping_renamed_fields.js # https://github.com/FerretDB/FerretDB/issues/2768
-      - mongo/jstests/aggregation/aggregation_with_uuids.js # https://github.com/FerretDB/FerretDB/issues/3613
-      - mongo/jstests/aggregation/illegal_reference_in_match.js # https://github.com/FerretDB/FerretDB/issues/2919
-      - mongo/jstests/aggregation/max_subpipeline_depth.js # https://github.com/FerretDB/FerretDB/issues/2916
-      - mongo/jstests/aggregation/testall.js # https://github.com/FerretDB/FerretDB/issues/2914
-      - mongo/jstests/aggregation/use_query_project_and_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
-      - mongo/jstests/aggregation/use_query_projection.js # https://github.com/FerretDB/FerretDB/issues/2915
-      - mongo/jstests/aggregation/use_query_sort.js # https://github.com/FerretDB/FerretDB/issues/2915
+      # https://github.com/FerretDB/FerretDB/issues/2286
+      - mongo/jstests/aggregation/ifnull.js
+      # https://github.com/FerretDB/FerretDB/issues/2125
+      - mongo/jstests/aggregation/accumulators/min_n_max_n.js
+      # https://github.com/FerretDB/FerretDB/issues/3611
+      - mongo/jstests/aggregation/agg_infinite_recursion.js
+      # https://github.com/FerretDB/FerretDB/issues/2892
+      - mongo/jstests/aggregation/bugs/cond.js
+      # https://github.com/FerretDB/FerretDB/issues/2894
+      - mongo/jstests/aggregation/bugs/firstlast.js
+      # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/bugs/groupMissing.js
+      # https://github.com/FerretDB/FerretDB/issues/2780
+      - mongo/jstests/aggregation/bugs/match.js
+      # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/explain.js
+      # https://github.com/FerretDB/FerretDB/issues/66
+      - mongo/jstests/aggregation/expressions/convert.js
+      # https://github.com/FerretDB/FerretDB/issues/2286
+      - mongo/jstests/aggregation/expressions/filter.js
+      # https://github.com/FerretDB/FerretDB/issues/2125
+      - mongo/jstests/aggregation/expressions/n_expressions.js
+      # https://github.com/FerretDB/FerretDB/issues/2917
+      - mongo/jstests/aggregation/expressions/not.js
+      # https://github.com/FerretDB/FerretDB/issues/541
+      - mongo/jstests/aggregation/expressions/rand.js
+      # https://github.com/FerretDB/FerretDB/issues/2916
+      - mongo/jstests/aggregation/expressions/set.js
+      # https://github.com/FerretDB/FerretDB/issues/2768
+      - mongo/jstests/aggregation/match_swapping_renamed_fields.js
+      # https://github.com/FerretDB/FerretDB/issues/3613
+      - mongo/jstests/aggregation/aggregation_with_uuids.js
+      # https://github.com/FerretDB/FerretDB/issues/2919
+      - mongo/jstests/aggregation/illegal_reference_in_match.js
+      # https://github.com/FerretDB/FerretDB/issues/2916
+      - mongo/jstests/aggregation/max_subpipeline_depth.js
+      # https://github.com/FerretDB/FerretDB/issues/2914
+      - mongo/jstests/aggregation/testall.js
+      # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_project_and_sort.js
+      # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_projection.js
+      # https://github.com/FerretDB/FerretDB/issues/2915
+      - mongo/jstests/aggregation/use_query_sort.js
     capped:
       # https://github.com/FerretDB/FerretDB/issues/3458
       - mongo/jstests/core/capped/cappeda.js
