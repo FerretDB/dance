@@ -36,6 +36,12 @@ results:
 
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+
+      # https://github.com/FerretDB/FerretDB/issues/3624
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/filter
+      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/no_filter
     skip:
       - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported
       - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet
@@ -79,10 +85,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/no_custom_standalone_error
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect/nil_context
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/filter/no_filter
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/options
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter
@@ -129,9 +131,9 @@ results:
 
   postgresql:
     stats:
-      fail: 10
+      fail: 13
       skip: 19
-      pass: 633
+      pass: 630
     ignore:
     include_ignore:
       - ignore
@@ -147,9 +149,9 @@ results:
 
   sqlite:
     stats:
-      fail: 11
+      fail: 13
       skip: 19
-      pass: 632
+      pass: 630
     ignore:
     include_ignore:
       - ignore
