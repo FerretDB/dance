@@ -43,7 +43,7 @@ jobs:
           - sqlite
           - mongodb
         test:
-          # temporarily disabling to avoid CI noise 
+          # temporarily disabling to avoid CI noise
           # - dbaas_core-0
           # - dbaas_core-1
           # - dbaas_core-2
@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
