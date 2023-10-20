@@ -133,7 +133,7 @@ results:
     stats:
       fail: 13
       skip: 19
-      pass: 629
+      pass: 630
     ignore:
     include_ignore:
       - ignore
@@ -151,7 +151,7 @@ results:
     stats:
       fail: 13
       skip: 19
-      pass: 629
+      pass: 630
     ignore:
     include_ignore:
       - ignore
