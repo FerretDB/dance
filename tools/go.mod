@@ -43,7 +43,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.2 // indirect
 	github.com/alexkohler/prealloc v1.0.0 // indirect
 	github.com/alingse/asasalint v0.0.11 // indirect
-	github.com/apache/thrift v0.0.0-20171203172758-327ebb6c2b6d // indirect
+	github.com/apache/thrift v0.13.0 // indirect
 	github.com/apple/foundationdb/bindings/go v0.0.0-20200112054404-407dc0907f4f // indirect
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.1.1 // indirect
