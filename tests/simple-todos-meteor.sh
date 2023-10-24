@@ -4,6 +4,8 @@ set -ex
 
 npm install
 
+curl https://install.meteor.com/ | sh
+
 meteor update
 
 export MONGO_URL="mongodb://localhost:27017/"
