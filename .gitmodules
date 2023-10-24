@@ -27,5 +27,5 @@
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
 [submodule "react-tutorial"]
-	path = react-tutorial
+	path = tests/react-tutorial
 	url = https://github.com/meteor/react-tutorial.git
