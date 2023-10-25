@@ -26,6 +26,6 @@
 	path = tests/python-example
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
-[submodule "tests/meteor"]
+[submodule "meteor"]
 	path = tests/meteor
-	url = tests/https://github.com/meteor/meteor.git
+	url = https://github.com/meteor/meteor.git
