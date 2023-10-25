@@ -1,0 +1,18 @@
+---
+runner: command
+dir: meteor
+args: [../meteor.sh]
+
+# TODO stats
+results:
+  postgresql:
+    stats:
+      pass: 1
+
+  sqlite:
+    stats:
+      pass: 1
+
+  mongodb:
+    stats:
+      pass: 1
