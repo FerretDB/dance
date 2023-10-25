@@ -60,7 +60,7 @@ jobs:
           - python-example-auth
           - ycsb-workloada
           - ycsb-workloadc
-          - simple-todos-meteor
+          - meteor
 
     steps:
       - name: Checkout code
