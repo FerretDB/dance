@@ -7,11 +7,18 @@ results:
   postgresql:
     stats:
       fail: 1
+    fail:
+      - meteor
 
   sqlite:
     stats:
       fail: 1
+    fail:
+      - meteor
+
 
   mongodb:
     stats:
-      pass: 1
+      fail: 1
+    fail:
+      - meteor
