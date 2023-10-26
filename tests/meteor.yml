@@ -16,7 +16,6 @@ results:
     fail:
       - meteor
 
-
   mongodb:
     stats:
       fail: 1
