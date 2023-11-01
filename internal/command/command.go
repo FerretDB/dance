@@ -30,6 +30,7 @@ import (
 // If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	allCommands := true
+
 	for _, a := range args {
 		if !strings.HasSuffix(a, ".sh") {
 			allCommands = false
