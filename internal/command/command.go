@@ -29,6 +29,17 @@ import (
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
+	allCommands := true
+	for _, a := range args {
+		if !strings.HasSuffix(a, ".sh") {
+			allCommands = false
+		}
+	}
+
+	if allCommands {
+		return runAllAsCommands(ctx, dir, args)
+	}
+
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
@@ -48,6 +59,34 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
+		}
+	}
+
+	return res, nil
+}
+
+func runAllAsCommands(ctx context.Context, dir string, files []string) (*config.TestResults, error) {
+	res := &config.TestResults{
+		TestResults: make(map[string]config.TestResult, len(files)),
+	}
+
+	for _, f := range files {
+		cmd := exec.CommandContext(ctx, "/bin/sh", "-c", f)
+		cmd.Dir = dir
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
+		log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
+		res.TestResults[f] = config.TestResult{
+			Status: config.Pass,
+		}
+
+		if err := cmd.Run(); err != nil {
+			res.TestResults[f] = config.TestResult{
+				Status: config.Fail,
+				Output: err.Error(),
+			}
 		}
 	}
 
