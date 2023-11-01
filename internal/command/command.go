@@ -72,7 +72,7 @@ func runAllAsCommands(ctx context.Context, dir string, files []string) (*config.
 	}
 
 	for _, f := range files {
-		cmd := exec.CommandContext(ctx, "/bin/sh", "-c", f)
+		cmd := exec.CommandContext(ctx, "/bin/sh", f)
 		cmd.Dir = dir
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
