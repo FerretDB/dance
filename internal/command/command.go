@@ -29,7 +29,7 @@ import (
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
-	allCommands := true
+	allCommands := true && len(args) > 1
 
 	for _, arg := range args {
 		if !strings.HasSuffix(arg, ".sh") {
@@ -71,20 +71,20 @@ func runAllAsCommands(ctx context.Context, dir string, files []string) (*config.
 		TestResults: make(map[string]config.TestResult, len(files)),
 	}
 
-	for _, f := range files {
-		cmd := exec.CommandContext(ctx, "/bin/sh", f)
+	for _, file := range files {
+		cmd := exec.CommandContext(ctx, "/bin/sh", file)
 		cmd.Dir = dir
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
 		log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-		res.TestResults[f] = config.TestResult{
+		res.TestResults[file] = config.TestResult{
 			Status: config.Pass,
 		}
 
 		if err := cmd.Run(); err != nil {
-			res.TestResults[f] = config.TestResult{
+			res.TestResults[file] = config.TestResult{
 				Status: config.Fail,
 				Output: err.Error(),
 			}
