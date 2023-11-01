@@ -31,8 +31,8 @@ import (
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	allCommands := true
 
-	for _, a := range args {
-		if !strings.HasSuffix(a, ".sh") {
+	for _, arg := range args {
+		if !strings.HasSuffix(arg, ".sh") {
 			allCommands = false
 		}
 	}
