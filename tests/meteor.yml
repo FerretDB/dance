@@ -1,23 +1,31 @@
 ---
 runner: command
 dir: meteor
-args: [../meteor.sh]
+args:
+  - ../meteor-doc-fetcher.sh
+  - ../meteor-oplog-cursor-supported.sh
+  - ../meteor-oplog-entry-skipping.sh
+  - ../meteor-oplog-x-implicit-collection-creation.sh
 
 results:
   postgresql:
     stats:
-      fail: 1
+      fail: 4
     fail:
-      - meteor
+      - meteor-doc-fetcher.sh
+      - meteor-oplog-cursor-supported.sh
+      - meteor-oplog-entry-skipping.sh
+      - meteor-oplog-x-implicit-collection-creation.sh
 
   sqlite:
     stats:
-      fail: 1
+      fail: 4
     fail:
-      - meteor
+      - meteor-doc-fetcher.sh
+      - meteor-oplog-cursor-supported.sh
+      - meteor-oplog-entry-skipping.sh
+      - meteor-oplog-x-implicit-collection-creation.sh
 
   mongodb:
     stats:
-      fail: 1
-    fail:
-      - meteor
+      pass: 4
