@@ -65,7 +65,6 @@ services:
       - TZ=Asia/Kathmandu
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "mongodb:127.0.0.1"
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
 
