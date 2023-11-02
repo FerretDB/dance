@@ -20,6 +20,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 
 	"github.com/FerretDB/dance/internal/config"
@@ -28,17 +29,15 @@ import (
 // Run runs generic test.
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
+// If all args are executable files with .sh extension it runs each file in a separate CommandContext.
 func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
-	allCommands := true && len(args) > 1
+	allExecutableFiles := !slices.ContainsFunc(args, func(arg string) bool {
+		return !strings.HasSuffix(arg, ".sh")
+	})
 
-	for _, arg := range args {
-		if !strings.HasSuffix(arg, ".sh") {
-			allCommands = false
-		}
-	}
-
-	if allCommands {
-		return runAllAsCommands(ctx, dir, args)
+	// handles special case if all args are executable
+	if allExecutableFiles && len(args) > 1 {
+		return runExecutableFiles(ctx, dir, args)
 	}
 
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
@@ -66,13 +65,14 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	return res, nil
 }
 
-func runAllAsCommands(ctx context.Context, dir string, files []string) (*config.TestResults, error) {
+// runExecutableFiles runs all args as executable files.
+func runExecutableFiles(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
 	res := &config.TestResults{
-		TestResults: make(map[string]config.TestResult, len(files)),
+		TestResults: make(map[string]config.TestResult, len(args)),
 	}
 
-	for _, file := range files {
-		cmd := exec.CommandContext(ctx, "/bin/sh", file)
+	for _, file := range args {
+		cmd := exec.CommandContext(ctx, file)
 		cmd.Dir = dir
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
