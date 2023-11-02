@@ -12,20 +12,25 @@ results:
     stats:
       fail: 4
     fail:
-      - meteor-doc-fetcher.sh
-      - meteor-oplog-cursor-supported.sh
-      - meteor-oplog-entry-skipping.sh
-      - meteor-oplog-x-implicit-collection-creation.sh
+      - ../meteor-doc-fetcher.sh
+      - ../meteor-oplog-cursor-supported.sh
+      - ../meteor-oplog-entry-skipping.sh
+      - ../meteor-oplog-x-implicit-collection-creation.sh
 
   sqlite:
     stats:
       fail: 4
     fail:
-      - meteor-doc-fetcher.sh
-      - meteor-oplog-cursor-supported.sh
-      - meteor-oplog-entry-skipping.sh
-      - meteor-oplog-x-implicit-collection-creation.sh
+      - ../meteor-doc-fetcher.sh
+      - ../meteor-oplog-cursor-supported.sh
+      - ../meteor-oplog-entry-skipping.sh
+      - ../meteor-oplog-x-implicit-collection-creation.sh
 
   mongodb:
     stats:
-      pass: 4
+      fail: 4
+    fail:
+      - ../meteor-doc-fetcher.sh
+      - ../meteor-oplog-cursor-supported.sh
+      - ../meteor-oplog-entry-skipping.sh
+      - ../meteor-oplog-x-implicit-collection-creation.sh
