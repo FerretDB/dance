@@ -101,7 +101,7 @@ services:
       context: ./build/deps
       dockerfile: ${MONGO_DOCKERFILE:-mongo6}.Dockerfile
     container_name: mongodb_replset
-    command: mongod --port 47017 --bind_ip_all --replSet rs0
+    command: mongod --port 47017 --bind_ip_all --replSet mongodb-rs
     ports:
       - 47017:27017
     extra_hosts:
