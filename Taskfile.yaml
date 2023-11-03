@@ -108,9 +108,11 @@ tasks:
 
   init:
     desc: "Initializes a new replica set"
+    run: once
     cmds:
       - >
-        docker compose run --rm mongosh mongosh --quiet mongodb://host.docker.internal:27017/
+        docker compose run --rm mongosh mongosh
+        'mongodb://host.docker.internal:27017/'
         --eval 'db.getSiblingDB("admin").runCommand({replSetInitiate: {_id: "mongodb-rs", members: [{_id: 0, host: "localhost"}]}})'
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
