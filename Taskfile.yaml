@@ -112,7 +112,7 @@ tasks:
       - >
         docker compose run --rm mongosh mongosh
         'mongodb://host.docker.internal:27017/'
-        --eval 'db.getSiblingDB("admin").runCommand({replSetInitiate: {_id: "mongodb-rs", members:[{_id: 0, host: "localhost" }]}});'
+        --eval 'db.getSiblingDB("admin").runCommand({replSetInitiate: {_id: "mongodb-rs", members:[{_id: 0, host: "localhost"}]}});'
     # this is true to prevent an already initialized and no such command errors 
     ignore_error: true
 
