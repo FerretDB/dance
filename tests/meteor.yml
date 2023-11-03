@@ -28,9 +28,4 @@ results:
 
   mongodb:
     stats:
-      fail: 4
-    fail:
-      - ../meteor-doc-fetcher.sh
-      - ../meteor-oplog-cursor-supported.sh
-      - ../meteor-oplog-entry-skipping.sh
-      - ../meteor-oplog-x-implicit-collection-creation.sh
+      pass: 4
