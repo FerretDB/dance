@@ -111,7 +111,7 @@ tasks:
     run: once
     cmds:
       - >
-        docker compose run --rm mongosh mongosh
+        docker compose run --rm mongo
         'mongodb://host.docker.internal:27017/'
         --eval 'db.getSiblingDB("admin").runCommand({replSetInitiate: {_id: "mongodb-rs", members: [{_id: 0, host: "localhost"}]}})'
 
