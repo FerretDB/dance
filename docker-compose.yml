@@ -68,18 +68,6 @@ services:
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
 
-  # initiates the replica set
-  # we need a separate container to run rs.initiate()
-  init_mongodb_replset:
-    build:
-      context: ./build/deps
-      dockerfile: ${MONGO_DOCKERFILE:-mongo6}.Dockerfile
-    container_name: init_mongodb_replset
-    depends_on:
-      - mongodb
-    restart: "no"
-    entrypoint: ["bash", "-c", "sleep 10 && mongosh --host mongodb:27017 --eval 'rs.initiate({_id: \"mongodb-rs\", members: [{_id: 0, host: \"localhost\"}]});'"]
-
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
     build:
