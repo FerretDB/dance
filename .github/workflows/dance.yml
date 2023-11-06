@@ -60,6 +60,7 @@ jobs:
           - python-example-auth
           - ycsb-workloada
           - ycsb-workloadc
+          - restheart
 
     steps:
       - name: Checkout code
