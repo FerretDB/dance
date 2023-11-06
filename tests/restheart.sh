@@ -5,7 +5,7 @@ set -ex
 # ensure we set JAVA_HOME to use Java 17
 # export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 
-unset $JAVA_HOME
+unset JAVA_HOME
 
 ./mvnw -X clean verify -DskipUTs -P-mongodb \
 -Dtest-connection-string="mongodb://user:password@localhost/ferretdb?authMechanism=PLAIN" \
