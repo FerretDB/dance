@@ -18,7 +18,7 @@ results:
 
   mongodb:
     stats:
-      # ETagIT.createTestData:65 create db test-etag-db ==> expected: <201> but was: <200>
+      # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
     fail:
       - restheart
