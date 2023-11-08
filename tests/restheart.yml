@@ -8,12 +8,14 @@ results:
     stats:
       fail: 1
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/2568
       - restheart
 
   sqlite:
     stats:
       fail: 1
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/2568
       - restheart
 
   mongodb:
