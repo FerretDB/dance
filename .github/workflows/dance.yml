@@ -60,7 +60,10 @@ jobs:
           - python-example-auth
           - ycsb-workloada
           - ycsb-workloadc
-          - meteor
+          - meteor-doc-fetcher
+          - meteor-oplog-cursor-supported
+          - meteor-oplog-entry-skipping
+          - meteor-oplog-x-implicit-collection-creation
 
     steps:
       - name: Checkout code
