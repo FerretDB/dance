@@ -29,3 +29,4 @@
 [submodule "meteor"]
 	path = tests/meteor
 	url = https://github.com/meteor/meteor.git
+	branch = devel
