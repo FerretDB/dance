@@ -6,12 +6,14 @@ args: [../meteor-oplog-entry-skipping.sh]
 results:
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/76
       fail: 1
     fail:
       - meteor
 
   sqlite:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/76
       fail: 1
     fail:
       - meteor
