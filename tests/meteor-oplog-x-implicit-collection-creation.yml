@@ -1,0 +1,21 @@
+---
+runner: command
+dir: meteor
+args: [../meteor-oplog-x-implicit-collection-creation.sh]
+
+results:
+  postgresql:
+    stats:
+      fail: 1
+    fail:
+      - meteor
+
+  sqlite:
+    stats:
+      fail: 1
+    fail:
+      - meteor
+
+  mongodb:
+    stats:
+      pass: 1
