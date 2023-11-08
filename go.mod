@@ -3,7 +3,6 @@ module github.com/FerretDB/dance
 go 1.21
 
 require (
-	github.com/AlekSi/pointer v1.2.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/sethvargo/go-githubactions v1.1.0
 	github.com/stretchr/testify v1.8.4
