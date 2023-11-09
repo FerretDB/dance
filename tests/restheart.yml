@@ -20,6 +20,4 @@ results:
 
   mongodb:
     stats:
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
