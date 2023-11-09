@@ -58,10 +58,10 @@ jobs:
           - mongo-tools
           - python-example
           - python-example-auth
-          - ycsb-workloada
-          - ycsb-workloadc
           - restheart
           - restheart-auth
+          - ycsb-workloada
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code
