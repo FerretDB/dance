@@ -1,6 +1,4 @@
 ---
-version: "3.8"
-
 services:
   postgresql:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
@@ -96,7 +94,7 @@ services:
     working_dir: /tests/mongo
     volumes:
       - ./tests/mongo:/tests/mongo
-
+   
   # for documentation
   textlint:
     build:
