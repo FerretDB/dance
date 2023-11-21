@@ -10,7 +10,8 @@ results:
   sqlite:
     stats:
       pass: 4
-      fail:
+      fail: 2
+    fail:
         # https://github.com/FerretDB/FerretDB/issues/3700
         - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore
         - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore/sample_geospatial
