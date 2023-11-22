@@ -31,7 +31,7 @@ import (
 
 // Run runs `go test`.
 // Args contain additional arguments to `go test`.
-// `-v -json -count=1` are always added.
+// `-v -json -p=1 -count=1` are always added.
 // `-race` is added if possible.
 func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*config.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
