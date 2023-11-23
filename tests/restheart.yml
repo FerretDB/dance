@@ -20,7 +20,4 @@ results:
 
   mongodb:
     stats:
-      # https://github.com/SoftInstigate/restheart/issues/477#issuecomment-1823937412
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
