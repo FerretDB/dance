@@ -1,0 +1,26 @@
+---
+runner: command
+dir: restheart
+args: [../restheart.sh]
+
+results:
+  postgresql:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/2568
+      fail: 1
+    fail:
+      - restheart
+
+  sqlite:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/2568
+      fail: 1
+    fail:
+      - restheart
+
+  mongodb:
+    stats:
+      # https://github.com/SoftInstigate/restheart/issues/477#issuecomment-1823937412
+      fail: 1
+    fail:
+      - restheart

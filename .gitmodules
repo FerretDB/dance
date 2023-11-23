@@ -26,3 +26,7 @@
 	path = tests/python-example
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
+[submodule "restheart"]
+	path = tests/restheart
+	url = https://github.com/SoftInstigate/restheart.git
+	branch = master
