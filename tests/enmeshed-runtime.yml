@@ -3,15 +3,14 @@ runner: command
 args: [../enmeshed-runtime.sh]
 
 results:
-  common:
+  postgresql:
     stats:
       pass: 1
 
-  ferretdb:
-    stats:
-
   sqlite:
     stats:
+      pass: 1
 
   mongodb:
     stats:
+      pass: 1
