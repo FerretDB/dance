@@ -9,14 +9,15 @@ results:
 
   sqlite:
     stats:
-    ignore:
-        # https://github.com/FerretDB/FerretDB/issues/3700
-        - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore
-        - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore/sample_geospatial
-        - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore/sample_analytics
-        - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport
-        - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport/Accounts
-        - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport/Shipwrecks
+      pass: 6
+    # ignore:
+    #     # https://github.com/FerretDB/FerretDB/issues/3700
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore/sample_geospatial
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestDumpRestore/sample_analytics
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport/Accounts
+    #     - github.com/FerretDB/dance/tests/mongo-tools/TestExportImport/Shipwrecks
 
 
   mongodb:
