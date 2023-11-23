@@ -62,6 +62,8 @@ jobs:
           - mongo-tools
           - python-example
           - python-example-auth
+          - restheart
+          - restheart-auth
           - ycsb-workloada
           - ycsb-workloadc
 

@@ -26,7 +26,7 @@
 	path = tests/python-example
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
-[submodule "meteor"]
-	path = tests/meteor
-	url = https://github.com/meteor/meteor.git
-	branch = devel
+[submodule "restheart"]
+	path = tests/restheart
+	url = https://github.com/SoftInstigate/restheart.git
+	branch = master

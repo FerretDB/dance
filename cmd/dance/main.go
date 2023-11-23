@@ -70,7 +70,7 @@ func logResult(label string, res map[string]string) {
 }
 
 func main() {
-	dbF := flag.String("db", "", "database to use: ferretdb, mongodb")
+	dbF := flag.String("db", "", "database to use: postgresql, sqlite, mongodb")
 	vF := flag.Bool("v", false, "be verbose")
 	pF := flag.Int("p", 0, "number of tests to run in parallel")
 	log.SetFlags(0)
