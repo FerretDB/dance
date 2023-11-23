@@ -10,6 +10,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -24,10 +25,9 @@ services:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=sqlite
+      - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    volumes:
-      - .data:/data
 
   postgres:
     build:
