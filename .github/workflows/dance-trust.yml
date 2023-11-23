@@ -47,7 +47,8 @@ jobs:
       fail-fast: false
       matrix:
         db:
-          - ferretdb
+          - postgresql
+          - sqlite
           - mongodb
         test:
           - enmeshed-runtime
