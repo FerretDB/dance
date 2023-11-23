@@ -20,7 +20,4 @@ results:
 
   mongodb:
     stats:
-      # https://github.com/FerretDB/dance/issues/651
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
