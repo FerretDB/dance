@@ -170,8 +170,8 @@ results:
   mongodb:
     stats:
       fail: 8
-      skip: 246
-      pass: 2457
+      skip: 265
+      pass: 2695
     ignore:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient_BSONOptions
