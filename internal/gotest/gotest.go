@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -31,16 +32,16 @@ import (
 
 // Run runs `go test`.
 // Args contain additional arguments to `go test`.
-// `-v -json -p=1 -count=1` are always added.
+// `-v -json -count=1` are always added.
 // `-race` is added if possible.
 func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*config.TestResults, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
-	args = append([]string{"test", "-v", "-json", "-p=1", "-count=1"}, args...)
+	args = append([]string{"test", "-v", "-json", "-count=1"}, args...)
 
 	// implicitly defaults to GOMAXPROCS
-	if parallel > 0 {
+	if parallel > 0 && !slices.Contains(args, "-p=1") {
 		log.Printf("Running up to %d tests in parallel.", parallel)
 		args = append(args, "-parallel="+strconv.Itoa(parallel))
 	}
