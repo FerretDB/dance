@@ -98,7 +98,7 @@ jobs:
         with:
           name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
           path: compose-logs.zip
-          retention-days: 1
+          retention-days: 3
 
       # ignore `go mod tidy` being applied to the Go driver, etc
       - name: Check dirty
