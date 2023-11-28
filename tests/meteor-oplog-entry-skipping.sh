@@ -2,8 +2,6 @@
 
 set -ex
 
-npm install -g npm@latest
-
 export PUPPETEER_DOWNLOAD_PATH=~/.npm/chromium
 
 export METEOR_LOCAL_DIR=~/.meteor
