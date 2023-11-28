@@ -48,7 +48,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo6.Dockerfile
-    command: --config /etc/mongod.conf --setParameter enableTestCommands=1
+    command: --config /etc/mongod.conf
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
