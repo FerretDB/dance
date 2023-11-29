@@ -1,6 +1,6 @@
 ---
 runner: gotest
-args: ["-timeout=20m", "-shuffle=on", "-p=1", "./..."]
+args: ["-timeout=20m", "-shuffle=on", "-parallel=1", "./..."]
 
 results:
   postgresql:
