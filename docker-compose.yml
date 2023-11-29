@@ -48,7 +48,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo6.Dockerfile
-    command: --setParameter enableTestCommands=1
+    command: --config /etc/mongod.conf
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
@@ -63,6 +63,8 @@ services:
       - TZ=Asia/Kathmandu
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      - ./build/mongod.conf:/etc/mongod.conf
 
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
@@ -92,41 +94,7 @@ services:
     working_dir: /tests/mongo
     volumes:
       - ./tests/mongo:/tests/mongo
-
-  # used for testing a replica set
-  mongodb_replset:
-    build:
-      context: ./build/deps
-      dockerfile: ${MONGO_DOCKERFILE:-mongo6}.Dockerfile
-    container_name: mongodb_replset
-    command: mongod --port 47017 --bind_ip_all --replSet rs0
-    ports:
-      - 47017:27017
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    environment:
-      # Always UTC+05:45. Set to catch timezone problems.
-      - TZ=Asia/Kathmandu
-    volumes:
-      - ./build/mongod_repl.conf:/etc/mongod.conf
-
-  # initiates the replica set
-  # we need a separate container to run rs.initiate()
-  init_mongodb_replset:
-    build:
-      context: ./build/deps
-      dockerfile: ${MONGO_DOCKERFILE:-mongo6}.Dockerfile
-    container_name: init_mongodb_replset
-    depends_on:
-      - mongodb_replset
-    restart: "no"
-    entrypoint:
-      [
-        "bash",
-        "-c",
-        "sleep 10 && mongosh --host mongodb_replset:47017 --eval 'rs.initiate();'",
-      ]
-
+   
   # for documentation
   textlint:
     build:

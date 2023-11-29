@@ -53,6 +53,10 @@ jobs:
           - dotnet-example-auth
           - java-example
           - java-example-auth
+          - meteor-doc-fetcher
+          - meteor-oplog-cursor-supported
+          - meteor-oplog-entry-skipping
+          - meteor-oplog-x-implicit-collection-creation
           - mongo
           - mongo-go-driver
           - mongo-tools

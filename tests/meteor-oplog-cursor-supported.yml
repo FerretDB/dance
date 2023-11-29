@@ -1,0 +1,31 @@
+---
+runner: command
+dir: meteor
+args: [../meteor-oplog-cursor-supported.sh]
+
+results:
+  postgresql:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/76
+      # https://github.com/FerretDB/FerretDB/issues/3638
+      # https://github.com/FerretDB/FerretDB/issues/2283
+      # https://github.com/FerretDB/FerretDB/issues/2984
+      # https://github.com/FerretDB/FerretDB/issues/3667
+      fail: 1
+    fail:
+      - meteor
+
+  sqlite:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/76
+      # https://github.com/FerretDB/FerretDB/issues/3638
+      # https://github.com/FerretDB/FerretDB/issues/2283
+      # https://github.com/FerretDB/FerretDB/issues/2984
+      # https://github.com/FerretDB/FerretDB/issues/3667
+      fail: 1
+    fail:
+      - meteor
+
+  mongodb:
+    stats:
+      pass: 1
