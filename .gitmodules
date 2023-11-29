@@ -30,3 +30,7 @@
 	path = tests/restheart
 	url = https://github.com/SoftInstigate/restheart.git
 	branch = master
+[submodule "meteor"]
+	path = tests/meteor
+	url = https://github.com/meteor/meteor.git
+	branch = devel
