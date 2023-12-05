@@ -238,7 +238,7 @@ results:
 
   mongodb:
     stats:
-      fail: 30
+      fail: 26
       pass: 88
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
