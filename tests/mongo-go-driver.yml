@@ -684,7 +684,6 @@ results:
       # test requires that close does not aggressively close used connections
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       # test fails frequently, skipping; see GODRIVER-2852
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
       - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedAtShutdown
       - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedDueToReplStateChange,_not_shutdown
       - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimary
@@ -1277,5 +1276,5 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/transaction-handling.json/All_commands_in_a_transaction_declare_an_API_version
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/transaction-handling.json/abortTransaction_includes_an_API_version
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
-      -  go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
