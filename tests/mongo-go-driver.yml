@@ -173,7 +173,7 @@ results:
   mongodb:
     stats:
       fail: 14
-      skip: 276 
+      skip: 277
       pass: 2735
     ignore:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
@@ -709,6 +709,8 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/10_no_remaining_sessions_are_checked_out_after_each_functional_test
       - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/14_implicit_session_allocation
       - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
+      # event ordering is incompatible with load-balancer SDAM spec test (DRIVERS-1785)
+      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples/post4.2
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
