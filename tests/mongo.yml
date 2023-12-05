@@ -157,7 +157,7 @@ results:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
       # https://github.com/FerretDB/FerretDB/issues/1710
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
-      # https://github.com/FerretDB/dance/issues/295
+      # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
       # https://github.com/FerretDB/FerretDB/issues/2950
@@ -271,5 +271,6 @@ results:
       - ongo/jstests/core/query/elemmatch/elemmatch_value.js
       - mongo/jstests/core/write/crud_api.js
       - mongo/jstests/readonly/get_more.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
       # assert: [1] != [0] are not equal
       - mongo/jstests/core/query/elemmatch/elemmatch_ne.js
