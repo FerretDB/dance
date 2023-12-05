@@ -64,8 +64,6 @@ github.com/Antonboom/nilnil v0.1.7 h1:ofgL+BA7vlA1K2wNQOsHzLJ2Pw5B5DpWRLdDAVvvTo
 github.com/Antonboom/nilnil v0.1.7/go.mod h1:TP+ScQWVEq0eSIxqU8CbdT5DFWoHp0MbP+KMUO1BKYQ=
 github.com/Antonboom/testifylint v0.2.3 h1:MFq9zyL+rIVpsvLX4vDPLojgN7qODzWsrnftNX2Qh60=
 github.com/Antonboom/testifylint v0.2.3/go.mod h1:IYaXaOX9NbfAyO+Y04nfjGI8wDemC1rUyM/cYolz018=
-github.com/BurntSushi/go-sumtype v0.0.0-20221020234012-480526a59796 h1:LkyKOzdmNBpJs/9iWbF7Dx4q0Ue0wESKUVLaUgcbpg8=
-github.com/BurntSushi/go-sumtype v0.0.0-20221020234012-480526a59796/go.mod h1:V4gPjiBeLsr++PoZh39o+6fZ++EbypxSUmMplhmBNRY=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
