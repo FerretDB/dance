@@ -161,7 +161,7 @@ results:
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
       # https://github.com/FerretDB/FerretDB/issues/2950
-      -  mongo/jstests/core/query/elemmatch/elemmatch_ne.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_ne.js
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
       # https://github.com/FerretDB/FerretDB/issues/3616
