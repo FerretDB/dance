@@ -157,15 +157,19 @@ results:
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
       # https://github.com/FerretDB/FerretDB/issues/1710
       - mongo/jstests/core/query/elemmatch/elemmatch_projection.js
-      # https://github.com/FerretDB/dance/issues/295
+      # https://github.com/FerretDB/FerretDB/issues/2262
       - mongo/jstests/core/query/elemmatch/elemmatch_object.js
       - mongo/jstests/core/query/elemmatch/elemmatch_value.js
+      # https://github.com/FerretDB/FerretDB/issues/2950
+      - mongo/jstests/core/query/elemmatch/elemmatch_ne.js
       # https://jira.mongodb.org/browse/SERVER-14832
       - mongo/jstests/core/query/distinct/distinct_array1.js
       # https://github.com/FerretDB/FerretDB/issues/3616
       - mongo/jstests/core/query/distinct/distinct4.js
       # https://github.com/FerretDB/FerretDB/issues/1242
       - mongo/jstests/core/query/unset/unset2.js
+      # SyntaxError: import declarations may only appear at top level of a module
+      - mongo/jstests/readonly/get_more.js
     tailable:
       # https://github.com/FerretDB/FerretDB/issues/2283
       # https://github.com/FerretDB/FerretDB/issues/2341
@@ -207,7 +211,7 @@ results:
   postgresql:
     stats:
       fail: 77
-      pass: 41
+      pass: 38
     fail:
     include_fail:
       - aggregation
@@ -221,7 +225,7 @@ results:
   sqlite:
     stats:
       fail: 77
-      pass: 41
+      pass: 38
     fail:
     include_fail:
       - aggregation
@@ -234,8 +238,8 @@ results:
 
   mongodb:
     stats:
-      fail: 9
-      pass: 109
+      fail: 27
+      pass: 88
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
@@ -249,3 +253,24 @@ results:
       - mongo/jstests/aggregation/use_query_sort.js
       # fails when updating the maximum size of the capped collection
       - mongo/jstests/core/capped/capped_resize.js
+      # SyntaxError: import declarations may only appear at top level of a module
+      - mongo/jstests/aggregation/accumulators/min_n_max_n.js
+      - mongo/jstests/aggregation/bugs/cond.js
+      - mongo/jstests/aggregation/bugs/groupMissing.js
+      - mongo/jstests/aggregation/bugs/match.js
+      - mongo/jstests/aggregation/expressions/filter.js
+      - mongo/jstests/aggregation/expressions/set.js
+      - mongo/jstests/aggregation/ifnull.js
+      - mongo/jstests/aggregation/sources/collStats/query_exec_stats.js
+      - mongo/jstests/aggregation/testall.js
+      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
+      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
+      - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js
+      - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
+      - ongo/jstests/core/query/elemmatch/elemmatch_value.js
+      - mongo/jstests/core/write/crud_api.js
+      - mongo/jstests/readonly/get_more.js
+      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
+      # assert: [1] != [0] are not equal
+      - mongo/jstests/core/query/elemmatch/elemmatch_ne.js
