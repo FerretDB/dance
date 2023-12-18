@@ -1,3 +1,8 @@
+[submodule "mongodb-sample-databases"]
+	path = dumps/mongodb-sample-databases
+	url = https://github.com/mcampo2/mongodb-sample-databases.git
+	branch = master
+
 [submodule "dotnet-example"]
 	path = tests/dotnet-example
 	url = https://github.com/FerretDB/dotnet-example.git
@@ -10,17 +15,17 @@
 	path = tests/java-example
 	url = https://github.com/FerretDB/java-example.git
 	branch = main
+[submodule "meteor"]
+	path = tests/meteor
+	url = https://github.com/meteor/meteor.git
+	branch = devel
 [submodule "mongo"]
 	path = tests/mongo
 	url = https://github.com/mongodb/mongo.git
-	branch = master
+	branch = v7.0
 [submodule "mongo-go-driver"]
 	path = tests/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
-	branch = master
-[submodule "mongodb-sample-databases"]
-	path = dumps/mongodb-sample-databases
-	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
 [submodule "python-example"]
 	path = tests/python-example
@@ -30,7 +35,3 @@
 	path = tests/restheart
 	url = https://github.com/SoftInstigate/restheart.git
 	branch = master
-[submodule "meteor"]
-	path = tests/meteor
-	url = https://github.com/meteor/meteor.git
-	branch = devel
