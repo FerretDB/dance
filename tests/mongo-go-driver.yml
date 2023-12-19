@@ -406,8 +406,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
       # execution failed: test must be skipped: "timeoutMode not supported
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
-      # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/timeseries-collection.json/createCollection_with_bucketing_options
       # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is lower than min required version "7.0"]
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/find.json/A_successful_find_event_with_a_getmore_and_the_server_kills_the_cursor_(<=_4.4)
       # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
