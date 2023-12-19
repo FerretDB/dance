@@ -913,7 +913,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_ShutdownInProgress
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_SocketException
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_StaleEpoch
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_StaleShardVersion
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_if_error_contains_ResumableChangeStreamError
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_omitted,_showExpandedEvents_is_not_sent_as_a_part_of_the_aggregate_command
