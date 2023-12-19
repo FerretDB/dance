@@ -51,7 +51,6 @@ args:
   - mongo/jstests/core/capped/capped_resize.js
   - mongo/jstests/core/capped/capped_update.js
   - mongo/jstests/core/capped/capped_upsert.js
-  - mongo/jstests/noPassthroughWithMongod/capped6.js
   - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
   - mongo/jstests/core/ddl/convert_to_capped.js
   - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
@@ -120,7 +119,6 @@ results:
       - mongo/jstests/core/capped/capped_resize.js
       - mongo/jstests/core/capped/capped_update.js
       - mongo/jstests/core/capped/capped_upsert.js
-      - mongo/jstests/noPassthroughWithMongod/capped6.js
       - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
       - mongo/jstests/core/ddl/convert_to_capped.js
       - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
@@ -210,8 +208,8 @@ results:
 
   postgresql:
     stats:
-      fail: 77
-      pass: 38
+      fail: 76
+      pass: 41
     fail:
     include_fail:
       - aggregation
@@ -224,8 +222,8 @@ results:
 
   sqlite:
     stats:
-      fail: 77
-      pass: 38
+      fail: 76
+      pass: 41
     fail:
     include_fail:
       - aggregation
@@ -238,39 +236,10 @@ results:
 
   mongodb:
     stats:
-      fail: 27
-      pass: 88
+      fail: 2
+      pass: 115
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown_paths.js
-      - mongo/jstests/aggregation/explain.js
-      - mongo/jstests/aggregation/match_swapping_renamed_fields.js
-      - mongo/jstests/aggregation/use_query_project_and_sort.js
-      - mongo/jstests/aggregation/use_query_projection.js
-      - mongo/jstests/aggregation/use_query_sort.js
-      # fails when updating the maximum size of the capped collection
-      - mongo/jstests/core/capped/capped_resize.js
-      # SyntaxError: import declarations may only appear at top level of a module
-      - mongo/jstests/aggregation/accumulators/min_n_max_n.js
-      - mongo/jstests/aggregation/bugs/cond.js
-      - mongo/jstests/aggregation/bugs/groupMissing.js
-      - mongo/jstests/aggregation/bugs/match.js
-      - mongo/jstests/aggregation/expressions/filter.js
-      - mongo/jstests/aggregation/expressions/set.js
-      - mongo/jstests/aggregation/ifnull.js
-      - mongo/jstests/aggregation/sources/collStats/query_exec_stats.js
-      - mongo/jstests/aggregation/testall.js
-      - mongo/jstests/core/query/awaitdata_getmore_cmd.js
-      - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
-      - mongo/jstests/core/query/cursor/tailable_cursor_invalidation.js
-      - mongo/jstests/core/query/cursor/tailable_getmore_batch_size.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_object.js
-      - ongo/jstests/core/query/elemmatch/elemmatch_value.js
-      - mongo/jstests/core/write/crud_api.js
-      - mongo/jstests/readonly/get_more.js
-      - mongo/jstests/core/query/elemmatch/elemmatch_value.js
-      # assert: [1] != [0] are not equal
-      - mongo/jstests/core/query/elemmatch/elemmatch_ne.js
