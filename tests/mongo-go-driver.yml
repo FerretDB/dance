@@ -166,9 +166,9 @@ results:
   
   mongodb:
     stats:
-      fail: 14
-      skip: 277
-      pass: 2735
+      fail: 30
+      skip: 275
+      pass: 2727
     ignore:
       - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient_BSONOptions
@@ -214,8 +214,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/without_PBRT_support
       # skipping for lack of SDAM monitoring
       - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/server_selection_before_resume
-      # skipping due to environmental constraints: server version "6.0.8" is lower than min required version "7.0.0"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/split_large_changes
       # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
       - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone
       # skipping due to environmental constraints: test requires auth value: true, cluster auth value: false
@@ -306,10 +304,8 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestMongosPinning
       # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
       - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/transaction_number_not_sent_on_writes
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/wrap_mmapv1_error
       # skipping because storage engine is not mmapv1
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-disambiguatedPaths.json
+      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/wrap_mmapv1_error
       # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is lower than min required version "6.1.0"]
       - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/The_watch_helper_must_not_throw_a_custom_exception_when_executed_against_a_single_server_topology,_but_instead_depend_on_a_server_error
       # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
@@ -705,6 +701,8 @@ results:
       - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
       # event ordering is incompatible with load-balancer SDAM spec test (DRIVERS-1785)
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "7.0.4" is higher than max version "6.0.99"]
+      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_StaleShardVersion
     pass:
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples/post4.2
       - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
