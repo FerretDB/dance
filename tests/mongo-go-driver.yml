@@ -2,13 +2,12 @@
 runner: gotest
 args:
   - -timeout=5m
-  - ./examples/...
   - ./mongo
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
-  - ./mongo/integration
-  - ./mongo/integration/unified
+  - ./internal/integration
+  - ./internal/integration/unified
 
 results:
   includes:
