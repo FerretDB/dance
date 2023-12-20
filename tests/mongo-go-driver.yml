@@ -12,36 +12,36 @@ args:
 results:
   includes:
     fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples
 
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/AggregationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestAggregationExamples
 
       # Should be true
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/ProjectionExamples
 
       # query array inconsistencies
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
 
       - go.mongodb.org/mongo-driver/mongo/integration/TestClient
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
       # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions/number_of_sessions_divides_evenly
       # panic: runtime error: invalid memory address or nil pointer dereference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/end_sessions
 
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec
 
       # panic: runtime error: invalid memory address or nil pointer dereference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
     skip:
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
@@ -51,47 +51,46 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
     pass:
-      - go.mongodb.org/mongo-driver/mongo/TestClient/
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/UpdateExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryArraysExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryToplevelFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/RunCommandExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/StableAPExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_and_delete_with_batches
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unacknowledged_write
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_with_batches
-
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_19_right_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20_wrong_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/no_custom_standalone_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect/nil_context
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/options
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/empty
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/non-empty
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/options
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/default_read_preference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/invalid_host
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/registry_passed_to_cursors
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch/disconnected
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/insert_and_delete_with_batches
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/unacknowledged_write
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/internal
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20_wrong_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone/no_custom_standalone_error
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect/nil_context
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_database_names/options
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter/empty
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter/non-empty
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/options
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping/default_read_preference
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping/invalid_host
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/registry_passed_to_cursors
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch/disconnected
 
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
@@ -104,15 +103,15 @@ results:
 
     ignore:
       # indicates flaky tests that should be ignored
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
+      - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/1._valid_AWS
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/4._valid_Vercel
 
       # test fails frequently, skipping; see GODRIVER-2852
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
@@ -120,16 +119,16 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
 
       # returns unknown result.
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
+      - go.mongodb.org/mongo-driver/internal/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/mongo/TestMergeChangeStreamOptions
 
   postgresql:
     stats:
-      fail: 8
+      fail: 6
       skip: 9
-      pass: 640
+      pass: 633
     ignore:
     include_ignore:
       - ignore
@@ -153,7 +152,7 @@ results:
       - ignore
     fail:
       # sql: Scan error on column index 0, name "SUM(pgsize)": converting NULL to int64 is unsupported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
+      - go.mongodb.org/mongo-driver/internal/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
     skip:
