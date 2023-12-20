@@ -163,8 +163,8 @@ results:
   mongodb:
     stats:
       fail: 31
-      skip: 252
-      pass: 2481
+      skip: 273
+      pass: 2584
     ignore:
       - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
       - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesSpec
