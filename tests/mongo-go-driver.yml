@@ -167,10 +167,11 @@ results:
       pass: 2584
     ignore:
       - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
-      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesSpec
       - go.mongodb.org/mongo-driver/internal/integration/TestClient_BSONOptions
       - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
       - go.mongodb.org/mongo-driver/internal/integration/TestSearchIndexProse
+      # subtests can exceed timeout and return unknown results.
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesSpec
     fail:
       - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse
       - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse/1._valid_AWS

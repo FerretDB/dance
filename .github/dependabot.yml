@@ -57,7 +57,7 @@ updates:
 
   - package-ecosystem: "gitsubmodule"
     directory: "/"
-    labels: ["deps"]
+    labels: ["deps", "not ready"]
     assignees: [b1ron]
     open-pull-requests-limit: 20
     schedule:
