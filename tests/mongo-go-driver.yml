@@ -170,7 +170,7 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient_BSONOptions
       - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
       - go.mongodb.org/mongo-driver/internal/integration/TestSearchIndexProse
-      # subtests can exceed timeout and return unknown results.
+      # subtests can exceed timeout and return unknown results
       - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesSpec
     fail:
       - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse
