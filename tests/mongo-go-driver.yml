@@ -2,47 +2,46 @@
 runner: gotest
 args:
   - -timeout=5m
-  - ./examples/...
   - ./mongo
   - ./mongo/gridfs
   - ./x/mongo/driver/integration
   - ./x/mongo/driver/topology
-  - ./mongo/integration
-  - ./mongo/integration/unified
+  - ./internal/integration
+  - ./internal/integration/unified
 
 results:
   includes:
     fail:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples
 
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/AggregationExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestAggregationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/AggregationExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestAggregationExamples
 
       # Should be true
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ProjectionExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/ProjectionExamples
 
       # query array inconsistencies
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient
       - go.mongodb.org/mongo-driver/mongo/TestClient
 
       # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions
-      - go.mongodb.org/mongo-driver/mongo/TestClient/endSessions/number_of_sessions_divides_evenly
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions/number_of_sessions_divides_evenly
       # panic: runtime error: invalid memory address or nil pointer dereference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/end_sessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/end_sessions
 
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec
 
       # panic: runtime error: invalid memory address or nil pointer dereference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
     skip:
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
@@ -52,47 +51,46 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
     pass:
-      - go.mongodb.org/mongo-driver/mongo/TestClient/
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/InsertExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/UpdateExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryArraysExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryNullMissingFieldsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/QueryToplevelFieldsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/RunCommandExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/InsertExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/UpdateExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryArraysExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryEmbeddedDocumentsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryToplevelFieldsExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/RunCommandExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/StableAPExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/insert_and_delete_with_batches
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unacknowledged_write
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/update_with_batches
-
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_19_right_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20_wrong_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone/no_custom_standalone_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/disconnect/nil_context
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_database_names/options
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/empty
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/filter/non-empty
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/list_databases/options
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/default_read_preference
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/ping/invalid_host
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/registry_passed_to_cursors
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/watch/disconnected
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/insert_and_delete_with_batches
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/unacknowledged_write
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/internal
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/command_error_code_20_wrong_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_19_right_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone/no_custom_standalone_error
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect/nil_context
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_database_names/options
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter/empty
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/filter/non-empty
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/list_databases/options
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping/default_read_preference
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/ping/invalid_host
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/registry_passed_to_cursors
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch/disconnected
 
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
@@ -105,15 +103,15 @@ results:
 
     ignore:
       # indicates flaky tests that should be ignored
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
+      - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/4._valid_Vercel
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/1._valid_AWS
+      - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/4._valid_Vercel
 
       # test fails frequently, skipping; see GODRIVER-2852
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
@@ -121,16 +119,16 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
 
       # returns unknown result.
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientStress
+      - go.mongodb.org/mongo-driver/internal/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/IndexExamples
+      - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/IndexExamples
       - go.mongodb.org/mongo-driver/mongo/TestMergeChangeStreamOptions
 
   postgresql:
     stats:
-      fail: 8
+      fail: 6
       skip: 9
-      pass: 640
+      pass: 633
     ignore:
     include_ignore:
       - ignore
@@ -146,15 +144,13 @@ results:
 
   sqlite:
     stats:
-      fail: 8
+      fail: 6
       skip: 9
-      pass: 640
+      pass: 633
     ignore:
     include_ignore:
       - ignore
     fail:
-      # sql: Scan error on column index 0, name "SUM(pgsize)": converting NULL to int64 is unsupported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClientOptions_CustomDialer
     include_fail:
       - fail
     skip:
@@ -166,1106 +162,96 @@ results:
   
   mongodb:
     stats:
-      fail: 30
-      skip: 276
-      pass: 2733
+      fail: 31
+      skip: 273
+      pass: 2584
     ignore:
-      - go.mongodb.org/mongo-driver/mongo/integration/TestUnifiedSpecs
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient_BSONOptions
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCommandLoggingAndMonitoringProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSearchIndexProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient_BSONOptions
+      - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestSearchIndexProse
+      # subtests can exceed timeout and return unknown results
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesSpec
     fail:
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/1._valid_AWS
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHandshakeProse/3._valid_GCP
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set
-      # error finding host "localhost:27017": server selection error: server selection timeout, current topology: { Type: ReplicaSetNoPrimary, Servers: [] }
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/txt-record-with-overridden-ssl-option.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json
-      # error running operation "waitForEvent" at index 1: execution failed: timed out waiting for event: context deadline exceeded
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json/Successful_heartbeat
-      # error running operation "waitForEvent" at index 1: execution failed: timed out waiting for event: context deadline exceeded
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json/Topology_lifecycle
+      - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse/1._valid_AWS
+      - go.mongodb.org/mongo-driver/internal/integration/TestHandshakeProse/3._valid_GCP
+      - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec
+      - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set
+      - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/txt-record-with-overridden-ssl-option.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json/Successful_heartbeat
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json/Topology_lifecycle
       # exec: "mongocryptd": executable file not found in $PATH
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsMongocryptdProse
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsMongocryptdProse/18._implicit_session_is_ignored_if_connection_does_not_support_sessions
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsMongocryptdProse/19._explicit_session_raises_an_error_if_connection_does_not_support_sessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsMongocryptdProse
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsMongocryptdProse/18._implicit_session_is_ignored_if_connection_does_not_support_sessions
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsMongocryptdProse/19._explicit_session_raises_an_error_if_connection_does_not_support_sessions
     skip:
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.0"
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples/pre4.0
-      # skipping because "count" is now part of Stable API v1; see GODRIVER-2482
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/StableAPIStrictCountExample
-      # CRYPT_SHARED_LIB_PATH not set, skipping
+      - go.mongodb.org/mongo-driver/internal/integration/TestAtlasDataLake
+      - go.mongodb.org/mongo-driver/internal/integration/TestCSOTProse/1._multi-batch_writes
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet/include_startAtOperationTime
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/without_PBRT_support
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet/server_selection_before_resume
+      - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/OP_MSG_used_for_authentication_on_3.6+
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/OP_MSG_used_for_handshakes_when_API_version_declared
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/app_name_is_always_sent
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/tls_connection
+      - go.mongodb.org/mongo-driver/internal/integration/TestClient/x509
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/delete_write_errors
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/unordered_writeError_index
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/delete_many/write_error
+      - go.mongodb.org/mongo-driver/internal/integration/TestCollection/delete_one/write_error
+      - go.mongodb.org/mongo-driver/internal/integration/TestConnectionsSurvivePrimaryStepDown/server_errors/notPrimary_reset_pool
+      - go.mongodb.org/mongo-driver/internal/integration/TestDatabase/list_collections/verify_results/sharded_filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestDatabase/list_collections/verify_results/sharded_no_filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestDatabase/list_collections/verify_results/standalone_filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestDatabase/list_collections/verify_results/standalone_no_filter
+      - go.mongodb.org/mongo-driver/internal/integration/TestDatabase/run_command/read_pref_passed_to_mongos
+      - go.mongodb.org/mongo-driver/internal/integration/TestErrors/errors_are_wrapped/network_error_during_auth
+      - go.mongodb.org/mongo-driver/internal/integration/TestGridFS/round_trip
+      - go.mongodb.org/mongo-driver/internal/integration/TestHintErrors
+      - go.mongodb.org/mongo-driver/internal/integration/TestIndexView/create_many/commit_quorum/error_on_server_versions_before_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/TestIndexView/create_one/commit_quorum/error_on_server_versions_before_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/TestLoadBalancedConnectionHandshake/LB_connection_handshake_uses_OP_MSG
+      - go.mongodb.org/mongo-driver/internal/integration/TestLoadBalancerSupport
+      - go.mongodb.org/mongo-driver/internal/integration/TestMongosPinning
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableReadsProse/retrying_in_sharded_cluster
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesProse/retrying_in_sharded_cluster
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesProse/transaction_number_not_sent_on_writes
+      - go.mongodb.org/mongo-driver/internal/integration/TestRetryableWritesProse/wrap_mmapv1_error
       - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
-      # skipping because OCSP_TLS_SHOULD_SUCCEED not set
       - go.mongodb.org/mongo-driver/mongo/TestOCSP
-      # skipping due to environmental constraints: test requires cluster to be data lake: true, cluster is data lake: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestAtlasDataLake
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCSOTProse/1._multi-batch_writes
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4" topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_NotSupported
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.0.6"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/include_startAtOperationTime
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.0.6"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/without_PBRT_support
-      # skipping for lack of SDAM monitoring
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/server_selection_before_resume
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_Standalone
-      # skipping due to environmental constraints: test requires auth value: true, cluster auth value: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/OP_MSG_used_for_authentication_on_3.6+
-      # skipping due to environmental constraints: test requires RequireAPIVersion value: true, local RequireAPIVersion value: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/OP_MSG_used_for_handshakes_when_API_version_declared
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["load-balanced"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/OP_MSG_used_for_handshakes_when_loadBalanced_is_true
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/app_name_is_always_sent
-      # skipping due to environmental constraints: test requires ssl value: true, cluster ssl value: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/tls_connection
-      # skipping due to environmental constraints: test requires auth value: true, cluster auth value: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/x509
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "5.0.7"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/delete_write_errors
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "5.0.7"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/unordered_writeError_index
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "5.0.7"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many/write_error
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "5.0.7"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_one/write_error
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.0"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/server_errors/notPrimary_reset_pool
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/sharded_filter
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/sharded_no_filter
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/standalone_filter
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["single"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/standalone_no_filter
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/run_command/read_pref_passed_to_mongos
-      # skipping due to environmental constraints: test requires auth value: true, cluster auth value: false
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrors/errors_are_wrapped/network_error_during_auth
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "3.6"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestGridFS/round_trip
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "3.2"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestHintErrors
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.2"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum/error_on_server_versions_before_4.4
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.2"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum/error_on_server_versions_before_4.4
-      # skipping due to environmental constraints: server version "6.0.8" is higher than max version "4.2"
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/load_balanced
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["load-balanced"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/direct-connection-false.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/encoded-userinfo-and-db.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/loadBalanced-false-txt.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/longer-parent-in-return.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/one-result-default-port.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/one-txt-record-multiple-strings.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/one-txt-record.json
-      # skipping test that expects ssl in a non-ssl environmen
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srv-service-name.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-equal_to_srv_records.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-greater_than_srv_records.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-less_than_srv_records.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-zero-txt.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-zero.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/two-results-default-port.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/two-results-nonstandard-port.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/txt-record-with-overridden-uri-option.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-admin-database.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-auth.json
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/sharded
-      # skipping test that expects ssl in a non-ssl environment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestLoadBalancerSupport
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["load-balanced"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestMongosPinning
-      # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/transaction_number_not_sent_on_writes
-      # skipping because storage engine is not mmapv1
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/wrap_mmapv1_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is lower than min required version "6.1.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/The_watch_helper_must_not_throw_a_custom_exception_when_executed_against_a_single_server_topology,_but_instead_depend_on_a_server_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_ExceededTimeLimit
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_FailedToSatisfyReadPreference
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_HostNotFound
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_HostUnreachable
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_InterruptedAtShutdown
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_InterruptedDueToReplStateChange
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_NetworkTimeout
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_NotPrimaryNoSecondaryOk
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_NotPrimaryOrSecondary
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_NotWritablePrimary
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_PrimarySteppedDown
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_RetryChangeStream
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_ShutdownInProgress
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_SocketException
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_StaleEpoch
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_StaleShardVersion
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_shardCollection_events_are_reported
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded-replicaset" "sharded"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_that_comment_is_not_set_on_getMore_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_with_document_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/addKeyAltName.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/createDataKey-kms_providers-invalid.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/createDataKey.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/deleteKey.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/getKey.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/getKeyByAltName.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/getKeys.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/removeKeyAltName.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/rewrapManyDataKey-decrypt_failure.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/rewrapManyDataKey-encrypt_failure.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-encryption/unified/rewrapManyDataKey.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listIndexNames_on_collection
-      # execution failed: test must be skipped: "the \"listIndexNames\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listIndexNames_on_collection
-      # execution failed: test must be skipped: "the \"listIndexNames\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listIndexNames_on_collection
-      # execution failed: test must be skipped: "the \"listIndexNames\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listIndexNames_on_collection
-      # execution failed: test must be skipped: "the \"listIndexNames\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_count_on_collection
-      # execution failed: test must be skipped: "the \"count\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
-      # execution failed: test must be skipped: "timeoutMode not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-      # execution failed: test must be skipped: "cursorType not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-      # execution failed: test must be skipped: "timeoutMode not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
-      # execution failed: test must be skipped: "timeoutMode not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
-      # execution failed: test must be skipped: "timeoutMode not supported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is lower than min required version "7.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/find.json/A_successful_find_event_with_a_getmore_and_the_server_kills_the_cursor_(<=_4.4)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/pre-42-server-connection-id.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/copydb_command_and_resulting_server-generated_error_are_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/copydbgetnonce_command_and_resulting_server-generated_error_are_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.6.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/copydbsaslstart_command_and_resulting_server-generated_error_are_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/network_error_in_response_to_copydb_is_not_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/network_error_in_response_to_copydbgetnonce_is_not_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.6.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/redacted-commands.json/network_error_in_response_to_copydbsaslstart_is_not_redacted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/logging/service-id.json/command_log_messages_include_serviceId_when_in_LB_mode
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/pre-42-server-connection-id.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/redacted-commands.json/copydb
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/redacted-commands.json/copydbgetnonce
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.6.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/command-monitoring/redacted-commands.json/copydbsaslstart
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-logging.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-let.json/Aggregate_to_collection_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-let.json/Aggregate_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$merge_omits_read_preference_for_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$out_omits_read_preference_for_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_a_document_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_does_not_set_comment_on_getMore_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
-      # skipping for reason: "aggregate comments are string-only"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-arrayFilters-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.5.5"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-comment.json/BulkWrite_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-delete-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-delete-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.3"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-deleteMany-let.json/BulkWrite_deleteMany_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-deleteOne-let.json/BulkWrite_deleteOne_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-insertOne-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-let.json/BulkWrite_replaceOne_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-update-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-update-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.1.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-updateMany-let.json/BulkWrite_updateMany_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-updateOne-let.json/BulkWrite_updateOne_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/countDocuments-comment.json/countDocuments_with_document_comment_on_less_than_4.4.0_-_server_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$merge_omits_read_preference_for_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$out_omits_read_preference_for_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-comment.json/deleteMany_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.3"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-let.json/deleteMany_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-comment.json/deleteOne_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.3"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-let.json/deleteOne_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/distinct-comment.json/distinct_with_document_comment_-_pre_4.4,_server_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.13"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/estimatedDocumentCount-comment.json/estimatedDocumentCount_with_document_comment_-_pre_4.4.14,_server_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.13"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_comment_does_not_set_comment_on_getMore_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_document_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/find-let.json/Find_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-comment.json/findOneAndDelete_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.3"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-let.json/findOneAndDelete_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-comment.json/findOneAndReplace_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-let.json/findOneAndReplace_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-comment.json/findOneAndUpdate_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-errorResponse.json/findOneAndUpdate_document_validation_errInfo_is_accessible
-      # execution failed: test must be skipped: "the \"modifyCollection\" operation is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.3.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-let.json/findOneAndUpdate_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertMany-comment.json/insertMany_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertMany-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertOne-comment.json/insertOne_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_dotted_key_in__id_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-comment.json/ReplaceOne_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-let.json/ReplaceOne_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateMany-comment.json/UpdateMany_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.1.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateMany-let.json/updateMany_with_let_option_unsupported_(server-side_error)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.2.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateOne-comment.json/UpdateOne_with_comment_-_pre_4.4
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "3.3.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateOne-hint-clientError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.1.9"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateOne-hint-serverError.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/updateOne-let.json/UpdateOne_with_let_option_unsupported_(server-side_error)
-      # execution failed: test must be skipped: "the deprecated disableMD5 file option is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_0_sans_MD5
-      # execution failed: test must be skipped: "the deprecated disableMD5 file option is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_1_sans_MD5
-      # execution failed: test must be skipped: "the deprecated contentType file option is not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/gridfs/upload.json/upload_when_contentType_is_provided
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/cursors.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/event-monitoring.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/lb-connection-establishment.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single" "sharded"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/non-lb-connection-establishment.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/sdam-error-handling.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/server-selection.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/transactions.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/load-balancers/wait-queue-timeouts.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCommand.json/does_not_attach_$readPreference_to_given_command_on_standalone
-      # execution failed: test must be skipped: "cursorType not supported"
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/returns_pinned_connections_to_the_pool_when_the_cursor_is_closed
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/returns_pinned_connections_to_the_pool_when_the_cursor_is_exhausted
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is lower than min required version "7.0"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/successfully_executes_checkMetadataConsistency_cursor_creating_command
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["load-balanced"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-loadbalanced.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-sharded.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-standalone.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-not-supported-client-error.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["single"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-not-supported-server-error.json
-      # skipping due to known failure: Test fails frequently. See GODRIVER-2843
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Find_operation_with_snapshot
-      # skipping due to known failure: Test fails frequently. See GODRIVER-2843
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Write_commands_with_snapshot_session_do_not_affect_snapshot_reads
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded-replicaset"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/transactions/unified/mongos-unpin.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded-replicaset"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_aws_kms_credentials.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_azure_kms_credentials.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_gcp_kms_credentials.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-no_kms.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-explicit_kms_credentials.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-mixed_kms_credential_fields.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-placeholder_kms_credentials.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-unconfigured_kms.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "6.0.8" is higher than max version "4.4.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-command-monitoring.json/A_successful_find_event_with_a_getmore_and_the_server_kills_the_cursor_(<=_4.4)
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded-replicaset"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-mongos-pin-auto.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [topology kind "replicaset" does not match any of the required kinds ["sharded-replicaset"]]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/test-commands-deprecation-errors.json
-      # Skipping because no compressor specified
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
-      # Skipping because authentication is required
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestSCRAM
-      # test requires that close does not aggressively close used connections
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkin-destroy-closed.json
-      # test requires that connections established by minPoolSize are immediately used to satisfy check-out requests (DRIVERS-2225)
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-minPoolSize-connection-maxConnecting.json
-      # test requires a checked-in connections cannot satisfy a check-out waiting on a new connection (DRIVERS-2223)
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
-      # test requires that close does not aggressively close used connections
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
-      # test fails frequently, skipping; see GODRIVER-2852
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedAtShutdown
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedDueToReplStateChange,_not_shutdown
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimary
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryNoSecondaryOk
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryOrSecondary
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_PrimarySteppedDown
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_ShutdownInProgress
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedAtShutdown 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedDueToReplStateChange,_not_shutdown  
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimary  
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryNoSecondaryOk  
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryOrSecondary 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_PrimarySteppedDown
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_ShutdownInProgress 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMErrorHandling/before_handshake_completes 
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSDAMProse/client_waits_between_failed_Hellos  
-      - go.mongodb.org/mongo-driver/mongo/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_no_failpoint  
-      - go.mongodb.org/mongo-driver/mongo/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_with_failpoint
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessions/14._implicit_session_allocation
-      - go.mongodb.org/mongo-driver/mongo/integration/TestLoadBalancedConnectionHandshake/LB_connection_handshake_uses_OP_MSG
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableReadsProse/retrying_in_sharded_cluster
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/retrying_in_sharded_cluster
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/10_no_remaining_sessions_are_checked_out_after_each_functional_test
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/14_implicit_session_allocation
-      - go.mongodb.org/mongo-driver/mongo/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
-      # event ordering is incompatible with load-balancer SDAM spec test (DRIVERS-1785)
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
-      # skipping due to environmental constraints: no matching RunOnBlock; comparison errors: [server version "7.0.4" is higher than max version "6.0.99"]
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_StaleShardVersion
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedDueToReplStateChange,_not_shutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedDueToReplStateChange,_not_shutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/before_handshake_completes
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMProse/client_waits_between_failed_Hellos
+      - go.mongodb.org/mongo-driver/internal/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_no_failpoint
+      - go.mongodb.org/mongo-driver/internal/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_with_failpoint
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/10_no_remaining_sessions_are_checked_out_after_each_functional_test
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/14_implicit_session_allocation
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
     pass:
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/CausalConsistencyExamples/post4.2
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/ChangeStreamExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/SnapshotQueryExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/TransactionsExamples
-      - go.mongodb.org/mongo-driver/examples/documentation_examples/TestDocumentationExamples/WithTransactionExample
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/abortTransaction_does_not_time_out
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_raises_custom_error
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_returns_value
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/canceled_context_before_callback_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/commitTransaction_timeout_allows_abortTransaction
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/context_error_before_commitTransaction_does_not_retry_and_aborts
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/expired_context_before_callback_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/commit_transient_transaction_error
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/transient_transaction_error
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/unknown_transaction_commit_result
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/slow_operation_in_callback_retries
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/wrapped_transient_transaction_error_retried
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/clusterTime_included
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/custom_read_concern
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/default_read_concern
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/no_cluster_time_on_first_command
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/non-consistent_read
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_nil
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_sent
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_sent/aggregate
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_sent/distinct
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_sent/find
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/operation_time_updated
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/create_many_indexes
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/create_one_index
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/delete_many
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/delete_one
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/drop_all_indexes
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/drop_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/drop_database
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/drop_one_index
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/estimated_document_count
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/find_one_and_delete
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/find_one_and_replace
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/find_one_and_update
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/insert_many
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/insert_one
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/list_collections
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/list_databases
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/list_indexes
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/replace_one
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/update_many
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCausalConsistency_Supported/write_then_read/update_one
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/Custom
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/CustomPipeline
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/call_to_cursor.Next_after_cursor_closed
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/custom_deployment
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/custom_deployment/errors_are_processed_for_SDAM_on_getMore
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/custom_deployment/errors_are_processed_for_SDAM_on_initial_aggregate
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/custom_deployment/errors_are_processed_for_SDAM_on_retried_aggregate
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/decode_does_not_panic
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/decode_does_not_panic/client
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/decode_does_not_panic/collection
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/decode_does_not_panic/database
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/empty_batch_cursor_not_closed
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/first_stage_is_$changeStream
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/getMore_commands_are_monitored
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/ignore_errors_from_killCursors
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/killCursors_commands_are_monitored
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/maxAwaitTimeMS
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/missing_resume_token
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/no_resume_for_aggregate_errors
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_once
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/with_PBRT_support
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/with_PBRT_support/neither
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/with_PBRT_support/resumeAfter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token/no_getMore/with_PBRT_support/startAfter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/resume_token_updated_on_empty_batch
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/track_resume_token
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/try_next
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/try_next/existing_non-empty_batch
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/try_next/getMore_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/try_next/one_getMore_sent
-      - go.mongodb.org/mongo-driver/mongo/integration/TestChangeStream_ReplicaSet/with_BSONOptions
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/direct_connection_made
-      - go.mongodb.org/mongo-driver/mongo/integration/TestClient/hello_lastWriteDate
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/aggregate/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/write_concern_error/delete
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/write_concern_error/insert
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/bulk_write/write_concern_error/update
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_many/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/delete_one/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_delete/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_replace/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/find_one_and_update/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/insert_many/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/insert_one/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/replace_one/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_by_id/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_many/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCollection/update_one/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/getMore_iteration
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/server_errors
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/server_errors/interrupted_at_shutdown_reset_pool
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/server_errors/notPrimary_keep_pool
-      - go.mongodb.org/mongo-driver/mongo/integration/TestConnectionsSurvivePrimaryStepDown/server_errors/shutdown_in_progress_reset_pool
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCursor/all/getMore_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestCursor/close/killCursors_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/replica_set_filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/list_collections/verify_results/replica_set_no_filter
-      - go.mongodb.org/mongo-driver/mongo/integration/TestDatabase/run_command/gets_result_and_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrors/ServerError/Raw_response
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrors/ServerError/Raw_response/CommandError
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrors/ServerError/Raw_response/WriteError
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrors/ServerError/Raw_response/WriteException
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrorsCodeNamePropagated
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrorsCodeNamePropagated/command_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestErrorsCodeNamePropagated/write_concern_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum/integer_value
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum/majority
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum/string_value
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/commit_quorum/votingMembers
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_many/replace_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum/integer_value
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum/majority
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum/string_value
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/commit_quorum/votingMembers
-      - go.mongodb.org/mongo-driver/mongo/integration/TestIndexView/create_one/replace_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/direct-connection-true.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/misformatted-option.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/no-results.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/not-enough-parts.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/parent-part-mismatch1.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/parent-part-mismatch2.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/parent-part-mismatch3.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/parent-part-mismatch4.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/parent-part-mismatch5.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/returned-parent-too-short.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/returned-parent-wrong.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-conflicts_with_replicaSet-txt.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-conflicts_with_replicaSet.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-invalid_integer.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/srvMaxHosts-invalid_type.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/two-txt-records.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/txt-record-not-allowed-option.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/txt-record-with-unallowed-option.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-port.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-two-hosts.json
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/NoWritesPerformed_label_returns_original_error
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/PoolClearedError_retryability
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/deleteMany
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/deleteOne
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/findOneAndDelete
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/findOneAndReplace
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/findOneAndUpdate
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/insertMany
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/insertMany#01
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/insertOne
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/replaceOne
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/updateMany
-      - go.mongodb.org/mongo-driver/mongo/integration/TestRetryableWritesProse/txn_number_included/updateOne
-      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteConcernError/errInfo_is_propagated
-      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsWithLabels
-      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsWithLabels/BulkWriteException_with_label
-      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsWithLabels/InsertMany_errors_with_label
-      - go.mongodb.org/mongo-driver/mongo/integration/TestWriteErrorsWithLabels/WriteException_with_label
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-clusterTime.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-clusterTime.json/clusterTime_is_present
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/Change_Stream_should_error_when__id_is_projected_out
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/Change_Stream_should_error_when_an_invalid_aggregation_stage_is_passed_in
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/change_stream_errors_on_ElectionInProgress
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentrequired_with_changeStreamPreAndPostImages_disabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentrequired_with_changeStreamPreAndPostImages_enabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentwhenAvailable_with_changeStreamPreAndPostImages_disabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentwhenAvailable_with_changeStreamPreAndPostImages_enabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangeoff_with_changeStreamPreAndPostImages_disabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangeoff_with_changeStreamPreAndPostImages_enabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangerequired_with_changeStreamPreAndPostImages_disabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangerequired_with_changeStreamPreAndPostImages_enabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangewhenAvailable_with_changeStreamPreAndPostImages_disabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-pre_and_post_images.json/fullDocumentBeforeChangewhenAvailable_with_changeStreamPreAndPostImages_enabled
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_CursorNotFound
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_a_network_error
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_does_not_resume_if_error_does_not_contain_ResumableChangeStreamError
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_ExceededTimeLimit
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_FailedToSatisfyReadPreference
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_HostNotFound
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_HostUnreachable
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_InterruptedAtShutdown
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_InterruptedDueToReplStateChange
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_NetworkTimeout
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_NotPrimaryNoSecondaryOk
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_NotPrimaryOrSecondary
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_NotWritablePrimary
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_PrimarySteppedDown
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_RetryChangeStream
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_ShutdownInProgress
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_SocketException
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_after_StaleEpoch
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-errorLabels.json/change_stream_resumes_if_error_contains_ResumableChangeStreamError
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_omitted,_showExpandedEvents_is_not_sent_as_a_part_of_the_aggregate_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_provided,_showExpandedEvents_is_sent_as_a_part_of_the_aggregate_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_createIndex_events_are_reported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_create_events_are_reported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_create_events_on_views_are_reported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_dropIndexes_events_are_reported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_modify_events_are_reported
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams-showExpandedEvents.json/when_showExpandedEvents_is_true,_new_fields_on_change_stream_events_are_handled_appropriately
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/$changeStream_must_be_the_first_stage_in_a_change_stream_pipeline_sent_to_the_server
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Change_Stream_should_allow_valid_aggregate_pipeline_stages
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Executing_a_watch_helper_on_a_Collection_results_in_notifications_for_changes_to_the_specified_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Executing_a_watch_helper_on_a_Database_results_in_notifications_for_changes_to_all_collections_in_the_specified_database.
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Executing_a_watch_helper_on_a_MongoClient_results_in_notifications_for_changes_to_all_collections_in_all_databases_in_the_cluster.
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_array_truncation
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_consecutive_resume
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_drop_and_invalidate_event_types
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_insert,_update,_replace,_and_delete_event_types
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_modified_structure_in_ns_document_MUST_NOT_err
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_newField_added_in_response_MUST_NOT_err
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_new_structure_in_ns_document_MUST_NOT_err
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_projection_in_change_stream_returns_expected_fields
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_rename_and_invalidate_event_types
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_server_error_on_projecting_out__id
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_that_comment_is_set_on_getMore
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_unknown_operationType_MUST_NOT_err
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_wallTime_field_is_set_in_a_change_event
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_with_document_comment
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/Test_with_string_comment
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/The_server_returns_change_stream_responses_in_the_specified_server_response_format
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/change-streams/change-streams.json/to_field_is_set_in_a_rename_change_event
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/error-transformations.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/error-transformations.json/basic_MaxTimeMSExpired_error_is_transformed
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/error-transformations.json/write_concern_error_MaxTimeMSExpired_is_transformed
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_createIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_deleteMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_dropIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_dropIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_runCommand_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_updateMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_createIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_deleteMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_dropIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_dropIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_runCommand_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_updateMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_createIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_deleteMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_dropIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_dropIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_runCommand_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_updateMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_createIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_deleteMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_dropIndex_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_dropIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_runCommand_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_updateMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_fails_after_two_consecutive_socket_timeouts_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-legacy-timeouts.json/operation_succeeds_after_one_socket_timeout_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_aggregate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_aggregate_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_bulkWrite_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_countDocuments_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_createChangeStream_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_createChangeStream_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_createChangeStream_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_deleteOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_distinct_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_estimatedDocumentCount_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_findOneAndDelete_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_findOneAndReplace_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_findOneAndUpdate_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_findOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_find_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_insertMany_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_insertOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_listCollectionNames_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_listCollections_on_database
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_listDatabaseNames_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_listDatabases_on_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_listIndexes_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_replaceOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_updateOne_on_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-out-readConcern.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-out-readConcern.json/readConcern_available_with_out_stage
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-out-readConcern.json/readConcern_linearizable_with_out_stage
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-out-readConcern.json/readConcern_local_with_out_stage
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-out-readConcern.json/readConcern_majority_with_out_stage
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$merge_includes_read_preference_for_5.0+_server
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$out_includes_read_preference_for_5.0+_server
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$merge_includes_read_preference_for_5.0+_server
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$out_includes_read_preference_for_5.0+_server
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/bulkWrite-serverErrors.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/bulkWrite-serverErrors.json/BulkWrite_succeeds_after_retryable_writeConcernError_in_first_batch
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/insertOne-noWritesPerformedErrors.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/insertOne-noWritesPerformedErrors.json/InsertOne_fails_after_NoWritesPerformed_error
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/insertOne-serverErrors.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/retryable-writes/unified/insertOne-serverErrors.json/InsertOne_succeeds_after_retryable_writeConcernError
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCommand.json/always_gossips_the_$clusterTime_on_the_sent_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCommand.json/attaches_the_provided_$readPreference_to_given_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/run-command/runCommand.json/attaches_transaction_fields_to_given_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-replicaset.json/Failing_heartbeat
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_explicit_session_is_discarded_(findAndModify)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_explicit_session_is_discarded_(insert)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_implicit_session_is_discarded_(findAndModify)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_implicit_session_is_discarded_(insert)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_implicit_session_is_discarded_(read_not_returning_cursor)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/driver-sessions-dirty-session-errors.json/Dirty_implicit_session_is_discarded_(read_returning_cursor)
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/implicit-sessions-default-causal-consistency.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/implicit-sessions-default-causal-consistency.json/afterClusterTime_is_not_sent_on_retried_read_in_implicit_session_when_readConcern_level_is_linearizable
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/implicit-sessions-default-causal-consistency.json/afterClusterTime_is_not_sent_on_retried_read_in_implicit_session_when_readConcern_level_is_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/implicit-sessions-default-causal-consistency.json/readConcern_is_not_sent_on_retried_read_in_implicit_session_when_readConcern_level_is_not_specified
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_deleteOne_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_findOneAndUpdate_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_insertMany_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_insertOne_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_listCollections_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_listDatabases_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_listIndexes_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_runCommand_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-unsupported-ops.json/Server_returns_an_error_on_updateOne_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Aggregate_operation_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Distinct_operation_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/First_snapshot_read_does_not_send_atClusterTime
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Mixed_operation_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/StartTransaction_fails_in_snapshot_session
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/countDocuments_operation_with_snapshot
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/transactions/unified/do-not-retry-read-in-transaction.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/transactions/unified/do-not-retry-read-in-transaction.json/find_does_not_retry_in_a_transaction
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-change-streams.json/Executing_a_watch_helper_on_a_MongoClient_results_in_notifications_for_changes_to_all_collections_in_all_databases_in_the_cluster.
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-change-streams.json/Test_consecutive_resume
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-change-streams.json/saveResultAsEntity_is_optional_for_createChangeStream
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-crud.json/readConcern_majority_with_out_stage
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/FindOneAndUpdate_is_committed_on_first_attempt
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/FindOneAndUpdate_is_never_committed
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/FindOneAndUpdate_is_not_committed_on_first_attempt
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/InsertMany_succeeds_after_PrimarySteppedDown
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/InsertOne_fails_after_connection_failure_when_retryWrites_option_is_false
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-retryable-writes.json/InsertOne_fails_after_multiple_retryable_writeConcernErrors
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-sessions.json/Dirty_explicit_session_is_discarded
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-convenient-api.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-convenient-api.json/withTransaction_and_no_transaction_options_set
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-convenient-api.json/withTransaction_explicit_transaction_options
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-convenient-api.json/withTransaction_inherits_transaction_options_from_client
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-convenient-api.json/withTransaction_inherits_transaction_options_from_defaultTransactionOptions
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions.json/Client_side_error_in_command_starting_transaction
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions.json/create_index_on_a_non-existing_collection
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions.json/explicitly_create_collection_using_create_command
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/transaction-handling.json
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/transaction-handling.json/All_commands_in_a_transaction_declare_an_API_version
-      - go.mongodb.org/mongo-driver/mongo/integration/unified/TestUnifiedSpec/versioned-api/transaction-handling.json/abortTransaction_includes_an_API_version
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
-      - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
