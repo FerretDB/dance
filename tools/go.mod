@@ -3,12 +3,12 @@ module github.com/FerretDB/dance/tools
 go 1.21
 
 require (
-	github.com/go-task/task/v3 v3.32.0
+	github.com/go-task/task/v3 v3.33.1
 	github.com/golangci/golangci-lint v1.55.2
 	github.com/pingcap/go-ycsb v1.0.1
 	github.com/quasilyte/go-consistent v0.6.0
 	golang.org/x/perf v0.0.0-20231127181059-b53752263861
-	golang.org/x/tools v0.16.0
+	golang.org/x/tools v0.16.1
 	golang.org/x/vuln v1.0.1
 	mvdan.cc/gofumpt v0.5.0
 )
