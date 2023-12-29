@@ -112,7 +112,7 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js
     capped:
-      # https://github.com/FerretDB/FerretDB/issues/3458
+      # TODO add link
       - mongo/jstests/core/capped/cappeda.js
       - mongo/jstests/core/capped/capped_large_docs.js
       - mongo/jstests/core/capped/capped_queries_and_id_index.js
