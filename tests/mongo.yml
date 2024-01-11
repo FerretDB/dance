@@ -112,13 +112,15 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/2915
       - mongo/jstests/aggregation/use_query_sort.js
     capped:
-      # https://github.com/FerretDB/FerretDB/issues/3458
-      - mongo/jstests/core/capped/cappeda.js
+      # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/capped/capped_large_docs.js
+      # https://github.com/FerretDB/FerretDB/issues/3921
       - mongo/jstests/core/capped/capped_queries_and_id_index.js
+      # https://github.com/FerretDB/FerretDB/issues/2286
       - mongo/jstests/core/capped/capped_resize.js
+      # https://github.com/FerretDB/FerretDB/issues/3922
       - mongo/jstests/core/capped/capped_update.js
-      - mongo/jstests/core/capped/capped_upsert.js
+      # https://github.com/FerretDB/FerretDB/issues/3457
       - mongo/jstests/core/ddl/convert_to_capped_nonexistant.js
       - mongo/jstests/core/ddl/convert_to_capped.js
       - mongo/jstests/noPassthrough/noncapped_oplog_creation.js
@@ -208,8 +210,8 @@ results:
 
   postgresql:
     stats:
-      fail: 76
-      pass: 41
+      fail: 73
+      pass: 44
     fail:
     include_fail:
       - aggregation
@@ -222,8 +224,8 @@ results:
 
   sqlite:
     stats:
-      fail: 76
-      pass: 41
+      fail: 73
+      pass: 44
     fail:
     include_fail:
       - aggregation
