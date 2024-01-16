@@ -42,6 +42,7 @@ jobs:
           - postgresql
           - sqlite
           - mongodb
+          - mongodb-secured
         test:
           # temporarily disabling to avoid CI noise
           # - dbaas_core-0
@@ -51,6 +52,7 @@ jobs:
           # - diff
           - dotnet-example
           - dotnet-example-auth
+          - dotnet-example-auth-scram-sha-1
           - java-example
           - java-example-auth
           - meteor-doc-fetcher
