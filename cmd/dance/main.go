@@ -81,6 +81,8 @@ func main() {
 		log.Fatal("-db is required")
 	}
 
+	*dbF = strings.TrimSuffix(*dbF, "-secured")
+
 	ctx, stop := notifyAppTermination(context.Background())
 	go func() {
 		<-ctx.Done()
