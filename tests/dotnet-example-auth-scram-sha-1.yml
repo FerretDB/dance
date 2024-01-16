@@ -1,0 +1,20 @@
+---
+runner: command
+dir: dotnet-example
+args:
+  - dotnet
+  - run
+  - mongodb://user:password@localhost:27017/?authMechanism=SCRAM-SHA-1
+
+results:
+  postgresql:
+    stats:
+      fail: 1
+
+  sqlite:
+    stats:
+      fail: 1
+
+  mongodb:
+    stats:
+      pass: 1
