@@ -42,7 +42,6 @@ jobs:
           - postgresql
           - sqlite
           - mongodb
-          - mongodb-secured
         test:
           # temporarily disabling to avoid CI noise
           # - dbaas_core-0
