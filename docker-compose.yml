@@ -12,6 +12,7 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
+      - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -26,6 +27,7 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
+      - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
