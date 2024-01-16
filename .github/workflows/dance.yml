@@ -52,6 +52,7 @@ jobs:
           - dotnet-example
           - dotnet-example-auth
           - dotnet-example-auth-scram-sha-1
+          - dotnet-example-auth-scram-sha-256
           - java-example
           - java-example-auth
           - meteor-doc-fetcher
