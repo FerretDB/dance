@@ -112,9 +112,17 @@ tasks:
       - >
         docker compose run --rm mongosh mongosh
         'mongodb://host.docker.internal:27017/'
-        --eval 'rs.initiate({_id: "mongodb-rs", members: [{_id: 0, host: "localhost"}]})'
+        --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # this is true to prevent an already initialized error and no such command error for replSetInitiate
     ignore_error: true
+
+  create-root-user:
+    desc: "Creates a user with root access"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://host.docker.internal:27018/'
+        --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
