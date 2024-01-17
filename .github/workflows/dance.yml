@@ -64,6 +64,7 @@ jobs:
           - mongo-tools
           - python-example
           - python-example-auth
+          - python-example-auth-scram-sha-1
           - restheart
           - restheart-auth
           - ycsb-workloada
