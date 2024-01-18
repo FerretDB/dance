@@ -50,7 +50,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo7.Dockerfile
-    # command: --config /etc/mongod.conf
+    command: --config /etc/mongod.conf
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
@@ -68,17 +68,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
+      - ./build/certs:/etc/certs
       - ./build/mongod.conf:/etc/mongod.conf
-      - ./build/key:/etc/key
-    # https://stackoverflow.com/a/62754564
-    entrypoint:
-        - bash
-        - -c
-        - |
-            chmod 400 /etc/key
-            chown 999:999 /etc/key
-            exec docker-entrypoint.sh $$@
-    command: "mongod --config /etc/mongod.conf --keyFile /etc/key"
   
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
@@ -92,6 +83,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
+      - ./build/certs:/etc/certs
       - ./dumps:/dumps
 
   # legacy mongo shell
@@ -107,6 +99,7 @@ services:
       - "host.docker.internal:host-gateway"
     working_dir: /tests/mongo
     volumes:
+      - ./build/certs:/etc/certs
       - ./tests/mongo:/tests/mongo
    
   # for documentation
