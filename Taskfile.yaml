@@ -91,19 +91,21 @@ tasks:
     cmds:
       - docker compose exec postgres psql -U postgres -d ferretdb
 
+  # FIXME validation failed for the self-signed certificate, try --tlsAllowInvalidCertificates.
   mongo:
     desc: "Run legacy MongoDB shell (`mongo`) with test script"
     cmds:
       - >
         docker compose run --rm mongo
-        'mongodb://host.docker.internal:27017/'
+        'mongodb://user:password@host.docker.internal:27017/?tls=true&tlsCertificateKeyFile=/etc/certs/mongodb.pem&tlsCaFile=/etc/certs/mongodb-ca.crt'
         {{.CLI_ARGS}}
 
   mongosh:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker compose run --rm mongosh mongosh mongodb://host.docker.internal:27017/
+        docker compose run --rm mongosh mongosh 
+        'mongodb://user:password@host.docker.internal:27017/?tls=true&tlsCertificateKeyFile=/etc/certs/mongodb.pem&tlsCaFile=/etc/certs/mongodb-ca.crt'
         --verbose --eval 'disableTelemetry()' --shell
 
   init-repl:
@@ -111,7 +113,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://user:password@host.docker.internal:27017/'
+        'mongodb://user:password@host.docker.internal:27017/?tls=true&tlsCertificateKeyFile=/etc/certs/mongodb.pem&tlsCaFile=/etc/certs/mongodb-cert.crt'
         --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # this is true to prevent an already initialized error and no such command error for replSetInitiate
     ignore_error: true
