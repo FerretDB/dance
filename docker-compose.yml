@@ -50,7 +50,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo7.Dockerfile
-    command: --config /etc/mongod.conf
+    # command: --config /etc/mongod.conf
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
@@ -70,7 +70,15 @@ services:
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
       - ./build/key:/etc/key
-
+    entrypoint:
+        - bash
+        - -c
+        - |
+            chmod 400 /etc/key
+            chown 999:999 /etc/key
+            exec docker-entrypoint.sh $$@
+    command: "mongod --config /etc/mongod.conf --keyFile /etc/key"
+  
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
     build:
