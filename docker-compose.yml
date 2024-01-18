@@ -70,6 +70,7 @@ services:
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
       - ./build/key:/etc/key
+    # https://stackoverflow.com/a/62754564
     entrypoint:
         - bash
         - -c
