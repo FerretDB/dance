@@ -95,8 +95,7 @@ tasks:
     desc: "Run legacy MongoDB shell (`mongo`) with test script"
     cmds:
       - >
-        docker compose run --rm mongo
-        --tls --tlsCertificateKeyFile /etc/certs/mongodb.pem --tlsAllowInvalidCertificates
+        docker compose run --rm mongo --tls --tlsCAFile /etc/ssl/mongodb-ca.crt --sslPEMKeyFile /etc/ssl/mongodb.pem
         'mongodb://user:password@host.docker.internal:27017/'
         {{.CLI_ARGS}}
 
@@ -105,14 +104,15 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh 
-        'mongodb://user:password@host.docker.internal:27017/?tls=true&tlsCertificateKeyFile=/etc/certs/mongodb.pem&tlsCaFile=/etc/certs/mongodb-cert.crt'
-        --verbose --eval 'disableTelemetry()' --shell
+        'mongodb://user:password@host.docker.internal:27017/?directConnection=true&tls=true&tlsCertificateKeyFile=/etc/ssl/mongodb.pem&tlsCaFile=/etc/ssl/mongodb-ca.crt&replicaSet=rs0'
+        --eval 'disableTelemetry()' --shell
+
   init-repl:
     desc: "Initializes a new replica set"
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://user:password@host.docker.internal:27017/?tls=true&tlsCertificateKeyFile=/etc/certs/mongodb.pem&tlsCaFile=/etc/certs/mongodb-cert.crt'
+        'mongodb://user:password@host.docker.internal:27017/?directConnection=true&tls=true&tlsCertificateKeyFile=/etc/ssl/mongodb.pem&tlsCaFile=/etc/ssl/mongodb-ca.crt&replicaSet=rs0'
         --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # this is true to prevent an already initialized error and no such command error for replSetInitiate
     ignore_error: true

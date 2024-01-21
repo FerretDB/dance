@@ -68,7 +68,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./build/certs:/etc/certs
+      - ./build/certs:/etc/ssl
       - ./build/mongod.conf:/etc/mongod.conf
   
   # never started normally, used only for mongosh, mongodump, etc.
@@ -83,7 +83,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./build/certs:/etc/certs
+      - ./build/certs:/etc/ssl
       - ./dumps:/dumps
 
   # legacy mongo shell
@@ -99,7 +99,7 @@ services:
       - "host.docker.internal:host-gateway"
     working_dir: /tests/mongo
     volumes:
-      - ./build/certs:/etc/certs
+      - ./build/certs:/etc/ssl
       - ./tests/mongo:/tests/mongo
    
   # for documentation
