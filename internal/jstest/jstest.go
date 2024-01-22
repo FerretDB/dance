@@ -151,7 +151,7 @@ func runMongo(dir, file string) ([]byte, error) {
 
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
-		"--verbose", "--norc", "mongodb://user:password@host.docker.internal:27017/",
+		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
 		"--eval", evalBuilder(file), file,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
