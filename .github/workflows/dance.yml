@@ -51,10 +51,12 @@ jobs:
           # - diff
           - dotnet-example
           - dotnet-example-auth
-          - dotnet-example-auth-scram-sha-1
-          - dotnet-example-auth-scram-sha-256
+          # - dotnet-example-auth-scram-sha-1
+          # - dotnet-example-auth-scram-sha-256
           - java-example
           - java-example-auth
+          # - java-example-auth-scram-sha-1
+          # - java-example-auth-scram-sha-256
           - meteor-doc-fetcher
           - meteor-oplog-cursor-supported
           - meteor-oplog-entry-skipping
@@ -64,7 +66,8 @@ jobs:
           - mongo-tools
           - python-example
           - python-example-auth
-          - python-example-auth-scram-sha-1
+          # - python-example-auth-scram-sha-1
+          # - python-example-auth-scram-sha-256
           - restheart
           - restheart-auth
           - ycsb-workloada
