@@ -1,0 +1,17 @@
+---
+runner: command
+dir: java-example/java
+args: [../../java-example-auth-scram-sha-256.sh]
+
+results:
+  postgresql:
+    stats:
+      fail: 1
+
+  sqlite:
+    stats:
+      fail: 1
+
+  mongodb:
+    stats:
+      pass: 1
