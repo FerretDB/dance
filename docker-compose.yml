@@ -67,7 +67,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
-  
+
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
     build:
