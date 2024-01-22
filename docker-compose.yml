@@ -50,7 +50,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: mongo7.Dockerfile
-    # command: --config /etc/mongod.conf
+    command: --config /etc/mongod.conf
     container_name: dance_mongodb
     restart: unless-stopped
     ulimits:
@@ -63,24 +63,10 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=password
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
-      - ./build/key:/etc/key
-    entrypoint:
-      - bash
-      - -c
-      - |
-          trap 'true' SIGTERM
-          chmod 400 /etc/key
-          chown 999:999 /etc/key
-          exec docker-entrypoint.sh $$@
-          wait $!
-          chmod 777 /etc/key
-    command: "mongod --config /etc/mongod.conf --keyFile /etc/key"
   
   # never started normally, used only for mongosh, mongodump, etc.
   mongosh:
