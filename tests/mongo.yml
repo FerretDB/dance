@@ -171,7 +171,6 @@ results:
       # SyntaxError: import declarations may only appear at top level of a module
       - mongo/jstests/readonly/get_more.js
     tailable:
-      # https://github.com/FerretDB/FerretDB/issues/2283
       # https://github.com/FerretDB/FerretDB/issues/2341
       - mongo/jstests/aggregation/sources/collStats/query_exec_stats.js
       # https://github.com/FerretDB/FerretDB/issues/3606
@@ -199,8 +198,6 @@ results:
       - mongo/jstests/core/write/crud_api.js
     auth:
       # https://github.com/FerretDB/FerretDB/issues/7
-      # https://github.com/FerretDB/FerretDB/issues/1492
-      # https://github.com/FerretDB/FerretDB/issues/1491
       - mongo/jstests/core/administrative/auth1.js
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
@@ -210,8 +207,8 @@ results:
 
   postgresql:
     stats:
-      fail: 73
-      pass: 44
+      fail: 72
+      pass: 45
     fail:
     include_fail:
       - aggregation
@@ -224,8 +221,8 @@ results:
 
   sqlite:
     stats:
-      fail: 73
-      pass: 44
+      fail: 72
+      pass: 45
     fail:
     include_fail:
       - aggregation

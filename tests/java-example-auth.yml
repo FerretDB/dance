@@ -6,11 +6,13 @@ args: [../../java-example-auth.sh]
 results:
   postgresql:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/pull/3996
+      fail: 1
 
   sqlite:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/pull/3996
+      fail: 1
 
   mongodb:
     stats:
