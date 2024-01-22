@@ -39,8 +39,9 @@ results:
       # panic: runtime error: invalid memory address or nil pointer dereference
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
-    skip:
+
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
+    skip:
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestInsert
@@ -127,8 +128,8 @@ results:
   postgresql:
     stats:
       fail: 6
-      skip: 9
-      pass: 633
+      skip: 8
+      pass: 634
     ignore:
     include_ignore:
       - ignore
@@ -145,8 +146,8 @@ results:
   sqlite:
     stats:
       fail: 6
-      skip: 9
-      pass: 633
+      skip: 8
+      pass: 634
     ignore:
     include_ignore:
       - ignore
