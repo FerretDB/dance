@@ -6,13 +6,12 @@ args: [../../java-example.sh]
 results:
   postgresql:
     stats:
-      # https://github.com/FerretDB/FerretDB/pull/3996
-      fail: 1
+      pass: 1
 
   sqlite:
     stats:
-      # https://github.com/FerretDB/FerretDB/pull/3996
-      fail: 1
+      pass: 1
+      pass: 1
 
   mongodb:
     stats:
