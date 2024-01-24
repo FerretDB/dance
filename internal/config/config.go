@@ -207,11 +207,11 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Skip:
 			switch testRes.Status {
 			case Fail:
-				compareResult.ExpectedFail[test] = testResOutput
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Skip:
 				compareResult.ExpectedSkip[test] = testResOutput
 			case Pass:
-				compareResult.ExpectedPass[test] = testResOutput
+				compareResult.UnexpectedPass[test] = testResOutput
 			case Ignore:
 				fallthrough
 			case Unknown:
@@ -222,9 +222,9 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		case Pass:
 			switch testRes.Status {
 			case Fail:
-				compareResult.ExpectedFail[test] = testResOutput
+				compareResult.UnexpectedFail[test] = testResOutput
 			case Skip:
-				compareResult.ExpectedSkip[test] = testResOutput
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Pass:
 				compareResult.ExpectedPass[test] = testResOutput
 			case Ignore:
