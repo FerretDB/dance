@@ -207,8 +207,8 @@ results:
 
   postgresql:
     stats:
-      fail: 72
-      pass: 45
+      fail: 71
+      pass: 46
     fail:
     include_fail:
       - aggregation
@@ -221,8 +221,8 @@ results:
 
   sqlite:
     stats:
-      fail: 72
-      pass: 45
+      fail: 71
+      pass: 46
     fail:
     include_fail:
       - aggregation
