@@ -105,7 +105,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh 
-        'mongodb://host.docker.internal:27017/?directConnection=true'
+        'mongodb://host.docker.internal:27017/'
         --eval 'disableTelemetry()' --shell
 
   init-repl:
