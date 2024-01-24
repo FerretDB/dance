@@ -7,10 +7,14 @@ results:
   postgresql:
     stats:
       fail: 1
+    fail:
+      - java-example/java
 
   sqlite:
     stats:
       fail: 1
+    fail:
+      - java-example/java
 
   mongodb:
     stats:

@@ -7,10 +7,14 @@ results:
   postgresql:
     stats:
       fail: 1
-  
+    fail:
+      - python-example
+
   sqlite:
     stats:
       fail: 1
+    fail:
+      - python-example
 
   mongodb:
     stats:

@@ -10,10 +10,14 @@ results:
   postgresql:
     stats:
       fail: 1
+    fail:
+      - dotnet-example
 
   sqlite:
     stats:
       fail: 1
+    fail:
+      - dotnet-example
 
   mongodb:
     stats:
