@@ -440,6 +440,27 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_InterruptedDueToReplStateChange,_not_shutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/command_error_-_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedAtShutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_InterruptedDueToReplStateChange,_not_shutdown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryNoSecondaryOk
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_NotPrimaryOrSecondary
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_PrimarySteppedDown
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/after_handshake_completes/server_errors/write_concern_error_-_ShutdownInProgress
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMErrorHandling/before_handshake_completes
+      - go.mongodb.org/mongo-driver/internal/integration/TestSDAMProse/client_waits_between_failed_Hellos
+      - go.mongodb.org/mongo-driver/internal/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_no_failpoint
+      - go.mongodb.org/mongo-driver/internal/integration/TestServerSelectionProse/operationCount-based_selection_within_latency_window,_with_failpoint
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/10_no_remaining_sessions_are_checked_out_after_each_functional_test
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/14_implicit_session_allocation
+      - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
     pass:
       - go.mongodb.org/mongo-driver/internal/integration/TestClientStress
       - go.mongodb.org/mongo-driver/internal/integration/TestClientStress/Client_recovers_from_traffic_spike
