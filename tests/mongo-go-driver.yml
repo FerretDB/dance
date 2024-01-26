@@ -157,8 +157,8 @@ results:
   postgresql:
     stats:
       fail: 6
-      skip: 8
-      pass: 634
+      skip: 9
+      pass: 633
     ignore:
     include_ignore:
       - ignore
@@ -175,8 +175,8 @@ results:
   sqlite:
     stats:
       fail: 6
-      skip: 8
-      pass: 634
+      skip: 9
+      pass: 633
     ignore:
     include_ignore:
       - ignore
