@@ -12,35 +12,27 @@ args:
 results:
   includes:
     fail:
+      # TODO investigate and create issues for failures
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples
-
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/AggregationExamples
       - go.mongodb.org/mongo-driver/internal/docexamples/TestAggregationExamples
-
       # Should be true
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/ProjectionExamples
-
       # query array inconsistencies
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/QueryArrayEmbeddedDocumentsExamples
-
       - go.mongodb.org/mongo-driver/internal/integration/TestClient
       - go.mongodb.org/mongo-driver/mongo/TestClient
-
       # expected 2 started events, got 0 - panic: runtime error: index out of range [0] with length 0 [recovered] - panic: runtime error: index out of range [0] with length 0
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/endSessions/number_of_sessions_divides_evenly
       # panic: runtime error: invalid memory address or nil pointer dereference
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/end_sessions
-
       # error terminating open transactions: (CommandNotFound) no such command: 'killAllSessions'
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec
-
       # panic: runtime error: invalid memory address or nil pointer dereference
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
-
-      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
     skip:
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
@@ -51,6 +43,7 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
     pass:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/DeleteExamples
@@ -64,7 +57,6 @@ results:
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/StableAPExamples
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/DeleteExamples
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/TestDocumentationExamples/QueryNullMissingFieldsExamples
-
       - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/insert_and_delete_with_batches
       - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/unacknowledged_write
       - go.mongodb.org/mongo-driver/internal/integration/TestCollection/bulk_write/internal
@@ -92,15 +84,29 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/registry_passed_to_cursors
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch/disconnected
-
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
       - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
-
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
+      - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI
+      - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_empty_string
+      - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_non-empty_string
+      - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_not_called
+      - go.mongodb.org/mongo-driver/mongo/TestClient/database
+      - go.mongodb.org/mongo-driver/mongo/TestClient/localThreshold
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/custom_URI_error
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/custom_options
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/default
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes/custom_URI
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes/custom_URI_error
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes/custom_options
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes/default
+      - go.mongodb.org/mongo-driver/mongo/TestClient/server_monitor
+      - go.mongodb.org/mongo-driver/mongo/TestClient/write_concern
 
     ignore:
       # indicates flaky tests that should be ignored
