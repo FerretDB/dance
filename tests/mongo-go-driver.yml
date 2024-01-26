@@ -107,6 +107,29 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/retry_writes/default
       - go.mongodb.org/mongo-driver/mongo/TestClient/server_monitor
       - go.mongodb.org/mongo-driver/mongo/TestClient/write_concern
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/maxPoolSize_==_0
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/minPoolSize_<_default_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/minPoolSize_<_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/minPoolSize_==_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/minPoolSize_>_default_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_ApplyURI()/minPoolSize_>_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/maxPoolSize_==_0
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/minPoolSize_<_default_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/minPoolSize_<_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/minPoolSize_==_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/minPoolSize_>_default_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/min_pool_size_from_Set*PoolSize()/minPoolSize_>_maxPoolSize
+      - go.mongodb.org/mongo-driver/mongo/TestClient/new_client
+      - go.mongodb.org/mongo-driver/mongo/TestClient/nil_document_error
+      - go.mongodb.org/mongo-driver/mongo/TestClient/read_concern
+      - go.mongodb.org/mongo-driver/mongo/TestClient/read_preference
+      - go.mongodb.org/mongo-driver/mongo/TestClient/read_preference/absent
+      - go.mongodb.org/mongo-driver/mongo/TestClient/read_preference/specified
+      - go.mongodb.org/mongo-driver/mongo/TestClient/replace_topology_error
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads
+      - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/custom_URI
 
     ignore:
       # indicates flaky tests that should be ignored
