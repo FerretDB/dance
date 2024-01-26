@@ -153,16 +153,6 @@ func main() {
 			log.Fatal(err)
 		}
 
-		keys := maps.Keys(compareRes.UnexpectedRest)
-		if len(keys) != 0 {
-			log.Printf("Unexpected/unknown results:")
-			sort.Strings(keys)
-			for _, t := range keys {
-				res := compareRes.UnexpectedRest[t]
-				log.Printf("%s %s:\n\t%s", t, res.Status, res.IndentedOutput())
-			}
-		}
-
 		logResult("Unexpectedly failed", compareRes.UnexpectedFail)
 		logResult("Unexpectedly skipped", compareRes.UnexpectedSkip)
 		logResult("Unexpectedly passed", compareRes.UnexpectedPass)
@@ -173,13 +163,15 @@ func main() {
 			logResult("Expectedly passed", compareRes.ExpectedPass)
 		}
 
-		log.Printf("Unexpected/unknown results: %d.", len(compareRes.UnexpectedRest))
+		logResult("Unknown", compareRes.Unknown)
+
 		log.Printf("Unexpectedly failed: %d.", len(compareRes.UnexpectedFail))
 		log.Printf("Unexpectedly skipped: %d.", len(compareRes.UnexpectedSkip))
 		log.Printf("Unexpectedly passed: %d.", len(compareRes.UnexpectedPass))
 		log.Printf("Expectedly failed: %d.", len(compareRes.ExpectedFail))
 		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
 		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
+		log.Printf("Unknown: %d.", len(compareRes.Unknown))
 
 		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
 		if err != nil {

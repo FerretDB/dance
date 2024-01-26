@@ -49,10 +49,10 @@ type Stats struct {
 	UnexpectedFail int
 	UnexpectedSkip int
 	UnexpectedPass int
-	UnexpectedRest int
 	ExpectedFail   int
 	ExpectedSkip   int
 	ExpectedPass   int
+	Unknown        int
 }
 
 // Config represents the configuration settings for the test execution.
@@ -110,7 +110,7 @@ type CompareResult struct {
 	UnexpectedSkip map[string]string
 	UnexpectedPass map[string]string
 
-	UnexpectedRest map[string]TestResult
+	Unknown map[string]string
 
 	Stats Stats
 }
@@ -161,13 +161,13 @@ func (tr *TestResult) IndentedOutput() string {
 // Compare compares two *TestResults and returns a *CompareResult containing the differences.
 func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 	compareResult := &CompareResult{
-		ExpectedSkip:   make(map[string]string),
 		ExpectedFail:   make(map[string]string),
+		ExpectedSkip:   make(map[string]string),
 		ExpectedPass:   make(map[string]string),
-		UnexpectedSkip: make(map[string]string),
 		UnexpectedFail: make(map[string]string),
+		UnexpectedSkip: make(map[string]string),
 		UnexpectedPass: make(map[string]string),
-		UnexpectedRest: make(map[string]TestResult),
+		Unknown:        make(map[string]string),
 	}
 
 	tcMap := tc.toMap()
@@ -194,15 +194,13 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 			case Fail:
 				compareResult.ExpectedFail[test] = testResOutput
 			case Skip:
-				compareResult.ExpectedSkip[test] = testResOutput
+				compareResult.UnexpectedSkip[test] = testResOutput
 			case Pass:
-				compareResult.ExpectedPass[test] = testResOutput
-			case Ignore:
-				fallthrough
-			case Unknown:
+				compareResult.UnexpectedPass[test] = testResOutput
+			case Ignore, Unknown:
 				fallthrough
 			default:
-				compareResult.UnexpectedRest[test] = testRes
+				compareResult.Unknown[test] = testResOutput
 			}
 		case Skip:
 			switch testRes.Status {
@@ -212,12 +210,10 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.ExpectedSkip[test] = testResOutput
 			case Pass:
 				compareResult.UnexpectedPass[test] = testResOutput
-			case Ignore:
-				fallthrough
-			case Unknown:
+			case Ignore, Unknown:
 				fallthrough
 			default:
-				compareResult.UnexpectedRest[test] = testRes
+				compareResult.Unknown[test] = testResOutput
 			}
 		case Pass:
 			switch testRes.Status {
@@ -227,12 +223,10 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 				compareResult.UnexpectedSkip[test] = testResOutput
 			case Pass:
 				compareResult.ExpectedPass[test] = testResOutput
-			case Ignore:
-				fallthrough
-			case Unknown:
+			case Ignore, Unknown:
 				fallthrough
 			default:
-				compareResult.UnexpectedRest[test] = testRes
+				compareResult.Unknown[test] = testResOutput
 			}
 		case Ignore:
 			continue
@@ -247,14 +241,10 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 		UnexpectedFail: len(compareResult.UnexpectedFail),
 		UnexpectedSkip: len(compareResult.UnexpectedSkip),
 		UnexpectedPass: len(compareResult.UnexpectedPass),
-		UnexpectedRest: len(compareResult.UnexpectedRest),
 		ExpectedFail:   len(compareResult.ExpectedFail),
 		ExpectedSkip:   len(compareResult.ExpectedSkip),
 		ExpectedPass:   len(compareResult.ExpectedPass),
-	}
-	// special case: zero in expected_pass means "don't check"
-	if tc.Stats != nil && tc.Stats.ExpectedPass == 0 {
-		tc.Stats.ExpectedPass = compareResult.Stats.ExpectedPass
+		Unknown:        len(compareResult.Unknown),
 	}
 
 	return compareResult, nil
