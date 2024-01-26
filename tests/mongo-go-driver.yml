@@ -255,11 +255,30 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/10_no_remaining_sessions_are_checked_out_after_each_functional_test
       - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/14_implicit_session_allocation
       - go.mongodb.org/mongo-driver/internal/integration/TestSessionsProse/7_authenticating_as_multiple_users_suppresses_implicit_sessions
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/sdam-error-handling.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/server-selection.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/transactions.json
       # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["load-balanced"]
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/load_balanced
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/command-monitoring/logging/service-id.json/command_log_messages_include_serviceId_when_in_LB_mode
-
-
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/cursors.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/event-monitoring.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/lb-connection-establishment.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/does_not_close_the_cursor_when_receiving_an_empty_batch
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/returns_pinned_connections_to_the_pool_when_the_cursor_is_closed
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/returns_pinned_connections_to_the_pool_when_the_cursor_is_exhausted
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/run-command/runCursorCommand.json/successfully_executes_checkMetadataConsistency_cursor_creating_command
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-loadbalanced.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-sharded.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/logging-standalone.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-discovery-and-monitoring/unified/serverMonitoringMode.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-selection/logging/load-balanced.json
+      # skipping due to environmental constraints no matching RunOnBlock; comparison errors [topology kind "replicaset" does not match any of the required kinds ["single" "sharded"]]
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/non-lb-connection-establishment.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/run-command/runCommand.json/does_not_attach_$readPreference_to_given_command_on_standalone
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/load-balancers/wait-queue-timeouts.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-selection/logging/operation-id.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-selection/logging/sharded.json
       # skipping test that expects ssl in a non-ssl environment
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/direct-connection-false.json
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/encoded-userinfo-and-db.json
@@ -289,18 +308,24 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-admin-database.json
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-auth.json
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/replica_set/uri-with-uppercase-hostname
-      
-      
       # skipping due to environmental constraints: topology kind "replicaset" does not match any of the required kinds ["sharded"]
       - go.mongodb.org/mongo-driver/internal/integration/TestInitialDNSSeedlistDiscoverySpec/sharded
-     
-     
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/transactions/unified/mongos-unpin.json
+      # skipping due to environmental constraints no matching RunOnBlock; comparison errors [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_aws_kms_credentials.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_azure_kms_credentials.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-missing_gcp_kms_credentials.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-fail/kmsProviders-no_kms.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-explicit_kms_credentials.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-mixed_kms_credential_fields.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-placeholder_kms_credentials.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/kmsProviders-unconfigured_kms.json
       # skipping due to environmental constraints no matching RunOnBlock; comparison errors [topology kind "replicaset" does not match any of the required kinds ["single"]]
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/change-streams/change-streams-errors.json/The_watch_helper_must_not_throw_a_custom_exception_when_executed_against_a_single_server_topology,_but_instead_depend_on_a_server_error
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-logging.json
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/connection-monitoring-and-pooling/logging/connection-pool-options.json
-      
-      
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-not-supported-server-error.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/server-selection/logging/standalone.json
       # skipping due to environmental constraints no matching RunOnBlock; comparison errors [server version "7.0.4" is higher than max version "3.6.99", "4.0.99", "4.2.99", "4.4.99", "6.1.99"] 
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_ExceededTimeLimit
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/change-streams/change-streams-resume-allowlist.json/change_stream_resumes_after_FailedToSatisfyReadPreference
@@ -339,8 +364,147 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/command-monitoring/redacted-commands.json/getnonce
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate-let.json/Aggregate_to_collection_with_let_option_unsupported_(server-side_error)
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate-let.json/Aggregate_with_let_option_unsupported_(server-side_error)
-      
-
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$merge_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate-write-readPreference.json/Aggregate_with_$out_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_a_document_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_does_not_set_comment_on_getMore_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-arrayFilters-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-comment.json/BulkWrite_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-delete-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-delete-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-deleteMany-let.json/BulkWrite_deleteMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-deleteOne-let.json/BulkWrite_deleteOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-insertOne-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-replaceOne-let.json/BulkWrite_replaceOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-update-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-update-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-updateMany-let.json/BulkWrite_updateMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-updateOne-let.json/BulkWrite_updateOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/countDocuments-comment.json/countDocuments_with_document_comment_on_less_than_4.4.0_-_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$merge_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$out_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-comment.json/deleteMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-let.json/deleteMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-comment.json/deleteOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-let.json/deleteOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/distinct-comment.json/distinct_with_document_comment_-_pre_4.4,_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/estimatedDocumentCount-comment.json/estimatedDocumentCount_with_document_comment_-_pre_4.4.14,_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_comment_does_not_set_comment_on_getMore_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_document_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-let.json/Find_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-comment.json/findOneAndDelete_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-let.json/findOneAndDelete_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-comment.json/findOneAndReplace_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-let.json/findOneAndReplace_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-comment.json/findOneAndUpdate_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-errorResponse.json/findOneAndUpdate_document_validation_errInfo_is_accessible
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-let.json/findOneAndUpdate_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertMany-comment.json/insertMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertMany-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-comment.json/insertOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_dotted_key_in__id_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-comment.json/ReplaceOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-let.json/ReplaceOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-comment.json/UpdateMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-let.json/updateMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/bulkWrite-updateOne-let.json/BulkWrite_updateOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/countDocuments-comment.json/countDocuments_with_document_comment_on_less_than_4.4.0_-_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$merge_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/db-aggregate-write-readPreference.json/Database-level_aggregate_with_$out_omits_read_preference_for_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-comment.json/deleteMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteMany-let.json/deleteMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-comment.json/deleteOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/deleteOne-let.json/deleteOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/distinct-comment.json/distinct_with_document_comment_-_pre_4.4,_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/estimatedDocumentCount-comment.json/estimatedDocumentCount_with_document_comment_-_pre_4.4.14,_server_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-allowdiskuse-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_comment_does_not_set_comment_on_getMore_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-comment.json/find_with_document_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/find-let.json/Find_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-comment.json/findOneAndDelete_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndDelete-let.json/findOneAndDelete_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-comment.json/findOneAndReplace_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndReplace-let.json/findOneAndReplace_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-comment.json/findOneAndUpdate_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-let.json/findOneAndUpdate_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertMany-comment.json/insertMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertMany-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-comment.json/insertOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_dotted_key_in__id_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Inserting_document_with_top-level_dollar-prefixed_key_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/insertOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-comment.json/ReplaceOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dollar-prefixed_key_in_embedded_doc_on_pre-5.0_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_dotted_key_in_embedded_doc_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Replacing_document_with_top-level_dotted_key_on_pre-3.6_server_yields_server-side_error
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-dots_and_dollars.json/Unacknowledged_write_using_dollar-prefixed_or_dotted_keys_may_be_silently_rejected_on_pre-5.0_server
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/replaceOne-let.json/ReplaceOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-comment.json/UpdateMany_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateMany-let.json/updateMany_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateOne-comment.json/UpdateOne_with_comment_-_pre_4.4
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateOne-hint-clientError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateOne-hint-serverError.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/updateOne-let.json/UpdateOne_with_let_option_unsupported_(server-side_error)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions-not-supported-client-error.json
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/observeSensitiveCommands.json/getnonce_is_not_observed_by_default
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/observeSensitiveCommands.json/getnonce_is_not_observed_with_observeSensitiveCommands=false
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/observeSensitiveCommands.json/getnonce_is_observed_with_observeSensitiveCommands=true
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-command-monitoring.json/A_successful_find_event_with_a_getmore_and_the_server_kills_the_cursor_(<=_4.4)
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/unified-test-format/valid-pass/poc-transactions-mongos-pin-auto.json
+      # skipping due to environmental constraints no matching RunOnBlock; comparison errors [mismatched values for server parameter "acceptApiVersion2"; expected true, got false]
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/versioned-api/test-commands-deprecation-errors.json
+      # execution failed test must be skipped "the deprecated disableMD5 file option is not supported"
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_0_sans_MD5
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/gridfs/upload-disableMD5.json/upload_when_length_is_1_sans_MD5
+      # execution failed test must be skipped "the deprecated contentType file option is not supported"
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/gridfs/upload.json/upload_when_contentType_is_provided
+      # execution failed test must be skipped "the \"modifyCollection\" operation is not supported"
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/findOneAndUpdate-errorResponse.json/findOneAndUpdate_document_validation_errInfo_is_accessible
+      # skipping for reason "aggregate comments are string-only"
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/crud/unified/aggregate.json/aggregate_with_comment_sets_comment_on_getMore
       # skipping due to environmental constraints no matching RunOnBlock; comparison errors [runOnBlock requires CSFLE to be enabled. Build with the cse tag to enable]
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-encryption/unified/addKeyAltName.json
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-encryption/unified/createDataKey-kms_providers-invalid.json
@@ -364,37 +528,22 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_for_non-zero_timeoutMS_-_count_on_collection
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/operation_is_retried_multiple_times_if_timeoutMS_is_zero_-_count_on_collection
       - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/retryability-timeoutMS.json/timeoutMS_applies_to_whole_operation,_not_individual_attempts_-_count_on_collection
-
-
-
       # execution failed test must be skipped "timeoutMode not supported"
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
-
-
-
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Non=tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_if_timeoutMode_is_iteration_-_failure
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/error_if_timeoutMode_is_cursorLifetime_and_cursorType_is_tailableAwait
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/errors_if_timeoutMode_is_set_without_timeoutMS
       # execution failed test must be skipped "the \"modifyCollection\" operation is not supported"
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
-
-
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/collection-management/modifyCollection-pre_and_post_images.json/modifyCollection_to_changeStreamPreAndPostImages_enabled
       # execution failed test must be skipped "cursorType not supported"
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
-
-
-
-
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/runCursorCommand.json/Tailable_cursor_awaitData_iteration_timeoutMS_is_refreshed_for_getMore_-_failure
       # execution failed test must be skipped "the \"listIndexNames\" operation is not supported"
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listIndexNames_on_collection
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listIndexNames_on_collection
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listIndexNames_on_collection
-go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listIndexNames_on_collection
-
-    
-    
-    
-    
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_configured_on_a_MongoClient_-_listIndexNames_on_collection
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/global-timeoutMS.json/timeoutMS_can_be_set_to_0_on_a_MongoClient_-_listIndexNames_on_collection
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_configured_for_an_operation_-_listIndexNames_on_collection
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/client-side-operations-timeout/override-operation-timeoutMS.json/timeoutMS_can_be_set_to_0_for_an_operation_-_listIndexNames_on_collection
+      # skipping due to known failure Test fails frequently. See GODRIVER-2843
+      - go.mongodb.org/mongo-driver/internal/integration/unified/TestUnifiedSpec/sessions/snapshot-sessions.json/Find_operation_with_snapshot
     
     
     
