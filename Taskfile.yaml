@@ -41,6 +41,7 @@ tasks:
         docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
       - task: init-repl
+      - task: init-user
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
@@ -103,17 +104,30 @@ tasks:
     desc: "Run mongo shell"
     cmds:
       - >
-        docker compose run --rm mongosh mongosh mongodb://host.docker.internal:27017/
-        --verbose --eval 'disableTelemetry()' --shell
+        docker compose run --rm mongosh mongosh 
+        'mongodb://host.docker.internal:27017/'
+        --eval 'disableTelemetry()' --shell
 
   init-repl:
     desc: "Initializes a new replica set"
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
-        --eval 'rs.initiate({_id: "mongodb-rs", members: [{_id: 0, host: "localhost"}]})'
-    # this is true to prevent an already initialized error and no such command error for replSetInitiate
+        'mongodb://host.docker.internal:27017/?directConnection=true'
+        --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
+    # ignore already initialized error and no such command error for replSetInitiate
+    ignore_error: true
+
+  # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
+  # https://github.com/docker-library/mongo/blob/master/7.0/docker-entrypoint.sh#L260
+  init-user:
+    desc: "Creates a user with the root access role"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://host.docker.internal:27017/?directConnection=true'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
+    # ignore roles that are not implemented yet
     ignore_error: true
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
