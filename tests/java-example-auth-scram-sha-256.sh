@@ -6,4 +6,4 @@ set -ex
 export MAVEN_OPTS='-ea'
 
 mvn compile exec:java -Dexec.mainClass=com.start.Connection \
--Dexec.args="mongodb://user:password@localhost:27017/?replicaSet=rs0&directConnection=true&authMechanism=SCRAM-SHA-256"
+-Dexec.args="mongodb://user:password@localhost:27017/?replicaSet=rs0&authMechanism=SCRAM-SHA-256"
