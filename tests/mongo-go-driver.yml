@@ -33,6 +33,7 @@ results:
       # panic: runtime error: invalid memory address or nil pointer dereference
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
     skip:
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
@@ -43,7 +44,6 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
-      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
     pass:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/DeleteExamples
@@ -68,6 +68,7 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported/operation_time_nil
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone/no_custom_standalone_error
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect
@@ -157,8 +158,8 @@ results:
   postgresql:
     stats:
       fail: 6
-      skip: 9
-      pass: 633
+      skip: 8
+      pass: 634
     ignore:
     include_ignore:
       - ignore
@@ -175,8 +176,8 @@ results:
   sqlite:
     stats:
       fail: 6
-      skip: 9
-      pass: 633
+      skip: 8
+      pass: 634
     ignore:
     include_ignore:
       - ignore
