@@ -98,7 +98,7 @@ services:
     working_dir: /tests/mongo
     volumes:
       - ./tests/mongo:/tests/mongo
-   
+
   # for documentation
   textlint:
     build:
