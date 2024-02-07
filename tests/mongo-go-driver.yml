@@ -12,7 +12,7 @@ args:
 results:
   includes:
     fail:
-      # TODO investigate and create issues for failures
+      # https://github.com/FerretDB/FerretDB/issues/1711
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples
       # (NotImplemented) `aggregate` stage "$project" is not implemented yet
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/AggregationExamples
