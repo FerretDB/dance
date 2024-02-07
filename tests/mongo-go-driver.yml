@@ -14,7 +14,7 @@ results:
     fail:
       # https://github.com/FerretDB/FerretDB/issues/1711
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples
-      # (NotImplemented) `aggregate` stage "$project" is not implemented yet
+      # https://github.com/FerretDB/FerretDB/issues/2964
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/AggregationExamples
       - go.mongodb.org/mongo-driver/internal/docexamples/TestAggregationExamples
       # Should be true
