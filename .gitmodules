@@ -2,14 +2,13 @@
 	path = dumps/mongodb-sample-databases
 	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
-
 [submodule "dotnet-example"]
 	path = tests/dotnet-example
 	url = https://github.com/FerretDB/dotnet-example.git
 	branch = main
 [submodule "enmeshed-runtime"]
 	path = tests/enmeshed-runtime
-	url = https://github.com/nmshd/cns-runtime.git
+	url = https://github.com/nmshd/runtime.git
 	branch = main
 [submodule "java-example"]
 	path = tests/java-example
