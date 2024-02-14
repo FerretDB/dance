@@ -72,6 +72,9 @@ jobs:
           - restheart-auth
           - ycsb-workloada
           - ycsb-workloadc
+        auth:
+          - new
+          - old
 
     steps:
       - name: Checkout code
