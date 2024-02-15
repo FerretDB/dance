@@ -2,6 +2,7 @@
 	path = dumps/mongodb-sample-databases
 	url = https://github.com/mcampo2/mongodb-sample-databases.git
 	branch = master
+
 [submodule "dotnet-example"]
 	path = tests/dotnet-example
 	url = https://github.com/FerretDB/dotnet-example.git
