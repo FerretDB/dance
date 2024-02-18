@@ -48,7 +48,6 @@ jobs:
           # - dbaas_core-1
           # - dbaas_core-2
           # - dbaas_core-3
-          # - diff
           - dotnet-example
           - dotnet-example-auth
           - dotnet-example-auth-scram-sha-1
@@ -73,8 +72,8 @@ jobs:
           - ycsb-workloada
           - ycsb-workloadc
         auth:
-          - new
           - old
+          - new
 
     steps:
       - name: Checkout code
@@ -97,10 +96,19 @@ jobs:
         run: go generate -x
         working-directory: tools
 
-      - name: Start environment
-        run: bin/task env-up-detach DB=${{ matrix.db }}
+      - name: Start environment with New Authentication
+        if: ${{ matrix.auth == 'new' }}
         env:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+          NEW_AUTH: true
+        run: bin/task env-up-detach DB=${{ matrix.db }}
+
+      - name: Start environment with Old Authentication
+        if: ${{ matrix.auth == 'old' }}
+        env:
+          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+          NEW_AUTH: false
+        run: bin/task env-up-detach DB=${{ matrix.db }}
 
       - name: Run init
         run: bin/task init
