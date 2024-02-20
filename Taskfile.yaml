@@ -2,7 +2,6 @@
 version: "3"
 
 vars:
-  DB: ""
   TEST: ""
   PARALLEL: 0
 
@@ -42,9 +41,10 @@ tasks:
         --build {{.DB}}
       - task: init-repl
       - task: init-user
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
+    env:
+      FERRETDB_TEST_ENABLE_NEW_AUTH: {{.NEWAUTH}}
+    requires:
+      vars: [DB, NEWAUTH]
 
   env-pull:
     cmds:
@@ -69,10 +69,9 @@ tasks:
     desc: "Run all integration tests"
     dir: tests
     cmds:
-      - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
+      - go run ../cmd/dance -db={{.DB}} -newauth={{.NEWAUTH}} -p={{.PARALLEL}} {{.TEST}}
+    requires:
+      vars: [DB, NEWAUTH]
 
   lint:
     desc: "Run linters"
