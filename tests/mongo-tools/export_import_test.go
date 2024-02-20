@@ -16,6 +16,7 @@ package mongotools
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -91,6 +92,8 @@ func TestExportImport(t *testing.T) {
 func mongoimport(t *testing.T, file, db, coll string) {
 	t.Helper()
 
+	mongodbURI := os.Getenv("MONGODB_URI")
+
 	runDockerComposeCommand(
 		t,
 		"mongoimport",
@@ -101,13 +104,15 @@ func mongoimport(t *testing.T, file, db, coll string) {
 		"--drop",
 		"--numInsertionWorkers=10",
 		"--stopOnError",
-		"mongodb://host.docker.internal:27017/",
+		mongodbURI,
 	)
 }
 
 // mongoexport exports collection from <db>/<coll> to the <file> file.
 func mongoexport(t *testing.T, file, db, coll string) {
 	t.Helper()
+
+	mongodbURI := os.Getenv("MONGODB_URI")
 
 	runDockerComposeCommand(
 		t,
@@ -117,6 +122,6 @@ func mongoexport(t *testing.T, file, db, coll string) {
 		"--collection="+coll,
 		"--out="+file,
 		"--sort={x:1}",
-		"mongodb://host.docker.internal:27017/",
+		mongodbURI,
 	)
 }

@@ -46,6 +46,10 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		cliArgs = append(cliArgs, "-p", p)
 	}
 
+	mongodbURI := "mongodb.url=" + os.Getenv("MONGODB_URI")
+
+	cliArgs = append(cliArgs, "-p", mongodbURI)
+
 	cmd := exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout

@@ -15,6 +15,7 @@
 package mongotools
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -97,6 +98,8 @@ func TestDumpRestore(t *testing.T) {
 func mongorestore(t *testing.T, db, root, newDB string) {
 	t.Helper()
 
+	mongodbURI := os.Getenv("MONGODB_URI")
+
 	runDockerComposeCommand(
 		t,
 		"mongorestore",
@@ -111,7 +114,7 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		"--numInsertionWorkersPerCollection=4",
 		"--stopOnError",
 		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
-		"mongodb://host.docker.internal:27017/",
+		mongodbURI,
 		root,
 	)
 }
@@ -120,6 +123,8 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 func mongodump(t *testing.T, db, root string) {
 	t.Helper()
 
+	mongodbURI := os.Getenv("MONGODB_URI")
+
 	runDockerComposeCommand(
 		t,
 		"mongodump",
@@ -127,6 +132,6 @@ func mongodump(t *testing.T, db, root string) {
 		"--db="+db,
 		"--out="+root,
 		"--numParallelCollections=10",
-		"mongodb://host.docker.internal:27017/",
+		mongodbURI,
 	)
 }
