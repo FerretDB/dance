@@ -1,0 +1,25 @@
+---
+runner: command
+dir: python-example
+args: [../python-example-plain.sh]
+
+results:
+  postgresql-oldauth:
+    stats:
+      pass: 1
+
+  postgresql-newauth:
+    stats:
+      pass: 1
+
+  sqlite-oldauth:
+    stats:
+      fail: 1
+
+  sqlite-newauth:
+    stats:
+      pass: 1
+
+  mongodb:
+    stats:
+      fail: 1
