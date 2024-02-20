@@ -1,17 +1,22 @@
 ---
 runner: command
 dir: dotnet-example
-args:
-  - dotnet
-  - run
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+args: [../dotnet-example-scram.sh]
 
 results:
-  postgresql:
+  postgresql-oldauth:
     stats:
       pass: 1
 
-  sqlite:
+  postgresql-newauth:
+    stats:
+      pass: 1
+
+  sqlite-oldauth:
+    stats:
+      fail: 1
+
+  sqlite-newauth:
     stats:
       pass: 1
 
@@ -19,5 +24,3 @@ results:
     stats:
       # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
-    fail:
-      - dotnet-example
