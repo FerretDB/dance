@@ -30,7 +30,7 @@ jobs:
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
     concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
@@ -42,6 +42,9 @@ jobs:
           - postgresql
           - sqlite
           - mongodb
+        newauth:
+          - false
+          - true
         test:
           # temporarily disabling to avoid CI noise
           # - dbaas_core-0
@@ -71,9 +74,6 @@ jobs:
           - restheart-auth
           - ycsb-workloada
           - ycsb-workloadc
-        auth:
-          - old
-          - new
 
     steps:
       - name: Checkout code
@@ -96,25 +96,16 @@ jobs:
         run: go generate -x
         working-directory: tools
 
-      - name: Start environment with New Authentication
-        if: ${{ matrix.auth == 'new' }}
+      - name: Start environment
         env:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-          NEW_AUTH: true
-        run: bin/task env-up-detach DB=${{ matrix.db }}
-
-      - name: Start environment with Old Authentication
-        if: ${{ matrix.auth == 'old' }}
-        env:
-          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-          NEW_AUTH: false
-        run: bin/task env-up-detach DB=${{ matrix.db }}
+        run: bin/task env-up-detach DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }}
 
       - name: Run init
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
+        run: bin/task dance DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }} TEST=${{ matrix.test }} PARALLEL=10
 
       - name: Collect logs
         if: failure()
@@ -129,7 +120,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+          name: compose-logs-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}
           path: compose-logs.zip
           retention-days: 3
 
