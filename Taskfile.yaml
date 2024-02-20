@@ -42,7 +42,7 @@ tasks:
       - task: init-repl
       - task: init-user
     env:
-      FERRETDB_TEST_ENABLE_NEW_AUTH: {{.NEWAUTH}}
+      FERRETDB_TEST_ENABLE_NEW_AUTH: '{{.NEWAUTH}}'
     requires:
       vars: [DB, NEWAUTH]
 
