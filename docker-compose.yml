@@ -46,7 +46,7 @@ services:
       - TZ=America/St_Johns
       - POSTGRES_USER=user
       - POSTGRES_DB=dance
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=password
 
   mongodb:
     build:
