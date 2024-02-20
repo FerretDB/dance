@@ -48,6 +48,7 @@
             # - dbaas_core-1
             # - dbaas_core-2
             # - dbaas_core-3
+            # - diff
             - dotnet-example
             - dotnet-example-auth
             - dotnet-example-auth-scram-sha-1
