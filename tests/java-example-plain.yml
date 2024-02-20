@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: java-example/java
-args: [../../java-example-auth.sh]
+args: [../../java-example-plain.sh]
 
 results:
   postgresql:
@@ -16,5 +16,3 @@ results:
     stats:
       # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
-    fail:
-      - java-example
