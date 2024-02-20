@@ -1,131 +1,128 @@
 ---
-name: Dance
-on:
-  pull_request:
-    types:
-      - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
-      - opened
-      - reopened
-      - synchronize
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: "12 3 * * *" # after FerretDB's Docker workflow
-
-env:
-  GOPATH: /home/runner/go
-  GOCACHE: /home/runner/go/cache
-  GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
-  GOMODCACHE: /home/runner/go/mod
-  GOPROXY: https://proxy.golang.org
-  GOTOOLCHAIN: local
-
-jobs:
-  dance:
-    name: dance
-    runs-on: ubuntu-22.04
-    timeout-minutes: 45
-
-    # Do not run this job in parallel for any PR change or branch push
-    # to save some resources.
-    concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
-      cancel-in-progress: true
-
-    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
-
-    strategy:
-      fail-fast: false
-      matrix:
-        db:
-          - postgresql
-          - sqlite
-          - mongodb
-        newauth:
-          - false
-          - true
-        test:
-          # temporarily disabling to avoid CI noise
-          # - dbaas_core-0
-          # - dbaas_core-1
-          # - dbaas_core-2
-          # - dbaas_core-3
-          - dotnet-example
-          - dotnet-example-auth
-          - dotnet-example-auth-scram-sha-1
-          - dotnet-example-auth-scram-sha-256
-          - java-example
-          - java-example-auth
-          - java-example-auth-scram-sha-1
-          - java-example-auth-scram-sha-256
-          - meteor-doc-fetcher
-          - meteor-oplog-cursor-supported
-          - meteor-oplog-entry-skipping
-          - meteor-oplog-x-implicit-collection-creation
-          - mongo
-          - mongo-go-driver
-          - mongo-tools
-          - python-example
-          - python-example-auth
-          - python-example-auth-scram-sha-1
-          - python-example-auth-scram-sha-256
-          - restheart
-          - restheart-auth
-          - ycsb-workloada
-          - ycsb-workloadc
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Setup Go
-        uses: FerretDB/github-actions/setup-go@main
-        with:
-          cache-key: dance
-
-      - name: Install Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Install Task
-        run: go generate -x
-        working-directory: tools
-
-      - name: Start environment
-        env:
-          FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
-        run: bin/task env-up-detach DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }}
-
-      - name: Run init
-        run: bin/task init
-
-      - name: Dance!
-        run: bin/task dance DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }} TEST=${{ matrix.test }} PARALLEL=10
-
-      - name: Collect logs
-        if: failure()
-        run: |
-          bin/task env-logs-collect > /tmp/compose-logs.txt
-
-      - name: Compress logs before upload
-        if: failure()
-        run: zip -q -9 compose-logs.zip /tmp/compose-logs.txt
-
-      - name: Upload logs
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}
-          path: compose-logs.zip
-          retention-days: 3
-
-      # ignore `go mod tidy` being applied to the Go driver, etc
-      - name: Check dirty
-        run: |
-          git status --ignore-submodules=none
-          git diff --ignore-submodules=all --exit-code
+  name: Dance
+  on:
+    pull_request:
+      types:
+        - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
+        - opened
+        - reopened
+        - synchronize
+    push:
+      branches:
+        - main
+    schedule:
+      - cron: "12 3 * * *" # after FerretDB's Docker workflow
+  
+  env:
+    GOPATH: /home/runner/go
+    GOCACHE: /home/runner/go/cache
+    GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
+    GOMODCACHE: /home/runner/go/mod
+    GOPROXY: https://proxy.golang.org
+    GOTOOLCHAIN: local
+  
+  jobs:
+    dance:
+      name: dance
+      runs-on: ubuntu-22.04
+      timeout-minutes: 45
+  
+      # Do not run this job in parallel for any PR change or branch push
+      # to save some resources.
+      concurrency:
+        group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+        cancel-in-progress: true
+  
+      if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
+  
+      strategy:
+        fail-fast: false
+        matrix:
+          db:
+            - postgresql
+            - sqlite
+            - mongodb
+          test:
+            # temporarily disabling to avoid CI noise
+            # - dbaas_core-0
+            # - dbaas_core-1
+            # - dbaas_core-2
+            # - dbaas_core-3
+            - dotnet-example
+            - dotnet-example-auth
+            - dotnet-example-auth-scram-sha-1
+            - dotnet-example-auth-scram-sha-256
+            - java-example
+            - java-example-auth
+            - java-example-auth-scram-sha-1
+            - java-example-auth-scram-sha-256
+            - meteor-doc-fetcher
+            - meteor-oplog-cursor-supported
+            - meteor-oplog-entry-skipping
+            - meteor-oplog-x-implicit-collection-creation
+            - mongo
+            - mongo-go-driver
+            - mongo-tools
+            - python-example
+            - python-example-auth
+            - python-example-auth-scram-sha-1
+            - python-example-auth-scram-sha-256
+            - restheart
+            - restheart-auth
+            - ycsb-workloada
+            - ycsb-workloadc
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            submodules: true
+  
+        - name: Setup Go
+          uses: FerretDB/github-actions/setup-go@main
+          with:
+            cache-key: dance
+  
+        - name: Install Java
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'zulu'
+            java-version: '17'
+  
+        - name: Install Task
+          run: go generate -x
+          working-directory: tools
+  
+        - name: Start environment
+          run: bin/task env-up-detach DB=${{ matrix.db }}
+          env:
+            FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+  
+        - name: Run init
+          run: bin/task init
+  
+        - name: Dance!
+          run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
+  
+        - name: Collect logs
+          if: failure()
+          run: |
+            bin/task env-logs-collect > /tmp/compose-logs.txt
+  
+        - name: Compress logs before upload
+          if: failure()
+          run: zip -q -9 compose-logs.zip /tmp/compose-logs.txt
+  
+        - name: Upload logs
+          if: failure()
+          uses: actions/upload-artifact@v3
+          with:
+            name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+            path: compose-logs.zip
+            retention-days: 3
+  
+        # ignore `go mod tidy` being applied to the Go driver, etc
+        - name: Check dirty
+          run: |
+            git status --ignore-submodules=none
+            git diff --ignore-submodules=all --exit-code
