@@ -131,14 +131,8 @@ func main() {
 
 		var runRes *config.TestResults
 
-		// this hack simplifies our configuration until we support SCRAM
-		if *dbF != "mongodb" {
-			// we only support PLAIN for now
-			os.Setenv("MONGODB_URI", "mongodb://user:password@host.docker.internal:27017/?authMechanism=PLAIN")
-		} else {
-			// will default to SCRAM-SHA-1
-			os.Setenv("MONGODB_URI", "mongodb://user:password@host.docker.internal:27017/?authSource=admin")
-		}
+		// will default to SCRAM-SHA-1
+		os.Setenv("MONGODB_URI", "mongodb://user:password@host.docker.internal:27017/?authSource=admin")
 
 		switch cfg.Runner {
 		case config.RunnerTypeCommand:
