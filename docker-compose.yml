@@ -11,7 +11,7 @@ services:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
+      - FERRETDB_POSTGRESQL_URL=postgres://user:password@postgres:5432/dance
       - FERRETDB_REPL_SET_NAME=rs0
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
     extra_hosts:

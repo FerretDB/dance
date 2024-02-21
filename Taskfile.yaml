@@ -42,6 +42,8 @@ tasks:
         --build {{.DB}}
       - task: init-repl
       - task: init-user
+      - task: init-repl-plain
+      - task: init-user-plain
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
@@ -108,6 +110,18 @@ tasks:
         'mongodb://host.docker.internal:27017/'
         --eval 'disableTelemetry()' --shell
 
+  # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
+  # because PostgreSQL trust authentication is not supported
+  init-repl-plain:
+    desc: "Initializes a new replica set using PLAIN authentication mechanism"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://user:password@host.docker.internal:27017/?authMechanism=PLAIN'
+        --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
+    # ignore already initialized error and no such command error for replSetInitiate
+    ignore_error: true
+
   init-repl:
     desc: "Initializes a new replica set"
     cmds:
@@ -116,6 +130,18 @@ tasks:
         'mongodb://host.docker.internal:27017/'
         --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # ignore already initialized error and no such command error for replSetInitiate
+    ignore_error: true
+
+  # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
+  # because PostgreSQL trust authentication is not supported nor are roles hence an empty roles array
+  init-user-plain:
+    desc: "Creates a user with no roles using PLAIN authentication mechanism"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://user:password@host.docker.internal:27017/?authMechanism=PLAIN'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: []})'
+    # ignore roles that are not implemented yet
     ignore_error: true
 
   # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
