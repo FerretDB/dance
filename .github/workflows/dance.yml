@@ -49,11 +49,10 @@ jobs:
           # - dbaas_core-2
           # - dbaas_core-3
           # - diff
-          - dotnet-example
           - dotnet-example-auth
           - dotnet-example-auth-scram-sha-1
           - dotnet-example-auth-scram-sha-256
-          - java-example
+          - enmeshed-runtime
           - java-example-auth
           - java-example-auth-scram-sha-1
           - java-example-auth-scram-sha-256
@@ -64,11 +63,9 @@ jobs:
           - mongo
           - mongo-go-driver
           - mongo-tools
-          - python-example
           - python-example-auth
           - python-example-auth-scram-sha-1
           - python-example-auth-scram-sha-256
-          - restheart
           - restheart-auth
           - ycsb-workloada
           - ycsb-workloadc
