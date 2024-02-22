@@ -12,9 +12,7 @@ results:
 
   sqlite:
     stats:
-      fail: 1
-    fail:
-      - java-example
+      pass: 1
 
   mongodb:
     stats:

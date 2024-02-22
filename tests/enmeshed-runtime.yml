@@ -17,4 +17,6 @@ results:
 
   mongodb:
     stats:
-      pass: 1
+      fail: 1
+    fail:
+      - enmeshed-runtime
