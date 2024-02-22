@@ -255,54 +255,9 @@ results:
 
   sqlite:
     stats:
-      fail: 113
-      pass: 4
+      fail: 45
+      pass: 68
     fail:
-      - mongo/jstests/aggregation/bugs/sort_arrays.js
-      - mongo/jstests/core/capped/capped_queries_and_id_index.js
-      - mongo/jstests/core/capped/capped_upsert.js
-      - mongo/jstests/core/capped/cappeda.js
-      - mongo/jstests/core/query/all/all3.js
-      - mongo/jstests/core/query/array/array4.js
-      - mongo/jstests/core/query/basic2.js
-      - mongo/jstests/core/query/basic4.js
-      - mongo/jstests/core/query/basic5.js
-      - mongo/jstests/core/query/basic6.js
-      - mongo/jstests/core/query/basic7.js
-      - mongo/jstests/core/query/basic8.js
-      - mongo/jstests/core/query/basica.js
-      - mongo/jstests/core/query/cursor/cursor1.js
-      - mongo/jstests/core/query/cursor/cursor2.js
-      - mongo/jstests/core/query/cursor/cursor3.js
-      - mongo/jstests/core/query/cursor/cursor4.js
-      - mongo/jstests/core/query/cursor/cursor5.js
-      - mongo/jstests/core/query/cursor/cursor6.js
-      - mongo/jstests/core/query/cursor/cursor7.js
-      - mongo/jstests/core/query/cursor/getmore_cmd_maxtimems.js
-      - mongo/jstests/core/query/distinct/distinct1.js
-      - mongo/jstests/core/query/distinct/distinct2.js
-      - mongo/jstests/core/query/distinct/distinct3.js
-      - mongo/jstests/core/query/unset/unset.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
-      - mongo/jstests/core/write/update/update2.js
-      - mongo/jstests/core/write/update/update3.js
-      - mongo/jstests/core/write/update/update5.js
-      - mongo/jstests/core/write/update/update6.js
-      - mongo/jstests/core/write/update/update7.js
-      - mongo/jstests/core/write/update/update8.js
-      - mongo/jstests/core/write/update/update9.js
-      - mongo/jstests/core/write/update/updatea.js
-      - mongo/jstests/core/write/update/updateb.js
-      - mongo/jstests/core/write/update/updatec.js
-      - mongo/jstests/core/write/update/updated.js
-      - mongo/jstests/core/write/update/updatee.js
-      - mongo/jstests/core/write/update/updatef.js
-      - mongo/jstests/core/write/update/updateg.js
-      - mongo/jstests/core/write/update/updatei.js
-      - mongo/jstests/core/write/update/updatej.js
-      - mongo/jstests/core/write/update/updatek.js
-      - mongo/jstests/core/write/update/updatem.js
-      - mongo/jstests/noPassthroughWithMongod/capped4.js
     include_fail:
       - aggregation
       - capped
