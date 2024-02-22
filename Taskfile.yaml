@@ -141,6 +141,8 @@ tasks:
         docker compose run --rm mongosh mongosh
         'mongodb://username:password@host.docker.internal:27017/?authMechanism=PLAIN'
         --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: []})'
+    # ignore authentication for mechanism PLAIN which is not enabled for MongoDB
+    ignore_error: true
 
   # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
   # https://github.com/docker-library/mongo/blob/master/7.0/docker-entrypoint.sh#L260
