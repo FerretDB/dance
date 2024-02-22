@@ -42,6 +42,19 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/commit_transient_transaction_error
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/unknown_transaction_commit_result
       - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/slow_operation_in_callback_retries
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream/nonmatching_filter
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/expired_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/canceled_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_returns_value
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_raises_custom_error
     skip:
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
@@ -103,19 +116,6 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/cannot_modify_options_after_client_creation
       - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/failure_with_unsupported_version
       - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/success_with_all_options
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_raises_custom_error
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_returns_value
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/canceled_context_before_callback_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/expired_context_before_callback_does_not_retry
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/transient_transaction_error
-      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/wrapped_transient_transaction_error_retried
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_empty_string
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_non-empty_string
@@ -155,6 +155,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/replace_topology_error
       - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads
       - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/custom_URI
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/transient_transaction_error
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/wrapped_transient_transaction_error_retried
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream/nil_filter
 
     ignore:
       # indicates flaky tests that should be ignored
@@ -178,9 +181,9 @@ results:
 
   postgresql:
     stats:
-      fail: 15
+      fail: 25
       skip: 10
-      pass: 791
+      pass: 730
     ignore:
     include_ignore:
       - ignore
