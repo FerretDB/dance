@@ -61,11 +61,15 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
+	// if load phase fails, mark the test as failed and return
+	// TODO: remove this when possibly
 	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
 		}
+
+		return res, nil
 	}
 
 	// run workload with almost the same args
