@@ -132,7 +132,7 @@ func main() {
 		var runRes *config.TestResults
 
 		// will default to SCRAM-SHA-1
-		os.Setenv("MONGODB_URI", "mongodb://user:password@host.docker.internal:27017/")
+		os.Setenv("MONGODB_URI", "mongodb://username:password@host.docker.internal:27017/")
 
 		switch cfg.Runner {
 		case config.RunnerTypeCommand:

@@ -140,7 +140,7 @@ tasks:
       - >
         docker compose run --rm mongosh mongosh
         'mongodb://username:password@host.docker.internal:27017/?authMechanism=PLAIN'
-        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: []})'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: []})'
 
   # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
   # https://github.com/docker-library/mongo/blob/master/7.0/docker-entrypoint.sh#L260
@@ -149,8 +149,8 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://username:password@host.docker.internal:27017/'
-        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
+        'mongodb://host.docker.internal:27017/'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: [ "root" ]})'
     # ignore roles that are not implemented yet
     ignore_error: true
 
