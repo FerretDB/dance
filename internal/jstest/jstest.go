@@ -21,7 +21,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
@@ -150,11 +149,9 @@ func runMongo(dir, file string) ([]byte, error) {
 		return nil, err
 	}
 
-	mongodbURI := os.Getenv("MONGODB_URI")
-
 	dockerArgs := []string{"compose", "run", "-T", "--rm", "mongo"}
 	shellArgs := []string{
-		"--verbose", "--norc", mongodbURI,
+		"--verbose", "--norc", "mongodb://host.docker.internal:27017/",
 		"--eval", evalBuilder(file), file,
 	}
 	dockerArgs = append(dockerArgs, shellArgs...)
