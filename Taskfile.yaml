@@ -127,7 +127,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://username:password@host.docker.internal:27017/'
+        'mongodb://host.docker.internal:27017/'
         --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # ignore already initialized error and no such command error for replSetInitiate
     ignore_error: true
