@@ -111,7 +111,7 @@ tasks:
         --eval 'disableTelemetry()' --shell
 
   # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
-  # because PostgreSQL trust authentication is not supported
+  # because PostgreSQL trust authentication is disabled
   init-repl-plain:
     desc: "Initializes a new replica set using PLAIN authentication mechanism"
     cmds:
@@ -133,7 +133,7 @@ tasks:
     ignore_error: true
 
   # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
-  # because PostgreSQL trust authentication is not supported nor are roles hence an empty roles array
+  # because PostgreSQL trust authentication is disabled and roles are not supported hence an empty roles array
   init-user-plain:
     desc: "Creates a user with no roles using PLAIN authentication mechanism"
     cmds:
