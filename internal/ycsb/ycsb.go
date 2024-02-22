@@ -39,6 +39,14 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	// because we set cmd.Dir, the relative path here is different
 	bin = filepath.Join("..", bin)
 
+	res := &config.TestResults{
+		TestResults: map[string]config.TestResult{
+			dir: {
+				Status: config.Pass,
+			},
+		},
+	}
+
 	// load workload
 
 	cliArgs := []string{"load", "mongodb", "-P", args[0]}
@@ -54,7 +62,10 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	if err := cmd.Run(); err != nil {
-		return nil, err
+		res.TestResults[dir] = config.TestResult{
+			Status: config.Fail,
+			Output: err.Error(),
+		}
 	}
 
 	// run workload with almost the same args
@@ -67,14 +78,6 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	cmd.Stderr = os.Stderr
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
-	res := &config.TestResults{
-		TestResults: map[string]config.TestResult{
-			dir: {
-				Status: config.Pass,
-			},
-		},
-	}
 
 	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = config.TestResult{

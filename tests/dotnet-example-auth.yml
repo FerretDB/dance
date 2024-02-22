@@ -16,10 +16,7 @@ results:
 
   sqlite:
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/3121
-      fail: 1
-    fail:
-      - dotnet-example
+      pass: 1
 
   mongodb:
     stats:

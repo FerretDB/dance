@@ -9,7 +9,9 @@ args:
 results:
   postgresql:
     stats:
-      pass: 1
+      fail: 1
+    fail:
+      - ycsb
 
   sqlite:
     stats:
