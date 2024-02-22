@@ -99,7 +99,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongo
-        'mongodb://host.docker.internal:27017/'
+        'mongodb://username:password@host.docker.internal:27017/'
         {{.CLI_ARGS}}
 
   mongosh:
@@ -107,7 +107,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
+        'mongodb://username:password@host.docker.internal:27017/'
         --eval 'disableTelemetry()' --shell
 
   # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
@@ -117,7 +117,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/?authMechanism=PLAIN'
+        'mongodb://username:password@host.docker.internal:27017/?authMechanism=PLAIN'
         --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
     # ignore already initialized error and no such command error for replSetInitiate
     ignore_error: true
