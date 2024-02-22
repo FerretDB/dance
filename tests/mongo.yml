@@ -230,11 +230,10 @@ results:
 
   mongodb:
     stats:
-      fail: 3
-      pass: 114
+      fail: 2
+      pass: 115
     fail:
       # both tests invoke the MongoRunner and also fail on resmoke.py with exit code 253.
       # they both seem to use a key file with incorrect permissions.
       - mongo/jstests/auth/getMore.js
       - mongo/jstests/auth/list_sessions.js
-      - mongo/jstests/core/administrative/auth1.js
