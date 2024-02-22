@@ -149,8 +149,6 @@ results:
       - mongo/jstests/core/query/cursor/getmore_invalidated_cursors.js
       # https://github.com/FerretDB/FerretDB/issues/3615
       - mongo/jstests/core/query/cursor/getmore_invalidated_documents.js
-      # authentication fails with startParallelShell
-      - mongo/jstests/core/query/distinct/distinct3.js
       # https://github.com/FerretDB/FerretDB/issues/730
       - mongo/jstests/core/query/elemmatch/elemmatch_or_pushdown.js
       # https://github.com/FerretDB/FerretDB/issues/1710
@@ -180,11 +178,7 @@ results:
       - mongo/jstests/core/write/find_and_modify/find_and_modify.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
-      # https://github.com/FerretDB/FerretDB/issues/1855
-      - mongo/jstests/core/write/update/update8.js
-      # https://github.com/FerretDB/FerretDB/issues/1742
-      - mongo/jstests/core/write/update/updateb.js
+      # TODO investigate why this fails
       - mongo/jstests/core/write/update/updatel.js
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
@@ -202,8 +196,8 @@ results:
 
   postgresql:
     stats:
-      fail: 72
-      pass: 45
+      fail: 68
+      pass: 49
     fail:
     include_fail:
       - aggregation
@@ -216,8 +210,8 @@ results:
 
   sqlite:
     stats:
-      fail: 71
-      pass: 46
+      fail: 68
+      pass: 49
     fail:
     include_fail:
       - aggregation
