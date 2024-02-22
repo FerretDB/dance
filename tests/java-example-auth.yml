@@ -6,15 +6,11 @@ args: [../../java-example-auth.sh]
 results:
   postgresql:
     stats:
-      fail: 1
-    fail:
-      - java-example
+      pass: 1
 
   sqlite:
     stats:
-      fail: 1
-    fail:
-      - java-example
+      pass: 1
 
   mongodb:
     stats:
