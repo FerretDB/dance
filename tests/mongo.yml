@@ -255,8 +255,8 @@ results:
 
   sqlite:
     stats:
-      fail: 45
-      pass: 68
+      fail: 68
+      pass: 49
     fail:
     include_fail:
       - aggregation
