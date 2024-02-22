@@ -6,15 +6,11 @@ args: [../python-example-auth-scram-sha-1.sh]
 results:
   postgresql:
     stats:
-      fail: 1
-    fail:
-      - python-example
+      pass: 1
 
   sqlite:
     stats:
-      fail: 1
-    fail:
-      - python-example
+      pass: 1
 
   mongodb:
     stats:

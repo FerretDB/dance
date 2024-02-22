@@ -6,15 +6,11 @@ args: [../../java-example-auth-scram-sha-256.sh]
 results:
   postgresql:
     stats:
-      fail: 1
-    fail:
-      - java-example/java
+      pass: 1
 
   sqlite:
     stats:
-      fail: 1
-    fail:
-      - java-example/java
+      pass: 1
 
   mongodb:
     stats:

@@ -8,11 +8,8 @@ args:
 
 results:
   postgresql:
-    # https://github.com/FerretDB/FerretDB/issues/3121
     stats:
-      fail: 1
-    fail:
-      - dotnet-example
+      pass: 1
 
   sqlite:
     stats:
