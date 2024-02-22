@@ -4,7 +4,7 @@ dir: dotnet-example
 args:
   - dotnet
   - run
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+  - mongodb://username:password@localhost:27017/?authMechanism=PLAIN
 
 results:
   postgresql:
