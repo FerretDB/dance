@@ -196,6 +196,7 @@ results:
 
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4115
       fail: 113
       pass: 4
     fail:

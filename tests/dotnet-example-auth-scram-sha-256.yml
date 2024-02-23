@@ -9,6 +9,7 @@ args:
 results:
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4115
       fail: 1
     fail:
       - dotnet-example
