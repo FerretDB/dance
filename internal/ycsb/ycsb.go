@@ -62,7 +62,7 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
 	// if load phase fails, mark the test as failed and return
-	// TODO: remove this when possibly
+	// TODO: remove this when https://github.com/FerretDB/FerretDB/issues/4115 is fixed
 	if err := cmd.Run(); err != nil {
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
