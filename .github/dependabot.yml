@@ -64,3 +64,13 @@ updates:
       interval: "weekly"
       day: "thursday"
       time: "01:42"
+
+  - package-ecosystem: "nuget"
+    directory: "/"
+    labels: ["deps", "not ready"]
+    assignees: [b1ron]
+    open-pull-requests-limit: 20
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "01:42"
