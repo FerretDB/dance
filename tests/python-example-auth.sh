@@ -4,7 +4,7 @@ set -ex
 
 pip install --user pipenv
 
-pipenv --python $(python --version) | awk '{ print $NF }'
+pipenv --python $(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
 
 . $(pipenv --venv)/bin/activate
 pipenv install
