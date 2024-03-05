@@ -4,7 +4,7 @@ set -ex
 
 pip install --user pipenv
 
-pipenv --python 3.6.4
+pipenv --python $(python --version) | awk '{ print $NF }'
 
 . $(pipenv --venv)/bin/activate 
 pipenv install
