@@ -2,6 +2,8 @@
 
 set -ex
 
+pip install --user pipenv
+
 . $(pipenv --venv)/bin/activate
 pipenv install
 
