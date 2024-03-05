@@ -4,6 +4,8 @@ set -ex
 
 pip install --user pipenv
 
+pipenv --python 3.6.4
+
 . $(pipenv --venv)/bin/activate 
 pipenv install
 
