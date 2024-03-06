@@ -5,12 +5,19 @@ args: [../enmeshed-runtime.sh]
 results:
   postgresql:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/issues/4115
+      fail: 1
+    fail:
+      - enmeshed-runtime
 
   sqlite:
     stats:
-      pass: 1
+      fail: 1
+    fail:
+      - enmeshed-runtime
 
   mongodb:
     stats:
-      pass: 1
+      fail: 1
+    fail:
+      - enmeshed-runtime

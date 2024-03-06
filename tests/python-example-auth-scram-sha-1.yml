@@ -6,15 +6,14 @@ args: [../python-example-auth-scram-sha-1.sh]
 results:
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4115
       fail: 1
     fail:
       - python-example
 
   sqlite:
     stats:
-      fail: 1
-    fail:
-      - python-example
+      pass: 1
 
   mongodb:
     stats:

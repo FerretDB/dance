@@ -34,6 +34,14 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/afterClusterTime_not_included
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/abortTransaction_does_not_time_out
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/commitTransaction_timeout_allows_abortTransaction
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/context_error_before_commitTransaction_does_not_retry_and_aborts
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/commit_transient_transaction_error
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/unknown_transaction_commit_result
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/slow_operation_in_callback_retries 
     skip:
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_ReplicaSet
       - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestCompression
@@ -44,6 +52,10 @@ results:
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-checkout-returned-connection-maxConnecting.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-close-destroy-conns.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size-error.json
+      # CRYPT_SHARED_LIB_PATH not set, skipping
+      - go.mongodb.org/mongo-driver/mongo/TestClient/mongocryptd_or_crypt_shared
+      # skipping because OCSP_TLS_SHOULD_SUCCEED not set
+      - go.mongodb.org/mongo-driver/mongo/TestOCSP
     pass:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/
       - go.mongodb.org/mongo-driver/internal/docexamples/TestDocumentationExamples/DeleteExamples
@@ -69,6 +81,7 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/retry_writes_error_20_wrapped/write_error_code_20_wrong_msg
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_NotSupported/clusterTime_not_included
       - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported/operation_time_nil
+      - go.mongodb.org/mongo-driver/internal/integration/TestCausalConsistency_Supported/no_cluster_time_on_first_command
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone
       - go.mongodb.org/mongo-driver/internal/integration/TestChangeStream_Standalone/no_custom_standalone_error
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/disconnect
@@ -85,13 +98,10 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/registry_passed_to_cursors
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch
       - go.mongodb.org/mongo-driver/internal/integration/TestClient/watch/disconnected
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
-      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
-      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
+      - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version
+      - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/cannot_modify_options_after_client_creation
+      - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/failure_with_unsupported_version
+      - go.mongodb.org/mongo-driver/mongo/TestClient/serverAPI_version/success_with_all_options
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_empty_string
       - go.mongodb.org/mongo-driver/mongo/TestClient/GetURI/ApplyURI_called_with_non-empty_string
@@ -131,7 +141,9 @@ results:
       - go.mongodb.org/mongo-driver/mongo/TestClient/replace_topology_error
       - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads
       - go.mongodb.org/mongo-driver/mongo/TestClient/retry_reads/custom_URI
-
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/retry_timeout_enforced/transient_transaction_error
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/wrapped_transient_transaction_error_retried
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream/nil_filter
     ignore:
       # indicates flaky tests that should be ignored
       - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs
@@ -139,16 +151,13 @@ results:
       - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json
       - go.mongodb.org/mongo-driver/internal/integration/TestUnifiedSpecs/retryable-reads/aggregate-merge.json/Aggregate_with_$merge_does_not_retry
       - go.mongodb.org/mongo-driver/internal/integration/TestCommandLoggingAndMonitoringProse
-
       - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse
       - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/1._valid_AWS
       - go.mongodb.org/mongo-driver/internal/integrationTestHandshakeProse/4._valid_Vercel
-
       # test fails frequently, skipping; see GODRIVER-2852
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse/created_and_closed_events/checkOut/connection_error_publishes_events
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-clear-min-size.json
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPSpec/pool-create-min-size.json
-
       # returns unknown result.
       - go.mongodb.org/mongo-driver/internal/integration/TestClientStress
       - go.mongodb.org/mongo-driver/x/mongo/driver/topology/TestCMAPProse
@@ -157,13 +166,30 @@ results:
 
   postgresql:
     stats:
-      fail: 6
-      skip: 8
-      pass: 634
+      fail: 25
+      skip: 10
+      pass: 730
     ignore:
     include_ignore:
       - ignore
     fail:
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_raises_custom_error
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_returns_value
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/canceled_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/expired_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream/nonmatching_filter
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Bucket_and_upload_set_to_different_values
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Bucket_chunk_size_set
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Options_provided_without_chunk_size
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Upload_stream_chunk_size_set
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     include_fail:
       - fail
     skip:
@@ -175,9 +201,9 @@ results:
 
   sqlite:
     stats:
-      fail: 6
-      skip: 8
-      pass: 634
+      fail: 15
+      skip: 10
+      pass: 791
     ignore:
     include_ignore:
       - ignore
@@ -188,6 +214,23 @@ results:
     include_skip:
       - skip
     pass:
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_raises_custom_error
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/callback_returns_value
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/canceled_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/TestConvenientTransactions/expired_context_before_callback_does_not_retry
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestBucket_openDownloadStream/nonmatching_filter
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Bucket_and_upload_set_to_different_values
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Bucket_chunk_size_set
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Default_values
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Options_provided_without_chunk_size
+      - go.mongodb.org/mongo-driver/mongo/gridfs/TestGridFS/ChunkSize/Upload_stream_chunk_size_set
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/AllowDiskUse
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/Multiple_Batches
+      - go.mongodb.org/mongo-driver/x/mongo/driver/integration/TestAggregate/TestMaxTimeMSInGetMore
     include_pass:
       - pass
   

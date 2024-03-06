@@ -42,6 +42,8 @@ tasks:
         --build {{.DB}}
       - task: init-repl
       - task: init-user
+      - task: init-repl-auth
+      - task: init-user-auth
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
@@ -97,7 +99,7 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongo
-        'mongodb://host.docker.internal:27017/'
+        'mongodb://username:password@host.docker.internal:27017/'
         {{.CLI_ARGS}}
 
   mongosh:
@@ -105,8 +107,20 @@ tasks:
     cmds:
       - >
         docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
+        'mongodb://username:password@host.docker.internal:27017/'
         --eval 'disableTelemetry()' --shell
+
+  # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
+  # because PostgreSQL trust authentication is disabled
+  init-repl-auth:
+    desc: "Initializes a new replica set using PLAIN authentication mechanism"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://username:password@host.docker.internal:27017/?authMechanism=PLAIN'
+        --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
+    # ignore already initialized error and no such command error for replSetInitiate
+    ignore_error: true
 
   init-repl:
     desc: "Initializes a new replica set"
@@ -118,6 +132,18 @@ tasks:
     # ignore already initialized error and no such command error for replSetInitiate
     ignore_error: true
 
+  # this connection requires backend authentication so it uses the PLAIN authentication mechanism,
+  # because PostgreSQL trust authentication is disabled and roles are not supported hence an empty roles array
+  init-user-auth:
+    desc: "Creates a user with no roles using PLAIN authentication mechanism"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://username:password@host.docker.internal:27017/?authMechanism=PLAIN'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: []})'
+    # ignore authentication for mechanism PLAIN which is not enabled for MongoDB
+    ignore_error: true
+
   # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
   # https://github.com/docker-library/mongo/blob/master/7.0/docker-entrypoint.sh#L260
   init-user:
@@ -126,7 +152,7 @@ tasks:
       - >
         docker compose run --rm mongosh mongosh
         'mongodb://host.docker.internal:27017/'
-        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: [ "root" ]})'
     # ignore roles that are not implemented yet
     ignore_error: true
 

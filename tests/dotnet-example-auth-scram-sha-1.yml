@@ -4,11 +4,12 @@ dir: dotnet-example
 args:
   - dotnet
   - run
-  - mongodb://user:password@localhost:27017/?replicaSet=rs0&authMechanism=SCRAM-SHA-1
+  - mongodb://username:password@localhost:27017/?replicaSet=rs0&authMechanism=SCRAM-SHA-1
 
 results:
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4115
       fail: 1
     fail:
       - dotnet-example

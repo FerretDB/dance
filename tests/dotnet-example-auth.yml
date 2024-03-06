@@ -4,12 +4,15 @@ dir: dotnet-example
 args:
   - dotnet
   - run
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+  - mongodb://username:password@localhost:27017/?authMechanism=PLAIN
 
 results:
   postgresql:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      fail: 1
+    fail:
+      - dotnet-example
 
   sqlite:
     stats:
