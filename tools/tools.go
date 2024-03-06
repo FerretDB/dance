@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build go1.21
-// +build go1.21
-
 package tools
 
 import (
@@ -28,13 +25,6 @@ import (
 	_ "golang.org/x/vuln/cmd/govulncheck"
 	_ "mvdan.cc/gofumpt"
 )
-
-// Check that `go` in $PATH have the right version.
-// Catches problems like `/some/path/go generate` invocations where `/some/path/go` is 1.21+
-// (that's checked by the build tags above), but just `go` in $PATH (typically something like `/usr/bin/go`)
-// is an earlier version.
-
-//go:generate go run check.go
 
 //go:generate go build -v -o ../bin/ github.com/go-task/task/v3/cmd/task
 //go:generate go build -v -o ../bin/ github.com/golangci/golangci-lint/cmd/golangci-lint
