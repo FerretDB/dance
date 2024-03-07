@@ -2,7 +2,7 @@
 
 set -ex
 
-python -m venv .
+python3 -m venv .
 
 ./bin/pip3 install -r requirements.txt
 
