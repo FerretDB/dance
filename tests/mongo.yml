@@ -178,11 +178,7 @@ results:
       - mongo/jstests/core/write/find_and_modify/find_and_modify.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify2.js
       - mongo/jstests/core/write/find_and_modify/find_and_modify3.js
-      - mongo/jstests/core/write/find_and_modify/find_and_modify4.js
-      # https://github.com/FerretDB/FerretDB/issues/1855
-      - mongo/jstests/core/write/update/update8.js
-      # https://github.com/FerretDB/FerretDB/issues/1742
-      - mongo/jstests/core/write/update/updateb.js
+      # https://github.com/FerretDB/FerretDB/issues/822
       - mongo/jstests/core/write/update/updatel.js
       # https://docs.ferretdb.io/diff/
       # 5. Document restrictions:
@@ -200,8 +196,8 @@ results:
 
   postgresql:
     stats:
-      fail: 71
-      pass: 46
+      fail: 68
+      pass: 49
     fail:
     include_fail:
       - aggregation
@@ -214,8 +210,8 @@ results:
 
   sqlite:
     stats:
-      fail: 71
-      pass: 46
+      fail: 68
+      pass: 49
     fail:
     include_fail:
       - aggregation
