@@ -30,7 +30,7 @@ jobs:
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
     concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
@@ -48,7 +48,6 @@ jobs:
           # - dbaas_core-1
           # - dbaas_core-2
           # - dbaas_core-3
-          # - diff
           - dotnet-example
           - dotnet-example-auth
           - dotnet-example-auth-scram-sha-1
@@ -72,6 +71,9 @@ jobs:
           - restheart-auth
           - ycsb-workloada
           - ycsb-workloadc
+        newauth:
+          - false
+          - true
 
     steps:
       - name: Checkout code
@@ -95,15 +97,15 @@ jobs:
         working-directory: tools
 
       - name: Start environment
-        run: bin/task env-up-detach DB=${{ matrix.db }}
         env:
           FERRETDB_IMAGE: ghcr.io/ferretdb/ferretdb-dev:main
+        run: bin/task env-up-detach DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }}
 
       - name: Run init
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
+        run: bin/task dance DB=${{ matrix.db }} NEWAUTH=${{ matrix.newauth }} TEST=${{ matrix.test }} PARALLEL=10
 
       - name: Collect logs
         if: failure()
@@ -118,7 +120,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+          name: compose-logs-${{ matrix.db }}-${{ matrix.newauth }}-${{ matrix.test }}
           path: compose-logs.zip
           retention-days: 3
 

@@ -68,9 +68,11 @@ type Config struct {
 
 // Results stores the expected test results for different databases.
 type Results struct {
-	PostgreSQL *TestConfig
-	SQLite     *TestConfig
-	MongoDB    *TestConfig
+	PostgreSQLOldAuth *TestConfig
+	PostgreSQLNewAuth *TestConfig
+	SQLiteOldAuth     *TestConfig
+	SQLiteNewAuth     *TestConfig
+	MongoDB           *TestConfig
 }
 
 // TestConfig represents the configuration for tests categorized by status and regular expressions.
@@ -128,18 +130,33 @@ const (
 )
 
 // ForDB returns the database-specific test configuration based on the provided dbName.
-func (c *Config) ForDB(dbName string) (*TestConfig, error) {
-	return c.Results.forDB(dbName)
+func (c *Config) ForDB(dbName string, newAuth bool) (*TestConfig, error) {
+	return c.Results.forDB(dbName, newAuth)
 }
 
-func (r *Results) forDB(dbName string) (*TestConfig, error) {
-	switch dbName {
-	case "postgresql":
-		if c := r.PostgreSQL; c != nil {
+func (r *Results) forDB(dbName string, newAuth bool) (*TestConfig, error) {
+	key := dbName
+	if newAuth {
+		key += "-newauth"
+	} else {
+		key += "-oldauth"
+	}
+
+	switch key {
+	case "postgresql-oldauth":
+		if c := r.PostgreSQLOldAuth; c != nil {
 			return c, nil
 		}
-	case "sqlite":
-		if c := r.SQLite; c != nil {
+	case "postgresql-newauth":
+		if c := r.PostgreSQLNewAuth; c != nil {
+			return c, nil
+		}
+	case "sqlite-oldauth":
+		if c := r.SQLiteOldAuth; c != nil {
+			return c, nil
+		}
+	case "sqlite-newauth":
+		if c := r.SQLiteNewAuth; c != nil {
 			return c, nil
 		}
 	case "mongodb":
@@ -147,10 +164,10 @@ func (r *Results) forDB(dbName string) (*TestConfig, error) {
 			return c, nil
 		}
 	default:
-		return nil, fmt.Errorf("unknown database %q", dbName)
+		return nil, fmt.Errorf("unknown database %q for newAuth=%t", dbName, newAuth)
 	}
 
-	return nil, fmt.Errorf("no expected results for %q", dbName)
+	return nil, fmt.Errorf("no expected results for %q and newAuth=%t", dbName, newAuth)
 }
 
 // IndentedOutput returns the output of a test result with indented lines.

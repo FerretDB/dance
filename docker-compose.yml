@@ -13,7 +13,7 @@ services:
       - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
       - FERRETDB_REPL_SET_NAME=rs0
-      - FERRETDB_TEST_ENABLE_NEW_AUTH=true
+      - FERRETDB_TEST_ENABLE_NEW_AUTH=${FERRETDB_TEST_ENABLE_NEW_AUTH:-false}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -29,7 +29,7 @@ services:
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
       - FERRETDB_REPL_SET_NAME=rs0
-      - FERRETDB_TEST_ENABLE_NEW_AUTH=true
+      - FERRETDB_TEST_ENABLE_NEW_AUTH=${FERRETDB_TEST_ENABLE_NEW_AUTH:-false}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

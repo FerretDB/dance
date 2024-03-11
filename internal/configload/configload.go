@@ -34,10 +34,12 @@ type config struct {
 	Results struct {
 		// Includes is a mapping that allows us to merge sequences together,
 		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
-		Includes   map[string][]string `yaml:"includes"`
-		PostgreSQL *backend            `yaml:"postgresql"`
-		SQLite     *backend            `yaml:"sqlite"`
-		MongoDB    *backend            `yaml:"mongodb"`
+		Includes          map[string][]string `yaml:"includes"`
+		PostgreSQLOldAuth *backend            `yaml:"postgresql-oldauth"`
+		PostgreSQLNewAuth *backend            `yaml:"postgresql-newauth"`
+		SQLiteOldAuth     *backend            `yaml:"sqlite-oldauth"`
+		SQLiteNewAuth     *backend            `yaml:"sqlite-newauth"`
+		MongoDB           *backend            `yaml:"mongodb"`
 	} `yaml:"results"`
 }
 
@@ -59,14 +61,24 @@ func Load(file string) (*ic.Config, error) {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	postgreSQL, err := cfg.Results.PostgreSQL.convert(cfg.Results.Includes)
+	postgreSQLOldAuth, err := cfg.Results.PostgreSQLOldAuth.convert(cfg.Results.Includes)
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
+		return nil, fmt.Errorf("failed to convert PostgreSQL-oldauth config: %w", err)
 	}
 
-	sqLite, err := cfg.Results.SQLite.convert(cfg.Results.Includes)
+	postgreSQLNewAuth, err := cfg.Results.PostgreSQLNewAuth.convert(cfg.Results.Includes)
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
+		return nil, fmt.Errorf("failed to convert PostgreSQL-newauth config: %w", err)
+	}
+
+	sqLiteOldAuth, err := cfg.Results.SQLiteOldAuth.convert(cfg.Results.Includes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert SQLite-oldauth config: %w", err)
+	}
+
+	sqLiteNewAuth, err := cfg.Results.SQLiteNewAuth.convert(cfg.Results.Includes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert SQLite-newauth config: %w", err)
 	}
 
 	mongoDB, err := cfg.Results.MongoDB.convert(cfg.Results.Includes)
@@ -79,9 +91,11 @@ func Load(file string) (*ic.Config, error) {
 		Dir:    cfg.Dir,
 		Args:   cfg.Args,
 		Results: ic.Results{
-			PostgreSQL: postgreSQL,
-			SQLite:     sqLite,
-			MongoDB:    mongoDB,
+			PostgreSQLOldAuth: postgreSQLOldAuth,
+			PostgreSQLNewAuth: postgreSQLNewAuth,
+			SQLiteOldAuth:     sqLiteOldAuth,
+			SQLiteNewAuth:     sqLiteNewAuth,
+			MongoDB:           mongoDB,
 		},
 	}, nil
 }

@@ -71,6 +71,7 @@ func logResult(label string, res map[string]string) {
 
 func main() {
 	dbF := flag.String("db", "", "database to use: postgresql, sqlite, mongodb")
+	newAuth := flag.Bool("newauth", false, "use new authentication mechanism")
 	vF := flag.Bool("v", false, "be verbose")
 	pF := flag.Int("p", 0, "number of tests to run in parallel")
 	log.SetFlags(0)
@@ -124,7 +125,7 @@ func main() {
 			log.Printf("\tDir changed to %s", dir)
 		}
 
-		expectedConfig, err := cfg.ForDB(*dbF)
+		expectedConfig, err := cfg.ForDB(*dbF, *newAuth)
 		if err != nil {
 			log.Fatal(err)
 		}
