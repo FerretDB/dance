@@ -2,8 +2,7 @@
 
 set -ex
 
-# enables Maven exceptions
-export MAVEN_OPTS='-ea'
+export MAVEN_OPTS='-enableassertions'
 
 mvn compile exec:java -Dexec.mainClass=com.start.Connection \
--Dexec.args="mongodb://localhost:27017/"
+    -Dexec.args="mongodb://localhost:27017/"
