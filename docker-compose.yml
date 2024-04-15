@@ -11,7 +11,7 @@ services:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://user@postgres:5432/dance
+      - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/dance
       - FERRETDB_REPL_SET_NAME=rs0
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
     extra_hosts:
@@ -46,25 +46,25 @@ services:
       - TZ=America/St_Johns
       - POSTGRES_USER=user
       - POSTGRES_DB=dance
-      - POSTGRES_HOST_AUTH_METHOD=trust
 
   mongodb:
     build:
       context: ./build/deps
-      dockerfile: mongo7.Dockerfile
+      dockerfile: mongodb.Dockerfile
     command: --config /etc/mongod.conf
     container_name: dance_mongodb
-    restart: unless-stopped
     ulimits:
-      nproc: 64000
+      nproc: 65535
       nofile:
-        soft: 64000
-        hard: 64000
+        soft: 20000
+        hard: 40000
     ports:
       - 27017:27017
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -74,7 +74,7 @@ services:
   mongosh:
     build:
       context: ./build/deps
-      dockerfile: mongo7.Dockerfile
+      dockerfile: mongodb.Dockerfile
     container_name: dance_mongosh
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
@@ -84,12 +84,11 @@ services:
     volumes:
       - ./dumps:/dumps
 
-  # legacy mongo shell
-  mongo:
+  legacy-mongo-shell:
     build:
       context: ./build/deps
-      dockerfile: mongo.Dockerfile
-    container_name: dance_mongo
+      dockerfile: legacy-mongo-shell.Dockerfile
+    container_name: dance_legacy-mongo-shell
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
