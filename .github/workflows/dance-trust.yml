@@ -27,7 +27,11 @@ env:
 jobs:
   dance:
     name: dance
-    runs-on: ubuntu-22.04
+
+    # https://www.ubicloud.com/docs/github-actions-integration/price-performance#usage-pricing
+    # https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#per-minute-rates
+    runs-on: ubicloud-standard-4
+
     timeout-minutes: 30
 
     # Do not run this job in parallel for any PR change or branch push
