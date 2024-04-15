@@ -26,7 +26,7 @@ import (
 
 // config represents the YAML-based configuration for the testing framework.
 //
-//nolint:govet // we don't care about alignment there
+//nolint:vet // we don't care about alignment there
 type config struct {
 	Runner  ic.RunnerType `yaml:"runner"`
 	Dir     string        `yaml:"dir"`
