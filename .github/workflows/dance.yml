@@ -84,11 +84,11 @@ jobs:
         with:
           cache-key: dance
 
-      - name: Install Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
+      # - name: Install Java
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'zulu'
+      #     java-version: '17'
 
       - name: Install Task
         run: go generate -x

@@ -6,4 +6,4 @@ set -ex
 export MAVEN_OPTS='-ea'
 
 mvn compile exec:java -Dexec.mainClass=com.start.Connection \
--Dexec.args="mongodb://user:password@localhost:27017/?authMechanism=PLAIN"
+    -Dexec.args="mongodb://user:password@localhost:27017/?authMechanism=PLAIN"
