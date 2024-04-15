@@ -49,6 +49,13 @@ jobs:
           # - dbaas_core-2
           # - dbaas_core-3
           # - diff
+          # - meteor-doc-fetcher
+          # - meteor-oplog-cursor-supported
+          # - meteor-oplog-entry-skipping
+          # - meteor-oplog-x-implicit-collection-creation
+          # - mongo
+          # - ycsb-workloada
+          # - ycsb-workloadc
           - dotnet-example
           - dotnet-example-auth
           - dotnet-example-auth-scram-sha-1
@@ -57,11 +64,6 @@ jobs:
           - java-example-auth
           - java-example-auth-scram-sha-1
           - java-example-auth-scram-sha-256
-          - meteor-doc-fetcher
-          - meteor-oplog-cursor-supported
-          - meteor-oplog-entry-skipping
-          - meteor-oplog-x-implicit-collection-creation
-          - mongo
           - mongo-go-driver
           - mongo-tools
           - python-example
@@ -70,8 +72,6 @@ jobs:
           - python-example-auth-scram-sha-256
           - restheart
           - restheart-auth
-          - ycsb-workloada
-          - ycsb-workloadc
 
     steps:
       - name: Checkout code
