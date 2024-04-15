@@ -24,7 +24,7 @@ import (
 
 // backend represents the YAML-based configuration for database-specific test configurations.
 //
-//nolint:govet // we don't care about alignment there
+//nolint:vet // we don't care about alignment there
 type backend struct {
 	Default ic.Status `yaml:"default"`
 	Stats   stats     `yaml:"stats"`

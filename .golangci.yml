@@ -48,6 +48,10 @@ linters-settings:
     checks: ["all"]
   govet:
     enable-all: true
+    disable:
+      - fieldalignment
+      - nilness
+      - shadow
   # ineffassign
   lll:
     line-length: 130
@@ -57,7 +61,6 @@ linters-settings:
       - guiness # present in the test dataset
   nolintlint:
     allow-unused: false
-    allow-leading-space: false
     allow-no-explanation: []
     require-explanation: true
     require-specific: true

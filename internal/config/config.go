@@ -57,7 +57,7 @@ type Stats struct {
 
 // Config represents the configuration settings for the test execution.
 //
-//nolint:govet // we don't care about alignment there
+//nolint:vet // we don't care about alignment there
 type Config struct {
 	Runner RunnerType
 	Dir    string
