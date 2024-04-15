@@ -1,9 +1,6 @@
 ---
 runner: command
-args:
-  - dotnet
-  - run
-  - mongodb://localhost:27017/
+args: [../dotnet-example.sh]
 
 results:
   postgresql:

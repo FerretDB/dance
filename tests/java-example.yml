@@ -3,15 +3,19 @@ runner: command
 dir: java-example/java
 args: [../../java-example.sh]
 
+# Authentication is required by our setup.
 results:
   postgresql:
+    default: fail
     stats:
-      pass: 1
+      fail: 1
 
   sqlite:
+    default: fail
     stats:
-      pass: 1
+      fail: 1
 
   mongodb:
+    default: fail
     stats:
-      pass: 1
+      fail: 1

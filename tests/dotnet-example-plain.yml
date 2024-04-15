@@ -1,10 +1,7 @@
 ---
 runner: command
 dir: dotnet-example
-args:
-  - dotnet
-  - run
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+args: [../dotnet-example-plain.sh]
 
 results:
   postgresql:

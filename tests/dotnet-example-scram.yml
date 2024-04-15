@@ -1,10 +1,7 @@
 ---
 runner: command
 dir: dotnet-example
-args:
-  - dotnet
-  - run
-  - mongodb://user:password@localhost:27017/?authMechanism=SCRAM-SHA-1
+args: [../dotnet-example-scram.sh]
 
 results:
   postgresql:
