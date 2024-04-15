@@ -12,7 +12,6 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://postgres:5432/dance
-      - FERRETDB_REPL_SET_NAME=rs0
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -28,7 +27,6 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
-      - FERRETDB_REPL_SET_NAME=rs0
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -45,6 +43,7 @@ services:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
       - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
       - POSTGRES_DB=dance
 
   mongodb:

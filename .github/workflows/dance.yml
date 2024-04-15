@@ -60,22 +60,25 @@ jobs:
           # - mongo
           # - ycsb-workloada
           # - ycsb-workloadc
+
           - dotnet-example
-          - dotnet-example-auth
-          - dotnet-example-auth-scram-sha-1
-          - dotnet-example-auth-scram-sha-256
+          - dotnet-example-plain
+          - dotnet-example-sha1
+          - dotnet-example-sha256
+
           - java-example
-          - java-example-auth
-          - java-example-auth-scram-sha-1
-          - java-example-auth-scram-sha-256
+          - java-example-plain
+          - java-example-sha1
+          - java-example-sha256
+
+          - python-example
+          - python-example-plain
+          - python-example-sha1
+          - python-example-sha256
+
           - mongo-go-driver
           - mongo-tools
-          - python-example
-          - python-example-auth
-          - python-example-auth-scram-sha-1
-          - python-example-auth-scram-sha-256
           - restheart
-          - restheart-auth
 
     steps:
       - name: Checkout code
