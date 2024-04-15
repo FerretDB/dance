@@ -24,7 +24,7 @@ tasks:
   fmt:
     desc: "Format code"
     cmds:
-      - bin/gofumpt -w ./cmd/ ./internal/
+      - bin/gofumpt -w ./cmd/ ./internal/ ./tests/mongo-tools/
 
   env-up:
     desc: "Start environment"
@@ -84,27 +84,6 @@ tasks:
       - >
         bin/go-consistent -pedantic
         ./cmd/... ./internal/... ./tests/mongo-tools/...
-
-  psql:
-    desc: "Run psql"
-    cmds:
-      - docker compose exec postgres psql -U postgres -d ferretdb
-
-  mongo:
-    desc: "Run legacy MongoDB shell (`mongo`) with test script"
-    cmds:
-      - >
-        docker compose run --rm mongo
-        'mongodb://host.docker.internal:27017/'
-        {{.CLI_ARGS}}
-
-  mongosh:
-    desc: "Run mongo shell"
-    cmds:
-      - >
-        docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
-        --eval 'disableTelemetry()' --shell
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
