@@ -1,20 +1,20 @@
 ---
 runner: command
-dir: java-example/java
-args: [../../java-example-auth-scram-sha-1.sh]
+dir: python-example
+args: [../python-example-sha1.sh]
 
 results:
   postgresql:
     stats:
       fail: 1
     fail:
-      - java-example/java
+      - python-example
 
   sqlite:
     stats:
       fail: 1
     fail:
-      - java-example/java
+      - python-example
 
   mongodb:
     stats:

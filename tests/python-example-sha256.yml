@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: python-example
-args: [../python-example-auth-scram-sha-1.sh]
+args: [../python-example-sha256.sh]
 
 results:
   postgresql:

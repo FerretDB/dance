@@ -1,13 +1,13 @@
 ---
 runner: command
 dir: python-example
-args: [../python-example-auth.sh]
+args: [../python-example-plain.sh]
 
 results:
   postgresql:
     stats:
       pass: 1
-  
+
   sqlite:
     stats:
       pass: 1
