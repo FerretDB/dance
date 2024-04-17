@@ -38,10 +38,10 @@ tasks:
       # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
       # https://github.com/docker/compose/issues/10269#issuecomment-1495205234
       - >
-        docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
+        docker compose up --always-recreate-deps --force-recreate --remove-orphans -t 0 --detach
         --build {{.DB}}
       - task: init-repl
-      - task: init-user
+      - task: insert-user
     preconditions:
       - sh: "test {{.DB}}"
         msg: "Please set DB variable to one of `postgresql`, `sqlite`, or `mongodb`"
@@ -126,8 +126,29 @@ tasks:
       - >
         docker compose run --rm mongosh mongosh
         'mongodb://host.docker.internal:27017/'
-        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
+        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "username", pwd: "password", roles: [ "root" ]})'
     # ignore roles that are not implemented yet
+    ignore_error: true
+
+  insert-user:
+    desc: "Inserts a user document directly into the system.users collection"
+    cmds:
+      - >
+        docker compose run --rm mongosh mongosh
+        'mongodb://host.docker.internal:27017/'
+        --verbose --eval
+        'db.getSiblingDB("admin").system.users.insert({"_id" : "test.username", "userId" : UUID("b7636cbc-99ac-4c87-8d2f-7a50380bc8f0"), "user" : "username", "db" : "test", "credentials" : {"SCRAM-SHA-1" : {"iterationCount" : NumberInt(10000),"salt" : "PBoLVqXQCk0E/9XXXTFw6A==","storedKey" : "wvNh1m3FSUwgCBn/rEINz1NGVdY=","serverKey" : "4Fnmuta3kZmBNxG94IjZq6/Tucg="},"SCRAM-SHA-256" : {"iterationCount" : NumberInt(15000),"salt" : "GdzhsVThC0oP+PYngC2B0wwXFRuR/xP6rpnxJA==","storedKey" : "1IEtAJyQjKCaVCpRrTlifHSHIW5d0SOn7UaiCTGYCTc=","serverKey" : "IdXlVuMnJ8df3PGg9rgx6q/UiODlEqJqu4IiNT75YvA="}},"roles" : [ ]});'
+    # ignore duplicate key error
+    ignore_error: true
+
+  disable-trust-enable-scram:
+    desc: "Disables trust authentication and enables SCRAM"
+    cmds:
+      - >
+        sed 's/FERRETDB_TEST_ENABLE_NEW_AUTH=false/FERRETDB_TEST_ENABLE_NEW_AUTH=true/g' docker-compose.yml |
+        sed 's/- POSTGRES_HOST_AUTH_METHOD=trust//g' |
+        sed -e '/POSTGRES_DB=dance/N' -e 's/\n//' > temp.yml
+    # ignore already enabled error
     ignore_error: true
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
