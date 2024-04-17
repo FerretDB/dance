@@ -148,8 +148,6 @@ tasks:
         sed 's/FERRETDB_TEST_ENABLE_NEW_AUTH=false/FERRETDB_TEST_ENABLE_NEW_AUTH=true/g' docker-compose.yml |
         sed 's/- POSTGRES_HOST_AUTH_METHOD=trust//g' |
         sed -e '/POSTGRES_DB=dance/N' -e 's/\n//' > temp.yml
-    # ignore already enabled error
-    ignore_error: true
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
