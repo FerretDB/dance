@@ -11,7 +11,7 @@ require (
 	github.com/quasilyte/go-consistent v0.6.0
 	golang.org/x/perf v0.0.0-20240404204407-f3e401e020e4
 	golang.org/x/tools v0.20.0
-	golang.org/x/vuln v1.0.5-0.20240405165317-7bf0c05f1467 // // https://github.com/golang/go/issues/66139
+	golang.org/x/vuln v1.1.0 // // https://github.com/golang/go/issues/66139
 	mvdan.cc/gofumpt v0.6.0
 )
 
