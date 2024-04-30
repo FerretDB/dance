@@ -38,3 +38,4 @@
 [submodule "tests/nodejs-example"]
 	path = tests/nodejs-example
 	url = https://github.com/FerretDB/nodejs-example.git
+	branch = main
