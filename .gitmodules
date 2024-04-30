@@ -35,7 +35,7 @@
 	path = tests/restheart
 	url = https://github.com/SoftInstigate/restheart.git
 	branch = master
-[submodule "tests/nodejs-example"]
+[submodule "nodejs-example"]
 	path = tests/nodejs-example
 	url = https://github.com/FerretDB/nodejs-example.git
 	branch = main
