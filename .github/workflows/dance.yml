@@ -77,7 +77,6 @@ jobs:
           - restheart
           - restheart-auth
           - nodejs-example
-          - nodejs-example-auth
           - nodejs-example-auth-scram-sha-1
           - nodejs-example-auth-scram-sha-256
 
