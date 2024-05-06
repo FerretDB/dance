@@ -1,6 +1,7 @@
 ---
 runner: command
-args: [../python-example.sh]
+dir: python-example
+args: [../python-example-scram.sh]
 
 results:
   postgresql:
