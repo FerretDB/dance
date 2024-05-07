@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: restheart
-args: [../restheart-auth.sh]
+args: [../restheart-scram.sh]
 
 results:
   postgresql:
