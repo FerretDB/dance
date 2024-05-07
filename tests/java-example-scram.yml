@@ -6,11 +6,17 @@ args: [../../java-example-scram.sh]
 results:
   postgresql:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/issues/4243
+      fail: 1
+    fail:
+      - java-example
 
   sqlite:
     stats:
-      pass: 1
+      # https://github.com/FerretDB/FerretDB/issues/4243
+      fail: 1
+    fail:
+      - java-example
 
   mongodb:
     stats:
