@@ -6,6 +6,7 @@ args: [../restheart-auth.sh]
 results:
   postgresql:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4243
       # https://github.com/FerretDB/FerretDB/issues/2568
       fail: 1
     fail:
@@ -13,6 +14,7 @@ results:
 
   sqlite:
     stats:
+      # https://github.com/FerretDB/FerretDB/issues/4243
       # https://github.com/FerretDB/FerretDB/issues/2568
       fail: 1
     fail:
@@ -20,7 +22,4 @@ results:
 
   mongodb:
     stats:
-      # PLAIN is used in MongoDB to perform LDAP authentication.
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
