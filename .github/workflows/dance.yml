@@ -60,6 +60,7 @@ jobs:
           # - mongo
           # - ycsb-workloada
           # - ycsb-workloadc
+          # - restheart
           - dotnet-example-plain
           - dotnet-example-scram
           - java-example-plain
@@ -68,7 +69,6 @@ jobs:
           - mongo-tools
           - python-example-plain
           - python-example-scram
-          - restheart
 
     steps:
       - name: Checkout code
