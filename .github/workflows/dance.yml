@@ -60,6 +60,7 @@ jobs:
           # - mongo
           # - ycsb-workloada
           # - ycsb-workloadc
+          - dotnet-example-plain
           - dotnet-example-scram
           - java-example-scram
           - mongo-go-driver
