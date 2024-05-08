@@ -1,0 +1,26 @@
+---
+runner: command
+dir: java-example
+args: [../java-example-plain.sh]
+
+results:
+  postgresql:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/4243
+      fail: 1
+    fail: 
+      - java-example
+
+  sqlite:
+    stats:
+      # https://github.com/FerretDB/FerretDB/issues/4243
+      fail: 1
+    fail: 
+      - java-example
+
+  mongodb:
+    stats:
+      # PLAIN is used in MongoDB to perform LDAP authentication.
+      fail: 1
+    fail:
+      - java-example
