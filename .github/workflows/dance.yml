@@ -66,8 +66,9 @@ jobs:
           - java-example-scram
           - mongo-go-driver
           - mongo-tools
+          - python-example-plain
           - python-example-scram
-          - restheart-scram
+          - restheart
 
     steps:
       - name: Checkout code
