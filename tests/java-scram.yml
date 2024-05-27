@@ -9,14 +9,14 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - java-example
+      - python-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - java-example
+      - python-example
 
   mongodb:
     stats:

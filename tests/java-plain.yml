@@ -5,22 +5,19 @@ args: [../../java-plain.sh]
 
 results:
   postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/891
+    default: fail
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail:
-      - java-example
 
   sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/891
+    default: fail
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail:
-      - java-example
 
-  mongodb:
+mongodb:
+    # PLAIN is used in MongoDB to perform LDAP authentication
+    default: fail
     stats:
-      # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
-    fail:
-      - java-example
