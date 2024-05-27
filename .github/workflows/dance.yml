@@ -59,12 +59,11 @@ jobs:
           # - meteor-oplog-x-implicit-collection-creation
           # - mongo
           # - mongo-go-driver
+          # - mongo-tools
           # - restheart
           # - restheart-auth
           # - ycsb-workloada
           # - ycsb-workloadc
-
-          - mongo-tools
 
           - dotnet
           - dotnet-plain
