@@ -1,7 +1,7 @@
 ---
 runner: command
-dir: dotnet-example
-args: [../dotnet-example.sh]
+dir: python-example
+args: [../python-scram.sh]
 
 results:
   postgresql:
@@ -9,18 +9,15 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - dotnet-example
+      - python-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - dotnet-example
+      - python-example
 
   mongodb:
     stats:
-      # PLAIN is used in MongoDB to perform LDAP authentication.
-      fail: 1
-    fail:
-      - dotnet-example
+      pass: 1

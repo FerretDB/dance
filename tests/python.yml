@@ -1,7 +1,7 @@
 ---
 runner: command
-dir: java-example/java
-args: [../../java-example-scram.sh]
+dir: python-example
+args: [../python.sh]
 
 results:
   postgresql:
@@ -9,15 +9,18 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - java-example
+      - python-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - java-example
+      - python-example
 
   mongodb:
     stats:
-      pass: 1
+      # PLAIN is used in MongoDB to perform LDAP authentication.
+      fail: 1
+    fail:
+      - python-example

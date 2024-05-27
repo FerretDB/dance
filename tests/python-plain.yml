@@ -1,21 +1,21 @@
 ---
 runner: command
 dir: python-example
-args: [../python-example-plain.sh]
+args: [../python-plain.sh]
 
 results:
   postgresql:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail: 
+    fail:
       - python-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail: 
+    fail:
       - python-example
 
   mongodb:

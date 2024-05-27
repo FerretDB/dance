@@ -66,17 +66,17 @@ jobs:
 
           - mongo-tools
 
-          - dotnet-example
-          - dotnet-example-plain
-          - dotnet-example-scram
+          - dotnet
+          - dotnet-plain
+          - dotnet-scram
 
-          - java-example
-          - java-example-plain
-          - java-example-scram
+          - java
+          - java-plain
+          - java-scram
 
-          - python-example
-          - python-example-plain
-          - python-example-scram
+          - python
+          - python-plain
+          - python-scram
 
     steps:
       - name: Checkout code

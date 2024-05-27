@@ -1,22 +1,22 @@
 ---
 runner: command
-dir: python-example
-args: [../python-example-scram.sh]
+dir: java-example/java
+args: [../../java-scram.sh]
 
 results:
   postgresql:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail: 
-      - python-example
+    fail:
+      - java-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
-    fail: 
-      - python-example
+    fail:
+      - java-example
 
   mongodb:
     stats:

@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: dotnet-example
-args: [../dotnet-example-scram.sh]
+args: [../dotnet-scram.sh]
 
 results:
   postgresql:

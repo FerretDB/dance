@@ -1,7 +1,7 @@
 ---
 runner: command
-dir: python-example
-args: [../python-example.sh]
+dir: java-example/java
+args: [../../java-plain.sh]
 
 results:
   postgresql:
@@ -9,18 +9,18 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - python-example
+      - java-example
 
   sqlite:
     stats:
       # https://github.com/FerretDB/FerretDB/issues/4243
       fail: 1
     fail:
-      - python-example
+      - java-example
 
   mongodb:
     stats:
       # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
     fail:
-      - python-example
+      - java-example
