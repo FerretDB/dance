@@ -58,7 +58,7 @@ updates:
   - package-ecosystem: "gitsubmodule"
     directory: "/"
     labels: ["deps", "not ready"]
-    assignees: [b1ron]
+    assignees: [AlekSi]
     open-pull-requests-limit: 20
     schedule:
       interval: "weekly"
