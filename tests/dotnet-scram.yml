@@ -5,16 +5,16 @@ args: [../dotnet-scram.sh]
 
 results:
   postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/889
+    default: fail
     stats:
       fail: 1
-    fail:
-      - dotnet-example
 
   sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/889
+    default: fail
     stats:
       fail: 1
-    fail:
-      - dotnet-example
 
   mongodb:
     stats:

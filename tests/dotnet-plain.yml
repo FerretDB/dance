@@ -5,22 +5,19 @@ args: [../dotnet-plain.sh]
 
 results:
   postgresql:
-    # https://github.com/FerretDB/FerretDB/issues/4243
+    # TODO https://github.com/FerretDB/dance/issues/889
     default: fail
-    # stats:
-    #   fail: 1
-    # fail:
-    #   - dotnet-example
+    stats:
+      fail: 1
 
   sqlite:
-    # https://github.com/FerretDB/FerretDB/issues/4243
+    # TODO https://github.com/FerretDB/dance/issues/889
     default: fail
+    stats:
+      fail: 1
 
   mongodb:
-    # https://github.com/FerretDB/FerretDB/issues/4243
+    # PLAIN is used in MongoDB to perform LDAP authentication
     default: fail
-    # stats:
-    #   # PLAIN is used in MongoDB to perform LDAP authentication.
-    #   fail: 1
-    # fail:
-    #   - dotnet-example
+    stats:
+      fail: 1
