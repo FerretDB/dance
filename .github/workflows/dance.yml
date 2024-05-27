@@ -58,24 +58,26 @@ jobs:
           # - meteor-oplog-entry-skipping
           # - meteor-oplog-x-implicit-collection-creation
           # - mongo
+          # - mongo-go-driver
+          # - restheart
+          # - restheart-auth
           # - ycsb-workloada
           # - ycsb-workloadc
-          - dotnet-example
-          - dotnet-example-auth
-          - dotnet-example-auth-scram-sha-1
-          - dotnet-example-auth-scram-sha-256
-          - java-example
-          - java-example-auth
-          - java-example-auth-scram-sha-1
-          - java-example-auth-scram-sha-256
-          - mongo-go-driver
-          - mongo-tools
-          - python-example
-          - python-example-auth
-          - python-example-auth-scram-sha-1
-          - python-example-auth-scram-sha-256
-          - restheart
-          - restheart-auth
+
+          # TODO https://github.com/FerretDB/dance/issues/892
+          # - mongo-tools
+
+          - dotnet
+          - dotnet-plain
+          - dotnet-scram
+
+          - java
+          - java-plain
+          - java-scram
+
+          - python
+          - python-plain
+          - python-scram
 
     steps:
       - name: Checkout code

@@ -1,0 +1,21 @@
+---
+runner: command
+dir: python-example
+args: [../python-scram.sh]
+
+results:
+  postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/890
+    default: fail
+    stats:
+      fail: 1
+
+  sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/890
+    default: fail
+    stats:
+      fail: 1
+
+  mongodb:
+    stats:
+      pass: 1

@@ -1,0 +1,23 @@
+---
+runner: command
+dir: dotnet-example
+args: [../dotnet-plain.sh]
+
+results:
+  postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/889
+    default: fail
+    stats:
+      fail: 1
+
+  sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/889
+    default: fail
+    stats:
+      fail: 1
+
+  mongodb:
+    # PLAIN is used in MongoDB to perform LDAP authentication
+    default: fail
+    stats:
+      fail: 1

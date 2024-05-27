@@ -1,0 +1,23 @@
+---
+runner: command
+dir: python-example
+args: [../python-plain.sh]
+
+results:
+  postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/890
+    default: fail
+    stats:
+      fail: 1
+
+  sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/890
+    default: fail
+    stats:
+      fail: 1
+
+  mongodb:
+    # PLAIN is used in MongoDB to perform LDAP authentication
+    default: fail
+    stats:
+      fail: 1
