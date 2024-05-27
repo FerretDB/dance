@@ -1,10 +1,7 @@
 ---
 runner: command
-dir: dotnet-example
-args:
-  - dotnet
-  - run
-  - mongodb://user:password@localhost:27017/?authMechanism=PLAIN
+dir: python-example
+args: [../python-example-plain.sh]
 
 results:
   postgresql:
@@ -20,4 +17,4 @@ results:
       # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
     fail:
-      - dotnet-example
+      - python-example

@@ -1,13 +1,13 @@
 ---
 runner: command
-dir: python-example
-args: [../python-example-auth.sh]
+dir: dotnet-example
+args: [../dotnet-example-plain.sh]
 
 results:
   postgresql:
     stats:
       pass: 1
-  
+
   sqlite:
     stats:
       pass: 1
@@ -17,4 +17,4 @@ results:
       # PLAIN is used in MongoDB to perform LDAP authentication.
       fail: 1
     fail:
-      - python-example
+      - dotnet-example

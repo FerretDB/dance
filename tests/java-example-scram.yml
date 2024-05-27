@@ -1,6 +1,7 @@
 ---
 runner: command
-args: [../dotnet-example.sh]
+dir: java-example/java
+args: [../../java-example-scram.sh]
 
 results:
   postgresql:

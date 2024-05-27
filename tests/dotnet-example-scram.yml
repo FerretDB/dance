@@ -1,20 +1,20 @@
 ---
 runner: command
-dir: python-example
-args: [../python-example-auth-scram-sha-1.sh]
+dir: dotnet-example
+args: [../dotnet-example-scram.sh]
 
 results:
   postgresql:
     stats:
       fail: 1
     fail:
-      - python-example
+      - dotnet-example
 
   sqlite:
     stats:
       fail: 1
     fail:
-      - python-example
+      - dotnet-example
 
   mongodb:
     stats:
