@@ -59,11 +59,13 @@ jobs:
           # - meteor-oplog-x-implicit-collection-creation
           # - mongo
           # - mongo-go-driver
-          # - mongo-tools
           # - restheart
           # - restheart-auth
           # - ycsb-workloada
           # - ycsb-workloadc
+
+          # TODO https://github.com/FerretDB/dance/issues/892
+          # - mongo-tools
 
           - dotnet
           - dotnet-plain
