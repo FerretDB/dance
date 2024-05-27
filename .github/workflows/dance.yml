@@ -58,15 +58,23 @@ jobs:
           # - meteor-oplog-entry-skipping
           # - meteor-oplog-x-implicit-collection-creation
           # - mongo
+          # - mongo-go-driver
+          # - restheart
+          # - restheart-auth
           # - ycsb-workloada
           # - ycsb-workloadc
-          # - restheart
+
+          - mongo-tools
+
+          - dotnet-example
           - dotnet-example-plain
           - dotnet-example-scram
+
+          - java-example
           - java-example-plain
           - java-example-scram
-          - mongo-go-driver
-          - mongo-tools
+
+          - python-example
           - python-example-plain
           - python-example-scram
 
