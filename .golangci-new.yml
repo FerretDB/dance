@@ -65,20 +65,20 @@ linters:
 
     # TODO configure and enable one by one
     - bidichk
+    - bodyclose
     - containedctx
     - contextcheck
     - cyclop
-    - deadcode
     - decorder
     - depguard
     - dogsled
     - dupl
     - durationcheck
+    - err113
     - errcheck
     - errchkjson
     - errname
     - execinquery
-    - exhaustivestruct
     - exhaustruct
     - exportloopref
     - forbidigo
@@ -89,7 +89,6 @@ linters:
     - gocognit
     - gocritic
     - gocyclo
-    - goerr113
     - gofmt
     - gofumpt
     - gomnd
@@ -97,7 +96,6 @@ linters:
     - goprintffuncname
     - gosec
     - grouper
-    - ifshort
     - ireturn
     - maintidx
     - makezero
@@ -112,6 +110,8 @@ linters:
     - prealloc
     - predeclared
     - promlinter
+    - rowserrcheck
+    - sqlclosecheck
     - stylecheck
     - tagliatelle
     - tenv
@@ -120,23 +120,9 @@ linters:
     - typecheck
     - unconvert
     - unparam
-    - varcheck
     - varnamelen
-    - wrapcheck
-
-    # TODO https://github.com/golangci/golangci-lint/issues/2649
-    - bodyclose
-    - rowserrcheck
-    - sqlclosecheck
     - wastedassign
-
-    # deprecated
-    - golint
-    - interfacer
-    - maligned
-    - nosnakecase
-    - scopelint
-    - structcheck
+    - wrapcheck
 
     - nlreturn    # too annoying
     - testpackage # we test internals
