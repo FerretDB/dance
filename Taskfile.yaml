@@ -33,7 +33,6 @@ tasks:
       - docker compose logs --follow
 
   env-up-detach:
-    desc: "Start dependencies in docker"
     cmds:
       # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
       # https://github.com/docker/compose/issues/10269#issuecomment-1495205234

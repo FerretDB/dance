@@ -6,4 +6,6 @@ python3 -m venv .
 
 ./bin/pip3 install -r requirements.txt
 
+./bin/python3 pymongo_test.py 'mongodb://username:password@localhost:27017/?authMechanism=SCRAM-SHA-1'
+
 ./bin/python3 pymongo_test.py 'mongodb://username:password@localhost:27017/?authMechanism=SCRAM-SHA-256'
