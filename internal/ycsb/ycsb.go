@@ -16,15 +16,34 @@
 package ycsb
 
 import (
+	"bufio"
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/FerretDB/dance/internal/config"
 )
+
+// Measurements stores go-ycsb results.
+type Measurements struct {
+	Takes    time.Duration
+	Count    int64
+	OPS      float64
+	Avg      time.Duration
+	Min      time.Duration
+	Max      time.Duration
+	Perc50   time.Duration
+	Perc90   time.Duration
+	Perc95   time.Duration
+	Perc99   time.Duration
+	Perc999  time.Duration
+	Perc9999 time.Duration
+}
 
 // Run runs `go-ycsb`.
 //
@@ -63,8 +82,6 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	cmd = exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
@@ -76,7 +93,14 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		},
 	}
 
-	if err := cmd.Run(); err != nil {
+	output, err := cmd.CombinedOutput()
+	soutput := string(output)
+	fmt.Println(soutput)
+
+	switch err {
+	case nil:
+		fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(soutput))
+	default:
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
@@ -84,4 +108,59 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	}
 
 	return res, nil
+}
+
+// parseMeasurements parses go-ycsb results.
+func parseMeasurements(output string) map[string]Measurements {
+	res := make(map[string]Measurements)
+
+	scanner := bufio.NewScanner(strings.NewReader(output))
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		fields := strings.Fields(line)
+
+		if len(fields) == 0 {
+			continue
+		}
+
+		prefix := fields[0]
+
+		switch prefix {
+		case "TOTAL", "READ", "INSERT", "UPDATE":
+			var parsedPrefix string
+			var takes, ops float64
+			var count, avg, vmin, vmax, perc50, perc90, perc95, perc99, perc999, perc9999 int64
+
+			// It is enough to use fmt.Sscanf for parsing the data as the string produced by go-ycsb has fixed format:
+			// https://github.com/pingcap/go-ycsb/blob/fe11c4783b57703465ec7d36fcc4268979001d1a/pkg/measurement/measurement.go#L28
+			_, err := fmt.Sscanf(line,
+				"%s - Takes(s): %f, Count: %d, OPS: %f, Avg(us): %d, Min(us): %d, Max(us): %d, "+
+					"50th(us): %d, 90th(us): %d, 95th(us): %d, 99th(us): %d, 99.9th(us): %d, 99.99th(us): %d",
+				&parsedPrefix, &takes, &count, &ops, &avg, &vmin, &vmax, &perc50, &perc90, &perc95, &perc99, &perc999, &perc9999,
+			)
+			if err != nil {
+				panic(err)
+			}
+
+			res[prefix] = Measurements{
+				Takes:    time.Duration(takes * float64(time.Second)),
+				Count:    count,
+				OPS:      ops,
+				Avg:      time.Duration(avg * int64(time.Microsecond)),
+				Min:      time.Duration(vmin * int64(time.Microsecond)),
+				Max:      time.Duration(vmax * int64(time.Microsecond)),
+				Perc50:   time.Duration(perc50 * int64(time.Microsecond)),
+				Perc90:   time.Duration(perc90 * int64(time.Microsecond)),
+				Perc95:   time.Duration(perc95 * int64(time.Microsecond)),
+				Perc99:   time.Duration(perc99 * int64(time.Microsecond)),
+				Perc999:  time.Duration(perc999 * int64(time.Microsecond)),
+				Perc9999: time.Duration(perc9999 * int64(time.Microsecond)),
+			}
+		default:
+			// string doesn't contain metrics, do nothing
+		}
+	}
+
+	return res
 }
