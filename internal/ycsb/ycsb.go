@@ -73,6 +73,7 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
+	// FIXME ?
 	if err := cmd.Run(); err != nil {
 		return nil, err
 	}
