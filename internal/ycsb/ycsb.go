@@ -93,7 +93,11 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	defer pipe.Close()
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-	r := io.TeeReader(pipe, os.Stdout)
+
+	var buf strings.Builder
+	mw := io.MultiWriter(os.Stdout, &buf)
+
+	go io.Copy(mw, pipe)
 
 	res := &config.TestResults{
 		TestResults: map[string]config.TestResult{
@@ -112,7 +116,7 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	switch err {
 	case nil:
-		fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(r))
+		fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(buf.String()))
 	default:
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
@@ -124,10 +128,10 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 }
 
 // parseMeasurements parses go-ycsb results.
-func parseMeasurements(output io.Reader) map[string]Measurements {
+func parseMeasurements(output string) map[string]Measurements {
 	res := make(map[string]Measurements)
 
-	scanner := bufio.NewScanner(output)
+	scanner := bufio.NewScanner(strings.NewReader(output))
 
 	for scanner.Scan() {
 		line := scanner.Text()
