@@ -86,6 +86,14 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	cmd.Stderr = os.Stderr
 
 	pipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+
+	defer pipe.Close()
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+	r := io.TeeReader(pipe, os.Stdout)
 
 	res := &config.TestResults{
 		TestResults: map[string]config.TestResult{
@@ -95,21 +103,17 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		},
 	}
 
-	if err != nil {
+	err = cmd.Run()
+
+	switch err {
+	case nil:
+		fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(r))
+	default:
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
 		}
-
-		return res, nil
 	}
-
-	defer pipe.Close()
-
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-	r := io.TeeReader(pipe, os.Stdout)
-
-	fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(r))
 
 	return res, nil
 }
