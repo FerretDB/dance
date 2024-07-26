@@ -103,7 +103,12 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		},
 	}
 
-	err = cmd.Run()
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+
+	err = cmd.Wait()
 
 	switch err {
 	case nil:
