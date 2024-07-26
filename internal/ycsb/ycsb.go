@@ -19,6 +19,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -82,8 +83,9 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	cmd = exec.CommandContext(ctx, bin, cliArgs...)
 	cmd.Dir = dir
+	cmd.Stderr = os.Stderr
 
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+	pipe, err := cmd.StdoutPipe()
 
 	res := &config.TestResults{
 		TestResults: map[string]config.TestResult{
@@ -93,28 +95,30 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		},
 	}
 
-	output, err := cmd.CombinedOutput()
-	soutput := string(output)
-	fmt.Println(soutput)
-
-	switch err {
-	case nil:
-		fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(soutput))
-	default:
+	if err != nil {
 		res.TestResults[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
 		}
+
+		return res, nil
 	}
+
+	defer pipe.Close()
+
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+	r := io.TeeReader(pipe, os.Stdout)
+
+	fmt.Printf("Parsed metrics: %+v\n\n", parseMeasurements(r))
 
 	return res, nil
 }
 
 // parseMeasurements parses go-ycsb results.
-func parseMeasurements(output string) map[string]Measurements {
+func parseMeasurements(output io.Reader) map[string]Measurements {
 	res := make(map[string]Measurements)
 
-	scanner := bufio.NewScanner(strings.NewReader(output))
+	scanner := bufio.NewScanner(output)
 
 	for scanner.Scan() {
 		line := scanner.Text()
