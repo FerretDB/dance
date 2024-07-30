@@ -180,5 +180,9 @@ func parseMeasurements(output string) map[string]Measurements {
 		}
 	}
 
+	if err := scanner.Err(); err != nil {
+		panic(scanner.Err())
+	}
+
 	return res
 }
