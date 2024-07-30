@@ -73,7 +73,6 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	log.Printf("Running %s", strings.Join(cmd.Args, " "))
 
-	// FIXME ?
 	if err := cmd.Run(); err != nil {
 		return nil, err
 	}
@@ -93,8 +92,6 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	defer pipe.Close()
 
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
 	res := &config.TestResults{
 		TestResults: map[string]config.TestResult{
 			dir: {
@@ -103,12 +100,17 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 		},
 	}
 
-	err = cmd.Start()
-	if err != nil {
+	log.Printf("Running %s", strings.Join(cmd.Args, " "))
+
+	if err = cmd.Start(); err != nil {
 		return nil, err
 	}
 
-	m := parseMeasurements(io.TeeReader(pipe, os.Stdout))
+	m, err := parseMeasurements(io.TeeReader(pipe, os.Stdout))
+	if err != nil {
+		_ = cmd.Process.Kill()
+		return nil, err
+	}
 
 	err = cmd.Wait()
 
@@ -125,12 +127,11 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	return res, nil
 }
 
-// parseMeasurements parses go-ycsb results.
-func parseMeasurements(r io.Reader) map[string]Measurements {
+// parseMeasurements parses go-ycsb output.
+func parseMeasurements(r io.Reader) (map[string]Measurements, error) {
 	res := make(map[string]Measurements)
 
 	scanner := bufio.NewScanner(r)
-
 	for scanner.Scan() {
 		line := scanner.Text()
 		fields := strings.Fields(line)
@@ -143,19 +144,19 @@ func parseMeasurements(r io.Reader) map[string]Measurements {
 
 		switch prefix {
 		case "TOTAL", "READ", "INSERT", "UPDATE":
-			var parsedPrefix string
 			var takes, ops float64
 			var count, avg, vmin, vmax, perc50, perc90, perc95, perc99, perc999, perc9999 int64
 
 			// It is enough to use fmt.Sscanf for parsing the data as the string produced by go-ycsb has fixed format:
 			// https://github.com/pingcap/go-ycsb/blob/fe11c4783b57703465ec7d36fcc4268979001d1a/pkg/measurement/measurement.go#L28
-			_, err := fmt.Sscanf(line,
+			_, err := fmt.Sscanf(
+				line,
 				"%s - Takes(s): %f, Count: %d, OPS: %f, Avg(us): %d, Min(us): %d, Max(us): %d, "+
 					"50th(us): %d, 90th(us): %d, 95th(us): %d, 99th(us): %d, 99.9th(us): %d, 99.99th(us): %d",
-				&parsedPrefix, &takes, &count, &ops, &avg, &vmin, &vmax, &perc50, &perc90, &perc95, &perc99, &perc999, &perc9999,
+				&prefix, &takes, &count, &ops, &avg, &vmin, &vmax, &perc50, &perc90, &perc95, &perc99, &perc999, &perc9999,
 			)
 			if err != nil {
-				panic(err)
+				return res, err
 			}
 
 			res[prefix] = Measurements{
@@ -178,8 +179,8 @@ func parseMeasurements(r io.Reader) map[string]Measurements {
 	}
 
 	if err := scanner.Err(); err != nil {
-		panic(scanner.Err())
+		return res, err
 	}
 
-	return res
+	return res, nil
 }

@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseMeasurements(t *testing.T) {
@@ -53,7 +54,9 @@ TOTAL  - Takes(s): 26.0, Count: 100000, OPS: 3852.6, Avg(us): 257, Min(us): 138,
 UPDATE - Takes(s): 26.0, Count: 49784, OPS: 1918.0, Avg(us): 267, Min(us): 153, Max(us): 52799, 50th(us): 260, 90th(us): 304, 95th(us): 328, 99th(us): 430, 99.9th(us): 1684, 99.99th(us): 2979
 `) + "\n")
 
-	actual := parseMeasurements(output)
+	actual, err := parseMeasurements(output)
+	require.NoError(t, err)
+
 	expected := map[string]Measurements{
 		"READ": {
 			Takes:    26 * time.Second,
