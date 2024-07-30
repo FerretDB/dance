@@ -24,7 +24,7 @@ import (
 
 func TestParseMeasurements(t *testing.T) {
 	//nolint:lll // verbatim output
-	output := strings.TrimSpace(`
+	output := strings.NewReader(strings.TrimSpace(`
 Using request distribution 'uniform' a keyrange of [0 4999]
 Connected to MongoDB!
 ***************** properties *****************
@@ -51,7 +51,7 @@ Run finished, takes 25.957181042s
 READ   - Takes(s): 26.0, Count: 50216, OPS: 1934.6, Avg(us): 246, Min(us): 138, Max(us): 9735, 50th(us): 243, 90th(us): 284, 95th(us): 305, 99th(us): 381, 99.9th(us): 692, 99.99th(us): 2871
 TOTAL  - Takes(s): 26.0, Count: 100000, OPS: 3852.6, Avg(us): 257, Min(us): 138, Max(us): 52799, 50th(us): 251, 90th(us): 296, 95th(us): 318, 99th(us): 405, 99.9th(us): 848, 99.99th(us): 2979
 UPDATE - Takes(s): 26.0, Count: 49784, OPS: 1918.0, Avg(us): 267, Min(us): 153, Max(us): 52799, 50th(us): 260, 90th(us): 304, 95th(us): 328, 99th(us): 430, 99.9th(us): 1684, 99.99th(us): 2979
-`) + "\n"
+`) + "\n")
 
 	actual := parseMeasurements(output)
 	expected := map[string]Measurements{
