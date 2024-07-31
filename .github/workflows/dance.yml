@@ -47,26 +47,6 @@ jobs:
           - sqlite
           - mongodb
         test:
-          # temporarily disabling to avoid CI noise
-          # - dbaas_core-0
-          # - dbaas_core-1
-          # - dbaas_core-2
-          # - dbaas_core-3
-          # - diff
-          # - meteor-doc-fetcher
-          # - meteor-oplog-cursor-supported
-          # - meteor-oplog-entry-skipping
-          # - meteor-oplog-x-implicit-collection-creation
-          # - mongo
-          # - mongo-go-driver
-          # - restheart
-          # - restheart-auth
-          # - ycsb-workloada
-          # - ycsb-workloadc
-
-          # TODO https://github.com/FerretDB/dance/issues/892
-          # - mongo-tools
-
           - dotnet
           - dotnet-plain
           - dotnet-scram
@@ -78,6 +58,14 @@ jobs:
           - python
           - python-plain
           - python-scram
+
+          - mongo-tools
+
+          - restheart
+          - restheart-auth
+
+          - ycsb-workloada
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code
