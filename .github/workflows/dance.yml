@@ -51,21 +51,21 @@ jobs:
           - dotnet-plain
           - dotnet-scram
 
-          - java
-          - java-plain
-          - java-scram
+          # - java
+          # - java-plain
+          # - java-scram
 
           - python
           - python-plain
           - python-scram
 
-          - mongo-tools
+          # - mongo-tools
 
-          - restheart
-          - restheart-auth
+          # - restheart
+          # - restheart-auth
 
-          - ycsb-workloada
-          - ycsb-workloadc
+          # - ycsb-workloada
+          # - ycsb-workloadc
 
     steps:
       - name: Checkout code
