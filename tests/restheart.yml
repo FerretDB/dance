@@ -1,7 +1,7 @@
 ---
 runner: command
 dir: restheart
-args: [../restheart.sh]
+args: [../_scripts/restheart.sh]
 
 results:
   postgresql:

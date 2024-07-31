@@ -1,6 +1,6 @@
 ---
 runner: command
-args: [../enmeshed-runtime.sh]
+args: [../_scripts/enmeshed-runtime.sh]
 
 results:
   postgresql:
