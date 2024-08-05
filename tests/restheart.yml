@@ -15,5 +15,6 @@ results:
       fail: 1
 
   mongodb:
+    default: fail
     stats:
-      pass: 1
+      fail: 1
