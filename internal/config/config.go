@@ -134,11 +134,11 @@ func (c *Config) ForDB(dbName string) (*TestConfig, error) {
 
 func (r *Results) forDB(dbName string) (*TestConfig, error) {
 	switch dbName {
-	case "postgresql":
+	case "ferretdb-postgresql":
 		if c := r.PostgreSQL; c != nil {
 			return c, nil
 		}
-	case "sqlite":
+	case "ferretdb-sqlite":
 		if c := r.SQLite; c != nil {
 			return c, nil
 		}
