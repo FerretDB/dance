@@ -5,12 +5,16 @@ args: [../../_scripts/java.sh]
 
 results:
   postgresql:
+    # TODO https://github.com/FerretDB/dance/issues/891
+    default: fail
     stats:
-      pass: 1
+      fail: 1
 
   sqlite:
+    # TODO https://github.com/FerretDB/dance/issues/891
+    default: fail
     stats:
-      pass: 1
+      fail: 1
 
   mongodb:
     stats:
