@@ -15,9 +15,7 @@
 // Package config provides functionality for handling and validating configuration data for test execution.
 package config
 
-import (
-	"fmt"
-)
+import "fmt"
 
 const (
 	// RunnerTypeCommand indicates a command-line test runner.

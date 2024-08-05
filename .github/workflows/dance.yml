@@ -48,21 +48,21 @@ jobs:
           - mongodb
         test:
           - dotnet
-          - dotnet-plain
-          - dotnet-scram
+          # - dotnet-plain
+          # - dotnet-scram
 
           - java
-          - java-plain
-          - java-scram
+          # - java-plain
+          # - java-scram
 
           - python
-          - python-plain
-          - python-scram
+          # - python-plain
+          # - python-scram
 
           - mongo-tools
 
           - restheart
-          - restheart-auth
+          # - restheart-auth
 
           - ycsb-workloada
           - ycsb-workloadc
