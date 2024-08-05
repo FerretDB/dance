@@ -43,8 +43,8 @@ jobs:
       fail-fast: false
       matrix:
         db:
-          - postgresql
-          - sqlite
+          - ferretdb-postgresql
+          - ferretdb-sqlite
           - mongodb
         test:
           - dotnet
