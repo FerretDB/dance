@@ -5,16 +5,12 @@ args: [../_scripts/python-plain.sh]
 
 results:
   postgresql:
-    # TODO https://github.com/FerretDB/dance/issues/890
-    default: fail
     stats:
-      fail: 1
+      pass: 1
 
   sqlite:
-    # TODO https://github.com/FerretDB/dance/issues/890
-    default: fail
     stats:
-      fail: 1
+      pass: 1
 
   mongodb:
     # PLAIN is used in MongoDB to perform LDAP authentication

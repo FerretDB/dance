@@ -43,29 +43,29 @@ jobs:
       fail-fast: false
       matrix:
         db:
-          - postgresql
-          - sqlite
+          - ferretdb-postgresql
+          - ferretdb-sqlite
           - mongodb
         test:
           - dotnet
-          - dotnet-plain
-          - dotnet-scram
+          # - dotnet-plain
+          # - dotnet-scram
 
-          # - java
+          - java
           # - java-plain
           # - java-scram
 
           - python
-          - python-plain
-          - python-scram
+          # - python-plain
+          # - python-scram
 
-          # - mongo-tools
+          - mongo-tools
 
-          # - restheart
+          - restheart
           # - restheart-auth
 
-          # - ycsb-workloada
-          # - ycsb-workloadc
+          - ycsb-workloada
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code

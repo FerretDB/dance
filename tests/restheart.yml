@@ -5,19 +5,16 @@ args: [../_scripts/restheart.sh]
 
 results:
   postgresql:
+    default: fail
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/2568
       fail: 1
-    fail:
-      - restheart
 
   sqlite:
+    default: fail
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/2568
       fail: 1
-    fail:
-      - restheart
 
   mongodb:
+    default: fail
     stats:
-      pass: 1
+      fail: 1
