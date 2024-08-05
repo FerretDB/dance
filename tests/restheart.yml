@@ -6,17 +6,11 @@ args: [../_scripts/restheart.sh]
 results:
   postgresql:
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/2568
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
 
   sqlite:
     stats:
-      # https://github.com/FerretDB/FerretDB/issues/2568
-      fail: 1
-    fail:
-      - restheart
+      pass: 1
 
   mongodb:
     stats:
