@@ -14,9 +14,9 @@
 
 package configload
 
-import ic "github.com/FerretDB/dance/internal/config"
+import "github.com/FerretDB/dance/internal/config"
 
-// stats represents the YAML representation of expected stats.
+// stats is used to unmarshal expected test stats from YAML.
 type stats struct {
 	Fail int `yaml:"fail"`
 	Skip int `yaml:"skip"`
@@ -24,12 +24,12 @@ type stats struct {
 }
 
 // convert converts stats to [*config.Stats].
-func (s *stats) convert() *ic.Stats {
+func (s *stats) convert() *config.Stats {
 	if s == nil {
 		panic("stats are nil")
 	}
 
-	return &ic.Stats{
+	return &config.Stats{
 		ExpectedFail: s.Fail,
 		ExpectedSkip: s.Skip,
 		ExpectedPass: s.Pass,

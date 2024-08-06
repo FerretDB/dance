@@ -21,31 +21,26 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	ic "github.com/FerretDB/dance/internal/config"
+	"github.com/FerretDB/dance/internal/config"
 )
 
-// config represents the YAML-based configuration for the testing framework.
+// file is used to unmarshal configuration from YAML.
 //
-//nolint:vet // we don't care about alignment there
-type config struct {
-	Runner  ic.RunnerType `yaml:"runner"`
-	Dir     string        `yaml:"dir"`
-	Args    []string      `yaml:"args"`
+//nolint:vet // for readability
+type file struct {
+	Runner  config.RunnerType `yaml:"runner"`
+	Dir     string            `yaml:"dir"`
+	Args    []string          `yaml:"args"`
 	Results struct {
-		// Includes is a mapping that allows us to merge sequences together,
-		// which is currently not possible in the YAML spec - https://github.com/yaml/yaml/issues/48
-		Includes   map[string][]string `yaml:"includes"`
-		PostgreSQL *backend            `yaml:"postgresql"`
-		SQLite     *backend            `yaml:"sqlite"`
-		MongoDB    *backend            `yaml:"mongodb"`
+		PostgreSQL *result `yaml:"postgresql"`
+		SQLite     *result `yaml:"sqlite"`
+		MongoDB    *result `yaml:"mongodb"`
 	} `yaml:"results"`
 }
 
-// Load reads and validates the configuration from a YAML file,
-// returning a pointer to the internal configuration struct *config.Config.
-// Any error encountered during the process is also returned.
-func Load(file string) (*ic.Config, error) {
-	f, err := os.Open(file)
+// Load reads and validates the configuration from a YAML file.
+func Load(name string) (*config.Config, error) {
+	f, err := os.Open(name)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load config: %w", err)
 	}
@@ -54,31 +49,31 @@ func Load(file string) (*ic.Config, error) {
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var cfg config
+	var cfg file
 	if err = d.Decode(&cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode config: %w", err)
 	}
 
-	postgreSQL, err := cfg.Results.PostgreSQL.convert(cfg.Results.Includes)
+	postgreSQL, err := cfg.Results.PostgreSQL.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
 	}
 
-	sqLite, err := cfg.Results.SQLite.convert(cfg.Results.Includes)
+	sqLite, err := cfg.Results.SQLite.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
 	}
 
-	mongoDB, err := cfg.Results.MongoDB.convert(cfg.Results.Includes)
+	mongoDB, err := cfg.Results.MongoDB.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert MongoDB config: %w", err)
 	}
 
-	return &ic.Config{
+	return &config.Config{
 		Runner: cfg.Runner,
 		Dir:    cfg.Dir,
 		Args:   cfg.Args,
-		Results: ic.Results{
+		Results: config.Results{
 			PostgreSQL: postgreSQL,
 			SQLite:     sqLite,
 			MongoDB:    mongoDB,

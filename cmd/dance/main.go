@@ -33,7 +33,7 @@ import (
 
 	"github.com/FerretDB/dance/internal/command"
 	"github.com/FerretDB/dance/internal/config"
-	"github.com/FerretDB/dance/internal/configload"
+	"github.com/FerretDB/dance/internal/config/configload"
 	"github.com/FerretDB/dance/internal/gotest"
 	"github.com/FerretDB/dance/internal/jstest"
 	"github.com/FerretDB/dance/internal/ycsb"

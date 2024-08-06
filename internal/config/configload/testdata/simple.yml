@@ -1,0 +1,20 @@
+---
+runner: command
+dir: test
+args: [simple.sh]
+
+results:
+  postgresql:
+    default: fail
+    stats:
+      fail: 1
+
+  sqlite:
+    default: fail
+    stats:
+      fail: 1
+
+  mongodb:
+    default: pass
+    stats:
+      pass: 1
