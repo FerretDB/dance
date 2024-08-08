@@ -92,9 +92,9 @@ services:
       - TZ=Asia/Kathmandu
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    working_dir: /tests/mongo
+    working_dir: /projects/mongo
     volumes:
-      - ./tests/mongo:/tests/mongo
+      - ./projects/mongo:/projects/mongo
 
   # for documentation
   textlint:

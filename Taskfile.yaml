@@ -67,7 +67,7 @@ tasks:
 
   dance:
     desc: "Run all integration tests"
-    dir: tests
+    dir: projects
     cmds:
       - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
     preconditions:
@@ -79,13 +79,13 @@ tasks:
     cmds:
       - >
         bin/golangci-lint run --config=.golangci.yml
-        ./cmd/... ./internal/... ./tests/mongo-tools/...
+        ./cmd/... ./internal/... ./projects/mongo-tools/...
       - >
         bin/golangci-lint run --config=.golangci-new.yml
-        ./cmd/... ./internal/... ./tests/mongo-tools/...
+        ./cmd/... ./internal/... ./projects/mongo-tools/...
       - >
         bin/go-consistent -pedantic
-        ./cmd/... ./internal/... ./tests/mongo-tools/...
+        ./cmd/... ./internal/... ./projects/mongo-tools/...
 
   psql:
     desc: "Run psql"
@@ -135,4 +135,4 @@ tasks:
     desc: "Format and lint documentation"
     cmds:
       - docker compose run --rm textlint --fix --rule one-sentence-per-line "**/*.md" ".github/**/*.md"
-      - docker compose run --rm markdownlint "**/*.md" "#dumps" "#tests"
+      - docker compose run --rm markdownlint "**/*.md" "#dumps" "#projects"
