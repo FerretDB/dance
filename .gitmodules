@@ -4,34 +4,34 @@
 	branch = master
 
 [submodule "dotnet-example"]
-	path = tests/dotnet-example
+	path = projects/dotnet-example
 	url = https://github.com/FerretDB/dotnet-example.git
 	branch = main
 [submodule "enmeshed-runtime"]
-	path = tests/enmeshed-runtime
+	path = projects/enmeshed-runtime
 	url = https://github.com/nmshd/runtime.git
 	branch = main
 [submodule "java-example"]
-	path = tests/java-example
+	path = projects/java-example
 	url = https://github.com/FerretDB/java-example.git
 	branch = main
 [submodule "meteor"]
-	path = tests/meteor
+	path = projects/meteor
 	url = https://github.com/meteor/meteor.git
 	branch = devel
 [submodule "mongo"]
-	path = tests/mongo
+	path = projects/mongo
 	url = https://github.com/mongodb/mongo.git
 	branch = v7.0
 [submodule "mongo-go-driver"]
-	path = tests/mongo-go-driver
+	path = projects/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
 [submodule "python-example"]
-	path = tests/python-example
+	path = projects/python-example
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
 [submodule "restheart"]
-	path = tests/restheart
+	path = projects/restheart
 	url = https://github.com/SoftInstigate/restheart.git
 	branch = master
