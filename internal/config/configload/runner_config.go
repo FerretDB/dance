@@ -21,39 +21,37 @@ type runnerConfig interface {
 }
 
 type runnerConfigCommand struct {
-	Dir  string   `mapstructure:"dir"`
-	Args []string `mapstructure:"args"`
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
 }
 
 func (rc *runnerConfigCommand) GetDir() string    { return rc.Dir }
 func (rc *runnerConfigCommand) GetArgs() []string { return rc.Args }
 func (*runnerConfigCommand) runnerConfig()        {}
 
-/*
 type runnerConfigGoTest struct {
-	_Dir  string   `mapstructure:"dir"`
-	_Args []string `mapstructure:"args"`
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
 }
 
-func (rc *runnerConfigGoTest) Dir() string    { return rc._Dir }
-func (rc *runnerConfigGoTest) Args() []string { return rc._Args }
-func (*runnerConfigGoTest) runnerConfig()     {}
+func (rc *runnerConfigGoTest) GetDir() string    { return rc.Dir }
+func (rc *runnerConfigGoTest) GetArgs() []string { return rc.Args }
+func (*runnerConfigGoTest) runnerConfig()        {}
 
 type runnerConfigJSTest struct {
-	_Dir  string   `mapstructure:"dir"`
-	_Args []string `mapstructure:"args"`
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
 }
 
-func (rc *runnerConfigJSTest) Dir() string    { return rc._Dir }
-func (rc *runnerConfigJSTest) Args() []string { return rc._Args }
-func (*runnerConfigJSTest) runnerConfig()     {}
+func (rc *runnerConfigJSTest) GetDir() string    { return rc.Dir }
+func (rc *runnerConfigJSTest) GetArgs() []string { return rc.Args }
+func (*runnerConfigJSTest) runnerConfig()        {}
 
 type runnerConfigYCSB struct {
-	_Dir  string   `mapstructure:"dir"`
-	_Args []string `mapstructure:"args"`
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
 }
 
-func (rc *runnerConfigYCSB) Dir() string    { return rc._Dir }
-func (rc *runnerConfigYCSB) Args() []string { return rc._Args }
-func (*runnerConfigYCSB) runnerConfig()     {}
-*/
+func (rc *runnerConfigYCSB) GetDir() string    { return rc.Dir }
+func (rc *runnerConfigYCSB) GetArgs() []string { return rc.Args }
+func (*runnerConfigYCSB) runnerConfig()        {}
