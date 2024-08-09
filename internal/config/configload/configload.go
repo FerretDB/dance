@@ -58,11 +58,11 @@ func Load(name string) (*config.Config, error) {
 	case config.RunnerTypeCommand:
 		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
-		p = &runnerParamsGoTest{}
+		fallthrough
 	case config.RunnerTypeJSTest:
-		p = &runnerParamsJSTest{}
+		fallthrough
 	case config.RunnerTypeYCSB:
-		p = &runnerParamsYCSB{}
+		fallthrough
 	default:
 		err = fmt.Errorf("unknown runner type %q", pc.Runner)
 	}

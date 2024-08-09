@@ -2,7 +2,15 @@
 runner: command
 params:
   dir: test
-  args: [simple.sh]
+  setup: |
+    setup 1
+    setup 2
+
+  tests:
+    - name: test 1
+      cmd: command 1
+    - name: test 2
+      cmd: command 2
 
 results:
   postgresql:
