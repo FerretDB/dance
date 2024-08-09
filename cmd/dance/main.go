@@ -31,12 +31,12 @@ import (
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/FerretDB/dance/internal/command"
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/config/configload"
-	"github.com/FerretDB/dance/internal/gotest"
-	"github.com/FerretDB/dance/internal/jstest"
-	"github.com/FerretDB/dance/internal/ycsb"
+	"github.com/FerretDB/dance/internal/runners/command"
+	"github.com/FerretDB/dance/internal/runners/gotest"
+	"github.com/FerretDB/dance/internal/runners/jstest"
+	"github.com/FerretDB/dance/internal/runners/ycsb"
 )
 
 func waitForPort(ctx context.Context, port uint16) error {

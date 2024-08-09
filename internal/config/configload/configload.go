@@ -41,7 +41,7 @@ type projectConfig struct {
 func Load(name string) (*config.Config, error) {
 	f, err := os.Open(name)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open config file: %w", err)
+		return nil, fmt.Errorf("failed to open project config file: %w", err)
 	}
 	defer f.Close()
 
@@ -50,19 +50,19 @@ func Load(name string) (*config.Config, error) {
 	d.KnownFields(true)
 
 	if err = d.Decode(&pc); err != nil {
-		return nil, fmt.Errorf("failed to decode YAML config: %w", err)
+		return nil, fmt.Errorf("failed to decode project config: %w", err)
 	}
 
-	var cfg runnerParams
+	var p runnerParams
 	switch pc.Runner {
 	case config.RunnerTypeCommand:
-		cfg = &runnerParamsCommand{}
+		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
-		cfg = &runnerParamsGoTest{}
+		p = &runnerParamsGoTest{}
 	case config.RunnerTypeJSTest:
-		cfg = &runnerParamsJSTest{}
+		p = &runnerParamsJSTest{}
 	case config.RunnerTypeYCSB:
-		cfg = &runnerParamsYCSB{}
+		p = &runnerParamsYCSB{}
 	default:
 		err = fmt.Errorf("unknown runner type %q", pc.Runner)
 	}
@@ -70,29 +70,29 @@ func Load(name string) (*config.Config, error) {
 		return nil, err
 	}
 
-	if err = pc.Params.Decode(cfg); err != nil {
-		return nil, fmt.Errorf("failed to decode runner config: %w", err)
+	if err = pc.Params.Decode(p); err != nil {
+		return nil, fmt.Errorf("failed to decode runner parameters: %w", err)
 	}
 
 	postgreSQL, err := pc.Results.PostgreSQL.convert()
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
+		return nil, fmt.Errorf("failed to convert PostgreSQL results: %w", err)
 	}
 
 	sqLite, err := pc.Results.SQLite.convert()
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
+		return nil, fmt.Errorf("failed to convert SQLite results: %w", err)
 	}
 
 	mongoDB, err := pc.Results.MongoDB.convert()
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert MongoDB config: %w", err)
+		return nil, fmt.Errorf("failed to convert MongoDB results: %w", err)
 	}
 
 	return &config.Config{
 		Runner: pc.Runner,
-		Dir:    cfg.GetDir(),
-		Args:   cfg.GetArgs(),
+		Dir:    p.GetDir(),
+		Args:   p.GetArgs(),
 		Results: config.Results{
 			PostgreSQL: postgreSQL,
 			SQLite:     sqLite,
