@@ -16,7 +16,7 @@ package configload
 
 import "github.com/FerretDB/dance/internal/config"
 
-// stats is used to unmarshal expected test stats from YAML.
+// stats represent expected fail/skip/pass statistics for specific database in the YAML project configuration file.
 type stats struct {
 	Fail int `yaml:"fail"`
 	Skip int `yaml:"skip"`

@@ -1,7 +1,8 @@
 ---
 runner: command
-dir: java-example/java
-args: [../../_scripts/java.sh]
+params:
+  dir: java-example/java
+  args: [../../_scripts/java.sh]
 
 results:
   postgresql:

@@ -1,10 +1,11 @@
 ---
 # Workload A: Update heavy workload
 runner: ycsb
-dir: ycsb
-args:
-  - workloads/workloada
-  - recordcount=5000
+params:
+  dir: ycsb
+  args:
+    - workloads/workloada
+    - recordcount=5000
 
 results:
   postgresql:

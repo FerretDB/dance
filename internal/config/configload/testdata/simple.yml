@@ -1,6 +1,6 @@
 ---
 runner: command
-config:
+params:
   dir: test
   args: [simple.sh]
 

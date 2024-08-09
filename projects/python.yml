@@ -1,7 +1,8 @@
 ---
 runner: command
-dir: python-example
-args: [../_scripts/python.sh]
+params:
+  dir: python-example
+  args: [../_scripts/python.sh]
 
 results:
   postgresql:

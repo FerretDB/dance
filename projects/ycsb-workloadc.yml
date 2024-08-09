@@ -1,10 +1,11 @@
 ---
 # Workload C: Read only
 runner: ycsb
-dir: ycsb
-args:
-  - workloads/workloadc
-  - recordcount=5000
+params:
+  dir: ycsb
+  args:
+    - workloads/workloadc
+    - recordcount=5000
 
 results:
   postgresql:

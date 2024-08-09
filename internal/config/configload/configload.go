@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package configload provides functionality for loading and validating configuration data from YAML files.
+// Package configload provides functionality for loading and validating project configuration from YAML files.
 package configload
 
 import (
@@ -24,12 +24,12 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// project is used to unmarshal configuration from YAML.
+// projectConfig represents YAML project configuration file.
 //
 //nolint:vet // for readability
-type project struct {
+type projectConfig struct {
 	Runner  config.RunnerType `yaml:"runner"`
-	Config  yaml.Node         `yaml:"config"`
+	Params  yaml.Node         `yaml:"params"`
 	Results struct {
 		PostgreSQL *result `yaml:"postgresql"`
 		SQLite     *result `yaml:"sqlite"`
@@ -37,7 +37,7 @@ type project struct {
 	} `yaml:"results"`
 }
 
-// Load reads and validates the configuration from a YAML file.
+// Load reads and validates project configuration from a YAML file.
 func Load(name string) (*config.Config, error) {
 	f, err := os.Open(name)
 	if err != nil {
@@ -45,52 +45,52 @@ func Load(name string) (*config.Config, error) {
 	}
 	defer f.Close()
 
-	var p project
+	var pc projectConfig
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	if err = d.Decode(&p); err != nil {
+	if err = d.Decode(&pc); err != nil {
 		return nil, fmt.Errorf("failed to decode YAML config: %w", err)
 	}
 
-	var cfg runnerConfig
-	switch p.Runner {
+	var cfg runnerParams
+	switch pc.Runner {
 	case config.RunnerTypeCommand:
-		cfg = &runnerConfigCommand{}
+		cfg = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
-		cfg = &runnerConfigGoTest{}
+		cfg = &runnerParamsGoTest{}
 	case config.RunnerTypeJSTest:
-		cfg = &runnerConfigJSTest{}
+		cfg = &runnerParamsJSTest{}
 	case config.RunnerTypeYCSB:
-		cfg = &runnerConfigYCSB{}
+		cfg = &runnerParamsYCSB{}
 	default:
-		err = fmt.Errorf("unknown runner type %q", p.Runner)
+		err = fmt.Errorf("unknown runner type %q", pc.Runner)
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	if err = p.Config.Decode(cfg); err != nil {
+	if err = pc.Params.Decode(cfg); err != nil {
 		return nil, fmt.Errorf("failed to decode runner config: %w", err)
 	}
 
-	postgreSQL, err := p.Results.PostgreSQL.convert()
+	postgreSQL, err := pc.Results.PostgreSQL.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
 	}
 
-	sqLite, err := p.Results.SQLite.convert()
+	sqLite, err := pc.Results.SQLite.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
 	}
 
-	mongoDB, err := p.Results.MongoDB.convert()
+	mongoDB, err := pc.Results.MongoDB.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert MongoDB config: %w", err)
 	}
 
 	return &config.Config{
-		Runner: p.Runner,
+		Runner: pc.Runner,
 		Dir:    cfg.GetDir(),
 		Args:   cfg.GetArgs(),
 		Results: config.Results{

@@ -1,7 +1,8 @@
 ---
 runner: command
-dir: dotnet-example
-args: [../_scripts/dotnet.sh]
+params:
+  dir: dotnet-example
+  args: [../_scripts/dotnet.sh]
 
 results:
   postgresql:
