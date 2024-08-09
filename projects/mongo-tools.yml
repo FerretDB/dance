@@ -1,6 +1,7 @@
 ---
 runner: gotest
-args: ["-timeout=20m", "-shuffle=on", "./..."]
+params:
+  args: ["-timeout=20m", "-shuffle=on", "./..."]
 
 results:
   postgresql:

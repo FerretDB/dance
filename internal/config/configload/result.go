@@ -21,7 +21,7 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// result is used to unmarshal expected test results for specific database from YAML.
+// result represents expected results for specific database in the YAML project configuration file.
 //
 //nolint:vet // for readability
 type result struct {

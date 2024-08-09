@@ -31,7 +31,7 @@ func TestLoad(t *testing.T) {
 		expected *config.Config
 		err      error
 	}{
-		"simple": {
+		"command": {
 			expected: &config.Config{
 				Runner: "command",
 				Dir:    "test",

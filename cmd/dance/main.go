@@ -31,12 +31,10 @@ import (
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
-	"github.com/FerretDB/dance/internal/command"
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/config/configload"
-	"github.com/FerretDB/dance/internal/gotest"
-	"github.com/FerretDB/dance/internal/jstest"
-	"github.com/FerretDB/dance/internal/ycsb"
+	"github.com/FerretDB/dance/internal/runner"
+	"github.com/FerretDB/dance/internal/runner/command"
 )
 
 func waitForPort(ctx context.Context, port uint16) error {
@@ -130,20 +128,26 @@ func main() {
 		}
 
 		var runRes *config.TestResults
+		var runner runner.Runner
 
 		switch cfg.Runner {
 		case config.RunnerTypeCommand:
-			runRes, err = command.Run(ctx, dir, cfg.Args)
+			runner, err = command.New(dir, cfg.Args, *pF)
 		case config.RunnerTypeGoTest:
-			runRes, err = gotest.Run(ctx, dir, cfg.Args, *vF, *pF)
+			fallthrough
 		case config.RunnerTypeJSTest:
-			runRes, err = jstest.Run(ctx, dir, cfg.Args, *pF)
+			fallthrough
 		case config.RunnerTypeYCSB:
-			runRes, err = ycsb.Run(ctx, dir, cfg.Args)
+			fallthrough
 		default:
 			log.Fatalf("unknown runner: %q", cfg.Runner)
 		}
 
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		runRes, err = runner.Run(ctx)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package config provides functionality for handling and validating configuration data for test execution.
+// Package config provides project configuration.
 package config
 
 import "fmt"

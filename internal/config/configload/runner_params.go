@@ -14,24 +14,26 @@
 
 package configload
 
-import "github.com/FerretDB/dance/internal/config"
-
-// stats represent expected fail/skip/pass statistics for specific database in the YAML project configuration file.
-type stats struct {
-	Fail int `yaml:"fail"`
-	Skip int `yaml:"skip"`
-	Pass int `yaml:"pass"`
+// runnerParams is common interface for runner parameters.
+//
+//sumtype:decl
+type runnerParams interface {
+	runnerParams() // seal for sumtype
 }
 
-// convert converts stats to [*config.Stats].
-func (s *stats) convert() *config.Stats {
-	if s == nil {
-		panic("stats are nil")
-	}
-
-	return &config.Stats{
-		ExpectedFail: s.Fail,
-		ExpectedSkip: s.Skip,
-		ExpectedPass: s.Pass,
-	}
+// runnerParamsCommand represents `command` runner parameters in the YAML project configuration file.
+type runnerParamsCommand struct {
+	Dir   string `yaml:"dir"`
+	Setup string `yaml:"setup"`
+	Tests struct {
+		Name string `yaml:"name"`
+		Cmd  string `yaml:"cmd"`
+	} `yaml:"tests"`
 }
+
+func (rp *runnerParamsCommand) runnerParams() {}
+
+// check interfaces
+var (
+	_ runnerParams = (*runnerParamsCommand)(nil)
+)

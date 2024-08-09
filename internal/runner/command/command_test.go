@@ -12,26 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package configload
+package command
 
-import "github.com/FerretDB/dance/internal/config"
+import (
+	"context"
+	"log/slog"
+	"testing"
 
-// stats represent expected fail/skip/pass statistics for specific database in the YAML project configuration file.
-type stats struct {
-	Fail int `yaml:"fail"`
-	Skip int `yaml:"skip"`
-	Pass int `yaml:"pass"`
-}
+	"github.com/stretchr/testify/require"
+)
 
-// convert converts stats to [*config.Stats].
-func (s *stats) convert() *config.Stats {
-	if s == nil {
-		panic("stats are nil")
+func TestCommand(t *testing.T) {
+	t.Parallel()
+
+	p := Params{
+		SetupCmd: "exit 1",
+		L:        slog.Default(),
 	}
+	c, err := New(p)
+	require.NoError(t, err)
 
-	return &config.Stats{
-		ExpectedFail: s.Fail,
-		ExpectedSkip: s.Skip,
-		ExpectedPass: s.Pass,
-	}
+	ctx := context.Background()
+
+	err = c.Setup(ctx)
+	require.Error(t, err)
 }

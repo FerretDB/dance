@@ -12,26 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package configload
+package runner
 
-import "github.com/FerretDB/dance/internal/config"
+import (
+	"context"
 
-// stats represent expected fail/skip/pass statistics for specific database in the YAML project configuration file.
-type stats struct {
-	Fail int `yaml:"fail"`
-	Skip int `yaml:"skip"`
-	Pass int `yaml:"pass"`
-}
+	"github.com/FerretDB/dance/internal/config"
+)
 
-// convert converts stats to [*config.Stats].
-func (s *stats) convert() *config.Stats {
-	if s == nil {
-		panic("stats are nil")
-	}
-
-	return &config.Stats{
-		ExpectedFail: s.Fail,
-		ExpectedSkip: s.Skip,
-		ExpectedPass: s.Pass,
-	}
+type Runner interface {
+	Setup(ctx context.Context) error
+	Run(ctx context.Context) (*config.TestResults, error)
 }

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package configload provides functionality for loading and validating configuration data from YAML files.
+// Package configload provides functionality for loading and validating project configuration from YAML files.
 package configload
 
 import (
@@ -24,13 +24,12 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// file is used to unmarshal configuration from YAML.
+// projectConfig represents YAML project configuration file.
 //
 //nolint:vet // for readability
-type file struct {
+type projectConfig struct {
 	Runner  config.RunnerType `yaml:"runner"`
-	Dir     string            `yaml:"dir"`
-	Args    []string          `yaml:"args"`
+	Params  yaml.Node         `yaml:"params"`
 	Results struct {
 		PostgreSQL *result `yaml:"postgresql"`
 		SQLite     *result `yaml:"sqlite"`
@@ -38,41 +37,62 @@ type file struct {
 	} `yaml:"results"`
 }
 
-// Load reads and validates the configuration from a YAML file.
+// Load reads and validates project configuration from a YAML file.
 func Load(name string) (*config.Config, error) {
 	f, err := os.Open(name)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load config: %w", err)
+		return nil, fmt.Errorf("failed to open project config file: %w", err)
 	}
 	defer f.Close()
 
+	var pc projectConfig
 	d := yaml.NewDecoder(f)
 	d.KnownFields(true)
 
-	var cfg file
-	if err = d.Decode(&cfg); err != nil {
-		return nil, fmt.Errorf("failed to decode config: %w", err)
+	if err = d.Decode(&pc); err != nil {
+		return nil, fmt.Errorf("failed to decode project config: %w", err)
 	}
 
-	postgreSQL, err := cfg.Results.PostgreSQL.convert()
+	var p runnerParams
+	switch pc.Runner {
+	case config.RunnerTypeCommand:
+		p = &runnerParamsCommand{}
+	case config.RunnerTypeGoTest:
+		fallthrough
+	case config.RunnerTypeJSTest:
+		fallthrough
+	case config.RunnerTypeYCSB:
+		fallthrough
+	default:
+		err = fmt.Errorf("unknown runner type %q", pc.Runner)
+	}
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert PostgreSQL config: %w", err)
+		return nil, err
 	}
 
-	sqLite, err := cfg.Results.SQLite.convert()
-	if err != nil {
-		return nil, fmt.Errorf("failed to convert SQLite config: %w", err)
+	if err = pc.Params.Decode(p); err != nil {
+		return nil, fmt.Errorf("failed to decode runner parameters: %w", err)
 	}
 
-	mongoDB, err := cfg.Results.MongoDB.convert()
+	postgreSQL, err := pc.Results.PostgreSQL.convert()
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert MongoDB config: %w", err)
+		return nil, fmt.Errorf("failed to convert PostgreSQL results: %w", err)
+	}
+
+	sqLite, err := pc.Results.SQLite.convert()
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert SQLite results: %w", err)
+	}
+
+	mongoDB, err := pc.Results.MongoDB.convert()
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert MongoDB results: %w", err)
 	}
 
 	return &config.Config{
-		Runner: cfg.Runner,
-		Dir:    cfg.Dir,
-		Args:   cfg.Args,
+		Runner: pc.Runner,
+		Dir:    p.GetDir(),
+		Args:   p.GetArgs(),
 		Results: config.Results{
 			PostgreSQL: postgreSQL,
 			SQLite:     sqLite,
