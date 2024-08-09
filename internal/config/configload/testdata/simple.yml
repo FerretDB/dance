@@ -1,7 +1,8 @@
 ---
 runner: command
-dir: test
-args: [simple.sh]
+config:
+  dir: test
+  args: [simple.sh]
 
 results:
   postgresql:
