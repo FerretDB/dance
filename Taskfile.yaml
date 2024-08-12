@@ -130,6 +130,11 @@ tasks:
     # ignore roles that are not implemented yet
     ignore_error: true
 
+  godocs:
+    desc: "Serve Go code documentation"
+    cmds:
+      - bin/pkgsite{{exeExt}} -http=127.0.0.1:6060 -open
+
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:
     desc: "Format and lint documentation"

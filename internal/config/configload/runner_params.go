@@ -14,24 +14,40 @@
 
 package configload
 
+import "github.com/FerretDB/dance/internal/config"
+
 // runnerParams is common interface for runner parameters.
 //
 //sumtype:decl
 type runnerParams interface {
-	runnerParams() // seal for sumtype
+	convert() config.RunnerParams // seal for sumtype
 }
 
-// runnerParamsCommand represents `command` runner parameters in the YAML project configuration file.
+// runnerParamsCommand represents `command` runner parameters in the project configuration YAML file.
 type runnerParamsCommand struct {
 	Dir   string `yaml:"dir"`
 	Setup string `yaml:"setup"`
-	Tests struct {
+	Tests []struct {
 		Name string `yaml:"name"`
 		Cmd  string `yaml:"cmd"`
 	} `yaml:"tests"`
 }
 
-func (rp *runnerParamsCommand) runnerParams() {}
+func (rp *runnerParamsCommand) convert() config.RunnerParams {
+	res := &config.RunnerParamsCommand{
+		Dir:   rp.Dir,
+		Setup: rp.Setup,
+	}
+
+	for _, t := range rp.Tests {
+		res.Tests = append(res.Tests, config.RunnerParamsCommandTest{
+			Name: t.Name,
+			Cmd:  t.Cmd,
+		})
+	}
+
+	return res
+}
 
 // check interfaces
 var (

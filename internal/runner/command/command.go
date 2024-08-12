@@ -83,12 +83,12 @@ func (c *command) execScript(ctx context.Context, name, content string) error {
 	return cmd.Run()
 }
 
-func (c *command) Setup(ctx context.Context) error {
-	c.L.InfoContext(ctx, "Running setup", slog.String("project", c.Name))
-	return c.execScript(ctx, c.Name, c.SetupCmd)
-}
-
 func (c *command) Run(ctx context.Context) (*config.TestResults, error) {
+	c.L.InfoContext(ctx, "Running setup", slog.String("project", c.Name))
+	if err := c.execScript(ctx, c.Name, c.SetupCmd); err != nil {
+		return nil, err
+	}
+
 	res := &config.TestResults{
 		TestResults: map[string]config.TestResult{},
 	}

@@ -34,26 +34,23 @@ func TestLoad(t *testing.T) {
 		"command": {
 			expected: &config.Config{
 				Runner: "command",
-				Dir:    "test",
-				Args:   []string{"simple.sh"},
-				Results: config.Results{
-					PostgreSQL: &config.TestConfig{
-						Default: config.Fail,
-						Stats: &config.Stats{
-							ExpectedFail: 1,
-						},
+				Params: &config.RunnerParamsCommand{
+					Dir: "test",
+					Setup: "python3 -m venv .\n" +
+						"./bin/pip3 install -r requirements.txt\n",
+					Tests: []config.RunnerParamsCommandTest{
+						{Name: "normal", Cmd: "./bin/python3 pymongo_test.py 'mongodb://127.0.0.1:27001/'"},
+						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27001/'"},
 					},
-					SQLite: &config.TestConfig{
-						Default: config.Fail,
-						Stats: &config.Stats{
-							ExpectedFail: 1,
-						},
+				},
+				Results: &config.TestConfig{
+					Default: config.Pass,
+					Stats: &config.Stats{
+						ExpectedFail: 1,
+						ExpectedPass: 1,
 					},
-					MongoDB: &config.TestConfig{
-						Default: config.Pass,
-						Stats: &config.Stats{
-							ExpectedPass: 1,
-						},
+					Fail: config.Tests{
+						Names: []string{"strict"},
 					},
 				},
 			},
@@ -62,7 +59,7 @@ func TestLoad(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			actual, err := Load(filepath.Join("testdata", name+".yml"))
+			actual, err := Load(filepath.Join("testdata", name+".yml"), "ferretdb-postgresql")
 			if tc.err != nil {
 				assert.Equal(t, tc.err, err)
 				return

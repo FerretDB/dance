@@ -19,6 +19,7 @@ import (
 	"log/slog"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -34,6 +35,7 @@ func TestCommand(t *testing.T) {
 
 	ctx := context.Background()
 
-	err = c.Setup(ctx)
+	res, err := c.Run(ctx)
 	require.Error(t, err)
+	assert.Nil(t, res)
 }

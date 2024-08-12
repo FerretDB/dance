@@ -21,7 +21,7 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// result represents expected results for specific database in the YAML project configuration file.
+// result represents expected results for specific database in the project configuration YAML file.
 //
 //nolint:vet // for readability
 type result struct {

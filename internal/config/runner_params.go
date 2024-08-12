@@ -14,16 +14,28 @@
 
 package config
 
-import "strings"
-
-// TestResult represents the outcome of a single test.
-type TestResult struct {
-	Status       Status
-	Output       string
-	Measurements map[string]float64
+// RunnerParams is common interface for runner parameters.
+//
+//sumtype:decl
+type RunnerParams interface {
+	runnerParams() // seal for sumtype
 }
 
-// IndentedOutput returns the output of a test result with indented lines.
-func (tr *TestResult) IndentedOutput() string {
-	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
+// RunnerParamsCommand represents `command` runner parameters.
+type RunnerParamsCommand struct {
+	Dir   string
+	Setup string
+	Tests []RunnerParamsCommandTest
 }
+
+type RunnerParamsCommandTest struct {
+	Name string
+	Cmd  string
+}
+
+func (rp *RunnerParamsCommand) runnerParams() {}
+
+// check interfaces
+var (
+	_ RunnerParams = (*RunnerParamsCommand)(nil)
+)

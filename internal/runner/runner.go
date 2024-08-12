@@ -20,7 +20,13 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
+// Runner is a common interface for all runners.
 type Runner interface {
-	Setup(ctx context.Context) error
+	// Run runs tests.
 	Run(ctx context.Context) (*config.TestResults, error)
+}
+
+//sumtype:decl
+type Params interface {
+	params() // seal for sumtype
 }
