@@ -33,7 +33,7 @@ import (
 // Args contain additional arguments to `go test`.
 // `-v -json -p=1 -count=1` are always added.
 // `-race` is added if possible.
-func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (*config.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (map[string]config.TestResult, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,9 +73,7 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 	d := json.NewDecoder(r)
 	d.DisallowUnknownFields()
 
-	res := &config.TestResults{
-		TestResults: make(map[string]config.TestResult),
-	}
+	res := make(map[string]config.TestResult)
 
 	for {
 		var event testEvent
@@ -93,7 +91,7 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 
 		testName := event.Package + "/" + event.Test
 
-		result := res.TestResults[testName]
+		result := res[testName]
 		if result.Status == "" {
 			result.Status = config.Unknown
 		}
@@ -113,7 +111,7 @@ func Run(ctx context.Context, dir string, args []string, verbose bool, parallel 
 			result.Status = config.Unknown
 		}
 
-		res.TestResults[testName] = result
+		res[testName] = result
 	}
 
 	if err = cmd.Wait(); err != nil {

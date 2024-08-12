@@ -33,7 +33,7 @@ import (
 
 // Run runs `mongo`.
 // Args is a list of filepath.Glob file patterns with additional support for !exclude.
-func Run(ctx context.Context, dir string, args []string, parallel int) (*config.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string, parallel int) (map[string]config.TestResult, error) {
 	// TODO https://github.com/FerretDB/dance/issues/20
 	_ = ctx
 
@@ -73,9 +73,7 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*config.
 
 	files := maps.Keys(filesM)
 
-	res := &config.TestResults{
-		TestResults: make(map[string]config.TestResult, len(files)),
-	}
+	res := make(map[string]config.TestResult, len(files))
 
 	type item struct {
 		file string
@@ -126,14 +124,14 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (*config.
 				return nil, it.err
 			}
 
-			res.TestResults[it.file] = config.TestResult{
+			res[it.file] = config.TestResult{
 				Status: config.Fail,
 				Output: string(it.out),
 			}
 			continue
 		}
 
-		res.TestResults[it.file] = config.TestResult{
+		res[it.file] = config.TestResult{
 			Status: config.Pass,
 			Output: string(it.out),
 		}

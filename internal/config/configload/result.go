@@ -36,14 +36,14 @@ type result struct {
 }
 
 // convert converts result to [*config.TestConfig].
-func (b *result) convert() (*config.TestConfig, error) {
-	if b == nil {
+func (r *result) convert() (*config.TestConfig, error) {
+	if r == nil {
 		panic("backend is nil")
 	}
 
 	t := &config.TestConfig{
-		Default: b.Default,
-		Stats:   b.Stats.convert(),
+		Default: r.Default,
+		Stats:   r.Stats.convert(),
 	}
 
 	if t.Default == "" {
@@ -58,10 +58,10 @@ func (b *result) convert() (*config.TestConfig, error) {
 	names := make(map[string]struct{})
 
 	for dst, src := range map[*[]string][]string{
-		&t.Fail.Names:   b.Fail,
-		&t.Skip.Names:   b.Skip,
-		&t.Pass.Names:   b.Pass,
-		&t.Ignore.Names: b.Ignore,
+		&t.Fail:   r.Fail,
+		&t.Skip:   r.Skip,
+		&t.Pass:   r.Pass,
+		&t.Ignore: r.Ignore,
 	} {
 		for _, name := range src {
 			if _, ok := names[name]; ok {

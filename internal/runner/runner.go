@@ -23,7 +23,7 @@ import (
 // Runner is a common interface for all runners.
 type Runner interface {
 	// Run runs tests.
-	Run(ctx context.Context) (*config.TestResults, error)
+	Run(ctx context.Context) (map[string]config.TestResult, error)
 }
 
 //sumtype:decl

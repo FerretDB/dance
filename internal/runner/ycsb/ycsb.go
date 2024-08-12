@@ -50,7 +50,7 @@ type Measurements struct {
 //
 // It loads and runs a YCSB workload.
 // Properties defined in the YAML file will override properties defined in the workload parameter file.
-func Run(ctx context.Context, dir string, args []string) (*config.TestResults, error) {
+func Run(ctx context.Context, dir string, args []string) (map[string]config.TestResult, error) {
 	bin := filepath.Join("..", "bin", "go-ycsb")
 	if _, err := os.Stat(bin); err != nil {
 		return nil, err
@@ -92,11 +92,9 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 
 	defer pipe.Close()
 
-	res := &config.TestResults{
-		TestResults: map[string]config.TestResult{
-			dir: {
-				Status: config.Pass,
-			},
+	res := map[string]config.TestResult{
+		dir: {
+			Status: config.Pass,
 		},
 	}
 
@@ -118,7 +116,7 @@ func Run(ctx context.Context, dir string, args []string) (*config.TestResults, e
 	case nil:
 		fmt.Printf("Parsed metrics: %+v\n\n", m)
 	default:
-		res.TestResults[dir] = config.TestResult{
+		res[dir] = config.TestResult{
 			Status: config.Fail,
 			Output: err.Error(),
 		}

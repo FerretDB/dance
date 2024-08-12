@@ -39,17 +39,6 @@ type Config struct {
 	Results *TestConfig
 }
 
-// TestResults represents the collection of results from multiple tests.
-type TestResults struct {
-	// Test results by full test name.
-	TestResults map[string]TestResult
-}
-
-// Tests holds information about tests of a specific status (fail, skip, pass).
-type Tests struct {
-	Names []string // names (i.e. "go.mongodb.org/mongo-driver/mongo/...")
-}
-
 // CompareResult encapsulates the comparison between expected and actual test outcomes.
 type CompareResult struct {
 	ExpectedFail map[string]string

@@ -19,6 +19,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"log/slog"
 	"net"
 	"os"
 	"path/filepath"
@@ -70,9 +71,10 @@ func logResult(label string, res map[string]string) {
 func main() {
 	dbF := flag.String("db", "", "database to use: postgresql, sqlite, mongodb")
 	vF := flag.Bool("v", false, "be verbose")
-	pF := flag.Int("p", 0, "number of tests to run in parallel")
 	log.SetFlags(0)
 	flag.Parse()
+
+	l := slog.Default()
 
 	// TODO https://github.com/FerretDB/dance/issues/30
 	if *dbF == "" {
@@ -112,27 +114,17 @@ func main() {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)
 
-		cfg, err := configload.Load(match)
+		pc, err := configload.Load(match, *dbF)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if cfg.Dir != "" {
-			dir = cfg.Dir
-			log.Printf("\tDir changed to %s", dir)
-		}
-
-		expectedConfig, err := cfg.ForDB(*dbF)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		var runRes *config.TestResults
+		var runRes map[string]config.TestResult
 		var runner runner.Runner
 
-		switch cfg.Runner {
+		switch pc.Runner {
 		case config.RunnerTypeCommand:
-			runner, err = command.New(dir, cfg.Args, *pF)
+			runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l.With(slog.String("dir", dir)))
 		case config.RunnerTypeGoTest:
 			fallthrough
 		case config.RunnerTypeJSTest:
@@ -140,7 +132,7 @@ func main() {
 		case config.RunnerTypeYCSB:
 			fallthrough
 		default:
-			log.Fatalf("unknown runner: %q", cfg.Runner)
+			log.Fatalf("unknown runner: %q", pc.Runner)
 		}
 
 		if err != nil {
@@ -152,7 +144,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		compareRes, err := expectedConfig.Compare(runRes)
+		compareRes, err := pc.Results.Compare(runRes)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -177,7 +169,7 @@ func main() {
 		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
 		log.Printf("Unknown: %d.", len(compareRes.Unknown))
 
-		expectedStats, err := yaml.Marshal(expectedConfig.Stats)
+		expectedStats, err := yaml.Marshal(pc.Results.Stats)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -25,34 +25,23 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 )
 
-type Test struct {
-	Name string
-	Cmd  string
-}
-
-type Params struct {
-	Name     string
-	Dir      string
-	SetupCmd string
-	Tests    []Test
-	L        *slog.Logger
-}
-
 type command struct {
-	Params
+	p *config.RunnerParamsCommand
+	l *slog.Logger
 }
 
 // Run runs generic test.
 // It runs a command with arguments in a directory and returns the combined output as is.
 // If the command exits with a non-zero exit code, the test fails.
-func New(params Params) (runner.Runner, error) {
+func New(params *config.RunnerParamsCommand, l *slog.Logger) (runner.Runner, error) {
 	return &command{
-		Params: params,
+		p: params,
+		l: l,
 	}, nil
 }
 
-func (c *command) execScript(ctx context.Context, name, content string) error {
-	f, err := os.CreateTemp(c.Dir, name+"-*.sh")
+func execScript(ctx context.Context, dir, file, content string) error {
+	f, err := os.CreateTemp(dir, file+"-*.sh")
 	if err != nil {
 		return err
 	}
@@ -76,35 +65,33 @@ func (c *command) execScript(ctx context.Context, name, content string) error {
 	}
 
 	cmd := exec.CommandContext(ctx, "./"+f.Name())
-	cmd.Dir = c.Dir
+	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
 }
 
-func (c *command) Run(ctx context.Context) (*config.TestResults, error) {
-	c.L.InfoContext(ctx, "Running setup", slog.String("project", c.Name))
-	if err := c.execScript(ctx, c.Name, c.SetupCmd); err != nil {
+func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error) {
+	c.l.InfoContext(ctx, "Running setup")
+	if err := execScript(ctx, c.p.Dir, c.p.Dir, c.p.Setup); err != nil {
 		return nil, err
 	}
 
-	res := &config.TestResults{
-		TestResults: map[string]config.TestResult{},
-	}
+	res := make(map[string]config.TestResult, len(c.p.Tests))
 
-	for _, t := range c.Tests {
+	for _, t := range c.p.Tests {
 		tc := config.TestResult{
 			Status: config.Pass,
 		}
 
-		c.L.InfoContext(ctx, "Running test", slog.String("project", c.Name), slog.String("test", t.Name))
-		if err := c.execScript(ctx, t.Name, t.Cmd); err != nil {
+		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
+		if err := execScript(ctx, c.p.Dir, t.Name, t.Cmd); err != nil {
 			tc.Status = config.Fail
 			tc.Output = err.Error()
 		}
 
-		res.TestResults[t.Name] = tc
+		res[t.Name] = tc
 	}
 
 	return res, nil

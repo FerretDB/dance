@@ -26,14 +26,14 @@ import (
 type TestConfig struct {
 	Default Status
 	Stats   *Stats
-	Fail    Tests
-	Skip    Tests
-	Pass    Tests
-	Ignore  Tests
+	Fail    []string
+	Skip    []string
+	Pass    []string
+	Ignore  []string
 }
 
 // Compare compares two *TestResults and returns a *CompareResult containing the differences.
-func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
+func (tc *TestConfig) Compare(results map[string]TestResult) (*CompareResult, error) {
 	compareResult := &CompareResult{
 		ExpectedFail:   make(map[string]string),
 		ExpectedSkip:   make(map[string]string),
@@ -46,12 +46,12 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 
 	tcMap := tc.toMap()
 
-	tests := maps.Keys(results.TestResults)
+	tests := maps.Keys(results)
 	sort.Strings(tests)
 
 	for _, test := range tests {
 		expectedRes := tc.Default
-		testRes := results.TestResults[test]
+		testRes := results[test]
 
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := tcMap[prefix]; ok {
@@ -127,18 +127,18 @@ func (tc *TestConfig) Compare(results *TestResults) (*CompareResult, error) {
 // toMap converts *TestConfig to the map of tests.
 // The map stores test names as a keys and their status (fail|skip|pass), as their value.
 func (tc *TestConfig) toMap() map[string]Status {
-	res := make(map[string]Status, len(tc.Pass.Names)+len(tc.Skip.Names)+len(tc.Fail.Names))
+	res := make(map[string]Status, len(tc.Pass)+len(tc.Skip)+len(tc.Fail))
 
 	for _, tcat := range []struct {
 		testsStatus Status
-		tests       Tests
+		tests       []string
 	}{
 		{Fail, tc.Fail},
 		{Skip, tc.Skip},
 		{Pass, tc.Pass},
 		{Ignore, tc.Ignore},
 	} {
-		for _, t := range tcat.tests.Names {
+		for _, t := range tcat.tests {
 			res[t] = tcat.testsStatus
 		}
 	}

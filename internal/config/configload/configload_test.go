@@ -49,9 +49,7 @@ func TestLoad(t *testing.T) {
 						ExpectedFail: 1,
 						ExpectedPass: 1,
 					},
-					Fail: config.Tests{
-						Names: []string{"strict"},
-					},
+					Fail: []string{"strict"},
 				},
 			},
 		},

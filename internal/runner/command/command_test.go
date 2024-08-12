@@ -19,6 +19,7 @@ import (
 	"log/slog"
 	"testing"
 
+	"github.com/FerretDB/dance/internal/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -26,11 +27,10 @@ import (
 func TestCommand(t *testing.T) {
 	t.Parallel()
 
-	p := Params{
-		SetupCmd: "exit 1",
-		L:        slog.Default(),
+	p := &config.RunnerParamsCommand{
+		Setup: "exit 1",
 	}
-	c, err := New(p)
+	c, err := New(p, slog.Default())
 	require.NoError(t, err)
 
 	ctx := context.Background()
