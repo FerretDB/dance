@@ -34,7 +34,7 @@ jobs:
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
     concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.test }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.project }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
@@ -46,7 +46,7 @@ jobs:
           - ferretdb-postgresql
           - ferretdb-sqlite
           - mongodb
-        test:
+        project:
           - dotnet
           # - dotnet-plain
           # - dotnet-scram
@@ -91,7 +91,7 @@ jobs:
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance DB=${{ matrix.db }} TEST=${{ matrix.test }} PARALLEL=10
+        run: bin/task dance DB=${{ matrix.db }} CONFIG=${{ matrix.project }}.yml
 
       - name: Collect logs
         if: failure()
@@ -106,7 +106,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.test }}
+          name: compose-logs-${{ matrix.db }}-${{ matrix.project }}
           path: compose-logs.zip
           retention-days: 3
 

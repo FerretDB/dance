@@ -16,7 +16,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log"
 	"log/slog"
@@ -78,12 +77,10 @@ var cli struct {
 
 	Verbose bool `help:"Be more verbose." short:"v"`
 
-	Projects []string `arg:"" help:"Projects." type:"path"`
+	Config []string `arg:"" help:"Project configurations to run." type:"existingfile" optional:""`
 }
 
-func main() {
-	log.SetFlags(0)
-
+func parseCLI() {
 	dbs := maps.Keys(configload.DBs)
 	slices.Sort(dbs)
 
@@ -101,8 +98,15 @@ func main() {
 	}
 
 	kong.Parse(&cli, kongOptions...)
+}
+
+func main() {
+	log.SetFlags(0)
+	slog.SetLogLoggerLevel(slog.LevelDebug)
 
 	l := slog.Default()
+
+	parseCLI()
 
 	ctx, stop := sigTerm(context.Background())
 
@@ -114,8 +118,7 @@ func main() {
 		stop()
 	}()
 
-	uri := configload.DBs[cli.Database]
-	u, err := url.Parse(uri)
+	u, err := url.Parse(configload.DBs[cli.Database])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,26 +133,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	matches, err := filepath.Glob("*.yml")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// TODO validate that args are in matches
-	if len(cli.Projects) != 0 {
-		matches = matches[:0:cap(matches)]
-		for _, arg := range flag.Args() {
-			matches = append(matches, arg+".yml")
+	configs := cli.Config
+	if len(configs) == 0 {
+		configs, err = filepath.Glob("*.yml")
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 
-	log.Printf("Run configurations: %v", matches)
+	for i, c := range configs {
+		configs[i] = filepath.Base(c)
+	}
 
-	for _, match := range matches {
-		dir := strings.TrimSuffix(match, filepath.Ext(match))
-		log.Printf("%s (%s)", match, dir)
+	log.Printf("Run project configs: %v", configs)
 
-		pc, err := configload.Load(match, cli.Database)
+	for _, c := range configs {
+		log.Print(c)
+
+		pc, err := configload.Load(c, cli.Database)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -159,7 +160,7 @@ func main() {
 
 		switch pc.Runner {
 		case config.RunnerTypeCommand:
-			runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l.With(slog.String("dir", dir)))
+			runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l)
 		case config.RunnerTypeGoTest:
 			fallthrough
 		case config.RunnerTypeJSTest:

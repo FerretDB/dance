@@ -3,7 +3,7 @@ version: "3"
 
 vars:
   DB: ""
-  TEST: ""
+  CONFIG: ""
 
 tasks:
   init-tools:
@@ -67,11 +67,11 @@ tasks:
       - go build -v -o bin/ ./cmd/dance/
 
   dance:
-    desc: "Run all integration tests"
+    desc: "Dance!"
     deps: [build]
     dir: projects
     cmds:
-      - ../bin/dance --database={{.DB}} {{.TEST}}
+      - ../bin/dance --database={{.DB}} {{.CONFIG}}
 
   lint:
     desc: "Run linters"
