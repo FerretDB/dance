@@ -33,7 +33,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal/config"
-	"github.com/FerretDB/dance/internal/config/configload"
+	"github.com/FerretDB/dance/internal/configload"
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
 )

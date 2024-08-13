@@ -2,17 +2,29 @@
 runner: command
 params:
   dir: python-example
-  args: [../_scripts/python.sh]
+  setup: |
+    python3 -m venv .
+    ./bin/pip3 install -r requirements.txt
+
+  tests:
+    - name: normal
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}'
+    - name: strict
+      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI}}'
 
 results:
-  postgresql:
+  ferretdb-postgresql:
     stats:
-      pass: 1
+      pass: 2
 
-  sqlite:
+  ferretdb-sqlite:
     stats:
-      pass: 1
+      pass: 2
 
   mongodb:
     stats:
-      pass: 1
+      pass: 2
+
+  mongodb-secured:
+    stats:
+      pass: 2

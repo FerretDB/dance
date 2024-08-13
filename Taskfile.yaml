@@ -42,9 +42,6 @@ tasks:
         --build {{.DB}}
       - task: init-repl
       - task: init-user
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb-postgresql`, `ferretdb-sqlite`, or `mongodb`"
 
   env-pull:
     cmds:
@@ -70,9 +67,6 @@ tasks:
     dir: projects
     cmds:
       - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb-postgresql`, `ferretdb-sqlite`, or `mongodb`"
 
   lint:
     desc: "Run linters"
