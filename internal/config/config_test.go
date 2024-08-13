@@ -22,31 +22,25 @@ import (
 )
 
 func FuzzNextPrefix(f *testing.F) {
-	type testCase struct {
-		paths []string
+	paths := []string{
+		"topology/TestCMAPSpec/pool-checkin-destroy-closed.json",
+		"topology/TestCMAPSpec/pool-checkin-destroy-closed.",
+		"topology/TestCMAPSpec/pool-checkin-destroy-closed",
+		"topology/TestCMAPSpec/",
+		"topology/TestCMAPSpec",
+		"topology/",
+		"topology",
+		"",
 	}
 
-	for _, tc := range []testCase{{
-		paths: []string{
-			"topology/TestCMAPSpec/pool-checkin-destroy-closed.json",
-			"topology/TestCMAPSpec/pool-checkin-destroy-closed.",
-			"topology/TestCMAPSpec/pool-checkin-destroy-closed",
-			"topology/TestCMAPSpec/",
-			"topology/TestCMAPSpec",
-			"topology/",
-			"topology",
-			"",
-		},
-	}} {
-		for i, path := range tc.paths[:len(tc.paths)-1] {
-			expected := tc.paths[i+1]
-			actual := nextPrefix(path)
-			assert.Equal(f, expected, actual, "path = %q", path)
+	for i, path := range paths[:len(paths)-1] {
+		expected := paths[i+1]
+		actual := nextPrefix(path)
+		assert.Equal(f, expected, actual, "path = %q", path)
 
-			f.Add(path)
-			f.Add(expected)
-			f.Add(actual)
-		}
+		f.Add(path)
+		f.Add(expected)
+		f.Add(actual)
 	}
 
 	f.Fuzz(func(t *testing.T, path string) {

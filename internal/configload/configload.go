@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"text/template"
 
 	"gopkg.in/yaml.v3"
@@ -43,25 +44,35 @@ type projectConfig struct {
 
 // Load reads and validates project configuration for the given database from the YAML file.
 func Load(file, db string) (*config.Config, error) {
-	uri, ok := DBs[db]
+	b, err := os.ReadFile(file)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read project config file: %w", err)
+	}
+
+	return loadContent(string(b), db)
+}
+
+// loadContent reads and validates project configuration for the given database from the YAML content.
+func loadContent(content, db string) (*config.Config, error) {
+	mongodbURI, ok := DBs[db]
 	if !ok {
 		return nil, fmt.Errorf("unknown database %q", db)
 	}
-	if uri == "" {
+	if mongodbURI == "" {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
 
-	t, err := template.ParseFiles(file)
+	t, err := template.New("").Option("missingkey=error").Parse(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
 	}
 
 	var buf bytes.Buffer
 	data := map[string]any{
-		"MONGODB_URI": uri,
+		"MONGODB_URI": mongodbURI,
 	}
 
-	if err = t.Option("missingkey=error").Execute(&buf, data); err != nil {
+	if err = t.Execute(&buf, data); err != nil {
 		return nil, fmt.Errorf("failed to execute project config file template: %w", err)
 	}
 

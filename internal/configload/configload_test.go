@@ -15,23 +15,25 @@
 package configload
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/FerretDB/dance/internal/config"
 )
 
-func TestLoad(t *testing.T) {
-	t.Parallel()
-
-	for name, tc := range map[string]struct {
+func FuzzLoadContent(f *testing.F) {
+	for _, tc := range []struct {
+		file     string
+		db       string
 		expected *config.Config
 		err      error
 	}{
-		"command": {
+		{
+			file: "command.yml",
+			db:   "ferretdb-postgresql",
 			expected: &config.Config{
 				Runner: "command",
 				Params: &config.RunnerParamsCommand{
@@ -54,17 +56,22 @@ func TestLoad(t *testing.T) {
 			},
 		},
 	} {
-		t.Run(name, func(t *testing.T) {
-			t.Parallel()
+		b, err := os.ReadFile(filepath.Join("testdata", tc.file))
+		require.NoError(f, err, "file = %s", tc.file)
 
-			actual, err := Load(filepath.Join("testdata", name+".yml"), "ferretdb-postgresql")
-			if tc.err != nil {
-				assert.Equal(t, tc.err, err)
-				return
-			}
+		actual, err := loadContent(string(b), tc.db)
+		if tc.err == nil {
+			require.Equal(f, tc.expected, actual, "file = %s", tc.file)
+		} else {
+			require.Equal(f, tc.err, err, "file = %s", tc.file)
+		}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.expected, actual)
-		})
+		for db := range DBs {
+			f.Add(string(b), db)
+		}
 	}
+
+	f.Fuzz(func(t *testing.T, content, db string) {
+		_, _ = loadContent(content, db)
+	})
 }

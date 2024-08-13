@@ -104,10 +104,13 @@ func main() {
 
 	l := slog.Default()
 
-	ctx, stop := notifyAppTermination(context.Background())
+	ctx, stop := sigTerm(context.Background())
+
 	go func() {
 		<-ctx.Done()
-		log.Print("Stopping...")
+		l.Info("Stopping...")
+
+		// second SIGTERM should immediately stop the process
 		stop()
 	}()
 
