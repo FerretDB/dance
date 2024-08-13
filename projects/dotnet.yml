@@ -14,6 +14,8 @@ results:
       fail: 1
       pass: 1
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      # https://github.com/FerretDB/dance/issues/889
       - strict
 
   ferretdb-sqlite:
@@ -21,6 +23,8 @@ results:
       fail: 1
       pass: 1
     fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      # https://github.com/FerretDB/dance/issues/889
       - strict
 
   mongodb:
