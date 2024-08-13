@@ -21,12 +21,16 @@ import (
 	"log"
 	"log/slog"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/alecthomas/kong"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/sethvargo/go-githubactions"
 	"golang.org/x/exp/maps"
@@ -38,7 +42,7 @@ import (
 	"github.com/FerretDB/dance/internal/runner/command"
 )
 
-func waitForPort(ctx context.Context, port uint16) error {
+func waitForPort(ctx context.Context, port int) error {
 	for ctx.Err() == nil {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 		if err == nil {
@@ -68,18 +72,37 @@ func logResult(label string, res map[string]string) {
 	}
 }
 
+var cli struct {
+	// TODO https://github.com/FerretDB/dance/issues/30
+	Database string `help:"${help_database}" enum:"${enum_database}" required:"" short:"d"`
+
+	Verbose bool `help:"Be more verbose." short:"v"`
+
+	Projects []string `arg:"" help:"Projects." type:"path"`
+}
+
 func main() {
-	dbF := flag.String("db", "", "database to use: postgresql, sqlite, mongodb")
-	vF := flag.Bool("v", false, "be verbose")
 	log.SetFlags(0)
-	flag.Parse()
+
+	dbs := maps.Keys(configload.DBs)
+	slices.Sort(dbs)
+
+	dbsHelp := make([]string, len(dbs))
+	for i, db := range dbs {
+		dbsHelp[i] = fmt.Sprintf("%s (%s)", db, configload.DBs[db])
+	}
+
+	kongOptions := []kong.Option{
+		kong.Vars{
+			"help_database": fmt.Sprintf("Database: %s.", strings.Join(dbsHelp, ", ")),
+			"enum_database": strings.Join(dbs, ","),
+		},
+		kong.DefaultEnvars("DANCE"),
+	}
+
+	kong.Parse(&cli, kongOptions...)
 
 	l := slog.Default()
-
-	// TODO https://github.com/FerretDB/dance/issues/30
-	if *dbF == "" {
-		log.Fatal("-db is required")
-	}
 
 	ctx, stop := notifyAppTermination(context.Background())
 	go func() {
@@ -88,7 +111,16 @@ func main() {
 		stop()
 	}()
 
-	const port = 27017
+	uri := configload.DBs[cli.Database]
+	u, err := url.Parse(uri)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	port, err := strconv.Atoi(u.Port())
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Printf("Waiting for port %d to be up...", port)
 
 	if err := waitForPort(ctx, port); err != nil {
@@ -101,7 +133,7 @@ func main() {
 	}
 
 	// TODO validate that args are in matches
-	if flag.NArg() != 0 {
+	if len(cli.Projects) != 0 {
 		matches = matches[:0:cap(matches)]
 		for _, arg := range flag.Args() {
 			matches = append(matches, arg+".yml")
@@ -114,7 +146,7 @@ func main() {
 		dir := strings.TrimSuffix(match, filepath.Ext(match))
 		log.Printf("%s (%s)", match, dir)
 
-		pc, err := configload.Load(match, *dbF)
+		pc, err := configload.Load(match, cli.Database)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -153,7 +185,7 @@ func main() {
 		logResult("Unexpectedly skipped", compareRes.XSkipped)
 		logResult("Unexpectedly passed", compareRes.XPassed)
 
-		if *vF {
+		if cli.Verbose {
 			logResult("Expectedly failed", compareRes.Failed)
 			logResult("Expectedly skipped", compareRes.Skipped)
 			logResult("Expectedly passed", compareRes.Passed)

@@ -4,7 +4,6 @@ version: "3"
 vars:
   DB: ""
   TEST: ""
-  PARALLEL: 0
 
 tasks:
   init-tools:
@@ -62,11 +61,17 @@ tasks:
     cmds:
       - docker compose down --remove-orphans --volumes
 
+  build:
+    desc: "Build dance tool"
+    cmds:
+      - go build -v -o bin/ ./cmd/dance/
+
   dance:
     desc: "Run all integration tests"
+    deps: [build]
     dir: projects
     cmds:
-      - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
+      - ../bin/dance --database={{.DB}} {{.TEST}}
 
   lint:
     desc: "Run linters"

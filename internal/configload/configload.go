@@ -25,12 +25,11 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// uris contains MongoDB URIs for different databases.
-var uris = map[string]string{
-	"mongodb":             "mongodb://127.0.0.1:47017/",
-	"mongodb-secured":     "mongodb://127.0.0.1:47018/",
+// DBs contains MongoDB URIs for different databases.
+var DBs = map[string]string{
 	"ferretdb-postgresql": "mongodb://127.0.0.1:27001/",
 	"ferretdb-sqlite":     "mongodb://127.0.0.1:27002/",
+	"mongodb":             "mongodb://127.0.0.1:37001/",
 }
 
 // projectConfig represents project configuration YAML file.
@@ -44,7 +43,7 @@ type projectConfig struct {
 
 // Load reads and validates project configuration for the given database from the YAML file.
 func Load(file, db string) (*config.Config, error) {
-	uri, ok := uris[db]
+	uri, ok := DBs[db]
 	if !ok {
 		return nil, fmt.Errorf("unknown database %q", db)
 	}

@@ -5,6 +5,7 @@ go 1.22
 toolchain go1.22.6
 
 require (
+	github.com/alecthomas/kong v0.9.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/sethvargo/go-githubactions v1.2.0
 	github.com/stretchr/testify v1.9.0
