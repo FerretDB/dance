@@ -149,24 +149,24 @@ func main() {
 			log.Fatal(err)
 		}
 
-		logResult("Unexpectedly failed", compareRes.UnexpectedFail)
-		logResult("Unexpectedly skipped", compareRes.UnexpectedSkip)
-		logResult("Unexpectedly passed", compareRes.UnexpectedPass)
+		logResult("Unexpectedly failed", compareRes.XFailed)
+		logResult("Unexpectedly skipped", compareRes.XSkipped)
+		logResult("Unexpectedly passed", compareRes.XPassed)
 
 		if *vF {
-			logResult("Expectedly failed", compareRes.ExpectedFail)
-			logResult("Expectedly skipped", compareRes.ExpectedSkip)
-			logResult("Expectedly passed", compareRes.ExpectedPass)
+			logResult("Expectedly failed", compareRes.Failed)
+			logResult("Expectedly skipped", compareRes.Skipped)
+			logResult("Expectedly passed", compareRes.Passed)
 		}
 
 		logResult("Unknown", compareRes.Unknown)
 
-		log.Printf("Unexpectedly failed: %d.", len(compareRes.UnexpectedFail))
-		log.Printf("Unexpectedly skipped: %d.", len(compareRes.UnexpectedSkip))
-		log.Printf("Unexpectedly passed: %d.", len(compareRes.UnexpectedPass))
-		log.Printf("Expectedly failed: %d.", len(compareRes.ExpectedFail))
-		log.Printf("Expectedly skipped: %d.", len(compareRes.ExpectedSkip))
-		log.Printf("Expectedly passed: %d.", len(compareRes.ExpectedPass))
+		log.Printf("Unexpectedly failed: %d.", len(compareRes.XFailed))
+		log.Printf("Unexpectedly skipped: %d.", len(compareRes.XSkipped))
+		log.Printf("Unexpectedly passed: %d.", len(compareRes.XPassed))
+		log.Printf("Expectedly failed: %d.", len(compareRes.Failed))
+		log.Printf("Expectedly skipped: %d.", len(compareRes.Skipped))
+		log.Printf("Expectedly passed: %d.", len(compareRes.Passed))
 		log.Printf("Unknown: %d.", len(compareRes.Unknown))
 
 		expectedStats, err := yaml.Marshal(pc.Results.Stats)
@@ -192,11 +192,11 @@ func main() {
 			log.Fatalf("\nUnexpected stats:\n%s", diff)
 		}
 
-		totalRun := compareRes.Stats.ExpectedFail + compareRes.Stats.ExpectedSkip + compareRes.Stats.ExpectedPass
+		totalRun := compareRes.Stats.Failed + compareRes.Stats.Skipped + compareRes.Stats.Passed
 		msg := fmt.Sprintf(
 			"%.2f%% (%d/%d) tests passed.",
-			float64(compareRes.Stats.ExpectedPass)/float64(totalRun)*100,
-			compareRes.Stats.ExpectedPass,
+			float64(compareRes.Stats.Passed)/float64(totalRun)*100,
+			compareRes.Stats.Passed,
 			totalRun,
 		)
 		log.Print(msg)

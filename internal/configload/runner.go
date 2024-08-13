@@ -33,6 +33,7 @@ type runnerParamsCommand struct {
 	} `yaml:"tests"`
 }
 
+// convert implements [runnerParams] interface.
 func (rp *runnerParamsCommand) convert() config.RunnerParams {
 	res := &config.RunnerParamsCommand{
 		Dir:   rp.Dir,

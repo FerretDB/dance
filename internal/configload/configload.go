@@ -25,6 +25,7 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
+// uris contains MongoDB URIs for different databases.
 var uris = map[string]string{
 	"mongodb":             "mongodb://127.0.0.1:47017/",
 	"mongodb-secured":     "mongodb://127.0.0.1:47018/",
@@ -36,9 +37,9 @@ var uris = map[string]string{
 //
 //nolint:vet // for readability
 type projectConfig struct {
-	Runner  config.RunnerType  `yaml:"runner"`
-	Params  yaml.Node          `yaml:"params"`
-	Results map[string]*result `yaml:"results"`
+	Runner  config.RunnerType           `yaml:"runner"`
+	Params  yaml.Node                   `yaml:"params"`
+	Results map[string]*expectedResults `yaml:"results"`
 }
 
 // Load reads and validates project configuration for the given database from the YAML file.

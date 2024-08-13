@@ -14,16 +14,15 @@
 
 package config
 
-import "strings"
+// Stats represent expected or actual fail/skip/pass statistics for specific database.
+type Stats struct {
+	Failed  int
+	Skipped int
+	Passed  int
 
-// TestResult represents the outcome of a single test.
-type TestResult struct {
-	Status       Status
-	Output       string
-	Measurements map[string]float64
-}
+	XFailed  int
+	XSkipped int
+	XPassed  int
 
-// IndentedOutput returns the output of a test result with indented lines.
-func (tr *TestResult) IndentedOutput() string {
-	return strings.ReplaceAll(tr.Output, "\n", "\n\t")
+	Unknown int
 }

@@ -21,10 +21,10 @@ import (
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// result represents expected results for specific database in the project configuration YAML file.
+// expectedResults represents expected results for specific database in the project configuration YAML file.
 //
 //nolint:vet // for readability
-type result struct {
+type expectedResults struct {
 	Default config.Status `yaml:"default"` // defaults to pass
 	Stats   stats         `yaml:"stats"`
 
@@ -35,33 +35,33 @@ type result struct {
 	Ignore []string `yaml:"ignore"`
 }
 
-// convert converts result to [*config.TestConfig].
-func (r *result) convert() (*config.TestConfig, error) {
+// convert converts result to [*config.ExpectedResults].
+func (r *expectedResults) convert() (*config.ExpectedResults, error) {
 	if r == nil {
-		panic("backend is nil")
+		panic("result is nil")
 	}
 
-	t := &config.TestConfig{
+	res := &config.ExpectedResults{
 		Default: r.Default,
 		Stats:   r.Stats.convert(),
 	}
 
-	if t.Default == "" {
-		t.Default = config.Pass
+	if res.Default == "" {
+		res.Default = config.Pass
 	}
 
-	expected := []config.Status{config.Fail, config.Skip, config.Pass, config.Ignore} // no unknown
-	if !slices.Contains(expected, t.Default) {
-		return nil, fmt.Errorf("invalid default status %q", t.Default)
+	statuses := []config.Status{config.Fail, config.Skip, config.Pass, config.Ignore} // no unknown
+	if !slices.Contains(statuses, res.Default) {
+		return nil, fmt.Errorf("invalid default status %q", res.Default)
 	}
 
 	names := make(map[string]struct{})
 
 	for dst, src := range map[*[]string][]string{
-		&t.Fail:   r.Fail,
-		&t.Skip:   r.Skip,
-		&t.Pass:   r.Pass,
-		&t.Ignore: r.Ignore,
+		&res.Fail:   r.Fail,
+		&res.Skip:   r.Skip,
+		&res.Pass:   r.Pass,
+		&res.Ignore: r.Ignore,
 	} {
 		for _, name := range src {
 			if _, ok := names[name]; ok {
@@ -73,5 +73,5 @@ func (r *result) convert() (*config.TestConfig, error) {
 		*dst = append(*dst, src...)
 	}
 
-	return t, nil
+	return res, nil
 }

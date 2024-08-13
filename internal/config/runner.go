@@ -45,11 +45,13 @@ type RunnerParamsCommand struct {
 	Tests []RunnerParamsCommandTest
 }
 
+// RunnerParamsCommandTest represents a single test in `command` runner parameters.
 type RunnerParamsCommandTest struct {
 	Name string
 	Cmd  string
 }
 
+// runnerParams implements [RunnerParams] interface.
 func (rp *RunnerParamsCommand) runnerParams() {}
 
 // check interfaces

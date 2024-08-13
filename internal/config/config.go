@@ -15,47 +15,21 @@
 // Package config provides project configuration.
 package config
 
-// Config represents project configuration.
-type Config struct {
-	Runner  RunnerType
-	Params  RunnerParams
-	Results *TestConfig
-}
-
-// CompareResult encapsulates the comparison between expected and actual test outcomes.
-type CompareResult struct {
-	ExpectedFail map[string]string
-	ExpectedSkip map[string]string
-	ExpectedPass map[string]string
-
-	UnexpectedFail map[string]string
-	UnexpectedSkip map[string]string
-	UnexpectedPass map[string]string
-
-	Unknown map[string]string
-
-	Stats Stats
-}
-
-// Stats represent expected/actual fail/skip/pass statistics for specific database.
-type Stats struct {
-	UnexpectedFail int
-	UnexpectedSkip int
-	UnexpectedPass int
-	ExpectedFail   int
-	ExpectedSkip   int
-	ExpectedPass   int
-	Unknown        int
-}
-
 // Status represents the status of a single test.
 type Status string
 
-// Constants representing different test statuses.
+// Constants representing different expected or actual  test statuses.
 const (
 	Fail    Status = "fail"
 	Skip    Status = "skip"
 	Pass    Status = "pass"
-	Ignore  Status = "ignore"  // for fluky tests
 	Unknown Status = "unknown" // result can't be parsed
+	Ignore  Status = "ignore"  // for fluky tests
 )
+
+// Config represents project configuration.
+type Config struct {
+	Runner  RunnerType
+	Params  RunnerParams
+	Results *ExpectedResults
+}

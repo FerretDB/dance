@@ -43,11 +43,11 @@ func TestLoad(t *testing.T) {
 						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27001/'"},
 					},
 				},
-				Results: &config.TestConfig{
+				Results: &config.ExpectedResults{
 					Default: config.Pass,
 					Stats: &config.Stats{
-						ExpectedFail: 1,
-						ExpectedPass: 1,
+						Failed: 1,
+						Passed: 1,
 					},
 					Fail: []string{"strict"},
 				},
