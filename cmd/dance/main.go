@@ -73,7 +73,7 @@ func logResult(label string, res map[string]string) {
 
 var cli struct {
 	// TODO https://github.com/FerretDB/dance/issues/30
-	Database string `help:"${help_database}" enum:"${enum_database}" required:"" short:"d"`
+	Database []string `help:"${help_database}" enum:"${enum_database}" short:"d"`
 
 	Verbose bool `help:"Be more verbose." short:"v"`
 
@@ -118,130 +118,139 @@ func main() {
 		stop()
 	}()
 
-	u, err := url.Parse(configload.DBs[cli.Database])
-	if err != nil {
-		log.Fatal(err)
+	if len(cli.Database) == 0 {
+		cli.Database = maps.Keys(configload.DBs)
+		slices.Sort(cli.Database)
 	}
 
-	port, err := strconv.Atoi(u.Port())
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("Waiting for port %d to be up...", port)
-
-	if err := waitForPort(ctx, port); err != nil {
-		log.Fatal(err)
-	}
-
-	configs := cli.Config
-	if len(configs) == 0 {
-		configs, err = filepath.Glob("*.yml")
+	for _, db := range cli.Database {
+		uri := configload.DBs[db]
+		u, err := url.Parse(uri)
 		if err != nil {
+			log.Fatal(err)
+		}
+
+		port, err := strconv.Atoi(u.Port())
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, uri)
+
+		if err := waitForPort(ctx, port); err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	for i, c := range configs {
-		configs[i] = filepath.Base(c)
+	if len(cli.Config) == 0 {
+		var err error
+		if cli.Config, err = filepath.Glob("*.yml"); err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	log.Printf("Run project configs: %v", configs)
+	for i, c := range cli.Config {
+		cli.Config[i] = filepath.Base(c)
+	}
 
-	for _, c := range configs {
-		log.Print(c)
+	log.Printf("Run project configs: %v", cli.Config)
 
-		pc, err := configload.Load(c, cli.Database)
-		if err != nil {
-			log.Fatal(err)
-		}
+	for _, c := range cli.Config {
+		for _, db := range cli.Database {
+			log.Println(db, c)
 
-		var runRes map[string]config.TestResult
-		var runner runner.Runner
+			pc, err := configload.Load(c, db)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		switch pc.Runner {
-		case config.RunnerTypeCommand:
-			runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l)
-		case config.RunnerTypeGoTest:
-			fallthrough
-		case config.RunnerTypeJSTest:
-			fallthrough
-		case config.RunnerTypeYCSB:
-			fallthrough
-		default:
-			log.Fatalf("unknown runner: %q", pc.Runner)
-		}
+			var runRes map[string]config.TestResult
+			var runner runner.Runner
 
-		if err != nil {
-			log.Fatal(err)
-		}
+			switch pc.Runner {
+			case config.RunnerTypeCommand:
+				runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l.With("config", c))
+			case config.RunnerTypeGoTest:
+				fallthrough
+			case config.RunnerTypeJSTest:
+				fallthrough
+			case config.RunnerTypeYCSB:
+				fallthrough
+			default:
+				log.Fatalf("unknown runner: %q", pc.Runner)
+			}
 
-		runRes, err = runner.Run(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		compareRes, err := pc.Results.Compare(runRes)
-		if err != nil {
-			log.Fatal(err)
-		}
+			runRes, err = runner.Run(ctx)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		logResult("Unexpectedly failed", compareRes.XFailed)
-		logResult("Unexpectedly skipped", compareRes.XSkipped)
-		logResult("Unexpectedly passed", compareRes.XPassed)
+			compareRes, err := pc.Results.Compare(runRes)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		if cli.Verbose {
-			logResult("Expectedly failed", compareRes.Failed)
-			logResult("Expectedly skipped", compareRes.Skipped)
-			logResult("Expectedly passed", compareRes.Passed)
-		}
+			logResult("Unexpectedly failed", compareRes.XFailed)
+			logResult("Unexpectedly skipped", compareRes.XSkipped)
+			logResult("Unexpectedly passed", compareRes.XPassed)
 
-		logResult("Unknown", compareRes.Unknown)
+			if cli.Verbose {
+				logResult("Expectedly failed", compareRes.Failed)
+				logResult("Expectedly skipped", compareRes.Skipped)
+				logResult("Expectedly passed", compareRes.Passed)
+			}
 
-		log.Printf("Unexpectedly failed: %d.", len(compareRes.XFailed))
-		log.Printf("Unexpectedly skipped: %d.", len(compareRes.XSkipped))
-		log.Printf("Unexpectedly passed: %d.", len(compareRes.XPassed))
-		log.Printf("Expectedly failed: %d.", len(compareRes.Failed))
-		log.Printf("Expectedly skipped: %d.", len(compareRes.Skipped))
-		log.Printf("Expectedly passed: %d.", len(compareRes.Passed))
-		log.Printf("Unknown: %d.", len(compareRes.Unknown))
+			logResult("Unknown", compareRes.Unknown)
 
-		expectedStats, err := yaml.Marshal(pc.Results.Stats)
-		if err != nil {
-			log.Fatal(err)
-		}
-		actualStats, err := yaml.Marshal(compareRes.Stats)
-		if err != nil {
-			log.Fatal(err)
-		}
+			log.Printf("Unexpectedly failed: %d.", len(compareRes.XFailed))
+			log.Printf("Unexpectedly skipped: %d.", len(compareRes.XSkipped))
+			log.Printf("Unexpectedly passed: %d.", len(compareRes.XPassed))
+			log.Printf("Expectedly failed: %d.", len(compareRes.Failed))
+			log.Printf("Expectedly skipped: %d.", len(compareRes.Skipped))
+			log.Printf("Expectedly passed: %d.", len(compareRes.Passed))
+			log.Printf("Unknown: %d.", len(compareRes.Unknown))
 
-		diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
-			A:        difflib.SplitLines(string(expectedStats)),
-			B:        difflib.SplitLines(string(actualStats)),
-			FromFile: "Expected",
-			ToFile:   "Actual",
-			Context:  10,
-		})
-		if err != nil {
-			log.Fatal(err)
-		}
-		if diff != "" {
-			log.Fatalf("\nUnexpected stats:\n%s", diff)
-		}
+			expectedStats, err := yaml.Marshal(pc.Results.Stats)
+			if err != nil {
+				log.Fatal(err)
+			}
+			actualStats, err := yaml.Marshal(compareRes.Stats)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		totalRun := compareRes.Stats.Failed + compareRes.Stats.Skipped + compareRes.Stats.Passed
-		msg := fmt.Sprintf(
-			"%.2f%% (%d/%d) tests passed.",
-			float64(compareRes.Stats.Passed)/float64(totalRun)*100,
-			compareRes.Stats.Passed,
-			totalRun,
-		)
-		log.Print(msg)
+			diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{
+				A:        difflib.SplitLines(string(expectedStats)),
+				B:        difflib.SplitLines(string(actualStats)),
+				FromFile: "Expected",
+				ToFile:   "Actual",
+				Context:  10,
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+			if diff != "" {
+				log.Fatalf("\nUnexpected stats:\n%s", diff)
+			}
 
-		// Make percentage more visible on GitHub Actions.
-		// https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-		if os.Getenv("GITHUB_ACTIONS") == "true" {
-			action := githubactions.New()
-			action.Noticef("%s", msg)
+			totalRun := compareRes.Stats.Failed + compareRes.Stats.Skipped + compareRes.Stats.Passed
+			msg := fmt.Sprintf(
+				"%.2f%% (%d/%d) tests passed.",
+				float64(compareRes.Stats.Passed)/float64(totalRun)*100,
+				compareRes.Stats.Passed,
+				totalRun,
+			)
+			log.Print(msg)
+
+			// Make percentage more visible on GitHub Actions.
+			// https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+			if os.Getenv("GITHUB_ACTIONS") == "true" {
+				action := githubactions.New()
+				action.Noticef("%s", msg)
+			}
 		}
 	}
 }

@@ -20,6 +20,7 @@ import (
 	"log/slog"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/runner"
@@ -64,7 +65,7 @@ func execScript(ctx context.Context, dir, file, content string) error {
 		return err
 	}
 
-	cmd := exec.CommandContext(ctx, "./"+f.Name())
+	cmd := exec.CommandContext(ctx, "./"+filepath.Base(f.Name()))
 	cmd.Dir = dir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
