@@ -14,6 +14,23 @@
 
 package config
 
+// RunnerType represents the type of test runner used in the project configuration.
+type RunnerType string
+
+const (
+	// RunnerTypeCommand indicates a command-line test runner.
+	RunnerTypeCommand RunnerType = "command"
+
+	// RunnerTypeGoTest indicates a Go test runner.
+	RunnerTypeGoTest RunnerType = "gotest"
+
+	// RunnerTypeJSTest indicates a JavaScript test runner.
+	RunnerTypeJSTest RunnerType = "jstest"
+
+	// RunnerTypeYCSB indicates a YCSB test runner.
+	RunnerTypeYCSB RunnerType = "ycsb"
+)
+
 // RunnerParams is common interface for runner parameters.
 //
 //sumtype:decl
