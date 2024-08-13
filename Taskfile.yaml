@@ -39,8 +39,8 @@ tasks:
       - >
         docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
-      - task: init-repl
-      - task: init-user
+      # - task: init-repl
+      # - task: init-user
 
   env-pull:
     cmds:

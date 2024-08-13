@@ -1,0 +1,28 @@
+---
+runner: command
+params:
+  dir: dotnet-example
+  tests:
+    - name: normal
+      cmd: dotnet run '{{.MONGODB_URI}}'
+    - name: strict
+      cmd: dotnet run --strict=true '{{.MONGODB_URI}}'
+
+results:
+  ferretdb-postgresql:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      - strict
+
+  ferretdb-sqlite:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      - strict
+
+  mongodb:
+    stats:
+      pass: 2

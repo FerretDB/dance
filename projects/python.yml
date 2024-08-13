@@ -15,16 +15,20 @@ params:
 results:
   ferretdb-postgresql:
     stats:
-      pass: 2
+      fail: 1
+      pass: 1
+    fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      - strict
 
   ferretdb-sqlite:
     stats:
-      pass: 2
+      fail: 1
+      pass: 1
+    fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      - strict
 
   mongodb:
-    stats:
-      pass: 2
-
-  mongodb-secured:
     stats:
       pass: 2

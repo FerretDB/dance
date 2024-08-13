@@ -148,27 +148,27 @@ func main() {
 		}
 	}
 
-	for i, c := range cli.Config {
-		cli.Config[i] = filepath.Base(c)
+	for i, cf := range cli.Config {
+		cli.Config[i] = filepath.Base(cf)
 	}
 
 	log.Printf("Run project configs: %v", cli.Config)
 
-	for _, c := range cli.Config {
+	for _, cf := range cli.Config {
 		for _, db := range cli.Database {
-			log.Println(db, c)
+			log.Println(db, cf)
 
-			pc, err := configload.Load(c, db)
+			c, err := configload.Load(cf, db)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			var runRes map[string]config.TestResult
-			var runner runner.Runner
+			rl := l.With("config", cf, "db", db)
 
-			switch pc.Runner {
+			var runner runner.Runner
+			switch c.Runner {
 			case config.RunnerTypeCommand:
-				runner, err = command.New(pc.Params.(*config.RunnerParamsCommand), l.With("config", c))
+				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl)
 			case config.RunnerTypeGoTest:
 				fallthrough
 			case config.RunnerTypeJSTest:
@@ -176,48 +176,48 @@ func main() {
 			case config.RunnerTypeYCSB:
 				fallthrough
 			default:
-				log.Fatalf("unknown runner: %q", pc.Runner)
+				log.Fatalf("unknown runner: %q", c.Runner)
 			}
 
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			runRes, err = runner.Run(ctx)
+			res, err := runner.Run(ctx)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			compareRes, err := pc.Results.Compare(runRes)
+			cmp, err := c.Results.Compare(res)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			logResult("Unexpectedly failed", compareRes.XFailed)
-			logResult("Unexpectedly skipped", compareRes.XSkipped)
-			logResult("Unexpectedly passed", compareRes.XPassed)
+			logResult("Unexpectedly failed", cmp.XFailed)
+			logResult("Unexpectedly skipped", cmp.XSkipped)
+			logResult("Unexpectedly passed", cmp.XPassed)
 
 			if cli.Verbose {
-				logResult("Expectedly failed", compareRes.Failed)
-				logResult("Expectedly skipped", compareRes.Skipped)
-				logResult("Expectedly passed", compareRes.Passed)
+				logResult("Expectedly failed", cmp.Failed)
+				logResult("Expectedly skipped", cmp.Skipped)
+				logResult("Expectedly passed", cmp.Passed)
 			}
 
-			logResult("Unknown", compareRes.Unknown)
+			logResult("Unknown", cmp.Unknown)
 
-			log.Printf("Unexpectedly failed: %d.", len(compareRes.XFailed))
-			log.Printf("Unexpectedly skipped: %d.", len(compareRes.XSkipped))
-			log.Printf("Unexpectedly passed: %d.", len(compareRes.XPassed))
-			log.Printf("Expectedly failed: %d.", len(compareRes.Failed))
-			log.Printf("Expectedly skipped: %d.", len(compareRes.Skipped))
-			log.Printf("Expectedly passed: %d.", len(compareRes.Passed))
-			log.Printf("Unknown: %d.", len(compareRes.Unknown))
+			log.Printf("Unexpectedly failed: %d.", len(cmp.XFailed))
+			log.Printf("Unexpectedly skipped: %d.", len(cmp.XSkipped))
+			log.Printf("Unexpectedly passed: %d.", len(cmp.XPassed))
+			log.Printf("Expectedly failed: %d.", len(cmp.Failed))
+			log.Printf("Expectedly skipped: %d.", len(cmp.Skipped))
+			log.Printf("Expectedly passed: %d.", len(cmp.Passed))
+			log.Printf("Unknown: %d.", len(cmp.Unknown))
 
-			expectedStats, err := yaml.Marshal(pc.Results.Stats)
+			expectedStats, err := yaml.Marshal(c.Results.Stats)
 			if err != nil {
 				log.Fatal(err)
 			}
-			actualStats, err := yaml.Marshal(compareRes.Stats)
+			actualStats, err := yaml.Marshal(cmp.Stats)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -236,11 +236,11 @@ func main() {
 				log.Fatalf("\nUnexpected stats:\n%s", diff)
 			}
 
-			totalRun := compareRes.Stats.Failed + compareRes.Stats.Skipped + compareRes.Stats.Passed
+			totalRun := cmp.Stats.Failed + cmp.Stats.Skipped + cmp.Stats.Passed
 			msg := fmt.Sprintf(
 				"%.2f%% (%d/%d) tests passed.",
-				float64(compareRes.Stats.Passed)/float64(totalRun)*100,
-				compareRes.Stats.Passed,
+				float64(cmp.Stats.Passed)/float64(totalRun)*100,
+				cmp.Stats.Passed,
 				totalRun,
 			)
 			log.Print(msg)
