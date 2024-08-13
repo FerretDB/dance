@@ -72,8 +72,10 @@ func execScript(ctx context.Context, dir, file, content string) error {
 	return cmd.Run()
 }
 
+// Run implements [runner.Runner] interface.
 func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error) {
 	c.l.InfoContext(ctx, "Running setup")
+
 	if err := execScript(ctx, c.p.Dir, c.p.Dir, c.p.Setup); err != nil {
 		return nil, err
 	}
@@ -86,6 +88,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 		}
 
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
+
 		if err := execScript(ctx, c.p.Dir, t.Name, t.Cmd); err != nil {
 			tc.Status = config.Fail
 			tc.Output = err.Error()

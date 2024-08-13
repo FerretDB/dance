@@ -19,9 +19,10 @@ import (
 	"log/slog"
 	"testing"
 
-	"github.com/FerretDB/dance/internal/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/FerretDB/dance/internal/config"
 )
 
 func TestCommand(t *testing.T) {
