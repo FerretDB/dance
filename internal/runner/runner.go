@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package runner contains common runner interface.
 package runner
 
 import (
@@ -22,10 +23,11 @@ import (
 
 // Runner is a common interface for all runners.
 type Runner interface {
-	// Run runs tests.
 	Run(ctx context.Context) (map[string]config.TestResult, error)
 }
 
+// Params is a common interface for all runner parameters.
+//
 //sumtype:decl
 type Params interface {
 	params() // seal for sumtype

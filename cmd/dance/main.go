@@ -71,13 +71,12 @@ func logResult(label string, res map[string]string) {
 	}
 }
 
+//nolint:vet // for readability
 var cli struct {
 	// TODO https://github.com/FerretDB/dance/issues/30
-	Database []string `help:"${help_database}" enum:"${enum_database}" short:"d"`
-
-	Verbose bool `help:"Be more verbose." short:"v"`
-
-	Config []string `arg:"" help:"Project configurations to run." type:"existingfile" optional:""`
+	Database []string `enum:"${enum_database}" help:"${help_database}"               short:"d"`
+	Verbose  bool     `help:"Be more verbose." short:"v"`
+	Config   []string `arg:""                  help:"Project configurations to run." optional:"" type:"existingfile"`
 }
 
 func parseCLI() {
@@ -163,7 +162,7 @@ func main() {
 				log.Fatal(err)
 			}
 
-			rl := l.With("config", cf, "db", db)
+			rl := l.With(slog.String("config", cf), slog.String("db", db))
 
 			var runner runner.Runner
 			switch c.Runner {

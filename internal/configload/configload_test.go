@@ -25,7 +25,7 @@ import (
 )
 
 func FuzzLoadContent(f *testing.F) {
-	for _, tc := range []struct {
+	for _, tc := range []struct { //nolint:vet // for readability
 		file     string
 		db       string
 		expected *config.Config

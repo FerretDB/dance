@@ -23,6 +23,8 @@ import (
 )
 
 // TestResult represents the actual outcome of a single test.
+//
+//nolint:vet // for readability
 type TestResult struct {
 	Status       Status
 	Output       string

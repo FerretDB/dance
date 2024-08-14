@@ -28,6 +28,8 @@ const (
 )
 
 // Config represents project configuration.
+//
+//nolint:vet // for readability
 type Config struct {
 	Runner  RunnerType
 	Params  RunnerParams

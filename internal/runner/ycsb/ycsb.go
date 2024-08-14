@@ -114,7 +114,8 @@ func Run(ctx context.Context, dir string, args []string) (map[string]config.Test
 
 	switch err {
 	case nil:
-		fmt.Printf("Parsed metrics: %+v\n\n", m)
+		// fmt.Printf("Parsed metrics: %+v\n\n", m)
+		_ = m
 	default:
 		res[dir] = config.TestResult{
 			Status: config.Fail,
