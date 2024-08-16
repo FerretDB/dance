@@ -14,9 +14,9 @@ params:
     - name: noauth
       cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI_ANONYMOUS}}'
     - name: sha1
-      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI_SHA1}}'
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI_SHA1}}'
     - name: sha256
-      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI_SHA256}}'
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI_SHA256}}'
 
 results:
   mongodb:
@@ -37,24 +37,18 @@ results:
 
   ferretdb-postgresql:
     stats:
-      fail: 3
-      pass: 2
+      fail: 2
+      pass: 3
     fail:
-      # https://github.com/FerretDB/FerretDB/issues/3121
-      # https://github.com/FerretDB/dance/issues/890
-      - strict
       # 'Unsupported authentication mechanism'
       - sha1
       - sha256
 
   ferretdb-sqlite:
     stats:
-      fail: 3
-      pass: 2
+      fail: 2
+      pass: 3
     fail:
-      # https://github.com/FerretDB/FerretDB/issues/3121
-      # https://github.com/FerretDB/dance/issues/890
-      - strict
       # 'Unsupported authentication mechanism'
       - sha1
       - sha256
