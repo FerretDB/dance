@@ -12,26 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package config provides project configuration.
-package config
+package command
 
-// Status represents the status of a single test.
-type Status string
+import (
+	"context"
+	"log/slog"
+	"testing"
 
-// Constants representing different expected or actual  test statuses.
-const (
-	Fail    Status = "fail"
-	Skip    Status = "skip"
-	Pass    Status = "pass"
-	Unknown Status = "unknown" // result can't be parsed
-	Ignore  Status = "ignore"  // for fluky tests
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"github.com/FerretDB/dance/internal/config"
 )
 
-// Config represents project configuration.
-//
-//nolint:vet // for readability
-type Config struct {
-	Runner  RunnerType
-	Params  RunnerParams
-	Results *ExpectedResults
+func TestCommand(t *testing.T) {
+	t.Parallel()
+
+	p := &config.RunnerParamsCommand{
+		Setup: "exit 1",
+	}
+	c, err := New(p, slog.Default())
+	require.NoError(t, err)
+
+	ctx := context.Background()
+
+	res, err := c.Run(ctx)
+	require.Error(t, err)
+	assert.Nil(t, res)
 }

@@ -1,7 +1,7 @@
 ---
 runner: command
 params:
-  dir: python-example
+  dir: test
   setup: |
     python3 -m venv .
     ./bin/pip3 install -r requirements.txt
@@ -18,8 +18,6 @@ results:
       fail: 1
       pass: 1
     fail:
-      # https://github.com/FerretDB/FerretDB/issues/3121
-      # https://github.com/FerretDB/dance/issues/890
       - strict
 
   ferretdb-sqlite:
@@ -27,10 +25,12 @@ results:
       fail: 1
       pass: 1
     fail:
-      # https://github.com/FerretDB/FerretDB/issues/3121
-      # https://github.com/FerretDB/dance/issues/890
       - strict
 
   mongodb:
+    stats:
+      pass: 2
+
+  mongodb-secured:
     stats:
       pass: 2

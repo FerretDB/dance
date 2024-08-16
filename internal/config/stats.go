@@ -12,26 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package config provides project configuration.
 package config
 
-// Status represents the status of a single test.
-type Status string
+// Stats represent expected or actual fail/skip/pass statistics for specific database.
+type Stats struct {
+	Failed  int
+	Skipped int
+	Passed  int
 
-// Constants representing different expected or actual  test statuses.
-const (
-	Fail    Status = "fail"
-	Skip    Status = "skip"
-	Pass    Status = "pass"
-	Unknown Status = "unknown" // result can't be parsed
-	Ignore  Status = "ignore"  // for fluky tests
-)
+	XFailed  int
+	XSkipped int
+	XPassed  int
 
-// Config represents project configuration.
-//
-//nolint:vet // for readability
-type Config struct {
-	Runner  RunnerType
-	Params  RunnerParams
-	Results *ExpectedResults
+	Unknown int
 }

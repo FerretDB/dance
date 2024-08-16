@@ -1,0 +1,17 @@
+---
+runner: gotest
+params:
+  args: ["-timeout=20m", "-shuffle=on", "./..."]
+
+results:
+  postgresql:
+    stats:
+      pass: 6
+
+  sqlite:
+    stats:
+      pass: 6
+
+  mongodb:
+    stats:
+      pass: 6

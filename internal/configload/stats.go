@@ -12,26 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package config provides project configuration.
-package config
+package configload
 
-// Status represents the status of a single test.
-type Status string
+import "github.com/FerretDB/dance/internal/config"
 
-// Constants representing different expected or actual  test statuses.
-const (
-	Fail    Status = "fail"
-	Skip    Status = "skip"
-	Pass    Status = "pass"
-	Unknown Status = "unknown" // result can't be parsed
-	Ignore  Status = "ignore"  // for fluky tests
-)
+// stats represent expected fail/skip/pass statistics for specific database in the project configuration YAML file.
+type stats struct {
+	Fail int `yaml:"fail"`
+	Skip int `yaml:"skip"`
+	Pass int `yaml:"pass"`
+}
 
-// Config represents project configuration.
-//
-//nolint:vet // for readability
-type Config struct {
-	Runner  RunnerType
-	Params  RunnerParams
-	Results *ExpectedResults
+// convert converts stats to [*config.Stats].
+func (s *stats) convert() *config.Stats {
+	if s == nil {
+		panic("stats are nil")
+	}
+
+	return &config.Stats{
+		Failed:  s.Fail,
+		Skipped: s.Skip,
+		Passed:  s.Pass,
+	}
 }

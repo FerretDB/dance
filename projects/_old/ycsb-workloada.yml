@@ -1,0 +1,21 @@
+---
+# Workload A: Update heavy workload
+runner: ycsb
+params:
+  dir: ycsb
+  args:
+    - workloads/workloada
+    - recordcount=5000
+
+results:
+  postgresql:
+    stats:
+      pass: 1
+
+  sqlite:
+    stats:
+      pass: 1
+
+  mongodb:
+    stats:
+      pass: 1

@@ -12,26 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package config provides project configuration.
-package config
+// Package runner contains common runner interface.
+package runner
 
-// Status represents the status of a single test.
-type Status string
+import (
+	"context"
 
-// Constants representing different expected or actual  test statuses.
-const (
-	Fail    Status = "fail"
-	Skip    Status = "skip"
-	Pass    Status = "pass"
-	Unknown Status = "unknown" // result can't be parsed
-	Ignore  Status = "ignore"  // for fluky tests
+	"github.com/FerretDB/dance/internal/config"
 )
 
-// Config represents project configuration.
+// Runner is a common interface for all runners.
+type Runner interface {
+	Run(ctx context.Context) (map[string]config.TestResult, error)
+}
+
+// Params is a common interface for all runner parameters.
 //
-//nolint:vet // for readability
-type Config struct {
-	Runner  RunnerType
-	Params  RunnerParams
-	Results *ExpectedResults
+//sumtype:decl
+type Params interface {
+	params() // seal for sumtype
 }

@@ -3,8 +3,7 @@ version: "3"
 
 vars:
   DB: ""
-  TEST: ""
-  PARALLEL: 0
+  CONFIG: ""
 
 tasks:
   init-tools:
@@ -40,11 +39,8 @@ tasks:
       - >
         docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
-      - task: init-repl
-      - task: init-user
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb-postgresql`, `ferretdb-sqlite`, or `mongodb`"
+      # - task: init-repl
+      # - task: init-user
 
   env-pull:
     cmds:
@@ -65,14 +61,17 @@ tasks:
     cmds:
       - docker compose down --remove-orphans --volumes
 
+  build:
+    desc: "Build dance tool"
+    cmds:
+      - go build -v -o bin/ ./cmd/dance/
+
   dance:
-    desc: "Run all integration tests"
+    desc: "Dance!"
+    deps: [build]
     dir: projects
     cmds:
-      - go run ../cmd/dance -db={{.DB}} -p={{.PARALLEL}} {{.TEST}}
-    preconditions:
-      - sh: "test {{.DB}}"
-        msg: "Please set DB variable to one of `ferretdb-postgresql`, `ferretdb-sqlite`, or `mongodb`"
+      - ../bin/dance --database={{.DB}} {{.CONFIG}}
 
   lint:
     desc: "Run linters"
@@ -129,6 +128,11 @@ tasks:
         --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
     # ignore roles that are not implemented yet
     ignore_error: true
+
+  godocs:
+    desc: "Serve Go code documentation"
+    cmds:
+      - bin/pkgsite{{exeExt}} -http=127.0.0.1:6060 -open
 
   # see https://github.com/DavidAnson/markdownlint-cli2#command-line for the reason we use double-quotes
   docs-fmt:

@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build !windows
-// +build !windows
+//go:build unix
 
 package main
 
@@ -24,6 +23,10 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-func notifyAppTermination(parent context.Context) (context.Context, context.CancelFunc) {
+// sigTerm returns a copy of the parent context that is marked done
+// (its Done channel is closed) when termination signal arrives,
+// when the returned stop function is called, or when the parent context's
+// Done channel is closed, whichever happens first.
+func sigTerm(parent context.Context) (context.Context, context.CancelFunc) {
 	return signal.NotifyContext(parent, unix.SIGTERM, unix.SIGINT)
 }
