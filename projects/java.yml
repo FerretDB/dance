@@ -1,0 +1,36 @@
+---
+runner: command
+params:
+  dir: java-example/java
+  tests:
+    - name: normal
+      cmd: |
+        export MAVEN_OPTS='-enableassertions'
+        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI}}"
+    - name: strict
+      cmd: |
+        export MAVEN_OPTS='-enableassertions'
+        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI}} -strict"
+
+results:
+  ferretdb-postgresql:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      # https://github.com/FerretDB/dance/issues/891
+      - strict
+
+  ferretdb-sqlite:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      # https://github.com/FerretDB/FerretDB/issues/3121
+      # https://github.com/FerretDB/dance/issues/891
+      - strict
+
+  mongodb:
+    stats:
+      pass: 2

@@ -48,14 +48,15 @@ jobs:
           - mongodb
         project:
           - dotnet
+          - java
+          - python
+
           # - dotnet-plain
           # - dotnet-scram
 
-          # - java
           # - java-plain
           # - java-scram
 
-          - python
           # - python-plain
           # - python-scram
 
