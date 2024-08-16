@@ -2,11 +2,13 @@
 runner: command
 params:
   dir: dotnet-example
+  setup: dotnet build
+
   tests:
     - name: normal
       cmd: dotnet run '{{.MONGODB_URI}}'
     - name: strict
-      cmd: dotnet run '{{.MONGODB_URI}}' --strict=true
+      cmd: dotnet run '{{.MONGODB_URI}}' --strict
     - name: noauth
       cmd: dotnet run '{{.MONGODB_URI_ANONYMOUS}}'
 

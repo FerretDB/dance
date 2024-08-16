@@ -2,6 +2,7 @@
 runner: command
 params:
   dir: java-example/java
+
   tests:
     - name: normal
       cmd: |
