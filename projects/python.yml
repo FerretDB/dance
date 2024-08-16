@@ -13,6 +13,14 @@ params:
       cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI}}'
 
 results:
+  mongodb:
+    stats:
+      pass: 2
+
+  mongodb-secured:
+    stats:
+      pass: 2
+
   ferretdb-postgresql:
     stats:
       fail: 1
@@ -30,7 +38,3 @@ results:
       # https://github.com/FerretDB/FerretDB/issues/3121
       # https://github.com/FerretDB/dance/issues/890
       - strict
-
-  mongodb:
-    stats:
-      pass: 2
