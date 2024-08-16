@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"os"
 	"text/template"
 
@@ -28,9 +29,10 @@ import (
 
 // DBs contains MongoDB URIs for different databases.
 var DBs = map[string]string{
+	"mongodb":             "mongodb://127.0.0.1:37001/",
+	"mongodb-secured":     "mongodb://username:password@127.0.0.1:37002/",
 	"ferretdb-postgresql": "mongodb://127.0.0.1:27001/",
 	"ferretdb-sqlite":     "mongodb://127.0.0.1:27002/",
-	"mongodb":             "mongodb://127.0.0.1:37001/",
 }
 
 // projectConfig represents project configuration YAML file.
@@ -63,6 +65,13 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
 
+	anonymousURI, err := url.Parse(mongodbURI)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse MongoDB URI: %w", err)
+	}
+
+	anonymousURI.User = nil
+
 	t, err := template.New("").Option("missingkey=error").Parse(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
@@ -70,7 +79,8 @@ func loadContent(content, db string) (*config.Config, error) {
 
 	var buf bytes.Buffer
 	data := map[string]any{
-		"MONGODB_URI": mongodbURI,
+		"MONGODB_URI":           mongodbURI,
+		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
 	}
 
 	if err = t.Execute(&buf, data); err != nil {

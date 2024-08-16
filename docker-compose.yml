@@ -5,7 +5,7 @@ services:
       context: ./build/deps
       dockerfile: mongo.Dockerfile
     command: --config /etc/mongod.conf
-    restart: unless-stopped
+    restart: on-failure
     ulimits:
       nproc: 64000
       nofile:
@@ -21,30 +21,32 @@ services:
     volumes:
       - ./build/mongod.conf:/etc/mongod.conf
 
-  # mongodb-secured:
-  #   build:
-  #     context: ./build/deps
-  #     dockerfile: mongo.Dockerfile
-  #   command: --config /etc/mongod.conf
-  #   restart: unless-stopped
-  #   ulimits:
-  #     nproc: 64000
-  #     nofile:
-  #       soft: 64000
-  #       hard: 64000
-  #   ports:
-  #     - 47018:47018
-  #   environment:
-  #     # Always UTC+05:45. Set to catch timezone problems.
-  #     - TZ=Asia/Kathmandu
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
-  #   volumes:
-  #     - ./build/mongod_secured.conf:/etc/mongod.conf
+  mongodb-secured:
+    build:
+      context: ./build/deps
+      dockerfile: mongo.Dockerfile
+    command: --config /etc/mongod.conf
+    restart: on-failure
+    ulimits:
+      nproc: 64000
+      nofile:
+        soft: 64000
+        hard: 64000
+    ports:
+      - 37002:37002
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./build/mongod_secured.conf:/etc/mongod.conf
 
   ferretdb-postgresql:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
-    restart: unless-stopped
+    restart: on-failure
     depends_on: ["postgres"]
     ports:
       - 27001:27001
@@ -54,13 +56,12 @@ services:
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance
-      - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   ferretdb-sqlite:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - 27002:27002
     environment:
@@ -69,7 +70,6 @@ services:
       - FERRETDB_LISTEN_ADDR=:27002
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
-      - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -77,7 +77,7 @@ services:
     build:
       context: ./build/deps
       dockerfile: postgres.Dockerfile
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - 5432:5432
     environment:
