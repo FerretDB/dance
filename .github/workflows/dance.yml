@@ -43,9 +43,10 @@ jobs:
       fail-fast: false
       matrix:
         db:
+          - mongodb
+          - mongodb-secured
           - ferretdb-postgresql
           - ferretdb-sqlite
-          - mongodb
         project:
           - dotnet
           - java
