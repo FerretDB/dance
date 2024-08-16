@@ -106,6 +106,7 @@ func (expected *ExpectedResults) Compare(actual map[string]TestResult) (*Compare
 		actualResult := actual[test]
 
 		expectedStatus := expected.Default
+
 		for prefix := test; prefix != ""; prefix = nextPrefix(prefix) {
 			if res, ok := m[prefix]; ok {
 				expectedStatus = res

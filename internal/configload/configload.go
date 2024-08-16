@@ -58,6 +58,7 @@ func loadContent(content, db string) (*config.Config, error) {
 	if !ok {
 		return nil, fmt.Errorf("unknown database %q", db)
 	}
+
 	if mongodbURI == "" {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
@@ -85,6 +86,7 @@ func loadContent(content, db string) (*config.Config, error) {
 	}
 
 	var p runnerParams
+
 	switch pc.Runner {
 	case config.RunnerTypeCommand:
 		p = &runnerParamsCommand{}
@@ -97,6 +99,7 @@ func loadContent(content, db string) (*config.Config, error) {
 	default:
 		err = fmt.Errorf("unknown runner type %q", pc.Runner)
 	}
+
 	if err != nil {
 		return nil, err
 	}

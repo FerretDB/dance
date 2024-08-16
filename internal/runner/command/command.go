@@ -26,14 +26,13 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 )
 
+// command represents a generic test runner.
 type command struct {
 	p *config.RunnerParamsCommand
 	l *slog.Logger
 }
 
-// Run runs generic test.
-// It runs a command with arguments in a directory and returns the combined output as is.
-// If the command exits with a non-zero exit code, the test fails.
+// New creates a new `command` runner with given parameters.
 func New(params *config.RunnerParamsCommand, l *slog.Logger) (runner.Runner, error) {
 	return &command{
 		p: params,
@@ -41,6 +40,7 @@ func New(params *config.RunnerParamsCommand, l *slog.Logger) (runner.Runner, err
 	}, nil
 }
 
+// execScripts stores the given shell script content in dir/file-XXX.sh and executes it.
 func execScript(ctx context.Context, dir, file, content string) error {
 	f, err := os.CreateTemp(dir, file+"-*.sh")
 	if err != nil {
@@ -102,3 +102,8 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 
 	return res, nil
 }
+
+// check interfaces
+var (
+	_ runner.Runner = (*command)(nil)
+)

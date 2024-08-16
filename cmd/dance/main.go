@@ -74,7 +74,7 @@ func logResult(label string, res map[string]string) {
 //nolint:vet // for readability
 var cli struct {
 	// TODO https://github.com/FerretDB/dance/issues/30
-	Database []string `enum:"${enum_database}" help:"${help_database}"               short:"d"`
+	Database []string `help:"${help_database}" enum:"${enum_database}"               short:"d"`
 	Verbose  bool     `help:"Be more verbose." short:"v"`
 	Config   []string `arg:""                  help:"Project configurations to run." optional:"" type:"existingfile"`
 }
@@ -133,9 +133,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, uri)
 
-		if err := waitForPort(ctx, port); err != nil {
+		if err = waitForPort(ctx, port); err != nil {
 			log.Fatal(err)
 		}
 	}
@@ -165,6 +166,7 @@ func main() {
 			rl := l.With(slog.String("config", cf), slog.String("db", db))
 
 			var runner runner.Runner
+
 			switch c.Runner {
 			case config.RunnerTypeCommand:
 				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl)
@@ -216,6 +218,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
+
 			actualStats, err := yaml.Marshal(cmp.Stats)
 			if err != nil {
 				log.Fatal(err)
@@ -231,6 +234,7 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
+
 			if diff != "" {
 				log.Fatalf("\nUnexpected stats:\n%s", diff)
 			}
