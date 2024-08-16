@@ -93,8 +93,12 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
 
 		if err := execScript(ctx, c.p.Dir, t.Name, t.Cmd); err != nil {
+			c.l.WarnContext(ctx, "Test failed", slog.String("test", t.Name), slog.String("error", err.Error()))
+
 			tc.Status = config.Fail
 			tc.Output = err.Error()
+		} else {
+			c.l.InfoContext(ctx, "Test passed", slog.String("test", t.Name))
 		}
 
 		res[t.Name] = tc
