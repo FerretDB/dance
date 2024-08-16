@@ -55,7 +55,7 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance
+      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance?sslmode=disable
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

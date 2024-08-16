@@ -54,6 +54,47 @@ func Load(file, db string) (*config.Config, error) {
 	return loadContent(string(b), db)
 }
 
+// templateData returns a map with template data for the given MongoDB URI.
+func templateData(uri url.URL) (map[string]any, error) {
+	anonymousURI := uri
+	anonymousURI.User = nil
+
+	plainURI := uri
+	q := plainURI.Query()
+	q.Set("authMechanism", "PLAIN")
+	plainURI.RawQuery = q.Encode()
+
+	if plainURI.User == nil {
+		plainURI.User = url.UserPassword("dummy", "dummy")
+	}
+
+	sha1URI := uri
+	q = sha1URI.Query()
+	q.Set("authMechanism", "SCRAM-SHA-1")
+	sha1URI.RawQuery = q.Encode()
+
+	if sha1URI.User == nil {
+		sha1URI.User = url.UserPassword("dummy", "dummy")
+	}
+
+	sha256URI := uri
+	q = sha256URI.Query()
+	q.Set("authMechanism", "SCRAM-SHA-256")
+	sha256URI.RawQuery = q.Encode()
+
+	if sha256URI.User == nil {
+		sha256URI.User = url.UserPassword("dummy", "dummy")
+	}
+
+	return map[string]any{
+		"MONGODB_URI":           uri.String(),
+		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
+		"MONGODB_URI_PLAIN":     plainURI.String(),
+		"MONGODB_URI_SHA1":      sha1URI.String(),
+		"MONGODB_URI_SHA256":    sha256URI.String(),
+	}, nil
+}
+
 // loadContent reads and validates project configuration for the given database from the YAML content.
 func loadContent(content, db string) (*config.Config, error) {
 	mongodbURI, ok := DBs[db]
@@ -65,24 +106,22 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
 
-	anonymousURI, err := url.Parse(mongodbURI)
+	uri, err := url.Parse(mongodbURI)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse MongoDB URI: %w", err)
+		return nil, fmt.Errorf("failed to parse MongoDB URI %q for %q: %w", mongodbURI, db, err)
 	}
-
-	anonymousURI.User = nil
 
 	t, err := template.New("").Option("missingkey=error").Parse(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
 	}
 
-	var buf bytes.Buffer
-	data := map[string]any{
-		"MONGODB_URI":           mongodbURI,
-		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
+	data, err := templateData(*uri)
+	if err != nil {
+		return nil, err
 	}
 
+	var buf bytes.Buffer
 	if err = t.Execute(&buf, data); err != nil {
 		return nil, fmt.Errorf("failed to execute project config file template: %w", err)
 	}
