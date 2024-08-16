@@ -6,7 +6,7 @@ params:
     - name: normal
       cmd: dotnet run '{{.MONGODB_URI}}'
     - name: strict
-      cmd: dotnet run --strict=true '{{.MONGODB_URI}}'
+      cmd: dotnet run '{{.MONGODB_URI}}' --strict=true
     - name: noauth
       cmd: dotnet run '{{.MONGODB_URI_ANONYMOUS}}'
 

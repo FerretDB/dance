@@ -10,9 +10,9 @@ params:
     - name: normal
       cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}'
     - name: strict
-      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI}}'
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}' --strict
     - name: noauth
-      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI_ANONYMOUS}}'
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI_ANONYMOUS}}'
 
 results:
   mongodb:
