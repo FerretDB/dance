@@ -59,7 +59,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb-sqlite:
+  ferretdb-sqlite-replset:
     image: ${FERRETDB_IMAGE:-ferretdb-local}
     restart: on-failure
     ports:
@@ -70,6 +70,7 @@ services:
       - FERRETDB_LISTEN_ADDR=:27002
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
+      - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

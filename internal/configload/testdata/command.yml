@@ -20,7 +20,7 @@ results:
     fail:
       - strict
 
-  ferretdb-sqlite:
+  ferretdb-sqlite-replset:
     stats:
       fail: 1
       pass: 1

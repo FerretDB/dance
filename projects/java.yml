@@ -2,6 +2,7 @@
 runner: command
 params:
   dir: java-example/java
+  setup: mvn compile
 
   tests:
     - name: normal
@@ -16,6 +17,10 @@ params:
       cmd: |
         export MAVEN_OPTS='-enableassertions'
         mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_ANONYMOUS}}"
+    - name: plain
+      cmd: |
+        export MAVEN_OPTS='-enableassertions'
+        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_PLAIN}}"
     - name: sha1
       cmd: |
         export MAVEN_OPTS='-enableassertions'
@@ -28,34 +33,34 @@ params:
 results:
   mongodb:
     stats:
-      fail: 2
+      fail: 3
       pass: 3
     fail:
-      # 'Authentication failed'
-      - sha1
-      - sha256
+      - plain # Received authentication for mechanism PLAIN which is not enabled
+      - sha1 # Authentication failed
+      - sha256 # Authentication failed
 
   mongodb-secured:
     stats:
-      fail: 1
+      fail: 2
       pass: 4
     fail:
-      - noauth
+      - plain # Received authentication for mechanism PLAIN which is not enabled
+      - noauth # Command dropDatabase requires authentication
 
   ferretdb-postgresql:
     stats:
-      fail: 2
+      fail: 3
       pass: 3
     fail:
-      # 'Unsupported authentication mechanism'
-      - sha1
-      - sha256
+      - plain # internal error: failed SASL auth: FATAL: password authentication failed for user "dummy"
+      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
+      - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
 
-  ferretdb-sqlite:
+  ferretdb-sqlite-replset:
     stats:
       fail: 2
-      pass: 3
+      pass: 4
     fail:
-      # 'Unsupported authentication mechanism'
-      - sha1
-      - sha256
+      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
+      - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
