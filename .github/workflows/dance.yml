@@ -46,7 +46,7 @@ jobs:
           - mongodb
           - mongodb-secured
           - ferretdb-postgresql
-          - ferretdb-sqlite
+          - ferretdb-sqlite-replset
         project:
           - dotnet
           - java

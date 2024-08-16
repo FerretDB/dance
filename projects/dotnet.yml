@@ -11,6 +11,8 @@ params:
       cmd: dotnet run '{{.MONGODB_URI}}' --strict
     - name: noauth
       cmd: dotnet run '{{.MONGODB_URI_ANONYMOUS}}'
+    - name: plain
+      cmd: dotnet run '{{.MONGODB_URI_PLAIN}}'
     - name: sha1
       cmd: dotnet run '{{.MONGODB_URI_SHA1}}'
     - name: sha256
@@ -19,34 +21,37 @@ params:
 results:
   mongodb:
     stats:
-      fail: 2
+      fail: 3
       pass: 3
     fail:
-      # 'Authentication failed'
-      - sha1
-      - sha256
+      - plain # Received authentication for mechanism PLAIN which is not enabled
+      - sha1 # Authentication failed
+      - sha256 # Authentication failed
 
   mongodb-secured:
     stats:
-      fail: 1
+      fail: 2
       pass: 4
     fail:
-      - noauth
+      - noauth # Command dropDatabase requires authentication
+      - plain # Received authentication for mechanism PLAIN which is not enabled
 
   ferretdb-postgresql:
     stats:
-      fail: 2
+      fail: 3
       pass: 3
     fail:
-      # 'Unsupported authentication mechanism'
+      # Unsupported OP_QUERY command: saslStart. The client driver may require an upgrade.
+      - plain
       - sha1
       - sha256
 
-  ferretdb-sqlite:
+  ferretdb-sqlite-replset:
     stats:
-      fail: 2
+      fail: 3
       pass: 3
     fail:
-      # 'Unsupported authentication mechanism'
+      # Unsupported OP_QUERY command: saslStart. The client driver may require an upgrade.
+      - plain
       - sha1
       - sha256

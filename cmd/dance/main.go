@@ -67,7 +67,7 @@ func logResult(label string, res map[string]string) {
 	sort.Strings(keys)
 	for _, t := range keys {
 		out := res[t]
-		log.Printf("%s:\n\t%s", t, out)
+		log.Printf("===> %s:\n\t%s\n\n", t, out)
 	}
 }
 
