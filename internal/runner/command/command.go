@@ -87,7 +87,6 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	res := make(map[string]config.TestResult, len(c.p.Tests))
 
 	for _, t := range c.p.Tests {
-
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
 
 		b, err := execScript(ctx, c.p.Dir, t.Name, t.Cmd)
