@@ -78,7 +78,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	if c.p.Setup != "" {
 		c.l.InfoContext(ctx, "Running setup")
 
-		b, err := execScript(ctx, c.p.Dir, c.p.Dir, c.p.Setup)
+		b, err := execScript(ctx, c.p.Dir, "setup", c.p.Setup)
 		if err != nil {
 			return nil, fmt.Errorf("%s\n%w", b, err)
 		}
