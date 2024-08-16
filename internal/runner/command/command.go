@@ -17,6 +17,7 @@ package command
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
@@ -41,10 +42,11 @@ func New(params *config.RunnerParamsCommand, l *slog.Logger) (runner.Runner, err
 }
 
 // execScripts stores the given shell script content in dir/file-XXX.sh and executes it.
-func execScript(ctx context.Context, dir, file, content string) error {
+// It returns the combined output of the script execution.
+func execScript(ctx context.Context, dir, file, content string) ([]byte, error) {
 	f, err := os.CreateTemp(dir, file+"-*.sh")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer func() {
@@ -54,23 +56,21 @@ func execScript(ctx context.Context, dir, file, content string) error {
 
 	content = "#!/bin/sh\n\n" + content + "\n"
 	if _, err = f.WriteString(content); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = f.Chmod(0o755); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err = f.Close(); err != nil {
-		return err
+		return nil, err
 	}
 
 	cmd := exec.CommandContext(ctx, "./"+filepath.Base(f.Name()))
 	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	return cmd.CombinedOutput()
 }
 
 // Run implements [runner.Runner] interface.
@@ -78,25 +78,30 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	if c.p.Setup != "" {
 		c.l.InfoContext(ctx, "Running setup")
 
-		if err := execScript(ctx, c.p.Dir, c.p.Dir, c.p.Setup); err != nil {
-			return nil, err
+		b, err := execScript(ctx, c.p.Dir, c.p.Dir, c.p.Setup)
+		if err != nil {
+			return nil, fmt.Errorf("%s\n%w", b, err)
 		}
 	}
 
 	res := make(map[string]config.TestResult, len(c.p.Tests))
 
 	for _, t := range c.p.Tests {
-		tc := config.TestResult{
-			Status: config.Pass,
-		}
 
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
 
-		if err := execScript(ctx, c.p.Dir, t.Name, t.Cmd); err != nil {
+		b, err := execScript(ctx, c.p.Dir, t.Name, t.Cmd)
+
+		tc := config.TestResult{
+			Status: config.Pass,
+			Output: string(b),
+		}
+
+		if err != nil {
 			c.l.WarnContext(ctx, "Test failed", slog.String("test", t.Name), slog.String("error", err.Error()))
 
 			tc.Status = config.Fail
-			tc.Output = err.Error()
+			tc.Output += "\n" + err.Error()
 		} else {
 			c.l.InfoContext(ctx, "Test passed", slog.String("test", t.Name))
 		}

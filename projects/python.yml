@@ -13,8 +13,6 @@ params:
       cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}' --strict
     - name: noauth
       cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI_ANONYMOUS}}'
-    # - name: plain
-    #   cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI_PLAIN}}'
     - name: sha1
       cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI_SHA1}}'
     - name: sha256
@@ -23,22 +21,19 @@ params:
 results:
   mongodb:
     stats:
-      fail: 3
+      fail: 2
       pass: 3
     fail:
-      # 'Received authentication for mechanism PLAIN which is not enabled'
-      - plain
       # 'Authentication failed'
       - sha1
       - sha256
 
   mongodb-secured:
     stats:
-      fail: 2
+      fail: 1
       pass: 4
     fail:
       - noauth
-      - plain # 'Received authentication for mechanism PLAIN which is not enabled'
 
   ferretdb-postgresql:
     stats:
@@ -55,7 +50,7 @@ results:
   ferretdb-sqlite:
     stats:
       fail: 3
-      pass: 3
+      pass: 2
     fail:
       # https://github.com/FerretDB/FerretDB/issues/3121
       # https://github.com/FerretDB/dance/issues/890
