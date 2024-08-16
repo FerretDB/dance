@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"net/url"
 	"os"
 	"text/template"
 
@@ -64,6 +65,13 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
 
+	anonymousURI, err := url.Parse(mongodbURI)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse MongoDB URI: %w", err)
+	}
+
+	anonymousURI.User = nil
+
 	t, err := template.New("").Option("missingkey=error").Parse(content)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
@@ -71,7 +79,8 @@ func loadContent(content, db string) (*config.Config, error) {
 
 	var buf bytes.Buffer
 	data := map[string]any{
-		"MONGODB_URI": mongodbURI,
+		"MONGODB_URI":           mongodbURI,
+		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
 	}
 
 	if err = t.Execute(&buf, data); err != nil {

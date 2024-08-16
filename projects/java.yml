@@ -11,20 +11,27 @@ params:
       cmd: |
         export MAVEN_OPTS='-enableassertions'
         mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI}} -strict"
+    - name: noauth
+      cmd: |
+        export MAVEN_OPTS='-enableassertions'
+        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_ANONYMOUS}}"
 
 results:
   mongodb:
     stats:
-      pass: 2
+      pass: 3
 
   mongodb-secured:
     stats:
+      fail: 1
       pass: 2
+    fail:
+      - noauth
 
   ferretdb-postgresql:
     stats:
       fail: 1
-      pass: 1
+      pass: 2
     fail:
       # https://github.com/FerretDB/FerretDB/issues/3121
       # https://github.com/FerretDB/dance/issues/891
@@ -33,7 +40,7 @@ results:
   ferretdb-sqlite:
     stats:
       fail: 1
-      pass: 1
+      pass: 2
     fail:
       # https://github.com/FerretDB/FerretDB/issues/3121
       # https://github.com/FerretDB/dance/issues/891
