@@ -26,21 +26,18 @@ tasks:
       - bin/gofumpt -w ./cmd/ ./internal/
 
   env-up:
-    desc: "Start environment"
+    desc: "Start development environment"
     deps: [env-up-detach]
     cmds:
-      - docker compose logs --follow
+      - task: env-logs
 
   env-up-detach:
-    desc: "Start dependencies in docker"
     cmds:
       # use -t instead of --timeout / --wait-timeout to be compatible with all versions:
       # https://github.com/docker/compose/issues/10269#issuecomment-1495205234
       - >
         docker compose up --always-recreate-deps --force-recreate --remove-orphans --renew-anon-volumes -t 0 --detach
         --build {{.DB}}
-      # - task: init-repl
-      # - task: init-user
 
   env-pull:
     cmds:
@@ -58,7 +55,7 @@ tasks:
       - docker compose logs
 
   env-down:
-    desc: "Stop environment"
+    desc: "Stop development environment"
     cmds:
       - docker compose down --remove-orphans --volumes
 
@@ -86,49 +83,6 @@ tasks:
       - >
         bin/go-consistent -pedantic
         ./cmd/... ./internal/... ./projects/mongo-tools/...
-
-  psql:
-    desc: "Run psql"
-    cmds:
-      - docker compose exec postgres psql -U postgres -d ferretdb
-
-  mongo:
-    desc: "Run legacy MongoDB shell (`mongo`) with test script"
-    cmds:
-      - >
-        docker compose run --rm mongo
-        'mongodb://host.docker.internal:27017/'
-        {{.CLI_ARGS}}
-
-  mongosh:
-    desc: "Run mongo shell"
-    cmds:
-      - >
-        docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
-        --eval 'disableTelemetry()' --shell
-
-  init-repl:
-    desc: "Initializes a new replica set"
-    cmds:
-      - >
-        docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
-        --verbose --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost"}]})'
-    # ignore already initialized error and no such command error for replSetInitiate
-    ignore_error: true
-
-  # creates a user similar to MONGO_INITDB_ROOT_USERNAME but does not enable authentication
-  # https://github.com/docker-library/mongo/blob/master/7.0/docker-entrypoint.sh#L260
-  init-user:
-    desc: "Creates a user with the root access role"
-    cmds:
-      - >
-        docker compose run --rm mongosh mongosh
-        'mongodb://host.docker.internal:27017/'
-        --verbose --eval 'db.getSiblingDB("admin").createUser({user: "user", pwd: "password", roles: [ "root" ]})'
-    # ignore roles that are not implemented yet
-    ignore_error: true
 
   godocs:
     desc: "Serve Go code documentation"
