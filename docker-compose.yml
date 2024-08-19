@@ -75,9 +75,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   postgres:
-    build:
-      context: ./build/deps
-      dockerfile: postgres.Dockerfile
+    image: ${POSTGRES_IMAGE:-postgres}
     restart: on-failure
     ports:
       - 5432:5432
