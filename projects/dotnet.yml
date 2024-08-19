@@ -42,6 +42,8 @@ results:
       pass: 3
     fail:
       # Unsupported OP_QUERY command: saslStart. The client driver may require an upgrade.
+      # TODO https://github.com/FerretDB/FerretDB/issues/4065
+      # TODO https://github.com/FerretDB/dance/issues/889
       - plain
       - sha1
       - sha256
@@ -52,6 +54,8 @@ results:
       pass: 3
     fail:
       # Unsupported OP_QUERY command: saslStart. The client driver may require an upgrade.
+      # TODO https://github.com/FerretDB/FerretDB/issues/4065
+      # TODO https://github.com/FerretDB/dance/issues/889
       - plain
       - sha1
       - sha256
