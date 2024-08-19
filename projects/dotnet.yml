@@ -78,3 +78,22 @@ results:
       - normal
       - sha1
       - sha256
+
+  ferretdb-sqlite-replset-secured:
+    stats:
+      fail: 5
+      pass: 1
+    fail:
+      - noauth # Authentication failed
+
+      # TODO https://github.com/FerretDB/FerretDB/issues/4065
+      # TODO https://github.com/FerretDB/dance/issues/889
+      # Unsupported OP_QUERY command: saslStart. The client driver may require an upgrade.
+      - plain
+
+      # TODO https://github.com/FerretDB/FerretDB/issues/4065
+      # TODO https://github.com/FerretDB/dance/issues/889
+      # Unsupported OP_QUERY command: saslContinue. The client driver may require an upgrade.
+      - normal
+      - sha1
+      - sha256

@@ -48,6 +48,7 @@ jobs:
           - ferretdb-postgresql
           - ferretdb-sqlite-replset
           - ferretdb-postgresql-secured
+          - ferretdb-sqlite-replset-secured
         project:
           - dotnet
           - java

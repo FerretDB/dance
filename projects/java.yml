@@ -74,3 +74,11 @@ results:
     fail:
       - noauth # Authentication failed
       - plain # Unsupported authentication mechanism "PLAIN"
+
+  ferretdb-sqlite-replset-secured:
+    stats:
+      fail: 2
+      pass: 4
+    fail:
+      - noauth # Authentication failed
+      - plain # Unsupported authentication mechanism "PLAIN"
