@@ -66,3 +66,19 @@ results:
     fail:
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
       - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
+
+  ferretdb-postgresql-secured:
+    stats:
+      fail: 2
+      pass: 4
+    fail:
+      - noauth # Authentication failed
+      - plain # Unsupported authentication mechanism "PLAIN"
+
+  ferretdb-sqlite-replset-secured:
+    stats:
+      fail: 2
+      pass: 4
+    fail:
+      - noauth # Authentication failed
+      - plain # Unsupported authentication mechanism "PLAIN"
