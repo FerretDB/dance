@@ -169,7 +169,7 @@ func main() {
 
 			switch c.Runner {
 			case config.RunnerTypeCommand:
-				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl)
+				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
 				fallthrough
 			case config.RunnerTypeJSTest:
