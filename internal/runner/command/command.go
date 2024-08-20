@@ -83,7 +83,7 @@ func execScript(ctx context.Context, dir, file, content string, verbose bool) ([
 		cmd.Stderr = &b
 	}
 
-	if err := cmd.Run(); err != nil {
+	if err = cmd.Run(); err != nil {
 		return nil, err
 	}
 

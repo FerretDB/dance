@@ -21,8 +21,8 @@ import (
 
 // LockedBuffer is a thread-safe [bytes.Buffer].
 type LockedBuffer struct {
-	m sync.Mutex
 	b bytes.Buffer
+	m sync.Mutex
 }
 
 // Bytes calls [bytes.Buffer.Write] in a thread-safe way.
