@@ -67,7 +67,7 @@ jobs:
           git diff --exit-code
 
   linters:
-    name: linters
+    name: Linters
     runs-on: ubuntu-22.04
     timeout-minutes: 5
 
