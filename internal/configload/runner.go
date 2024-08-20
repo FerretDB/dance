@@ -14,13 +14,17 @@
 
 package configload
 
-import "github.com/FerretDB/dance/internal/config"
+import (
+	"fmt"
+
+	"github.com/FerretDB/dance/internal/config"
+)
 
 // runnerParams is common interface for runner parameters.
 //
 //sumtype:decl
 type runnerParams interface {
-	convert() config.RunnerParams // seal for sumtype
+	convert() (config.RunnerParams, error) // seal for sumtype
 }
 
 // runnerParamsCommand represents `command` runner parameters in the project configuration YAML file.
@@ -34,7 +38,11 @@ type runnerParamsCommand struct {
 }
 
 // convert implements [runnerParams] interface.
-func (rp *runnerParamsCommand) convert() config.RunnerParams {
+func (rp *runnerParamsCommand) convert() (config.RunnerParams, error) {
+	if rp.Dir == "" {
+		return nil, fmt.Errorf("dir is required")
+	}
+
 	res := &config.RunnerParamsCommand{
 		Dir:   rp.Dir,
 		Setup: rp.Setup,
@@ -47,7 +55,7 @@ func (rp *runnerParamsCommand) convert() config.RunnerParams {
 		})
 	}
 
-	return res
+	return res, nil
 }
 
 // runnerParamsGoTest represents `gotest` runner parameters in the project configuration YAML file.
@@ -56,10 +64,10 @@ type runnerParamsGoTest struct {
 }
 
 // convert implements [runnerParams] interface.
-func (rp *runnerParamsGoTest) convert() config.RunnerParams {
+func (rp *runnerParamsGoTest) convert() (config.RunnerParams, error) {
 	return &config.RunnerParamsGoTest{
 		Args: rp.Args,
-	}
+	}, nil
 }
 
 // check interfaces

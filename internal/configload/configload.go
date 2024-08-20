@@ -159,7 +159,10 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("failed to decode runner parameters: %w", err)
 	}
 
-	params := p.convert()
+	params, err := p.convert()
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert runner parameters: %w", err)
+	}
 
 	res := pc.Results[db]
 	if res == nil {
