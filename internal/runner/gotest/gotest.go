@@ -12,113 +12,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gotest contains `go test` runner.
+// Package gotest contains `gotest` runner.
 package gotest
 
 import (
 	"context"
-	"encoding/json"
-	"io"
-	"log"
-	"os"
+	"log/slog"
 	"os/exec"
-	"runtime"
-	"strconv"
 	"strings"
+	"time"
 
 	"github.com/FerretDB/dance/internal/config"
+	"github.com/FerretDB/dance/internal/runner"
 )
 
-// Run runs `go test`.
-// Args contain additional arguments to `go test`.
-// `-v -json -p=1 -count=1` are always added.
-// `-race` is added if possible.
-func Run(ctx context.Context, dir string, args []string, verbose bool, parallel int) (map[string]config.TestResult, error) {
-	// TODO https://github.com/FerretDB/dance/issues/20
-	_ = ctx
-
-	args = append([]string{"test", "-v", "-json", "-p=1", "-count=1"}, args...)
-
-	// implicitly defaults to GOMAXPROCS
-	if parallel > 0 {
-		log.Printf("Running up to %d tests in parallel.", parallel)
-		args = append(args, "-parallel="+strconv.Itoa(parallel))
-	}
-
-	// use the same condition as in FerretDB's Taskfile.yml
-	if runtime.GOOS != "windows" && runtime.GOARCH != "arm" && runtime.GOARCH != "riscv64" {
-		args = append(args, "-race")
-	}
-
-	cmd := exec.Command("go", args...)
-	cmd.Dir = dir
-	cmd.Stderr = os.Stderr
-
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
-	p, err := cmd.StdoutPipe()
-	if err != nil {
-		return nil, err
-	}
-
-	var r io.Reader = p
-	if verbose {
-		r = io.TeeReader(p, os.Stdout)
-	}
-
-	if err = cmd.Start(); err != nil {
-		return nil, err
-	}
-
-	d := json.NewDecoder(r)
-	d.DisallowUnknownFields()
-
-	res := make(map[string]config.TestResult)
-
-	for {
-		var event testEvent
-		if err = d.Decode(&event); err != nil {
-			if err == io.EOF {
-				break
-			}
-			return nil, err
-		}
-
-		// skip package failures
-		if event.Test == "" {
-			continue
-		}
-
-		testName := event.Package + "/" + event.Test
-
-		result := res[testName]
-		if result.Status == "" {
-			result.Status = config.Unknown
-		}
-
-		result.Output += event.Output
-
-		switch event.Action {
-		case actionPass:
-			result.Status = config.Pass
-		case actionFail:
-			result.Status = config.Fail
-		case actionSkip:
-			result.Status = config.Skip
-		case actionBench, actionCont, actionOutput, actionPause, actionRun:
-			fallthrough
-		default:
-			result.Status = config.Unknown
-		}
-
-		res[testName] = result
-	}
-
-	if err = cmd.Wait(); err != nil {
-		if _, ok := err.(*exec.ExitError); ok {
-			err = nil
-		}
-	}
-
-	return res, err
+// testEvent represents a single even emitted by `go test -json`.
+//
+// See https://pkg.go.dev/cmd/test2json#hdr-Output_Format.
+type testEvent struct {
+	Time           time.Time `json:"Time"`
+	Action         string    `json:"Action"`
+	Package        string    `json:"Package"`
+	Test           string    `json:"Test"`
+	Output         string    `json:"Output"`
+	ElapsedSeconds float64   `json:"Elapsed"`
 }
+
+// Elapsed returns an elapsed time.
+func (te testEvent) Elapsed() time.Duration {
+	return time.Duration(te.ElapsedSeconds * float64(time.Second))
+}
+
+// goTest represents `gotest` runner.
+type goTest struct {
+	p *config.RunnerParamsGoTest
+	l *slog.Logger
+}
+
+// New creates a new `gotest` runner with given parameters.
+func New(params *config.RunnerParamsGoTest, l *slog.Logger) (runner.Runner, error) {
+	return &goTest{
+		p: params,
+		l: l,
+	}, nil
+}
+
+// Run implements [runner.Runner] interface.
+func (c *goTest) Run(ctx context.Context) (map[string]config.TestResult, error) {
+	// TODO https://github.com/FerretDB/dance/issues/20
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	args := append([]string{"test", "-v", "-json", "-count=1"}, c.p.Args...)
+
+	cmd := exec.CommandContext(ctx, "go", args...)
+
+	c.l.InfoContext(ctx, "Running", slog.String("cmd", strings.Join(cmd.Args, " ")))
+
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+// check interfaces
+var (
+	_ runner.Runner = (*goTest)(nil)
+)
