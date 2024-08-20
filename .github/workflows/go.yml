@@ -52,7 +52,7 @@ jobs:
         run: bin/task init
 
       - name: Run tests
-        run: bin/task tests
+        run: bin/task test
         env:
           GOFLAGS: ${{ runner.debug == '1' && '-v' || '' }}
 
