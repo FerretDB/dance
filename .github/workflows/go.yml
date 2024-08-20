@@ -1,0 +1,97 @@
+---
+name: Go
+on:
+  pull_request:
+    types:
+      - unlabeled # if GitHub Actions stuck, add and remove "not ready" label to force rebuild
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "12 3 * * *"
+
+env:
+  GOPATH: /home/runner/go
+  GOCACHE: /home/runner/go/cache
+  GOLANGCI_LINT_CACHE: /home/runner/go/cache/lint
+  GOMODCACHE: /home/runner/go/mod
+  GOPROXY: https://proxy.golang.org
+  GOTOOLCHAIN: local
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    # Do not run this job in parallel for any PR change or branch push.
+    concurrency:
+      group: ${{ github.workflow }}-tests-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
+
+    steps:
+      # TODO https://github.com/FerretDB/github-actions/issues/211
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: tests
+
+      - name: Install Task
+        run: go generate -x
+        working-directory: tools
+
+      - name: Run init
+        run: bin/task init
+
+      - name: Run tests
+        run: bin/task test
+        env:
+          GOFLAGS: ${{ runner.debug == '1' && '-v' || '' }}
+
+      # we don't want them on CI
+      - name: Clean test and fuzz caches
+        if: always()
+        run: go clean -testcache -fuzzcache
+
+      - name: Check dirty
+        run: |
+          git status
+          git diff --exit-code
+
+  linters:
+    name: Linters
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+
+    # Do not run this job in parallel for any PR change or branch push.
+    concurrency:
+      group: ${{ github.workflow }}-linters-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: true
+
+    if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
+
+    steps:
+      # TODO https://github.com/FerretDB/github-actions/issues/211
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # for `golangci-lint run --new` to work
+
+      - name: Setup Go
+        uses: FerretDB/github-actions/setup-go@main
+        with:
+          cache-key: linters
+
+      - name: Run linters
+        uses: FerretDB/github-actions/linters@main
+
+      - name: Format and lint documentation
+        run: bin/task docs-fmt
