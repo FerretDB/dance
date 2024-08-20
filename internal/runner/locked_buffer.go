@@ -12,31 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package command
+package runner
 
 import (
-	"context"
-	"log/slog"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
-	"github.com/FerretDB/dance/internal/config"
+	"bytes"
+	"sync"
 )
 
-func TestCommand(t *testing.T) {
-	t.Parallel()
+// LockedBuffer is a thread-safe [bytes.Buffer].
+type LockedBuffer struct {
+	b bytes.Buffer
+	m sync.Mutex
+}
 
-	p := &config.RunnerParamsCommand{
-		Setup: "exit 1",
-	}
-	c, err := New(p, slog.Default(), true)
-	require.NoError(t, err)
+// Bytes calls [bytes.Buffer.Write] in a thread-safe way.
+func (lb *LockedBuffer) Write(p []byte) (int, error) {
+	lb.m.Lock()
+	defer lb.m.Unlock()
 
-	ctx := context.Background()
+	return lb.b.Write(p)
+}
 
-	res, err := c.Run(ctx)
-	require.Error(t, err)
-	assert.Nil(t, res)
+// Bytes calls [bytes.Buffer.Bytes] in a thread-safe way.
+func (lb *LockedBuffer) Bytes() []byte {
+	lb.m.Lock()
+	defer lb.m.Unlock()
+
+	return lb.b.Bytes()
 }

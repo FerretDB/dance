@@ -18,6 +18,7 @@ package command
 import (
 	"context"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"os/exec"
@@ -29,21 +30,23 @@ import (
 
 // command represents a generic test runner.
 type command struct {
-	p *config.RunnerParamsCommand
-	l *slog.Logger
+	p       *config.RunnerParamsCommand
+	l       *slog.Logger
+	verbose bool
 }
 
 // New creates a new `command` runner with given parameters.
-func New(params *config.RunnerParamsCommand, l *slog.Logger) (runner.Runner, error) {
+func New(params *config.RunnerParamsCommand, l *slog.Logger, verbose bool) (runner.Runner, error) {
 	return &command{
-		p: params,
-		l: l,
+		p:       params,
+		l:       l,
+		verbose: verbose,
 	}, nil
 }
 
 // execScripts stores the given shell script content in dir/file-XXX.sh and executes it.
 // It returns the combined output of the script execution.
-func execScript(ctx context.Context, dir, file, content string) ([]byte, error) {
+func execScript(ctx context.Context, dir, file, content string, verbose bool) ([]byte, error) {
 	f, err := os.CreateTemp(dir, file+"-*.sh")
 	if err != nil {
 		return nil, err
@@ -70,7 +73,21 @@ func execScript(ctx context.Context, dir, file, content string) ([]byte, error) 
 	cmd := exec.CommandContext(ctx, "./"+filepath.Base(f.Name()))
 	cmd.Dir = dir
 
-	return cmd.CombinedOutput()
+	var b runner.LockedBuffer
+
+	if verbose {
+		cmd.Stdout = io.MultiWriter(&b, os.Stdout)
+		cmd.Stderr = io.MultiWriter(&b, os.Stderr)
+	} else {
+		cmd.Stdout = &b
+		cmd.Stderr = &b
+	}
+
+	if err = cmd.Run(); err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
 }
 
 // Run implements [runner.Runner] interface.
@@ -78,7 +95,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	if c.p.Setup != "" {
 		c.l.InfoContext(ctx, "Running setup")
 
-		b, err := execScript(ctx, c.p.Dir, "setup", c.p.Setup)
+		b, err := execScript(ctx, c.p.Dir, "setup", c.p.Setup, c.verbose)
 		if err != nil {
 			return nil, fmt.Errorf("%s\n%w", b, err)
 		}
@@ -89,7 +106,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	for _, t := range c.p.Tests {
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
 
-		b, err := execScript(ctx, c.p.Dir, t.Name, t.Cmd)
+		b, err := execScript(ctx, c.p.Dir, t.Name, t.Cmd, c.verbose)
 
 		tc := config.TestResult{
 			Status: config.Pass,

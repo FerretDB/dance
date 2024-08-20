@@ -4,6 +4,7 @@ version: "3"
 vars:
   DB: ""
   CONFIG: ""
+  RACE_FLAG: -race={{and (ne OS "windows") (ne ARCH "arm") (ne ARCH "riscv64")}}
 
 tasks:
   init-tools:
@@ -63,6 +64,11 @@ tasks:
     desc: "Build dance tool"
     cmds:
       - go build -v -o bin/ ./cmd/dance/
+
+  test:
+    desc: "Run unit tests (with caching)"
+    cmds:
+      - go test {{.RACE_FLAG}} -shuffle=on ./internal/...
 
   dance:
     desc: "Dance!"
