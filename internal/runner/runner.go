@@ -23,6 +23,7 @@ import (
 
 // Runner is a common interface for all runners.
 type Runner interface {
+	// Run executes configured tests and returns results by test name.
 	Run(ctx context.Context) (map[string]config.TestResult, error)
 }
 

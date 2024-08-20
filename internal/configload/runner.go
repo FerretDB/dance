@@ -50,7 +50,20 @@ func (rp *runnerParamsCommand) convert() config.RunnerParams {
 	return res
 }
 
+// runnerParamsGoTest represents `gotest` runner parameters in the project configuration YAML file.
+type runnerParamsGoTest struct {
+	Args []string `yaml:"args"`
+}
+
+// convert implements [runnerParams] interface.
+func (rp *runnerParamsGoTest) convert() config.RunnerParams {
+	return &config.RunnerParamsGoTest{
+		Args: rp.Args,
+	}
+}
+
 // check interfaces
 var (
 	_ runnerParams = (*runnerParamsCommand)(nil)
+	_ runnerParams = (*runnerParamsGoTest)(nil)
 )

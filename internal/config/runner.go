@@ -54,7 +54,16 @@ type RunnerParamsCommandTest struct {
 // runnerParams implements [RunnerParams] interface.
 func (rp *RunnerParamsCommand) runnerParams() {}
 
+// RunnerParamsGoTest represents `gotest` runner parameters.
+type RunnerParamsGoTest struct {
+	Args []string
+}
+
+// runnerParams implements [RunnerParams] interface.
+func (rp *RunnerParamsGoTest) runnerParams() {}
+
 // check interfaces
 var (
 	_ RunnerParams = (*RunnerParamsCommand)(nil)
+	_ RunnerParams = (*RunnerParamsGoTest)(nil)
 )
