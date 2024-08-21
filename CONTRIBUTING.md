@@ -2,20 +2,20 @@
 
 ## Concepts
 
-There are **projects** that use MongoDB and could work with FerretDB.
-Those projects have some kind of integration tests and/or benchmarks (we will call them **tests** for simplicity); sometimes, a project is only a set of tests.
+There are *projects* that use MongoDB and could work with FerretDB.
+Those projects have some kind of integration tests and/or benchmarks (we will call them *tests* for simplicity); sometimes, a project is only a set of tests.
 Names uniquely identify both projects and tests within the project.
 
-Tests are run against a **database** identified by name.
+Tests are run against a *database* identified by name.
 Each database has a single canonical MongoDB URI and configuration.
 Different configurations should be represented as different named databases.
 Databases may be run locally (for example, with Docker Compose) or remotely.
 
-Project tests a run against a database by a **runner** that returns **test results**.
+Project tests a run against a database by a *runner* that returns *test results*.
 In the simplest case, the test result contains only name, status, and unparsed output; other runner types may include additional properties like numerical measurements for benchmarks.
-Different **runner types** accept different **parameters**; sometimes, they may include test names, and sometimes, names are parsed from the output.
+Different *runner types* accept different *parameters*; sometimes, they may include test names, and sometimes, names are parsed from the output.
 
-**Project configuration** is a YAML file with a name matching the project name, containing a runner type, runner parameters, and expected test results per database name.
+*Project configuration* is a YAML file with a name matching the project name, containing a runner type, runner parameters, and expected test results per database name.
 Multiple MongoDB URIs (canonical form, URI with invalid credentials, etc) are available in runner parameters via template variables.
 Project configuration can not contain database-specific tests; instead, some tests may be expected to fail for some databases.
 
