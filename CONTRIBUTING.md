@@ -40,6 +40,7 @@ git submodule update --init
 
 ```sh
 export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main
+export POSTGRES_IMAGE=postgres:16
 
 bin/task env-up
 bin/task DB=ferretdb-postgresql
