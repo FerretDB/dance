@@ -17,7 +17,11 @@ package gotest
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"io"
 	"log/slog"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -45,15 +49,17 @@ func (te testEvent) Elapsed() time.Duration {
 
 // goTest represents `gotest` runner.
 type goTest struct {
-	p *config.RunnerParamsGoTest
-	l *slog.Logger
+	p       *config.RunnerParamsGoTest
+	l       *slog.Logger
+	verbose bool
 }
 
 // New creates a new `gotest` runner with given parameters.
-func New(params *config.RunnerParamsGoTest, l *slog.Logger) (runner.Runner, error) {
+func New(params *config.RunnerParamsGoTest, l *slog.Logger, verbose bool) (runner.Runner, error) {
 	return &goTest{
-		p: params,
-		l: l,
+		p:       params,
+		l:       l,
+		verbose: verbose,
 	}, nil
 }
 
@@ -66,14 +72,76 @@ func (c *goTest) Run(ctx context.Context) (map[string]config.TestResult, error) 
 	args := append([]string{"test", "-v", "-json", "-count=1"}, c.p.Args...)
 
 	cmd := exec.CommandContext(ctx, "go", args...)
+	cmd.Stderr = os.Stderr
 
-	c.l.InfoContext(ctx, "Running", slog.String("cmd", strings.Join(cmd.Args, " ")))
-
-	if err := cmd.Start(); err != nil {
+	p, err := cmd.StdoutPipe()
+	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	c.l.InfoContext(ctx, "Running", slog.String("cmd", strings.Join(cmd.Args, " ")))
+
+	if err = cmd.Start(); err != nil {
+		return nil, err
+	}
+
+	d := json.NewDecoder(p)
+	d.DisallowUnknownFields()
+
+	res := make(map[string]config.TestResult)
+
+	for {
+		var event testEvent
+		if err = d.Decode(&event); err != nil {
+			if err == io.EOF {
+				break
+			}
+
+			return nil, err
+		}
+
+		if c.verbose {
+			c.l.DebugContext(ctx, "", slog.Any("event", event))
+		}
+
+		if event.Test == "" {
+			continue
+		}
+
+		testName := event.Package + "/" + event.Test
+
+		result := res[testName]
+		if result.Status == "" {
+			result.Status = config.Unknown
+		}
+
+		result.Output += event.Output
+
+		switch event.Action {
+		case "fail":
+			result.Status = config.Fail
+		case "skip":
+			result.Status = config.Skip
+		case "pass":
+			result.Status = config.Pass
+		case "start", "run", "pause", "cont", "output", "bench":
+			fallthrough
+		default:
+			result.Status = config.Unknown
+		}
+
+		res[testName] = result
+	}
+
+	err = cmd.Wait()
+	c.l.InfoContext(ctx, "Done", slog.String("cmd", strings.Join(cmd.Args, " ")), slog.Any("err", err))
+
+	var exitErr *exec.ExitError
+	if errors.As(err, &exitErr) && exitErr.Exited() {
+		err = nil
+	}
+
+	return res, err
 }
 
 // check interfaces

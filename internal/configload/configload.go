@@ -142,7 +142,7 @@ func loadContent(content, db string) (*config.Config, error) {
 	case config.RunnerTypeCommand:
 		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
-		fallthrough
+		p = &runnerParamsGoTest{}
 	case config.RunnerTypeJSTest:
 		fallthrough
 	case config.RunnerTypeYCSB:
