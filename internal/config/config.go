@@ -18,7 +18,7 @@ package config
 // Status represents the status of a single test.
 type Status string
 
-// Constants representing different expected or actual  test statuses.
+// Constants representing different expected or actual test statuses.
 const (
 	Fail    Status = "fail"
 	Skip    Status = "skip"
