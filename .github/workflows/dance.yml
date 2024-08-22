@@ -99,8 +99,8 @@ jobs:
       - name: Start environment
         run: bin/task env-up-detach DB=${{ matrix.db }}
         env:
-          FERRETDB_IMAGE: ${{ inputs.ferretdb_image }}
-          POSTGRES_IMAGE: ${{ inputs.postgres_image }}
+          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
+          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
       - name: Run init
         run: bin/task init
