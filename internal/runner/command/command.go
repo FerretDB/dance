@@ -47,6 +47,10 @@ func New(params *config.RunnerParamsCommand, l *slog.Logger, verbose bool) (runn
 // execScripts stores the given shell script content in dir/file-XXX.sh and executes it.
 // It returns the combined output of the script execution.
 func execScript(ctx context.Context, dir, file, content string, verbose bool) ([]byte, error) {
+	if dir == "" {
+		dir = "."
+	}
+
 	f, err := os.CreateTemp(dir, file+"-*.sh")
 	if err != nil {
 		return nil, err
@@ -56,6 +60,10 @@ func execScript(ctx context.Context, dir, file, content string, verbose bool) ([
 		_ = f.Close()
 		_ = os.Remove(f.Name())
 	}()
+
+	if verbose {
+		content = "set -x\n\n" + content
+	}
 
 	content = "#!/bin/sh\n\n" + content + "\n"
 	if _, err = f.WriteString(content); err != nil {
@@ -83,11 +91,8 @@ func execScript(ctx context.Context, dir, file, content string, verbose bool) ([
 		cmd.Stderr = &b
 	}
 
-	if err = cmd.Run(); err != nil {
-		return nil, err
-	}
-
-	return b.Bytes(), nil
+	err = cmd.Run()
+	return b.Bytes(), err
 }
 
 // Run implements [runner.Runner] interface.
