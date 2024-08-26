@@ -28,15 +28,59 @@ import (
 func TestCommand(t *testing.T) {
 	t.Parallel()
 
-	p := &config.RunnerParamsCommand{
-		Setup: "exit 1",
-	}
-	c, err := New(p, slog.Default(), true)
-	require.NoError(t, err)
-
 	ctx := context.Background()
 
-	res, err := c.Run(ctx)
-	require.Error(t, err)
-	assert.Nil(t, res)
+	p := &config.RunnerParamsCommand{
+		Tests: []config.RunnerParamsCommandTest{
+			{
+				Name: "test1",
+				Cmd:  "exit 0",
+			},
+			{
+				Name: "test2",
+				Cmd:  "exit 1",
+			},
+		},
+	}
+
+	t.Run("Normal", func(t *testing.T) {
+		c, err := New(p, slog.Default(), false)
+		require.NoError(t, err)
+
+		res, err := c.Run(ctx)
+		require.NoError(t, err)
+
+		expected := map[string]config.TestResult{
+			"test1": {
+				Status: "pass",
+				Output: "",
+			},
+			"test2": {
+				Status: "fail",
+				Output: "\nexit status 1",
+			},
+		}
+		assert.Equal(t, expected, res)
+	})
+
+	t.Run("Verbose", func(t *testing.T) {
+		c, err := New(p, slog.Default(), true)
+		require.NoError(t, err)
+
+		res, err := c.Run(ctx)
+		require.NoError(t, err)
+
+		expected := map[string]config.TestResult{
+			"test1": {
+				Status: "pass",
+				Output: "+ exit 0\n",
+			},
+			"test2": {
+				Status: "fail",
+				Output: "+ exit 1\n\n" +
+					"exit status 1",
+			},
+		}
+		assert.Equal(t, expected, res)
+	})
 }
