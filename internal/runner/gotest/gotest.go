@@ -72,6 +72,7 @@ func (c *goTest) Run(ctx context.Context) (map[string]config.TestResult, error) 
 	args := append([]string{"test", "-v", "-json", "-count=1"}, c.p.Args...)
 
 	cmd := exec.CommandContext(ctx, "go", args...)
+	cmd.Dir = c.p.Dir
 	cmd.Stderr = os.Stderr
 
 	p, err := cmd.StdoutPipe()

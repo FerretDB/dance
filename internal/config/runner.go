@@ -56,6 +56,7 @@ func (rp *RunnerParamsCommand) runnerParams() {}
 
 // RunnerParamsGoTest represents `gotest` runner parameters.
 type RunnerParamsGoTest struct {
+	Dir  string
 	Args []string
 }
 

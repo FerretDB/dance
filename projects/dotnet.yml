@@ -1,7 +1,6 @@
 ---
 runner: command
 params:
-  dir: dotnet-example
   setup: dotnet build
 
   tests:

@@ -38,12 +38,11 @@ func setup(tb testing.TB) (context.Context, *mongo.Client) {
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
 	require.NoError(tb, err)
-	err = client.Ping(ctx, nil)
-	require.NoError(tb, err)
+
+	require.NoError(tb, client.Ping(ctx, nil))
 
 	tb.Cleanup(func() {
-		err = client.Disconnect(ctx)
-		require.NoError(tb, err)
+		require.NoError(tb, client.Disconnect(ctx))
 	})
 
 	return context.Background(), client
