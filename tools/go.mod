@@ -10,7 +10,7 @@ require (
 	github.com/pingcap/go-ycsb v1.0.1
 	github.com/quasilyte/go-consistent v0.6.1
 	golang.org/x/perf v0.0.0-20240806191124-3f62151e343c
-	golang.org/x/pkgsite v0.0.0-20240806212006-da7af58eca47
+	golang.org/x/pkgsite v0.0.0-20240824135812-676c19eae995
 	golang.org/x/tools v0.24.0
 	golang.org/x/vuln v1.1.3
 	mvdan.cc/gofumpt v0.7.0
