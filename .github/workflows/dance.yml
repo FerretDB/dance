@@ -57,7 +57,7 @@ jobs:
           - java-example
           - python-example
 
-          # - mongo-tools
+          - mongo-tools
 
           # - restheart
           # - restheart-auth
