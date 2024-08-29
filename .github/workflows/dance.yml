@@ -64,16 +64,7 @@ jobs:
           - java
           - python
 
-          # - dotnet-plain
-          # - dotnet-scram
-
-          # - java-plain
-          # - java-scram
-
-          # - python-plain
-          # - python-scram
-
-          # - mongo-tools
+          - mongo-tools
 
           # - restheart
           # - restheart-auth
