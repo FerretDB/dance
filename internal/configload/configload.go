@@ -90,10 +90,12 @@ func templateData(uri url.URL) (map[string]any, error) {
 	}
 
 	hostURI := uri
+
 	_, port, err := net.SplitHostPort(hostURI.Host)
 	if err != nil {
 		return nil, err
 	}
+
 	hostURI.Host = net.JoinHostPort("host.docker.internal", port)
 
 	return map[string]any{

@@ -42,6 +42,7 @@ func TestMain(m *testing.M) {
 	if *uriF == "" {
 		log.Fatal("-uri flag is required")
 	}
+
 	if *hostURIF == "" {
 		log.Fatal("-host-uri flag is required")
 	}
