@@ -60,12 +60,14 @@ func (rp *runnerParamsCommand) convert() (config.RunnerParams, error) {
 
 // runnerParamsGoTest represents `gotest` runner parameters in the project configuration YAML file.
 type runnerParamsGoTest struct {
+	Dir  string   `yaml:"dir"`
 	Args []string `yaml:"args"`
 }
 
 // convert implements [runnerParams] interface.
 func (rp *runnerParamsGoTest) convert() (config.RunnerParams, error) {
 	return &config.RunnerParamsGoTest{
+		Dir:  rp.Dir,
 		Args: rp.Args,
 	}, nil
 }
