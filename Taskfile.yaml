@@ -14,9 +14,16 @@ tasks:
       - go mod verify
       - go generate -x
 
+  init-tools-golangci:
+    dir: tools/golangci
+    cmds:
+      - go mod tidy
+      - go mod verify
+      - go generate -x
+
   init:
     desc: "Install development tools"
-    deps: [init-tools]
+    deps: [init-tools, init-tools-golangci]
     cmds:
       - go mod tidy
       - go mod verify
