@@ -1,6 +1,9 @@
 ---
 runner: gotest
-params: {}
+params:
+  args:
+    - -uri={{.MONGODB_URI}}
+    - -host-uri={{.MONGODB_HOST_URI}}
 
 results:
   mongodb:

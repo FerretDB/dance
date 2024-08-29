@@ -16,6 +16,8 @@ package mongotools
 
 import (
 	"context"
+	"flag"
+	"log"
 	"os"
 	"os/exec"
 	"slices"
@@ -29,6 +31,24 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var (
+	uriF     = flag.String("uri", "", "MongoDB URI")
+	hostURIF = flag.String("host-uri", "", "MongoDB URI from the inside Docker container")
+)
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	if *uriF == "" {
+		log.Fatal("-uri flag is required")
+	}
+	if *hostURIF == "" {
+		log.Fatal("-host-uri flag is required")
+	}
+
+	os.Exit(m.Run())
+}
+
 // setup returns test context and per-test client connection.
 func setup(tb testing.TB) (context.Context, *mongo.Client) {
 	tb.Helper()
@@ -36,7 +56,7 @@ func setup(tb testing.TB) (context.Context, *mongo.Client) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(*uriF))
 	require.NoError(tb, err)
 
 	require.NoError(tb, client.Ping(ctx, nil))

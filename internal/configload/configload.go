@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"net"
 	"net/url"
 	"os"
 	"text/template"
@@ -88,12 +89,20 @@ func templateData(uri url.URL) (map[string]any, error) {
 		sha256URI.User = url.UserPassword("dummy", "dummy")
 	}
 
+	hostURI := uri
+	_, port, err := net.SplitHostPort(hostURI.Host)
+	if err != nil {
+		return nil, err
+	}
+	hostURI.Host = net.JoinHostPort("host.docker.internal", port)
+
 	return map[string]any{
 		"MONGODB_URI":           uri.String(),
 		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
 		"MONGODB_URI_PLAIN":     plainURI.String(),
 		"MONGODB_URI_SHA1":      sha1URI.String(),
 		"MONGODB_URI_SHA256":    sha256URI.String(),
+		"MONGODB_HOST_URI":      hostURI.String(),
 	}, nil
 }
 

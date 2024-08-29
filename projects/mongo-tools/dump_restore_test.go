@@ -48,7 +48,6 @@ func TestDumpRestore(t *testing.T) {
 			"transactions": 1746,
 		},
 	}} {
-		tc := tc
 		t.Run(tc.name0, func(t *testing.T) {
 			t.Parallel()
 
@@ -111,7 +110,7 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		"--numInsertionWorkersPerCollection=4",
 		"--stopOnError",
 		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
-		"mongodb://host.docker.internal:27017/",
+		*hostURIF,
 		root,
 	)
 }
@@ -127,6 +126,6 @@ func mongodump(t *testing.T, db, root string) {
 		"--db="+db,
 		"--out="+root,
 		"--numParallelCollections=10",
-		"mongodb://host.docker.internal:27017/",
+		*hostURIF,
 	)
 }
