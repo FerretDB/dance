@@ -2,58 +2,32 @@
 runner: gotest
 params:
   args:
+    - -timeout=20m
+    - -shuffle=on
     - -uri={{.MONGODB_URI}}
     - -host-uri={{.MONGODB_HOST_URI}}
 
 results:
   mongodb:
     stats:
-      fail: 3
-      pass: 3
-    fail:
-      - plain # Received authentication for mechanism PLAIN which is not enabled
-      - sha1 # Authentication failed
-      - sha256 # Authentication failed
+      pass: 6
 
   mongodb-secured:
     stats:
-      fail: 2
-      pass: 4
-    fail:
-      - noauth # Command dropDatabase requires authentication
-      - plain # Received authentication for mechanism PLAIN which is not enabled
+      pass: 6
 
   ferretdb-postgresql:
     stats:
-      fail: 3
-      pass: 3
-    fail:
-      # TODO https://github.com/FerretDB/dance/issues/890
-      - plain # internal error: failed SASL auth: FATAL: password authentication failed for user "dummy"
-
-      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
-      - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
+      pass: 6
 
   ferretdb-sqlite-replset:
     stats:
-      fail: 2
-      pass: 4
-    fail:
-      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
-      - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
+      pass: 6
 
   ferretdb-postgresql-secured:
     stats:
-      fail: 2
-      pass: 4
-    fail:
-      - noauth # Authentication failed
-      - plain # Unsupported authentication mechanism "PLAIN"
+      pass: 6
 
   ferretdb-sqlite-replset-secured:
     stats:
-      fail: 2
-      pass: 4
-    fail:
-      - noauth # Authentication failed
-      - plain # Unsupported authentication mechanism "PLAIN"
+      pass: 6
