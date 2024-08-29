@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"net"
 	"net/url"
 	"os"
 	"text/template"
@@ -88,12 +89,22 @@ func templateData(uri url.URL) (map[string]any, error) {
 		sha256URI.User = url.UserPassword("dummy", "dummy")
 	}
 
+	hostURI := uri
+
+	_, port, err := net.SplitHostPort(hostURI.Host)
+	if err != nil {
+		return nil, err
+	}
+
+	hostURI.Host = net.JoinHostPort("host.docker.internal", port)
+
 	return map[string]any{
 		"MONGODB_URI":           uri.String(),
 		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
 		"MONGODB_URI_PLAIN":     plainURI.String(),
 		"MONGODB_URI_SHA1":      sha1URI.String(),
 		"MONGODB_URI_SHA256":    sha256URI.String(),
+		"MONGODB_HOST_URI":      hostURI.String(),
 	}, nil
 }
 
@@ -142,7 +153,7 @@ func loadContent(content, db string) (*config.Config, error) {
 	case config.RunnerTypeCommand:
 		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
-		fallthrough
+		p = &runnerParamsGoTest{}
 	case config.RunnerTypeJSTest:
 		fallthrough
 	case config.RunnerTypeYCSB:
@@ -159,7 +170,10 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("failed to decode runner parameters: %w", err)
 	}
 
-	params := p.convert()
+	params, err := p.convert()
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert runner parameters: %w", err)
+	}
 
 	res := pc.Results[db]
 	if res == nil {

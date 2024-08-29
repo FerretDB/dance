@@ -12,24 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package runner contains common runner interface.
-package runner
+package gotest
 
 import (
 	"context"
+	"log/slog"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// Runner is a common interface for all runners.
-type Runner interface {
-	// Run executes configured tests and returns results by test name.
-	Run(ctx context.Context) (map[string]config.TestResult, error)
+func Test1(t *testing.T) {
 }
 
-// Params is a common interface for all runner parameters.
-//
-//sumtype:decl
-type Params interface {
-	params() // seal for sumtype
+func TestGoTest(t *testing.T) {
+	t.Parallel()
+
+	p := &config.RunnerParamsGoTest{
+		Args: []string{"-run", `Test\d+`},
+	}
+	c, err := New(p, slog.Default(), true)
+	require.NoError(t, err)
+
+	ctx := context.Background()
+
+	res, err := c.Run(ctx)
+	require.NoError(t, err)
+
+	expected := map[string]config.TestResult{
+		"github.com/FerretDB/dance/internal/runner/gotest/Test1": {
+			Status: "pass",
+			Output: "=== RUN   Test1\n" +
+				"--- PASS: Test1 (0.00s)\n",
+		},
+	}
+	assert.Equal(t, expected, res)
 }

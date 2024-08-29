@@ -29,7 +29,7 @@ func FuzzLoadContent(f *testing.F) {
 		file     string
 		db       string
 		expected *config.Config
-		err      error
+		err      string
 	}{
 		{
 			file: "command.yml",
@@ -55,15 +55,24 @@ func FuzzLoadContent(f *testing.F) {
 				},
 			},
 		},
+		{
+			file: "command_nodir.yml",
+			db:   "ferretdb-postgresql",
+			err:  "failed to convert runner parameters: dir is required",
+		},
 	} {
 		b, err := os.ReadFile(filepath.Join("testdata", tc.file))
 		require.NoError(f, err, "file = %s", tc.file)
 
 		actual, err := loadContent(string(b), tc.db)
-		if tc.err == nil {
+		if tc.err == "" {
+			require.NoError(f, err, "file = %s", tc.file)
+			require.NotNil(f, actual, "file = %s", tc.file)
 			require.Equal(f, tc.expected, actual, "file = %s", tc.file)
 		} else {
-			require.Equal(f, tc.err, err, "file = %s", tc.file)
+			require.Error(f, err, "file = %s", tc.file)
+			require.EqualError(f, err, tc.err, "file = %s", tc.file)
+			require.Nil(f, actual, "file = %s", tc.file)
 		}
 
 		for db := range DBs {

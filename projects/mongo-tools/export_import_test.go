@@ -101,7 +101,7 @@ func mongoimport(t *testing.T, file, db, coll string) {
 		"--drop",
 		"--numInsertionWorkers=10",
 		"--stopOnError",
-		"mongodb://host.docker.internal:27017/",
+		*hostURIF,
 	)
 }
 
@@ -117,6 +117,6 @@ func mongoexport(t *testing.T, file, db, coll string) {
 		"--collection="+coll,
 		"--out="+file,
 		"--sort={x:1}",
-		"mongodb://host.docker.internal:27017/",
+		*hostURIF,
 	)
 }

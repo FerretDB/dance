@@ -39,6 +39,7 @@ import (
 	"github.com/FerretDB/dance/internal/configload"
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
+	"github.com/FerretDB/dance/internal/runner/gotest"
 )
 
 func waitForPort(ctx context.Context, port int) error {
@@ -171,7 +172,7 @@ func main() {
 			case config.RunnerTypeCommand:
 				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
-				fallthrough
+				runner, err = gotest.New(c.Params.(*config.RunnerParamsGoTest), rl, cli.Verbose)
 			case config.RunnerTypeJSTest:
 				fallthrough
 			case config.RunnerTypeYCSB:

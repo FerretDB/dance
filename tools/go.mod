@@ -13,7 +13,7 @@ require (
 	golang.org/x/pkgsite v0.0.0-20240806212006-da7af58eca47
 	golang.org/x/tools v0.24.0
 	golang.org/x/vuln v1.1.3
-	mvdan.cc/gofumpt v0.6.0
+	mvdan.cc/gofumpt v0.7.0
 )
 
 require (

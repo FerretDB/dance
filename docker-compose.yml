@@ -55,6 +55,7 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
+      # use different database from ferretdb-postgresql-secured
       - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance?sslmode=disable
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
@@ -86,7 +87,8 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_LISTEN_ADDR=:27003
       - FERRETDB_HANDLER=postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance?sslmode=disable
+      # use different database from ferretdb-postgresql
+      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/postgres?sslmode=disable
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
       - FERRETDB_SETUP_USERNAME=username
       - FERRETDB_SETUP_PASSWORD=password

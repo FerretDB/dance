@@ -1,0 +1,34 @@
+---
+runner: gotest
+params:
+  dir: mongo-tools
+  args:
+    - -timeout=20m
+    - -shuffle=on
+    - -uri={{.MONGODB_URI}}
+    - -host-uri={{.MONGODB_HOST_URI}}
+
+results:
+  mongodb:
+    stats:
+      pass: 6
+
+  mongodb-secured:
+    stats:
+      pass: 6
+
+  ferretdb-postgresql:
+    stats:
+      pass: 6
+
+  ferretdb-sqlite-replset:
+    stats:
+      pass: 6
+
+  ferretdb-postgresql-secured:
+    stats:
+      pass: 6
+
+  ferretdb-sqlite-replset-secured:
+    stats:
+      pass: 6
