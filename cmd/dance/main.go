@@ -165,27 +165,14 @@ func main() {
 			}
 
 			rl := l.With(slog.String("config", cf), slog.String("db", db))
-			dir := strings.TrimSuffix(cf, filepath.Ext(cf))
 
 			var runner runner.Runner
 
 			switch c.Runner {
 			case config.RunnerTypeCommand:
-				p := c.Params.(*config.RunnerParamsCommand)
-				if p.Dir == "" {
-					p.Dir = dir
-				}
-
-				runner, err = command.New(p, rl, cli.Verbose)
-
+				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
-				p := c.Params.(*config.RunnerParamsGoTest)
-				if p.Dir == "" {
-					p.Dir = dir
-				}
-
-				runner, err = gotest.New(p, rl, cli.Verbose)
-
+				runner, err = gotest.New(c.Params.(*config.RunnerParamsGoTest), rl, cli.Verbose)
 			case config.RunnerTypeJSTest:
 				fallthrough
 			case config.RunnerTypeYCSB:

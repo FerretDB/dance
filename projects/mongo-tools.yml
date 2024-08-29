@@ -1,6 +1,7 @@
 ---
 runner: gotest
 params:
+  dir: mongo-tools
   args:
     - -timeout=20m
     - -shuffle=on

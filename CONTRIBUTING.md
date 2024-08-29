@@ -60,7 +60,7 @@ In this case, `FERRETDB_IMAGE` must be unset to use that default image name.
 
 ```sh
 bin/task dance
-bin/task dance DB=ferretdb-postgresql,mongodb CONFIG=python.yml
+bin/task dance DB=ferretdb-postgresql,mongodb CONFIG=python-example.yml
 ```
 
 The first command runs all project configurations.

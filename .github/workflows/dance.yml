@@ -33,7 +33,7 @@ env:
 
 jobs:
   dance:
-    name: ${{ matrix.db }} ${{ matrix.project }}
+    name: ${{ matrix.project }}
 
     # https://www.ubicloud.com/docs/github-actions-integration/price-performance#usage-pricing
     # https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#per-minute-rates
@@ -44,7 +44,7 @@ jobs:
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
     concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.db }}-${{ matrix.project }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-dance-${{ matrix.project }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
@@ -52,17 +52,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        db:
-          - mongodb
-          - mongodb-secured
-          - ferretdb-postgresql
-          - ferretdb-sqlite-replset
-          - ferretdb-postgresql-secured
-          - ferretdb-sqlite-replset-secured
         project:
-          - dotnet
-          - java
-          - python
+          - dotnet-example
+          - java-example
+          - python-example
 
           - mongo-tools
 
@@ -88,7 +81,7 @@ jobs:
         working-directory: tools
 
       - name: Start environment
-        run: bin/task env-up-detach DB=${{ matrix.db }}
+        run: bin/task env-up-detach
         env:
           FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
           POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
@@ -97,7 +90,7 @@ jobs:
         run: bin/task init
 
       - name: Dance!
-        run: bin/task dance DB=${{ matrix.db }} CONFIG=${{ matrix.project }}.yml
+        run: bin/task dance CONFIG=${{ matrix.project }}.yml
 
       - name: Collect logs
         if: failure()
@@ -112,7 +105,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: compose-logs-${{ matrix.db }}-${{ matrix.project }}
+          name: compose-logs-${{ matrix.project }}
           path: compose-logs.zip
           retention-days: 3
 
