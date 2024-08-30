@@ -100,17 +100,18 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		t,
 		"mongorestore",
 		"--verbose=2",
+		"--authenticationDatabase=admin",
 		"--nsInclude="+db+".*",
 		"--nsFrom="+db+".*",
 		"--nsTo="+newDB+".*",
 		"--objcheck",
 		"--drop",
-		"--noIndexRestore", // not supported by FerretDB yet
+		// "--noIndexRestore", // not supported by FerretDB yet
 		"--numParallelCollections=4",
 		"--numInsertionWorkersPerCollection=4",
 		"--stopOnError",
 		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
-		*hostURIF,
+		*uriF,
 		root,
 	)
 }
@@ -122,10 +123,11 @@ func mongodump(t *testing.T, db, root string) {
 	runDockerComposeCommand(
 		t,
 		"mongodump",
+		"--authenticationDatabase=admin",
 		"--verbose=2",
 		"--db="+db,
 		"--out="+root,
 		"--numParallelCollections=10",
-		*hostURIF,
+		*uriF,
 	)
 }

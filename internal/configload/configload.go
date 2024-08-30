@@ -29,6 +29,8 @@ import (
 )
 
 // DBs contains MongoDB URIs for different databases.
+//
+// They should not include database names in either path (default db) or authSource parameter.
 var DBs = map[string]string{
 	"mongodb":                         "mongodb://127.0.0.1:37001/",
 	"mongodb-secured":                 "mongodb://username:password@127.0.0.1:37002/",
@@ -89,22 +91,22 @@ func templateData(uri url.URL) (map[string]any, error) {
 		sha256URI.User = url.UserPassword("dummy", "dummy")
 	}
 
-	hostURI := uri
+	dockerHostURI := uri
 
-	_, port, err := net.SplitHostPort(hostURI.Host)
+	_, port, err := net.SplitHostPort(dockerHostURI.Host)
 	if err != nil {
 		return nil, err
 	}
 
-	hostURI.Host = net.JoinHostPort("host.docker.internal", port)
+	dockerHostURI.Host = net.JoinHostPort("host.docker.internal", port)
 
 	return map[string]any{
-		"MONGODB_URI":           uri.String(),
-		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
-		"MONGODB_URI_PLAIN":     plainURI.String(),
-		"MONGODB_URI_SHA1":      sha1URI.String(),
-		"MONGODB_URI_SHA256":    sha256URI.String(),
-		"MONGODB_HOST_URI":      hostURI.String(),
+		"MONGODB_URI":             uri.String(),
+		"MONGODB_URI_ANONYMOUS":   anonymousURI.String(),
+		"MONGODB_URI_PLAIN":       plainURI.String(),
+		"MONGODB_URI_SHA1":        sha1URI.String(),
+		"MONGODB_URI_SHA256":      sha256URI.String(),
+		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
 	}, nil
 }
 

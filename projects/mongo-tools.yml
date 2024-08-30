@@ -5,8 +5,8 @@ params:
   args:
     - -timeout=20m
     - -shuffle=on
-    - -uri={{.MONGODB_URI}}
-    - -host-uri={{.MONGODB_HOST_URI}}
+    - -setup-uri={{.MONGODB_URI}}
+    - -uri={{.MONGODB_URI_DOCKER_HOST}}
 
 results:
   mongodb:

@@ -32,18 +32,18 @@ import (
 )
 
 var (
-	uriF     = flag.String("uri", "", "MongoDB URI")
-	hostURIF = flag.String("host-uri", "", "MongoDB URI from the inside Docker container")
+	setupURIF = flag.String("setup-uri", "", "MongoDB URI for test setup")
+	uriF      = flag.String("uri", "", "MongoDB URI for tools")
 )
 
 func TestMain(m *testing.M) {
 	flag.Parse()
 
-	if *uriF == "" {
+	if *setupURIF == "" {
 		log.Fatal("-uri flag is required")
 	}
 
-	if *hostURIF == "" {
+	if *uriF == "" {
 		log.Fatal("-host-uri flag is required")
 	}
 
@@ -57,7 +57,10 @@ func setup(tb testing.TB) (context.Context, *mongo.Client) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(*uriF))
+	// to make easier to differentiate -setup-uri and -uri in logs
+	opts := options.Client().ApplyURI(*setupURIF).SetAppName("mongo-tools-setup")
+
+	client, err := mongo.Connect(ctx, opts)
 	require.NoError(tb, err)
 
 	require.NoError(tb, client.Ping(ctx, nil))
