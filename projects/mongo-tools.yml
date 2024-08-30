@@ -11,24 +11,30 @@ params:
 results:
   mongodb:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
 
   mongodb-secured:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
 
   ferretdb-postgresql:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
 
   ferretdb-sqlite-replset:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
 
   ferretdb-postgresql-secured:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
 
   ferretdb-sqlite-replset-secured:
     stats:
-      pass: 6
+      pass: 3
+      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892

@@ -19,6 +19,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -101,8 +102,10 @@ func (c *goTest) Run(ctx context.Context) (map[string]config.TestResult, error) 
 			return nil, err
 		}
 
+		event.Time = event.Time.UTC()
+
 		if c.verbose {
-			c.l.DebugContext(ctx, "", slog.Any("event", event))
+			c.l.DebugContext(ctx, "", slog.Any("event", fmt.Sprintf("%+v", event)))
 		}
 
 		if event.Test == "" {

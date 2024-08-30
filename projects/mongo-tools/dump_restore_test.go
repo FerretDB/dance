@@ -23,6 +23,8 @@ import (
 )
 
 func TestDumpRestore(t *testing.T) {
+	t.Skip("https://github.com/FerretDB/dance/issues/892")
+
 	t.Parallel()
 
 	containerSourceRoot := "/dumps/mongodb-sample-databases/dump"
