@@ -13,28 +13,40 @@ results:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
 
   mongodb-secured:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
 
   ferretdb-postgresql:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
 
   ferretdb-sqlite-replset:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
 
   ferretdb-postgresql-secured:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
 
   ferretdb-sqlite-replset-secured:
     stats:
       pass: 3
       skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
+    skip:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore

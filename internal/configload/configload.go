@@ -68,6 +68,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 
 	if plainURI.User == nil {
 		plainURI.User = url.UserPassword("dummy", "dummy")
+
 		q.Set("authSource", "admin")
 	}
 
@@ -79,6 +80,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 
 	if sha1URI.User == nil {
 		sha1URI.User = url.UserPassword("dummy", "dummy")
+
 		q.Set("authSource", "admin")
 	}
 
@@ -90,6 +92,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 
 	if sha256URI.User == nil {
 		sha256URI.User = url.UserPassword("dummy", "dummy")
+
 		q.Set("authSource", "admin")
 	}
 
