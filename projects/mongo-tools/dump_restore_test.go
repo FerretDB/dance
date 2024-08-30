@@ -100,7 +100,6 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		t,
 		"mongorestore",
 		"--verbose=2",
-		"--authenticationDatabase=admin",
 		"--nsInclude="+db+".*",
 		"--nsFrom="+db+".*",
 		"--nsTo="+newDB+".*",
@@ -123,7 +122,6 @@ func mongodump(t *testing.T, db, root string) {
 	runDockerComposeCommand(
 		t,
 		"mongodump",
-		"--authenticationDatabase=admin",
 		"--verbose=2",
 		"--db="+db,
 		"--out="+root,
