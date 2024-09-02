@@ -11,17 +11,11 @@ params:
 results:
   mongodb:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      pass: 6
 
   mongodb-secured:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      pass: 6
 
   ferretdb-postgresql:
     stats:
