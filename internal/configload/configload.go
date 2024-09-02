@@ -31,11 +31,11 @@ import (
 // DBs contains MongoDB URIs for different databases.
 var DBs = map[string]string{
 	"mongodb":                         "mongodb://127.0.0.1:37001/",
-	"mongodb-secured":                 "mongodb://username:password@127.0.0.1:37002/",
+	"mongodb-secured":                 "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
 	"ferretdb-postgresql":             "mongodb://127.0.0.1:27001/",
 	"ferretdb-sqlite-replset":         "mongodb://127.0.0.1:27002/?replicaSet=rs0",
-	"ferretdb-postgresql-secured":     "mongodb://username:password@127.0.0.1:27003/",
-	"ferretdb-sqlite-replset-secured": "mongodb://username:password@127.0.0.1:27004/?replicaSet=rs0",
+	"ferretdb-postgresql-secured":     "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
+	"ferretdb-sqlite-replset-secured": "mongodb://username:password@127.0.0.1:27004/?authSource=admin&replicaSet=rs0",
 }
 
 // projectConfig represents project configuration YAML file.
@@ -65,46 +65,55 @@ func templateData(uri url.URL) (map[string]any, error) {
 	plainURI := uri
 	q := plainURI.Query()
 	q.Set("authMechanism", "PLAIN")
-	plainURI.RawQuery = q.Encode()
 
 	if plainURI.User == nil {
 		plainURI.User = url.UserPassword("dummy", "dummy")
+
+		q.Set("authSource", "admin")
 	}
+
+	plainURI.RawQuery = q.Encode()
 
 	sha1URI := uri
 	q = sha1URI.Query()
 	q.Set("authMechanism", "SCRAM-SHA-1")
-	sha1URI.RawQuery = q.Encode()
 
 	if sha1URI.User == nil {
 		sha1URI.User = url.UserPassword("dummy", "dummy")
+
+		q.Set("authSource", "admin")
 	}
+
+	sha1URI.RawQuery = q.Encode()
 
 	sha256URI := uri
 	q = sha256URI.Query()
 	q.Set("authMechanism", "SCRAM-SHA-256")
-	sha256URI.RawQuery = q.Encode()
 
 	if sha256URI.User == nil {
 		sha256URI.User = url.UserPassword("dummy", "dummy")
+
+		q.Set("authSource", "admin")
 	}
 
-	hostURI := uri
+	sha256URI.RawQuery = q.Encode()
 
-	_, port, err := net.SplitHostPort(hostURI.Host)
+	dockerHostURI := uri
+
+	_, port, err := net.SplitHostPort(dockerHostURI.Host)
 	if err != nil {
 		return nil, err
 	}
 
-	hostURI.Host = net.JoinHostPort("host.docker.internal", port)
+	dockerHostURI.Host = net.JoinHostPort("host.docker.internal", port)
 
 	return map[string]any{
-		"MONGODB_URI":           uri.String(),
-		"MONGODB_URI_ANONYMOUS": anonymousURI.String(),
-		"MONGODB_URI_PLAIN":     plainURI.String(),
-		"MONGODB_URI_SHA1":      sha1URI.String(),
-		"MONGODB_URI_SHA256":    sha256URI.String(),
-		"MONGODB_HOST_URI":      hostURI.String(),
+		"MONGODB_URI":             uri.String(),
+		"MONGODB_URI_ANONYMOUS":   anonymousURI.String(),
+		"MONGODB_URI_PLAIN":       plainURI.String(),
+		"MONGODB_URI_SHA1":        sha1URI.String(),
+		"MONGODB_URI_SHA256":      sha256URI.String(),
+		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
 	}, nil
 }
 

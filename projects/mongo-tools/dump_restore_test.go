@@ -105,12 +105,12 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 		"--nsTo="+newDB+".*",
 		"--objcheck",
 		"--drop",
-		"--noIndexRestore", // not supported by FerretDB yet
+		// "--noIndexRestore", // not supported by FerretDB yet
 		"--numParallelCollections=4",
 		"--numInsertionWorkersPerCollection=4",
 		"--stopOnError",
 		// "--preserveUUID", TODO https://github.com/FerretDB/FerretDB/issues/1682
-		*hostURIF,
+		*uriF,
 		root,
 	)
 }
@@ -126,6 +126,6 @@ func mongodump(t *testing.T, db, root string) {
 		"--db="+db,
 		"--out="+root,
 		"--numParallelCollections=10",
-		*hostURIF,
+		*uriF,
 	)
 }

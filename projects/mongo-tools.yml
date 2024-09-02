@@ -5,8 +5,8 @@ params:
   args:
     - -timeout=20m
     - -shuffle=on
-    - -uri={{.MONGODB_URI}}
-    - -host-uri={{.MONGODB_HOST_URI}}
+    - -setup-uri={{.MONGODB_URI}}
+    - -uri={{.MONGODB_URI_DOCKER_HOST}}
 
 results:
   mongodb:
@@ -19,16 +19,46 @@ results:
 
   ferretdb-postgresql:
     stats:
-      pass: 6
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
   ferretdb-sqlite-replset:
     stats:
-      pass: 6
+      fail: 6
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
 
   ferretdb-postgresql-secured:
     stats:
-      pass: 6
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
   ferretdb-sqlite-replset-secured:
     stats:
-      pass: 6
+      fail: 6
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks

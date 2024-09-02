@@ -48,7 +48,6 @@ func TestExportImport(t *testing.T) {
 			documentsCount: 1746,
 		},
 	} {
-		name, tc := name, tc
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -101,7 +100,7 @@ func mongoimport(t *testing.T, file, db, coll string) {
 		"--drop",
 		"--numInsertionWorkers=10",
 		"--stopOnError",
-		*hostURIF,
+		*uriF,
 	)
 }
 
@@ -117,6 +116,6 @@ func mongoexport(t *testing.T, file, db, coll string) {
 		"--collection="+coll,
 		"--out="+file,
 		"--sort={x:1}",
-		*hostURIF,
+		*uriF,
 	)
 }
