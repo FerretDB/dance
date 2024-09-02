@@ -30,14 +30,15 @@ results:
 
   ferretdb-sqlite-replset:
     stats:
-      pass: 4
-      fail: 2
-    pass:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+      fail: 6
     fail:
       # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
 
   ferretdb-postgresql-secured:
     stats:
@@ -52,11 +53,12 @@ results:
 
   ferretdb-sqlite-replset-secured:
     stats:
-      pass: 4
-      fail: 2
-    pass:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+      fail: 6
     fail:
       # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
+      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
