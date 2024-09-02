@@ -19,28 +19,44 @@ results:
 
   ferretdb-postgresql:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
   ferretdb-sqlite-replset:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
   ferretdb-postgresql-secured:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
   ferretdb-sqlite-replset-secured:
     stats:
-      pass: 3
-      skip: 1 # TODO https://github.com/FerretDB/dance/issues/892
-    skip:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
