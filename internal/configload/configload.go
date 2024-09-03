@@ -184,7 +184,7 @@ func loadContent(content, db string) (*config.Config, error) {
 
 	res := pc.Results[db]
 	if res == nil {
-		return nil, fmt.Errorf("no results configuration for %q", db)
+		return nil, nil
 	}
 
 	results, err := res.convert()

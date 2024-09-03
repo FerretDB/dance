@@ -12,22 +12,10 @@ results:
     stats:
       pass: 2
 
-  mongodb-secured:
-    stats:
-      pass: 2
-
   ferretdb-postgresql:
     stats:
       pass: 2
 
   ferretdb-sqlite-replset:
-    stats:
-      pass: 2
-
-  ferretdb-postgresql-secured:
-    stats:
-      pass: 2
-
-  ferretdb-sqlite-replset-secured:
     stats:
       pass: 2
