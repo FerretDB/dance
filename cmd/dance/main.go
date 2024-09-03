@@ -88,7 +88,7 @@ func logResult(label string, res map[string]config.TestResult) {
 var cli struct {
 	Database []string `help:"${help_database}" enum:"${enum_database}"               short:"d"`
 	Verbose  bool     `help:"Be more verbose." short:"v"`
-	Push     *url.URL `help:"Push results to the given MongoDB URI."`
+	Push     string   `help:"Push results to the given MongoDB URI."`
 	Config   []string `arg:""                  help:"Project configurations to run." optional:"" type:"existingfile"`
 }
 
@@ -156,11 +156,11 @@ func main() {
 
 	var mongoClient *mongo.Client
 
-	if cli.Push != nil {
+	if cli.Push != "" {
 		log.Printf("Connecting to %+v to push data...", cli.Push)
 
 		var err error
-		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push.String())); err != nil {
+		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push)); err != nil {
 			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
 		}
 
