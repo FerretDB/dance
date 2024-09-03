@@ -157,7 +157,7 @@ func main() {
 	var mongoClient *mongo.Client
 
 	if cli.Push != nil {
-		log.Printf("Connecting to push data...")
+		log.Printf("Connecting to %+v to push data...", cli.Push)
 
 		var err error
 		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push.String())); err != nil {
