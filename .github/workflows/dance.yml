@@ -91,6 +91,7 @@ jobs:
           oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
           oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
           tags: tag:ci
+          version: 1.72.1
 
       - name: Run init
         run: bin/task init
