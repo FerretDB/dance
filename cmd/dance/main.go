@@ -32,6 +32,9 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/sethvargo/go-githubactions"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -149,6 +152,16 @@ func main() {
 		}
 	}
 
+	var mongoClient *mongo.Client
+	if cli.Push != nil {
+		var err error
+		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push.String())); err != nil {
+			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
+		}
+
+		defer mongoClient.Disconnect(ctx)
+	}
+
 	if len(cli.Config) == 0 {
 		var err error
 		if cli.Config, err = filepath.Glob("*.yml"); err != nil {
@@ -171,7 +184,7 @@ func main() {
 				log.Fatal(err)
 			}
 
-			rl := l.With(slog.String("config", cf), slog.String("db", db))
+			rl := l.With(slog.String("config", cf), slog.String("database", db))
 
 			var runner runner.Runner
 
@@ -259,6 +272,30 @@ func main() {
 			if os.Getenv("GITHUB_ACTIONS") == "true" {
 				action := githubactions.New()
 				action.Noticef("%s", msg)
+			}
+
+			if mongoClient != nil {
+				hostname, _ := os.Hostname()
+
+				var passed bson.D
+				for t, tr := range cmp.Passed {
+					passed = append(passed, bson.E{t, bson.D{{"m", tr.Measurements}}})
+				}
+
+				doc := bson.D{
+					{"config", cf},
+					{"database", db},
+					{"time", time.Now()},
+					{"env", bson.D{
+						{"runner", os.Getenv("RUNNER_NAME")},
+						{"hostname", hostname},
+					}},
+					{"passed", passed},
+				}
+
+				if _, err = mongoClient.Database("dance").Collection("incoming").InsertOne(ctx, doc); err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}

@@ -24,7 +24,6 @@ import (
 	"log/slog"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -140,7 +139,7 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 
 	res := make(map[string]config.TestResult)
 	for t, m := range ms {
-		res[path.Join(dir, t)] = config.TestResult{
+		res[t] = config.TestResult{
 			Status:       config.Pass,
 			Measurements: m,
 		}
