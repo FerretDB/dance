@@ -35,9 +35,10 @@ jobs:
   dance:
     name: ${{ matrix.project }}
 
-    # https://www.ubicloud.com/docs/github-actions-integration/price-performance#usage-pricing
+    # https://www.ubicloud.com/docs/github-actions-integration/price-performance
+    # https://www.ubicloud.com/docs/about/pricing#github-actions
     # https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions#per-minute-rates
-    runs-on: ubicloud-standard-4
+    runs-on: ubicloud-standard-8
 
     timeout-minutes: 45
 
