@@ -31,10 +31,11 @@ import (
 
 // Client represents a MongoDB client.
 type Client struct {
-	c        *mongo.Client
-	database string
-	hostname string
-	runner   string
+	c          *mongo.Client
+	database   string
+	hostname   string
+	runner     string
+	repository string
 }
 
 // New creates a new MongoDB client with given URI.
@@ -68,10 +69,11 @@ func New(uri string) (*Client, error) {
 	}
 
 	return &Client{
-		c:        c,
-		database: database,
-		hostname: hostname,
-		runner:   os.Getenv("RUNNER_NAME"),
+		c:          c,
+		database:   database,
+		hostname:   hostname,
+		runner:     os.Getenv("RUNNER_NAME"),
+		repository: os.Getenv("GITHUB_REPOSITORY"),
 	}, nil
 }
 
@@ -91,6 +93,7 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 		{"env", bson.D{
 			{"runner", c.runner},
 			{"hostname", c.hostname},
+			{"repository", c.repository},
 		}},
 		{"passed", passed},
 	}
