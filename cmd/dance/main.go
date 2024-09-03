@@ -50,8 +50,7 @@ func waitForPort(ctx context.Context, port int) error {
 	for ctx.Err() == nil {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 		if err == nil {
-			conn.Close()
-			return nil
+			return conn.Close()
 		}
 
 		sleepCtx, sleepCancel := context.WithTimeout(ctx, time.Second)
@@ -72,12 +71,15 @@ func logResult(label string, res map[string]config.TestResult) {
 	sort.Strings(keys)
 	for _, t := range keys {
 		log.Printf("===> %s:", t)
+
 		if o := res[t].Output; o != "" {
 			log.Printf("\t%s", o)
 		}
+
 		if m := res[t].Measurements; m != nil {
 			log.Printf("\tMeasurements: %v", m)
 		}
+
 		log.Printf("")
 	}
 }
@@ -153,6 +155,7 @@ func main() {
 	}
 
 	var mongoClient *mongo.Client
+
 	if cli.Push != nil {
 		var err error
 		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push.String())); err != nil {
