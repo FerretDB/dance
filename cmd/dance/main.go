@@ -32,6 +32,9 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/sethvargo/go-githubactions"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
@@ -40,14 +43,14 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
 	"github.com/FerretDB/dance/internal/runner/gotest"
+	"github.com/FerretDB/dance/internal/runner/ycsb"
 )
 
 func waitForPort(ctx context.Context, port int) error {
 	for ctx.Err() == nil {
 		conn, err := net.Dial("tcp", fmt.Sprintf("127.0.0.1:%d", port))
 		if err == nil {
-			conn.Close()
-			return nil
+			return conn.Close()
 		}
 
 		sleepCtx, sleepCancel := context.WithTimeout(ctx, time.Second)
@@ -58,7 +61,7 @@ func waitForPort(ctx context.Context, port int) error {
 	return ctx.Err()
 }
 
-func logResult(label string, res map[string]string) {
+func logResult(label string, res map[string]config.TestResult) {
 	keys := maps.Keys(res)
 	if len(keys) == 0 {
 		return
@@ -67,16 +70,25 @@ func logResult(label string, res map[string]string) {
 	log.Printf("%s tests:", label)
 	sort.Strings(keys)
 	for _, t := range keys {
-		out := res[t]
-		log.Printf("===> %s:\n\t%s\n\n", t, out)
+		log.Printf("===> %s:", t)
+
+		if o := res[t].Output; o != "" {
+			log.Printf("\t%s", o)
+		}
+
+		if m := res[t].Measurements; m != nil {
+			log.Printf("\tMeasurements: %v", m)
+		}
+
+		log.Printf("")
 	}
 }
 
 //nolint:vet // for readability
 var cli struct {
-	// TODO https://github.com/FerretDB/dance/issues/30
 	Database []string `help:"${help_database}" enum:"${enum_database}"               short:"d"`
 	Verbose  bool     `help:"Be more verbose." short:"v"`
+	Push     string   `help:"Push results to the given MongoDB URI."`
 	Config   []string `arg:""                  help:"Project configurations to run." optional:"" type:"existingfile"`
 }
 
@@ -142,6 +154,19 @@ func main() {
 		}
 	}
 
+	var mongoClient *mongo.Client
+
+	if cli.Push != "" {
+		log.Printf("Connecting to %+v to push data...", cli.Push)
+
+		var err error
+		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push)); err != nil {
+			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
+		}
+
+		defer mongoClient.Disconnect(ctx)
+	}
+
 	if len(cli.Config) == 0 {
 		var err error
 		if cli.Config, err = filepath.Glob("*.yml"); err != nil {
@@ -164,7 +189,7 @@ func main() {
 				log.Fatal(err)
 			}
 
-			rl := l.With(slog.String("config", cf), slog.String("db", db))
+			rl := l.With(slog.String("config", cf), slog.String("database", db))
 
 			var runner runner.Runner
 
@@ -173,10 +198,8 @@ func main() {
 				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
 				runner, err = gotest.New(c.Params.(*config.RunnerParamsGoTest), rl, cli.Verbose)
-			case config.RunnerTypeJSTest:
-				fallthrough
 			case config.RunnerTypeYCSB:
-				fallthrough
+				runner, err = ycsb.New(c.Params.(*config.RunnerParamsYCSB), rl)
 			default:
 				log.Fatalf("unknown runner: %q", c.Runner)
 			}
@@ -254,6 +277,30 @@ func main() {
 			if os.Getenv("GITHUB_ACTIONS") == "true" {
 				action := githubactions.New()
 				action.Noticef("%s", msg)
+			}
+
+			if mongoClient != nil {
+				hostname, _ := os.Hostname()
+
+				var passed bson.D
+				for t, tr := range cmp.Passed {
+					passed = append(passed, bson.E{t, bson.D{{"m", tr.Measurements}}})
+				}
+
+				doc := bson.D{
+					{"config", cf},
+					{"database", db},
+					{"time", time.Now()},
+					{"env", bson.D{
+						{"runner", os.Getenv("RUNNER_NAME")},
+						{"hostname", hostname},
+					}},
+					{"passed", passed},
+				}
+
+				if _, err = mongoClient.Database("dance").Collection("incoming").InsertOne(ctx, doc); err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}

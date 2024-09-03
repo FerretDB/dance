@@ -72,8 +72,23 @@ func (rp *runnerParamsGoTest) convert() (config.RunnerParams, error) {
 	}, nil
 }
 
+// runnerParamsYCSB represents `ycsb` runner parameters in the project configuration YAML file.
+type runnerParamsYCSB struct {
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
+}
+
+// convert implements [runnerParams] interface.
+func (rp *runnerParamsYCSB) convert() (config.RunnerParams, error) {
+	return &config.RunnerParamsYCSB{
+		Dir:  rp.Dir,
+		Args: rp.Args,
+	}, nil
+}
+
 // check interfaces
 var (
 	_ runnerParams = (*runnerParamsCommand)(nil)
 	_ runnerParams = (*runnerParamsGoTest)(nil)
+	_ runnerParams = (*runnerParamsYCSB)(nil)
 )

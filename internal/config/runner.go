@@ -24,9 +24,6 @@ const (
 	// RunnerTypeGoTest indicates a Go test runner.
 	RunnerTypeGoTest RunnerType = "gotest"
 
-	// RunnerTypeJSTest indicates a JavaScript test runner.
-	RunnerTypeJSTest RunnerType = "jstest"
-
 	// RunnerTypeYCSB indicates a YCSB test runner.
 	RunnerTypeYCSB RunnerType = "ycsb"
 )
@@ -63,8 +60,18 @@ type RunnerParamsGoTest struct {
 // runnerParams implements [RunnerParams] interface.
 func (rp *RunnerParamsGoTest) runnerParams() {}
 
+// RunnerParamsYCSB represents `ycsb` runner parameters.
+type RunnerParamsYCSB struct {
+	Dir  string
+	Args []string
+}
+
+// runnerParams implements [RunnerParams] interface.
+func (rp *RunnerParamsYCSB) runnerParams() {}
+
 // check interfaces
 var (
 	_ RunnerParams = (*RunnerParamsCommand)(nil)
 	_ RunnerParams = (*RunnerParamsGoTest)(nil)
+	_ RunnerParams = (*RunnerParamsYCSB)(nil)
 )

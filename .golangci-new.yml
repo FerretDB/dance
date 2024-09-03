@@ -12,11 +12,6 @@ linters-settings:
     ignore-test: false
   copyloopvar:
     check-alias: true
-  errcheck:
-    check-type-assertions: false
-    check-blank: false
-    disable-default-exclusions: false
-    exclude-functions: []
   errorlint:
     # see caveats at https://github.com/polyfloyd/go-errorlint#fmterrorf-wrapping-verb
     errorf: false
@@ -66,6 +61,7 @@ linters:
     # checked by the other configuration
     - asciicheck
     - depguard
+    - errcheck
     - exhaustive
     - forbidigo
     - gci
@@ -177,3 +173,6 @@ issues:
   # whole-files: true
 
   exclude-use-default: false
+  exclude-rules:
+    - linters: [govet]
+      text: "composites: go.mongodb.org/mongo-driver/bson/primitive.E struct literal uses unkeyed fields"

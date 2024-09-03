@@ -163,10 +163,8 @@ func loadContent(content, db string) (*config.Config, error) {
 		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
 		p = &runnerParamsGoTest{}
-	case config.RunnerTypeJSTest:
-		fallthrough
 	case config.RunnerTypeYCSB:
-		fallthrough
+		p = &runnerParamsYCSB{}
 	default:
 		err = fmt.Errorf("unknown runner type %q", pc.Runner)
 	}

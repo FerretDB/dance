@@ -18,6 +18,14 @@ linters-settings:
             desc: use `slices` package instead
           - pkg: maps
             desc: use `golang.org/x/exp/maps` package instead
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+    disable-default-exclusions: false
+    exclude-functions:
+      - (*go.mongodb.org/mongo-driver/mongo.Client).Disconnect
+      - (*go.mongodb.org/mongo-driver/mongo.Cursor).Close
+      - (io.ReadCloser).Close
   exhaustive:
     default-signifies-exhaustive: false
   forbidigo:
@@ -120,6 +128,7 @@ linters:
   enable:
     - asciicheck
     - depguard
+    - errcheck
     - exhaustive
     - forbidigo
     - gci

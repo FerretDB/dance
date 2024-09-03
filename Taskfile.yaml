@@ -4,7 +4,6 @@ version: "3"
 vars:
   DB: ""
   CONFIG: ""
-  FLAGS: ""
   RACE_FLAG: -race={{and (ne OS "windows") (ne ARCH "arm") (ne ARCH "riscv64")}}
 
 tasks:
@@ -83,7 +82,7 @@ tasks:
     deps: [build]
     dir: projects
     cmds:
-      - ../bin/dance {{.FLAGS}} --database={{.DB}} {{.CONFIG}}
+      - ../bin/dance --database={{.DB}} {{.CONFIG}}
 
   lint:
     desc: "Run linters"

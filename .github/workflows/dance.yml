@@ -59,11 +59,9 @@ jobs:
 
           - mongo-tools
 
-          # - restheart
-          # - restheart-auth
-
-          # - ycsb-workloada
-          # - ycsb-workloadc
+          - ycsb-workloada
+          - ycsb-workloadb
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code
@@ -86,11 +84,21 @@ jobs:
           FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
           POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
+      - name: Connect to Tailscale
+        if: github.event_name != 'pull_request'
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
+          tags: tag:ci
+
       - name: Run init
         run: bin/task init
 
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.project }}.yml
+        env:
+          DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
 
       - name: Collect logs
         if: failure()
