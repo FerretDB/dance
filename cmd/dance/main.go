@@ -180,14 +180,20 @@ func main() {
 
 	for _, cf := range cli.Config {
 		for _, db := range cli.Database {
-			log.Println(db, cf)
+			rl := l.With(slog.String("config", cf), slog.String("database", db))
 
 			c, err := configload.Load(cf, db)
 			if err != nil {
-				log.Fatal(err)
+				rl.Error(err.Error())
+				os.Exit(1)
 			}
 
-			rl := l.With(slog.String("config", cf), slog.String("database", db))
+			if c == nil {
+				rl.Warn("No configuration, skipping")
+				continue
+			}
+
+			rl.Info("Configuration loaded")
 
 			var runner runner.Runner
 
