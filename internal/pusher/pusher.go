@@ -17,6 +17,7 @@ package pusher
 
 import (
 	"context"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -31,6 +32,7 @@ import (
 // Client represents a MongoDB client.
 type Client struct {
 	c        *mongo.Client
+	database string
 	hostname string
 	runner   string
 }
@@ -39,6 +41,16 @@ type Client struct {
 func New(uri string) (*Client, error) {
 	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
 	defer cancel()
+
+	u, err := url.Parse(uri)
+	if err != nil {
+		return nil, err
+	}
+
+	database := strings.TrimPrefix(u.Path, "/")
+	if database == "" {
+		database = "dance"
+	}
 
 	c, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
@@ -57,6 +69,7 @@ func New(uri string) (*Client, error) {
 
 	return &Client{
 		c:        c,
+		database: database,
 		hostname: hostname,
 		runner:   os.Getenv("RUNNER_NAME"),
 	}, nil
@@ -82,7 +95,7 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 		{"passed", passed},
 	}
 
-	_, err := c.c.Database("dance").Collection("incoming").InsertOne(ctx, doc)
+	_, err := c.c.Database(c.database).Collection("incoming").InsertOne(ctx, doc)
 
 	return err
 }

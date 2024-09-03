@@ -18,6 +18,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/FerretDB/dance/internal/config"
@@ -26,9 +27,11 @@ import (
 func TestPusher(t *testing.T) {
 	t.Parallel()
 
-	c, err := New("mongodb://localhost:27001/")
+	c, err := New("mongodb://localhost:27001/dance")
 	require.NoError(t, err)
 	t.Cleanup(c.Close)
+
+	assert.Equal(t, "dance", c.database)
 
 	res := map[string]config.TestResult{
 		"github.com/FerretDB/dance/projects/mongo-tools/TestExportImport": {},
