@@ -24,8 +24,8 @@
 #   Default data size: 1 KB records (10 fields, 100 bytes each, plus key)
 #   Request distribution: zipfian
 
-recordcount=3000
-operationcount=3000
+recordcount=5000
+operationcount=5000
 workload=core
 
 readallfields=true

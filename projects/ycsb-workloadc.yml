@@ -15,7 +15,3 @@ results:
   ferretdb-postgresql:
     stats:
       pass: 2
-
-  ferretdb-sqlite-replset:
-    stats:
-      pass: 2
