@@ -40,6 +40,7 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
 	"github.com/FerretDB/dance/internal/runner/gotest"
+	"github.com/FerretDB/dance/internal/runner/ycsb"
 )
 
 func waitForPort(ctx context.Context, port int) error {
@@ -173,10 +174,8 @@ func main() {
 				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
 				runner, err = gotest.New(c.Params.(*config.RunnerParamsGoTest), rl, cli.Verbose)
-			case config.RunnerTypeJSTest:
-				fallthrough
 			case config.RunnerTypeYCSB:
-				fallthrough
+				runner, err = ycsb.New(c.Params.(*config.RunnerParamsYCSB), rl)
 			default:
 				log.Fatalf("unknown runner: %q", c.Runner)
 			}

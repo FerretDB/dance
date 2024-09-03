@@ -18,70 +18,102 @@ package ycsb
 import (
 	"bufio"
 	"context"
-	"fmt"
+	"encoding/json"
+	"errors"
 	"io"
-	"log"
+	"log/slog"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/FerretDB/dance/internal/config"
+	"github.com/FerretDB/dance/internal/runner"
 )
 
-// Measurements stores go-ycsb results.
-type Measurements struct {
-	Takes    time.Duration
-	Count    int64
-	OPS      float64
-	Avg      time.Duration
-	Min      time.Duration
-	Max      time.Duration
-	Perc50   time.Duration
-	Perc90   time.Duration
-	Perc95   time.Duration
-	Perc99   time.Duration
-	Perc999  time.Duration
-	Perc9999 time.Duration
+// measurement represents a single object in go-ycsb JSON array output.
+type measurement struct {
+	Operation  string  `json:"Operation"`
+	TakesS     float64 `json:"Takes(s),string"`
+	Count      int     `json:"Count,string"`
+	OPS        float64 `json:"OPS,string"`
+	AvgUs      float64 `json:"Avg(us),string"`
+	MinUs      float64 `json:"Min(us),string"`
+	MaxUs      float64 `json:"Max(us),string"`
+	Perc50Us   float64 `json:"50th(us),string"`
+	Perc90Us   float64 `json:"90th(us),string"`
+	Perc95Us   float64 `json:"95th(us),string"`
+	Perc99Us   float64 `json:"99th(us),string"`
+	Perc999Us  float64 `json:"99.9th(us),string"`
+	Perc9999Us float64 `json:"99.99th(us),string"`
 }
 
-// Run runs `go-ycsb`.
-//
-// It loads and runs a YCSB workload.
-// Properties defined in the YAML file will override properties defined in the workload parameter file.
-func Run(ctx context.Context, dir string, args []string) (map[string]config.TestResult, error) {
-	bin := filepath.Join("..", "bin", "go-ycsb")
-	if _, err := os.Stat(bin); err != nil {
-		return nil, err
+// ycsb represents `ycsb` runner.
+type ycsb struct {
+	p *config.RunnerParamsYCSB
+	l *slog.Logger
+}
+
+// New creates a new `ycsb` runner with given parameters.
+func New(params *config.RunnerParamsYCSB, l *slog.Logger) (runner.Runner, error) {
+	return &ycsb{
+		p: params,
+		l: l,
+	}, nil
+}
+
+// parseOutput parses go-ycsb JSON output.
+func parseOutput(r io.Reader) (map[string]map[string]float64, error) {
+	var res map[string]map[string]float64
+
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if strings.HasPrefix(line, "write exception:") {
+			return nil, errors.New("unexpected output")
+		}
+
+		if !strings.HasPrefix(line, "[{") {
+			continue
+		}
+
+		var ms []measurement
+		if err := json.Unmarshal([]byte(line), &ms); err != nil {
+			return nil, err
+		}
+
+		res = make(map[string]map[string]float64)
+		for _, m := range ms {
+			res[strings.ToLower(m.Operation)] = map[string]float64{
+				"takes":    m.TakesS,
+				"count":    float64(m.Count),
+				"ops":      m.OPS,
+				"avg":      (time.Duration(m.AvgUs) * time.Microsecond).Seconds(),
+				"min":      (time.Duration(m.MinUs) * time.Microsecond).Seconds(),
+				"max":      (time.Duration(m.MaxUs) * time.Microsecond).Seconds(),
+				"perc50":   (time.Duration(m.Perc50Us) * time.Microsecond).Seconds(),
+				"perc90":   (time.Duration(m.Perc90Us) * time.Microsecond).Seconds(),
+				"perc95":   (time.Duration(m.Perc95Us) * time.Microsecond).Seconds(),
+				"perc99":   (time.Duration(m.Perc99Us) * time.Microsecond).Seconds(),
+				"perc999":  (time.Duration(m.Perc999Us) * time.Microsecond).Seconds(),
+				"perc9999": (time.Duration(m.Perc9999Us) * time.Microsecond).Seconds(),
+			}
+		}
 	}
 
-	// because we set cmd.Dir, the relative path here is different
-	bin = filepath.Join("..", bin)
-
-	// load workload
-
-	cliArgs := []string{"load", "mongodb", "-P", args[0]}
-	for _, p := range args[1:] {
-		cliArgs = append(cliArgs, "-p", p)
+	if err := scanner.Err(); err != nil {
+		return res, err
 	}
 
-	cmd := exec.CommandContext(ctx, bin, cliArgs...)
-	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	return res, nil
+}
 
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
-	if err := cmd.Run(); err != nil {
-		return nil, err
-	}
-
-	// run workload with almost the same args
-
-	cliArgs[0] = "run"
-
-	cmd = exec.CommandContext(ctx, bin, cliArgs...)
+// run runs given command in the given directory and returns parsed results.
+func run(ctx context.Context, args []string, dir string) (map[string]config.TestResult, error) {
+	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stderr = os.Stderr
 
@@ -92,94 +124,58 @@ func Run(ctx context.Context, dir string, args []string) (map[string]config.Test
 
 	defer pipe.Close()
 
-	res := map[string]config.TestResult{
-		dir: {
-			Status: config.Pass,
-		},
-	}
-
-	log.Printf("Running %s", strings.Join(cmd.Args, " "))
-
 	if err = cmd.Start(); err != nil {
 		return nil, err
 	}
 
-	m, err := parseMeasurements(io.TeeReader(pipe, os.Stdout))
+	ms, err := parseOutput(io.TeeReader(pipe, os.Stdout))
 	if err != nil {
 		_ = cmd.Process.Kill()
 		return nil, err
 	}
 
-	err = cmd.Wait()
+	if err = cmd.Wait(); err != nil {
+		return nil, err
+	}
 
-	switch err {
-	case nil:
-		// fmt.Printf("Parsed metrics: %+v\n\n", m)
-		_ = m
-	default:
-		res[dir] = config.TestResult{
-			Status: config.Fail,
-			Output: err.Error(),
+	res := make(map[string]config.TestResult)
+	for t, m := range ms {
+		res[path.Join(dir, t)] = config.TestResult{
+			Status:       config.Pass,
+			Measurements: m,
 		}
 	}
 
 	return res, nil
 }
 
-// parseMeasurements parses go-ycsb output.
-func parseMeasurements(r io.Reader) (map[string]Measurements, error) {
-	res := make(map[string]Measurements)
-
-	scanner := bufio.NewScanner(r)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fields := strings.Fields(line)
-
-		if len(fields) == 0 {
-			continue
-		}
-
-		prefix := fields[0]
-
-		switch prefix {
-		case "TOTAL", "READ", "INSERT", "UPDATE":
-			var takes, ops float64
-			var count, avg, vmin, vmax, perc50, perc90, perc95, perc99, perc999, perc9999 int64
-
-			// It is enough to use fmt.Sscanf for parsing the data as the string produced by go-ycsb has fixed format:
-			// https://github.com/pingcap/go-ycsb/blob/fe11c4783b57703465ec7d36fcc4268979001d1a/pkg/measurement/measurement.go#L28
-			_, err := fmt.Sscanf(
-				line,
-				"%s - Takes(s): %f, Count: %d, OPS: %f, Avg(us): %d, Min(us): %d, Max(us): %d, "+
-					"50th(us): %d, 90th(us): %d, 95th(us): %d, 99th(us): %d, 99.9th(us): %d, 99.99th(us): %d",
-				&prefix, &takes, &count, &ops, &avg, &vmin, &vmax, &perc50, &perc90, &perc95, &perc99, &perc999, &perc9999,
-			)
-			if err != nil {
-				return res, err
-			}
-
-			res[prefix] = Measurements{
-				Takes:    time.Duration(takes * float64(time.Second)),
-				Count:    count,
-				OPS:      ops,
-				Avg:      time.Duration(avg * int64(time.Microsecond)),
-				Min:      time.Duration(vmin * int64(time.Microsecond)),
-				Max:      time.Duration(vmax * int64(time.Microsecond)),
-				Perc50:   time.Duration(perc50 * int64(time.Microsecond)),
-				Perc90:   time.Duration(perc90 * int64(time.Microsecond)),
-				Perc95:   time.Duration(perc95 * int64(time.Microsecond)),
-				Perc99:   time.Duration(perc99 * int64(time.Microsecond)),
-				Perc999:  time.Duration(perc999 * int64(time.Microsecond)),
-				Perc9999: time.Duration(perc9999 * int64(time.Microsecond)),
-			}
-		default:
-			// string doesn't contain metrics, do nothing
-		}
+// Run implements [runner.Runner] interface.
+func (y *ycsb) Run(ctx context.Context) (map[string]config.TestResult, error) {
+	bin := filepath.Join("..", "bin", "go-ycsb")
+	if _, err := os.Stat(bin); err != nil {
+		return nil, err
 	}
 
-	if err := scanner.Err(); err != nil {
-		return res, err
+	bin, err := filepath.Abs(bin)
+	if err != nil {
+		return nil, err
 	}
 
-	return res, nil
+	args := []string{bin, "load", "mongodb", "-P", y.p.Args[0]}
+	for _, p := range y.p.Args[1:] {
+		args = append(args, "-p", p)
+	}
+	args = append(args, "-p", "outputstyle=json")
+
+	y.l.InfoContext(ctx, "Load", slog.String("cmd", strings.Join(args, " ")))
+
+	if _, err = run(ctx, args, y.p.Dir); err != nil {
+		return nil, err
+	}
+
+	args[1] = "run"
+
+	y.l.InfoContext(ctx, "Run", slog.String("cmd", strings.Join(args, " ")))
+
+	return run(ctx, args, y.p.Dir)
 }
