@@ -81,9 +81,9 @@ func logResult(label string, res map[string]config.TestResult) {
 
 //nolint:vet // for readability
 var cli struct {
-	// TODO https://github.com/FerretDB/dance/issues/30
 	Database []string `help:"${help_database}" enum:"${enum_database}"               short:"d"`
 	Verbose  bool     `help:"Be more verbose." short:"v"`
+	Push     *url.URL `help:"Push results to the given MongoDB URI."`
 	Config   []string `arg:""                  help:"Project configurations to run." optional:"" type:"existingfile"`
 }
 
