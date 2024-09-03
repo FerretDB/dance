@@ -157,11 +157,11 @@ func main() {
 	var mongoClient *mongo.Client
 
 	if cli.Push != "" {
-		log.Printf("Connecting to %+v to push data...", cli.Push)
+		log.Print("Connecting to MongoDB URI to push results...")
 
 		var err error
 		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push)); err != nil {
-			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
+			log.Fatal(err)
 		}
 
 		defer mongoClient.Disconnect(ctx)
