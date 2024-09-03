@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gotest contains `gotest` runner.
+// Package gotest provides `gotest` runner.
 package gotest
 
 import (

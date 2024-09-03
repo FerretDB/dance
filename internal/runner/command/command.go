@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package command contains generic test runner.
+// Package command provides generic test runner.
 package command
 
 import (

@@ -32,14 +32,12 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/sethvargo/go-githubactions"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/configload"
+	"github.com/FerretDB/dance/internal/pusher"
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
 	"github.com/FerretDB/dance/internal/runner/gotest"
@@ -154,17 +152,17 @@ func main() {
 		}
 	}
 
-	var mongoClient *mongo.Client
+	var pusherClient *pusher.Client
 
 	if cli.Push != "" {
-		log.Printf("Connecting to %+v to push data...", cli.Push)
+		log.Print("Connecting to MongoDB URI to push results...")
 
 		var err error
-		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push)); err != nil {
-			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
+		if pusherClient, err = pusher.New(cli.Push); err != nil {
+			log.Fatal(err)
 		}
 
-		defer mongoClient.Disconnect(ctx)
+		defer pusherClient.Close()
 	}
 
 	if len(cli.Config) == 0 {
@@ -279,26 +277,8 @@ func main() {
 				action.Noticef("%s", msg)
 			}
 
-			if mongoClient != nil {
-				hostname, _ := os.Hostname()
-
-				var passed bson.D
-				for t, tr := range cmp.Passed {
-					passed = append(passed, bson.E{t, bson.D{{"m", tr.Measurements}}})
-				}
-
-				doc := bson.D{
-					{"config", cf},
-					{"database", db},
-					{"time", time.Now()},
-					{"env", bson.D{
-						{"runner", os.Getenv("RUNNER_NAME")},
-						{"hostname", hostname},
-					}},
-					{"passed", passed},
-				}
-
-				if _, err = mongoClient.Database("dance").Collection("incoming").InsertOne(ctx, doc); err != nil {
+			if pusherClient != nil {
+				if err = pusherClient.Push(ctx, cf, db, cmp.Passed); err != nil {
 					log.Fatal(err)
 				}
 			}
