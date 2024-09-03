@@ -39,16 +39,16 @@ func (tr *TestResult) IndentedOutput() string {
 // CompareResults represents the comparison between expected and actual test outcomes.
 type CompareResults struct {
 	// expected
-	Failed  map[string]string
-	Skipped map[string]string
-	Passed  map[string]string
+	Failed  map[string]TestResult
+	Skipped map[string]TestResult
+	Passed  map[string]TestResult
 
 	// unexpected
-	XFailed  map[string]string
-	XSkipped map[string]string
-	XPassed  map[string]string
+	XFailed  map[string]TestResult
+	XSkipped map[string]TestResult
+	XPassed  map[string]TestResult
 
-	Unknown map[string]string
+	Unknown map[string]TestResult
 
 	Stats Stats
 }
@@ -88,13 +88,13 @@ func (expected *ExpectedResults) mapStatuses() map[string]Status {
 // Compare compares expected and actual results.
 func (expected *ExpectedResults) Compare(actual map[string]TestResult) (*CompareResults, error) {
 	res := &CompareResults{
-		Failed:   make(map[string]string),
-		Skipped:  make(map[string]string),
-		Passed:   make(map[string]string),
-		XFailed:  make(map[string]string),
-		XSkipped: make(map[string]string),
-		XPassed:  make(map[string]string),
-		Unknown:  make(map[string]string),
+		Failed:   make(map[string]TestResult),
+		Skipped:  make(map[string]TestResult),
+		Passed:   make(map[string]TestResult),
+		XFailed:  make(map[string]TestResult),
+		XSkipped: make(map[string]TestResult),
+		XPassed:  make(map[string]TestResult),
+		Unknown:  make(map[string]TestResult),
 	}
 
 	tests := maps.Keys(actual)
@@ -115,48 +115,53 @@ func (expected *ExpectedResults) Compare(actual map[string]TestResult) (*Compare
 		}
 
 		o := actualResult.IndentedOutput()
+		tr := TestResult{
+			Status:       actualResult.Status,
+			Output:       o,
+			Measurements: actualResult.Measurements,
+		}
 
 		switch expectedStatus {
 		case Fail:
 			switch actualResult.Status {
 			case Fail:
-				res.Failed[test] = o
+				res.Failed[test] = tr
 			case Skip:
-				res.XSkipped[test] = o
+				res.XSkipped[test] = tr
 			case Pass:
-				res.XPassed[test] = o
+				res.XPassed[test] = tr
 			case Ignore, Unknown:
 				fallthrough
 			default:
-				res.Unknown[test] = o
+				res.Unknown[test] = tr
 			}
 
 		case Skip:
 			switch actualResult.Status {
 			case Fail:
-				res.XFailed[test] = o
+				res.XFailed[test] = tr
 			case Skip:
-				res.Skipped[test] = o
+				res.Skipped[test] = tr
 			case Pass:
-				res.XPassed[test] = o
+				res.XPassed[test] = tr
 			case Ignore, Unknown:
 				fallthrough
 			default:
-				res.Unknown[test] = o
+				res.Unknown[test] = tr
 			}
 
 		case Pass:
 			switch actualResult.Status {
 			case Fail:
-				res.XFailed[test] = o
+				res.XFailed[test] = tr
 			case Skip:
-				res.XSkipped[test] = o
+				res.XSkipped[test] = tr
 			case Pass:
-				res.Passed[test] = o
+				res.Passed[test] = tr
 			case Ignore, Unknown:
 				fallthrough
 			default:
-				res.Unknown[test] = o
+				res.Unknown[test] = tr
 			}
 
 		case Ignore:

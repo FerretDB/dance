@@ -59,7 +59,7 @@ func waitForPort(ctx context.Context, port int) error {
 	return ctx.Err()
 }
 
-func logResult(label string, res map[string]string) {
+func logResult(label string, res map[string]config.TestResult) {
 	keys := maps.Keys(res)
 	if len(keys) == 0 {
 		return
@@ -68,8 +68,14 @@ func logResult(label string, res map[string]string) {
 	log.Printf("%s tests:", label)
 	sort.Strings(keys)
 	for _, t := range keys {
-		out := res[t]
-		log.Printf("===> %s:\n\t%s\n\n", t, out)
+		log.Printf("===> %s:", t)
+		if o := res[t].Output; o != "" {
+			log.Printf("\t%s", o)
+		}
+		if m := res[t].Measurements; m != nil {
+			log.Printf("\tMeasurements: %v", m)
+		}
+		log.Printf("")
 	}
 }
 
