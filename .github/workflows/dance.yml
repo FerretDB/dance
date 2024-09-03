@@ -59,11 +59,9 @@ jobs:
 
           - mongo-tools
 
-          # - restheart
-          # - restheart-auth
-
-          # - ycsb-workloada
-          # - ycsb-workloadc
+          - ycsb-workloada
+          - ycsb-workloadb
+          - ycsb-workloadc
 
     steps:
       - name: Checkout code
@@ -91,6 +89,8 @@ jobs:
 
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.project }}.yml
+        env:
+          DANCE_PUSH: ${{ secrets.NMSHD_TEST_BASEURL }}
 
       - name: Collect logs
         if: failure()

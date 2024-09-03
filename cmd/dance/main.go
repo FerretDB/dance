@@ -157,6 +157,8 @@ func main() {
 	var mongoClient *mongo.Client
 
 	if cli.Push != nil {
+		log.Printf("Connecting to push data...")
+
 		var err error
 		if mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(cli.Push.String())); err != nil {
 			log.Fatalf("Failed to connect to MongoDB URI to push results: %s", err)
