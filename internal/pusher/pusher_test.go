@@ -12,24 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package runner provides common runner interface.
-package runner
+package pusher
 
 import (
 	"context"
+	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/FerretDB/dance/internal/config"
 )
 
-// Runner is a common interface for all runners.
-type Runner interface {
-	// Run executes configured tests and returns results by test name.
-	Run(ctx context.Context) (map[string]config.TestResult, error)
-}
+func TestPusher(t *testing.T) {
+	t.Parallel()
 
-// Params is a common interface for all runner parameters.
-//
-//sumtype:decl
-type Params interface {
-	params() // seal for sumtype
+	c, err := New("mongodb://localhost:27001/")
+	require.NoError(t, err)
+	t.Cleanup(c.Close)
+
+	res := map[string]config.TestResult{
+		"github.com/FerretDB/dance/projects/mongo-tools/TestExportImport": {},
+	}
+	err = c.Push(context.Background(), "mongo-tools.yml", "ferretdb-postgresql", res)
+	require.NoError(t, err)
 }
