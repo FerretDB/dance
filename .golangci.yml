@@ -160,3 +160,5 @@ issues:
   exclude-rules:
     - linters: [govet]
       text: "composites: go.mongodb.org/mongo-driver/bson/primitive.E struct literal uses unkeyed fields"
+    - linters: [govet]
+      text: "composites: go.mongodb.org/mongo-driver/bson.E struct literal uses unkeyed fields"
