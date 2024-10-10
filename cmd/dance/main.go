@@ -145,7 +145,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, uri)
+		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, u.Redacted())
 
 		if err = waitForPort(ctx, port); err != nil {
 			log.Fatal(err)

@@ -128,7 +128,7 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("no MongoDB URI for %q", db)
 	}
 
-	uri, err := url.Parse(mongodbURI)
+	u, err := url.Parse(mongodbURI)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse MongoDB URI %q for %q: %w", mongodbURI, db, err)
 	}
@@ -138,7 +138,7 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
 	}
 
-	data, err := templateData(*uri)
+	data, err := templateData(*u)
 	if err != nil {
 		return nil, err
 	}
