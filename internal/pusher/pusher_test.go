@@ -27,7 +27,7 @@ import (
 func TestPusher(t *testing.T) {
 	t.Parallel()
 
-	c, err := New("mongodb://localhost:27001/dance")
+	c, err := New("mongodb://localhost:27001/dance", Logger(t))
 	require.NoError(t, err)
 	t.Cleanup(c.Close)
 

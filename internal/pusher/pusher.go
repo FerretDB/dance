@@ -17,6 +17,8 @@ package pusher
 
 import (
 	"context"
+	"fmt"
+	"log/slog"
 	"net/url"
 	"os"
 	"strings"
@@ -31,6 +33,7 @@ import (
 
 // Client represents a MongoDB client.
 type Client struct {
+	l          *slog.Logger
 	c          *mongo.Client
 	database   string
 	hostname   string
@@ -39,10 +42,7 @@ type Client struct {
 }
 
 // New creates a new MongoDB client with given URI.
-func New(uri string) (*Client, error) {
-	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
-	defer cancel()
-
+func New(uri string, l *slog.Logger) (*Client, error) {
 	u, err := url.Parse(uri)
 	if err != nil {
 		return nil, err
@@ -50,8 +50,13 @@ func New(uri string) (*Client, error) {
 
 	database := strings.TrimPrefix(u.Path, "/")
 	if database == "" {
-		database = "dance"
+		return nil, fmt.Errorf("database name is empty in the URL")
 	}
+
+	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
+	defer cancel()
+
+	l.InfoContext(ctx, "Connecting to MongoDB URI to push results...", slog.String("uri", u.Redacted()))
 
 	c, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
@@ -69,6 +74,7 @@ func New(uri string) (*Client, error) {
 	}
 
 	return &Client{
+		l:          l,
 		c:          c,
 		database:   database,
 		hostname:   hostname,
@@ -97,6 +103,8 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 		}},
 		{"passed", passed},
 	}
+
+	c.l.InfoContext(ctx, "Pushing results to MongoDB URI...", slog.Any("doc", doc))
 
 	_, err := c.c.Database(c.database).Collection("incoming").InsertOne(ctx, doc)
 

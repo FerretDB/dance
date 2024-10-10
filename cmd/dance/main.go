@@ -145,7 +145,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, uri)
+		log.Printf("Waiting for port %d for %s / %s to be up...", port, db, u.Redacted())
 
 		if err = waitForPort(ctx, port); err != nil {
 			log.Fatal(err)
@@ -155,10 +155,8 @@ func main() {
 	var pusherClient *pusher.Client
 
 	if cli.Push != "" {
-		log.Print("Connecting to MongoDB URI to push results...")
-
 		var err error
-		if pusherClient, err = pusher.New(cli.Push); err != nil {
+		if pusherClient, err = pusher.New(cli.Push, l.With(slog.String("name", "pusher"))); err != nil {
 			log.Fatal(err)
 		}
 

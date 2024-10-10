@@ -95,7 +95,7 @@ jobs:
           version: 1.72.1
 
       - name: Run init
-        run: bin/task init
+        run: bin/task init build
 
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.project }}.yml
