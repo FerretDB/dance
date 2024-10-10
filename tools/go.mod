@@ -2,7 +2,7 @@ module github.com/FerretDB/dance/tools
 
 go 1.23
 
-toolchain go1.23.1
+toolchain go1.23.2
 
 require (
 	github.com/go-task/task/v3 v3.39.2
