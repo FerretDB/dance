@@ -5,12 +5,12 @@ go 1.23
 toolchain go1.23.1
 
 require (
-	github.com/go-task/task/v3 v3.39.0
+	github.com/go-task/task/v3 v3.39.2
 	github.com/pingcap/go-ycsb v1.0.1
 	github.com/quasilyte/go-consistent v0.6.1
-	golang.org/x/perf v0.0.0-20240910214617-f1a715d501dd
-	golang.org/x/pkgsite v0.0.0-20240913130837-7d0ea0a0e8cd
-	golang.org/x/tools v0.25.0
+	golang.org/x/perf v0.0.0-20241004173025-94b0db8a2472
+	golang.org/x/pkgsite v0.0.0-20241004190937-78391ec0fb95
+	golang.org/x/tools v0.26.0
 	golang.org/x/vuln v1.1.3
 	mvdan.cc/gofumpt v0.7.0
 )
@@ -153,15 +153,15 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.20.0 // indirect
-	golang.org/x/crypto v0.27.0 // indirect
+	golang.org/x/crypto v0.28.0 // indirect
 	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/telemetry v0.0.0-20240522233618-39ace7a40ae7 // indirect
-	golang.org/x/term v0.24.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
+	golang.org/x/term v0.25.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.126.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect

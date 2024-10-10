@@ -155,10 +155,8 @@ func main() {
 	var pusherClient *pusher.Client
 
 	if cli.Push != "" {
-		log.Print("Connecting to MongoDB URI to push results...")
-
 		var err error
-		if pusherClient, err = pusher.New(cli.Push); err != nil {
+		if pusherClient, err = pusher.New(cli.Push, l.With(slog.String("name", "pusher"))); err != nil {
 			log.Fatal(err)
 		}
 
