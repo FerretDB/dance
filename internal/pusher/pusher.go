@@ -33,12 +33,14 @@ import (
 
 // Client represents a MongoDB client.
 type Client struct {
-	l          *slog.Logger
-	c          *mongo.Client
-	database   string
-	hostname   string
-	runner     string
-	repository string
+	l            *slog.Logger
+	c            *mongo.Client
+	pingerCancel context.CancelFunc
+	pingerDone   chan struct{}
+	database     string
+	hostname     string
+	runner       string
+	repository   string
 }
 
 // New creates a new MongoDB client with given URI.
@@ -53,34 +55,64 @@ func New(uri string, l *slog.Logger) (*Client, error) {
 		return nil, fmt.Errorf("database name is empty in the URL")
 	}
 
-	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
-	defer cancel()
-
-	l.InfoContext(ctx, "Connecting to MongoDB URI to push results...", slog.String("uri", u.Redacted()))
-
-	c, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
-	if err != nil {
-		return nil, err
-	}
-
-	if err = c.Ping(ctx, nil); err != nil {
-		c.Disconnect(ctx)
-		return nil, err
-	}
-
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
 	}
 
-	return &Client{
-		l:          l,
-		c:          c,
-		database:   database,
-		hostname:   hostname,
-		runner:     os.Getenv("RUNNER_NAME"),
-		repository: os.Getenv("GITHUB_REPOSITORY"),
-	}, nil
+	// We ignore many URI connection parameters and start pinger as soon as possible
+	// because it takes a long time on CI to establish the Tailscale connection.
+
+	ctx := context.Background()
+
+	opts := options.Client().ApplyURI(uri)
+	opts.SetDirect(true)
+	opts.SetConnectTimeout(3 * time.Second)
+	opts.SetHeartbeatInterval(3 * time.Second)
+	opts.SetMaxConnIdleTime(0)
+	opts.SetMinPoolSize(1)
+	opts.SetMaxPoolSize(1)
+	opts.SetMaxConnecting(1)
+
+	l.InfoContext(ctx, "Connecting to MongoDB URI to push results...", slog.String("uri", u.Redacted()))
+
+	c, err := mongo.Connect(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	pingerCtx, pingerCancel := context.WithCancel(ctx)
+
+	res := &Client{
+		l:            l,
+		c:            c,
+		pingerCancel: pingerCancel,
+		pingerDone:   make(chan struct{}),
+		database:     database,
+		hostname:     hostname,
+		runner:       os.Getenv("RUNNER_NAME"),
+		repository:   os.Getenv("GITHUB_REPOSITORY"),
+	}
+
+	go res.runPinger(pingerCtx)
+
+	return res, nil
+}
+
+func (c *Client) runPinger(ctx context.Context) {
+	for ctx.Err() == nil {
+		pingCtx, pingCancel := context.WithTimeout(ctx, 5*time.Second)
+
+		if err := c.c.Ping(pingCtx, nil); err != nil {
+			c.l.WarnContext(pingCtx, "Ping failed", slog.String("error", err.Error()))
+		}
+
+		// always wait, even if ping returns immediately
+		<-pingCtx.Done()
+		pingCancel()
+	}
+
+	close(c.pingerDone)
 }
 
 // Push pushes test results to MongoDB-compatible database.
@@ -113,8 +145,13 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 
 // Close closes all connections.
 func (c *Client) Close() {
-	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
+	c.pingerCancel()
+	<-c.pingerDone
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	c.c.Disconnect(ctx)
+
+	c.c = nil
 }

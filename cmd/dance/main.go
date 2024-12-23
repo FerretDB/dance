@@ -128,6 +128,17 @@ func main() {
 		stop()
 	}()
 
+	var pusherClient *pusher.Client
+
+	if cli.Push != "" {
+		var err error
+		if pusherClient, err = pusher.New(cli.Push, l.With(slog.String("name", "pusher"))); err != nil {
+			log.Fatal(err)
+		}
+
+		defer pusherClient.Close()
+	}
+
 	if len(cli.Database) == 0 {
 		cli.Database = maps.Keys(configload.DBs)
 		slices.Sort(cli.Database)
@@ -150,17 +161,6 @@ func main() {
 		if err = waitForPort(ctx, port); err != nil {
 			log.Fatal(err)
 		}
-	}
-
-	var pusherClient *pusher.Client
-
-	if cli.Push != "" {
-		var err error
-		if pusherClient, err = pusher.New(cli.Push, l.With(slog.String("name", "pusher"))); err != nil {
-			log.Fatal(err)
-		}
-
-		defer pusherClient.Close()
 	}
 
 	if len(cli.Config) == 0 {
