@@ -103,6 +103,8 @@ func New(uri string, l *slog.Logger) (*Client, error) {
 }
 
 // ping pings the database until connection is established or ctx is canceled.
+//
+// TODO https://github.com/FerretDB/dance/issues/1122
 func (c *Client) ping(ctx context.Context) {
 	for ctx.Err() == nil {
 		pingCtx, pingCancel := context.WithTimeout(ctx, 5*time.Second)
@@ -154,6 +156,8 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 }
 
 // Close closes all connections.
+//
+// TODO https://github.com/FerretDB/dance/issues/1122
 func (c *Client) Close() {
 	c.pingerCancel()
 	<-c.pingerDone

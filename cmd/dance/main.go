@@ -282,6 +282,7 @@ func main() {
 			}
 
 			if pusherClient != nil {
+				// TODO https://github.com/FerretDB/dance/issues/1122
 				if err = pusherClient.Push(ctx, cf, db, cmp.Passed); err != nil {
 					log.Fatal(err)
 				}
