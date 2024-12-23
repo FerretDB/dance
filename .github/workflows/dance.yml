@@ -85,14 +85,18 @@ jobs:
           FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
           POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
-      - name: Connect to Tailscale
+      - name: Install Tailscale
         if: github.event_name != 'pull_request'
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
           oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
           tags: tag:ci
-          version: 1.72.1
+          version: latest
+
+      - name: Ping Tailscale in the background
+        if: github.event_name != 'pull_request'
+        run: tailscale ping -c 0 --timeout 1s ${{ secrets.DANCE_PUSH_HOST }} &
 
       - name: Run init
         run: bin/task init build
@@ -105,18 +109,18 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
-          bin/task env-logs-collect > /tmp/compose-logs.txt
+          bin/task env-logs-collect > /tmp/logs/compose.txt
 
       - name: Compress logs before upload
         if: failure()
-        run: zip -q -9 compose-logs.zip /tmp/compose-logs.txt
+        run: zip -r -q -9 logs.zip /tmp/logs
 
       - name: Upload logs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: compose-logs-${{ matrix.project }}
-          path: compose-logs.zip
+          name: logs-${{ matrix.project }}
+          path: logs.zip
           retention-days: 3
 
       # ignore `go mod tidy` being applied to the Go driver, etc
