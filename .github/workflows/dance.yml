@@ -65,6 +65,15 @@ jobs:
           - ycsb-workloadc
 
     steps:
+      - name: Install Tailscale
+        if: github.event_name != 'pull_request'
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
+          tags: tag:ci
+          version: latest
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -85,21 +94,12 @@ jobs:
           FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
           POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
-      - name: Install Tailscale
-        if: github.event_name != 'pull_request'
-        uses: tailscale/github-action@v3
-        with:
-          oauth-client-id: ${{ secrets.TAILSCALE_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TAILSCALE_SECRET }}
-          tags: tag:ci
-          version: latest
-
-      - name: Ping Tailscale in the background
-        if: github.event_name != 'pull_request'
-        run: tailscale ping -c 0 --timeout 1s ${{ secrets.DANCE_PUSH_HOST }} &
-
       - name: Run init
         run: bin/task init build
+
+      - name: Wait for Tailscale to be up
+        if: github.event_name != 'pull_request'
+        run: tailscale ping -c 0 --until-direct --timeout 1s --verbose ${{ secrets.DANCE_PUSH_HOST }}
 
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.project }}.yml
@@ -109,6 +109,7 @@ jobs:
       - name: Collect logs
         if: failure()
         run: |
+          mkdir -p /tmp/logs
           bin/task env-logs-collect > /tmp/logs/compose.txt
 
       - name: Compress logs before upload
