@@ -94,25 +94,33 @@ func New(uri string, l *slog.Logger) (*Client, error) {
 		repository:   os.Getenv("GITHUB_REPOSITORY"),
 	}
 
-	go res.runPinger(pingerCtx)
+	go func() {
+		res.ping(pingerCtx)
+		close(res.pingerDone)
+	}()
 
 	return res, nil
 }
 
-func (c *Client) runPinger(ctx context.Context) {
+// ping pings the database until connection is established or ctx is canceled.
+func (c *Client) ping(ctx context.Context) {
 	for ctx.Err() == nil {
 		pingCtx, pingCancel := context.WithTimeout(ctx, 5*time.Second)
 
-		if err := c.c.Ping(pingCtx, nil); err != nil {
-			c.l.WarnContext(pingCtx, "Ping failed", slog.String("error", err.Error()))
+		err := c.c.Ping(pingCtx, nil)
+		if err == nil {
+			c.l.InfoContext(pingCtx, "Ping successful")
+			pingCancel()
+
+			return
 		}
+
+		c.l.WarnContext(pingCtx, "Ping failed", slog.String("error", err.Error()))
 
 		// always wait, even if ping returns immediately
 		<-pingCtx.Done()
 		pingCancel()
 	}
-
-	close(c.pingerDone)
 }
 
 // Push pushes test results to MongoDB-compatible database.
@@ -138,6 +146,8 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 
 	c.l.InfoContext(ctx, "Pushing results to MongoDB URI...", slog.Any("doc", doc))
 
+	c.ping(ctx)
+
 	_, err := c.c.Database(c.database).Collection("incoming").InsertOne(ctx, doc)
 
 	return err
@@ -152,6 +162,4 @@ func (c *Client) Close() {
 	defer cancel()
 
 	c.c.Disconnect(ctx)
-
-	c.c = nil
 }
