@@ -74,6 +74,12 @@ jobs:
           tags: tag:ci
           version: latest
 
+      - name: Start pinging Tailscale
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p /tmp/logs
+          tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -97,10 +103,6 @@ jobs:
       - name: Run init
         run: bin/task init build
 
-      - name: Wait for Tailscale to be up
-        if: github.event_name != 'pull_request'
-        run: tailscale ping -c 0 --until-direct --timeout 1s --verbose ${{ secrets.DANCE_PUSH_HOST }}
-
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.project }}.yml
         env:
@@ -108,9 +110,7 @@ jobs:
 
       - name: Collect logs
         if: failure()
-        run: |
-          mkdir -p /tmp/logs
-          bin/task env-logs-collect > /tmp/logs/compose.txt
+        run: bin/task env-logs-collect > /tmp/logs/compose.txt
 
       - name: Compress logs before upload
         if: failure()
