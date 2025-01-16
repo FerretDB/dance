@@ -10,8 +10,8 @@ require (
 	github.com/quasilyte/go-consistent v0.6.1
 	golang.org/x/perf v0.0.0-20241204221936-711ff2ab7231
 	golang.org/x/pkgsite v0.0.0-20241216215327-06c6edf28e6c
-	golang.org/x/tools v0.28.0
-	golang.org/x/vuln v1.1.3
+	golang.org/x/tools v0.29.0
+	golang.org/x/vuln v1.1.4
 	mvdan.cc/gofumpt v0.7.0
 )
 
@@ -169,14 +169,14 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.20.0 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/oauth2 v0.24.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/telemetry v0.0.0-20240522233618-39ace7a40ae7 // indirect
-	golang.org/x/term v0.27.0 // indirect
+	golang.org/x/term v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.126.0 // indirect
