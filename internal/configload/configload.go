@@ -32,7 +32,7 @@ import (
 var DBs = map[string]string{
 	"mongodb":              "mongodb://127.0.0.1:37001/",
 	"mongodb-secured":      "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
-	"ferretdb-postgresql":  "mongodb://127.0.0.1:27001/",
+	"ferretdb":             "mongodb://127.0.0.1:27001/",
 	"ferretdb-secured":     "mongodb://username:password@127.0.0.1:27002/?authSource=admin",
 	"ferretdb-dev":         "mongodb://127.0.0.1:27003/",
 	"ferretdb-dev-secured": "mongodb://username:password@127.0.0.1:27004/?authSource=admin",
