@@ -12,16 +12,6 @@ on:
       - main
   schedule:
     - cron: "12 3 * * *" # after FerretDB's Docker workflow
-  workflow_dispatch:
-    inputs:
-      ferretdb_image:
-        description: FerretDB Docker image
-        default: ghcr.io/ferretdb/ferretdb-dev:main
-        required: false
-      postgres_image:
-        description: PostgreSQL Docker image
-        default: postgres:16.4
-        required: false
 
 env:
   GOPATH: /home/runner/go
@@ -33,7 +23,7 @@ env:
 
 jobs:
   dance:
-    name: ${{ matrix.project }}
+    name: ${{ matrix.config }}
 
     # https://www.ubicloud.com/docs/github-actions-integration/price-performance
     # https://www.ubicloud.com/docs/about/pricing#github-actions
@@ -45,7 +35,7 @@ jobs:
     # Do not run this job in parallel for any PR change or branch push
     # to save some resources.
     concurrency:
-      group: ${{ github.workflow }}-dance-${{ matrix.project }}-${{ github.head_ref || github.ref_name }}
+      group: ${{ github.workflow }}-dance-${{ matrix.config }}-${{ github.head_ref || github.ref_name }}
       cancel-in-progress: true
 
     if: github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'not ready')
@@ -53,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
+        config:
           - dotnet-example
           - java-example
           - python-example
@@ -94,6 +84,13 @@ jobs:
         run: go generate -x
         working-directory: tools
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Start environment
         run: bin/task env-up-detach
         env:
@@ -104,7 +101,7 @@ jobs:
         run: bin/task init build
 
       - name: Dance!
-        run: bin/task dance CONFIG=${{ matrix.project }}.yml
+        run: bin/task dance CONFIG=${{ matrix.config }}.yml
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
 
@@ -120,7 +117,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs-${{ matrix.project }}
+          name: logs-${{ matrix.config }}
           path: logs.zip
           retention-days: 3
 

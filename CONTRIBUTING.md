@@ -39,11 +39,8 @@ git submodule update --init
 ## Starting environment
 
 ```sh
-export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main
-export POSTGRES_IMAGE=postgres:16
-
 bin/task env-up
-bin/task DB=ferretdb-postgresql
+bin/task env-up DB=ferretdb
 ```
 
 The first command starts all databases defined in `docker-compose.yml`.
@@ -60,7 +57,7 @@ In this case, `FERRETDB_IMAGE` must be unset to use that default image name.
 
 ```sh
 bin/task dance
-bin/task dance DB=ferretdb-postgresql,mongodb CONFIG=python-example.yml
+bin/task dance DB=ferretdb,mongodb CONFIG=python-example.yml
 ```
 
 The first command runs all project configurations.

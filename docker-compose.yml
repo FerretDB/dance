@@ -44,8 +44,10 @@ services:
     volumes:
       - ./build/mongod_secured.conf:/etc/mongod.conf
 
-  ferretdb-postgresql:
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
+  ferretdb:
+    build:
+      context: ./build/deps
+      dockerfile: ferretdb.Dockerfile
     restart: on-failure
     depends_on: ["postgres"]
     ports:
@@ -56,15 +58,19 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
-      # use different database from ferretdb-postgresql-secured
-      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb-sqlite-replset:
+  ferretdb-secured:
+    build:
+      context: ./build/deps
+      dockerfile: ferretdb.Dockerfile
     image: ${FERRETDB_IMAGE:-ferretdb-local}
     restart: on-failure
+    depends_on: ["postgres"]
     ports:
       - 27002:27002
     environment:
@@ -74,14 +80,30 @@ services:
       - FERRETDB_LISTEN_ADDR=:27002
       - FERRETDB_HANDLER=sqlite
       - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
-      - FERRETDB_REPL_SET_NAME=rs0
+      - FERRETDB_HANDLER=postgresql
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=true
+      # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb-postgresql-secured:
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
+  postgres:
+    build:
+      context: ./build/deps
+      dockerfile: postgres.Dockerfile
+    platform: linux/amd64
     restart: on-failure
-    depends_on: ["postgres"]
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  ferretdb-dev:
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    restart: on-failure
+    depends_on: ["postgres-dev"]
     ports:
       - 27003:27003
     environment:
@@ -90,19 +112,16 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27003
       - FERRETDB_HANDLER=postgresql
-      # use different database from ferretdb-postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/postgres?sslmode=disable
-      - FERRETDB_TEST_ENABLE_NEW_AUTH=true
-      - FERRETDB_SETUP_USERNAME=username
-      - FERRETDB_SETUP_PASSWORD=password
-      - FERRETDB_SETUP_DATABASE=admin
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-dev:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb-sqlite-replset-secured:
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
+  ferretdb-dev-secured:
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
     restart: on-failure
+    depends_on: ["postgres-dev"]
     ports:
       - 27004:27004
     environment:
@@ -110,27 +129,25 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27004
-      - FERRETDB_HANDLER=sqlite
-      - FERRETDB_SQLITE_URL=file:/state/?_pragma=busy_timeout(20000)
-      - FERRETDB_TEST_ENABLE_NEW_AUTH=true
-      - FERRETDB_SETUP_USERNAME=username
-      - FERRETDB_SETUP_PASSWORD=password
-      - FERRETDB_SETUP_DATABASE=admin
-      - FERRETDB_REPL_SET_NAME=rs0
+      - FERRETDB_HANDLER=postgresql
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-dev:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=true
+      # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  postgres:
-    image: ${POSTGRES_IMAGE:-postgres}
+  postgres-dev:
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:latest}
+    platform: linux/amd64
     restart: on-failure
     ports:
       - 5432:5432
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
-      - POSTGRES_USER=postgres_user
-      - POSTGRES_PASSWORD=postgres_password
-      - POSTGRES_DB=dance
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
 
   mongosh:
     build:
