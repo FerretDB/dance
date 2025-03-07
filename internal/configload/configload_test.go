@@ -33,7 +33,7 @@ func FuzzLoadContent(f *testing.F) {
 	}{
 		{
 			file: "command.yml",
-			db:   "ferretdb-postgresql",
+			db:   "ferretdb",
 			expected: &config.Config{
 				Runner: "command",
 				Params: &config.RunnerParamsCommand{
@@ -57,7 +57,7 @@ func FuzzLoadContent(f *testing.F) {
 		},
 		{
 			file: "command_nodir.yml",
-			db:   "ferretdb-postgresql",
+			db:   "ferretdb",
 			err:  "failed to convert runner parameters: dir is required",
 		},
 	} {

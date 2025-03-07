@@ -1,34 +1,22 @@
 ---
 runner: command
 params:
-  dir: java-example/java
-  setup: mvn compile
+  dir: nodejs-example
+  setup: npm ci
 
   tests:
     - name: normal
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI}}"
+      cmd: node index.js --uri='{{.MONGODB_URI}}'
     - name: strict
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI}} -strict"
+      cmd: node index.js --uri='{{.MONGODB_URI}}' --strict
     - name: noauth
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_ANONYMOUS}}"
+      cmd: node index.js --uri='{{.MONGODB_URI_ANONYMOUS}}'
     - name: plain
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_PLAIN}}"
+      cmd: node index.js --uri='{{.MONGODB_URI_PLAIN}}'
     - name: sha1
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_SHA1}}"
+      cmd: node index.js --uri='{{.MONGODB_URI_SHA1}}'
     - name: sha256
-      cmd: |
-        export MAVEN_OPTS='-enableassertions'
-        mvn compile exec:java -Dexec.mainClass=com.start.Connection -Dexec.args="-uri {{.MONGODB_URI_SHA256}}"
+      cmd: node index.js --uri='{{.MONGODB_URI_SHA256}}'
 
 results:
   mongodb:

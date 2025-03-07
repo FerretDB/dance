@@ -4,7 +4,7 @@ runner: ycsb
 params:
   dir: ycsb
   args:
-    - workloads/workloada
+    - workloads/workloada2
     - mongodb.url={{.MONGODB_URI}}
 
 results:

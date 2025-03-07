@@ -1,21 +1,21 @@
 ---
-# Workload A: Update heavy workload
+# Workload C: Read only
 runner: ycsb
 params:
   dir: ycsb
   args:
-    - workloads/workloada
+    - workloads/workloadc2
     - mongodb.url={{.MONGODB_URI}}
 
 results:
   mongodb:
     stats:
-      pass: 3
+      pass: 2
 
   ferretdb:
     stats:
-      pass: 3
+      pass: 2
 
   ferretdb-dev:
     stats:
-      pass: 3
+      pass: 2

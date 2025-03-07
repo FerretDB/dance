@@ -17,48 +17,18 @@ results:
     stats:
       pass: 6
 
-  ferretdb-postgresql:
+  ferretdb:
     stats:
-      pass: 4
-      fail: 2
-    pass:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-    fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      pass: 6
 
-  ferretdb-sqlite-replset:
+  ferretdb-secured:
     stats:
-      fail: 6
-    fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
+      pass: 6
 
-  ferretdb-postgresql-secured:
+  ferretdb-dev:
     stats:
-      pass: 4
-      fail: 2
-    pass:
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-    fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+      pass: 6
 
-  ferretdb-sqlite-replset-secured:
+  ferretdb-dev-secured:
     stats:
-      fail: 6
-    fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
+      pass: 6

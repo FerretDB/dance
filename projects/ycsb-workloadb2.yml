@@ -1,10 +1,10 @@
 ---
-# Workload A: Update heavy workload
+# Workload B: Read mostly workload
 runner: ycsb
 params:
   dir: ycsb
   args:
-    - workloads/workloada
+    - workloads/workloadb2
     - mongodb.url={{.MONGODB_URI}}
 
 results:

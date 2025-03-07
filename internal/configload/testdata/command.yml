@@ -13,14 +13,7 @@ params:
       cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI}}'
 
 results:
-  ferretdb-postgresql:
-    stats:
-      fail: 1
-      pass: 1
-    fail:
-      - strict
-
-  ferretdb-sqlite-replset:
+  ferretdb:
     stats:
       fail: 1
       pass: 1
@@ -28,9 +21,5 @@ results:
       - strict
 
   mongodb:
-    stats:
-      pass: 2
-
-  mongodb-secured:
     stats:
       pass: 2
