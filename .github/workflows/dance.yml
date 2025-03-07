@@ -50,7 +50,6 @@ jobs:
           - python-example
 
           - mongo-tools
-
           - ycsb-workloada
           - ycsb-workloada2
           - ycsb-workloadb
@@ -88,18 +87,8 @@ jobs:
         run: go generate -x
         working-directory: tools
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Start environment
         run: bin/task env-up-detach
-        env:
-          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb-dev:main' }}
-          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
       - name: Run init
         run: bin/task init build

@@ -50,9 +50,6 @@ All databases use different ports, so running them all should be possible.
 During FerretDB development, it is recommended to run it on the host with the same listening port as the matching Docker Compose service instead of using the above commands.
 This way, the fix-build-test development cycle will be faster as it does not involve Docker image building.
 
-Alternatively, the Docker image with the name `ferretdb-local` can be built by `task docker-local` in the FerretDB repository.
-In this case, `FERRETDB_IMAGE` must be unset to use that default image name.
-
 ## Running tests
 
 ```sh
