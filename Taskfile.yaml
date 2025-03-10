@@ -31,7 +31,7 @@ tasks:
   fmt:
     deps: [ fmt-go ]
 
-    # invoked by FerretDB/github-actions/linters action
+  # invoked by FerretDB/github-actions/linters action
   fmt-go:
     desc: "Format code"
     cmds:

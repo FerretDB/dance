@@ -137,7 +137,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   postgres-dev:
-    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:latest}
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
     platform: linux/amd64
     restart: on-failure
     ports:
