@@ -30,12 +30,17 @@ import (
 
 // DBs contains MongoDB URIs for different databases.
 var DBs = map[string]string{
-	"mongodb":                         "mongodb://127.0.0.1:37001/",
-	"mongodb-secured":                 "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
-	"ferretdb-postgresql":             "mongodb://127.0.0.1:27001/",
+	"mongodb":         "mongodb://127.0.0.1:37001/",
+	"mongodb-secured": "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
+
+	"ferretdb-postgresql":         "mongodb://127.0.0.1:27001/",
+	"ferretdb-postgresql-secured": "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
+
 	"ferretdb-sqlite-replset":         "mongodb://127.0.0.1:27002/?replicaSet=rs0",
-	"ferretdb-postgresql-secured":     "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
 	"ferretdb-sqlite-replset-secured": "mongodb://username:password@127.0.0.1:27004/?authSource=admin&replicaSet=rs0",
+
+	// add ferretdb2; no secured version yet
+	// TODO https://github.com/FerretDB/dance/issues/1154
 }
 
 // projectConfig represents project configuration YAML file.
