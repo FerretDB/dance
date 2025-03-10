@@ -68,7 +68,6 @@ services:
     build:
       context: ./build/deps
       dockerfile: ferretdb.Dockerfile
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
     restart: on-failure
     depends_on: ["postgres"]
     ports:
