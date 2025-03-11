@@ -41,8 +41,8 @@ func FuzzLoadContent(f *testing.F) {
 					Setup: "python3 -m venv .\n" +
 						"./bin/pip3 install -r requirements.txt\n",
 					Tests: []config.RunnerParamsCommandTest{
-						{Name: "normal", Cmd: "./bin/python3 pymongo_test.py 'mongodb://127.0.0.1:27001/'"},
-						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27001/'"},
+						{Name: "normal", Cmd: "./bin/python3 pymongo_test.py 'mongodb://127.0.0.1:27003/'"},
+						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27003/'"},
 					},
 				},
 				Results: &config.ExpectedResults{
