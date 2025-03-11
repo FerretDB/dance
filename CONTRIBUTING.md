@@ -40,7 +40,7 @@ git submodule update --init
 
 ```sh
 bin/task env-up
-bin/task env-up DB=ferretdb
+bin/task dance DB=ferretdb
 ```
 
 The first command starts all databases defined in `docker-compose.yml`.
