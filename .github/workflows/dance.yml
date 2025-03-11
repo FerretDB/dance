@@ -53,19 +53,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # add nodejs-example, ycsb-workloada2, ycsb-workloadb2 and ycsb-workloadc2
+        # TODO https://github.com/FerretDB/dance/issues/1154
         config:
           - dotnet-example
           - java-example
-          - nodejs-example
           - python-example
 
           - mongo-tools
+
           - ycsb-workloada
-          - ycsb-workloada2
           - ycsb-workloadb
-          - ycsb-workloadb2
           - ycsb-workloadc
-          - ycsb-workloadc2
 
     steps:
       - name: Install Tailscale

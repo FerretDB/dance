@@ -45,7 +45,7 @@ services:
       - ./build/mongod_secured.conf:/etc/mongod.conf
 
   ferretdb-postgresql:
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
     restart: on-failure
     depends_on: ["postgres"]
     ports:
@@ -63,7 +63,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb-postgresql-secured:
-    image: ${FERRETDB_IMAGE:-ferretdb-local}
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
     restart: on-failure
     depends_on: [ "postgres" ]
     ports:
@@ -85,7 +85,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   postgres:
-    image: ${POSTGRES_IMAGE:-postgres}
+    image: ${POSTGRES_IMAGE:-postgres:16.4}
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
