@@ -34,9 +34,12 @@ var DBs = map[string]string{
 	"mongodb-secured": "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
 
 	"ferretdb-postgresql":         "mongodb://127.0.0.1:27001/",
-	"ferretdb-postgresql-secured": "mongodb://username:password@127.0.0.1:27002/?authSource=admin",
+	"ferretdb-postgresql-secured": "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
 
-	"ferretdb2": "mongodb://127.0.0.1:27003/",
+	"ferretdb-sqlite-replset":         "mongodb://127.0.0.1:27002/?replicaSet=rs0",
+	"ferretdb-sqlite-replset-secured": "mongodb://username:password@127.0.0.1:27004/?authSource=admin&replicaSet=rs0",
+
+	"ferretdb2": "mongodb://127.0.0.1:47001/",
 
 	// add ferretdb2 secured and ferretdb2-dev versions
 	// TODO https://github.com/FerretDB/dance/issues/1154
