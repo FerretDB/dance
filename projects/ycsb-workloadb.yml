@@ -12,6 +12,10 @@ results:
     stats:
       pass: 3
 
+  ferretdb-postgresql:
+    stats:
+      pass: 3
+
   ferretdb:
     stats:
       pass: 3

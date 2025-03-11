@@ -17,6 +17,28 @@ results:
     stats:
       pass: 6
 
+  ferretdb-postgresql:
+    stats:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+
+  ferretdb-postgresql-secured:
+    stats:
+      pass: 4
+      fail: 2
+    pass:
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
+    fail:
+      # TODO https://github.com/FerretDB/dance/issues/892
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
+      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
+
   ferretdb:
     stats:
       pass: 6
