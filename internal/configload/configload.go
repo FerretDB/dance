@@ -37,6 +37,9 @@ var DBs = map[string]string{
 	"ferretdb-postgresql-secured": "mongodb://username:password@127.0.0.1:27002/?authSource=admin",
 
 	"ferretdb2": "mongodb://127.0.0.1:27003/",
+
+	// add ferretdb2 secured and ferretdb2-dev versions
+	// TODO https://github.com/FerretDB/dance/issues/1154
 }
 
 // projectConfig represents project configuration YAML file.
