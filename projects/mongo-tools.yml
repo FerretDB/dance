@@ -39,6 +39,6 @@ results:
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
-  ferretdb:
+  ferretdb2:
     stats:
       pass: 6

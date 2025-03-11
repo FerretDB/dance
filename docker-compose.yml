@@ -94,7 +94,7 @@ services:
       - POSTGRES_PASSWORD=postgres_password
       - POSTGRES_DB=dance
 
-  ferretdb:
+  ferretdb2:
     build:
       context: ./build/deps
       dockerfile: ferretdb.Dockerfile

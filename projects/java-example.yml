@@ -67,7 +67,7 @@ results:
       - noauth # Authentication failed
       - plain # Unsupported authentication mechanism "PLAIN"
 
-  ferretdb:
+  ferretdb2:
     stats:
       fail: 3
       pass: 3
