@@ -12,6 +12,16 @@ on:
       - main
   schedule:
     - cron: "12 3 * * *"
+  workflow_dispatch:
+    inputs:
+      ferretdb_image:
+        description: FerretDB Docker image
+        default: ghcr.io/ferretdb/ferretdb:1
+        required: false
+      postgres_image:
+        description: PostgreSQL Docker image
+        default: postgres:16.4
+        required: false
 
 env:
   GOPATH: /home/runner/go
@@ -50,6 +60,9 @@ jobs:
 
       - name: Start environment
         run: bin/task env-up-detach
+        env:
+          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb:1' }}
+          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
 
       - name: Run init
         run: bin/task init

@@ -29,7 +29,7 @@ tasks:
       - go mod verify
 
   fmt:
-    deps: [ fmt-go ]
+    deps: [fmt-go]
 
   # invoked by FerretDB/github-actions/linters action
   fmt-go:
