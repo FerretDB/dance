@@ -36,7 +36,6 @@ results:
       - noauth # Command dropDatabase requires authentication
       - plain # Received authentication for mechanism PLAIN which is not enabled
 
-
   ferretdb-postgresql:
     stats:
       fail: 3

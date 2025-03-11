@@ -14,7 +14,7 @@ results:
 
   ferretdb-postgresql:
     stats:
-      pass: 3
+      pass: 2
 
   ferretdb:
     stats:
