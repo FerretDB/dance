@@ -57,7 +57,7 @@ services:
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
       # use different database from ferretdb-postgresql-secured
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/dance?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
