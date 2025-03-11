@@ -33,7 +33,7 @@ func FuzzLoadContent(f *testing.F) {
 	}{
 		{
 			file: "command.yml",
-			db:   "ferretdb",
+			db:   "ferretdb-postgresql",
 			expected: &config.Config{
 				Runner: "command",
 				Params: &config.RunnerParamsCommand{
@@ -41,8 +41,8 @@ func FuzzLoadContent(f *testing.F) {
 					Setup: "python3 -m venv .\n" +
 						"./bin/pip3 install -r requirements.txt\n",
 					Tests: []config.RunnerParamsCommandTest{
-						{Name: "normal", Cmd: "./bin/python3 pymongo_test.py 'mongodb://127.0.0.1:27003/'"},
-						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27003/'"},
+						{Name: "normal", Cmd: "./bin/python3 pymongo_test.py 'mongodb://127.0.0.1:27001/'"},
+						{Name: "strict", Cmd: "./bin/python3 pymongo_test.py --strict 'mongodb://127.0.0.1:27001/'"},
 					},
 				},
 				Results: &config.ExpectedResults{
@@ -57,7 +57,7 @@ func FuzzLoadContent(f *testing.F) {
 		},
 		{
 			file: "command_nodir.yml",
-			db:   "ferretdb",
+			db:   "ferretdb-postgresql",
 			err:  "failed to convert runner parameters: dir is required",
 		},
 	} {
