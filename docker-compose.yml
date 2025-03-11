@@ -56,8 +56,8 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
-      # use different database from ferretdb-postgresql-secured
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
+      # use different database from ferretdb-postgresql-secured to avoid error
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/dance?sslmode=disable
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -90,7 +90,7 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27003
       - FERRETDB_HANDLER=postgresql
-      # use different database from ferretdb-postgresql
+      # use different database from ferretdb-postgresql to avoid error
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
       - FERRETDB_SETUP_USERNAME=username
@@ -120,12 +120,22 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  # Different FerretDB v1 instances must use different POSTGRES_DB to avoid error such as
+  # `relation "_ferretdb_database_metadata" already exists (SQLSTATE 42P07)`.
   postgres:
+    image: postgres
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dance
+
+  postgres-documentdb:
     image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0}
     platform: linux/amd64
     restart: on-failure
-    ports:
-      - 5432:5432
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
@@ -145,7 +155,7 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47001
       - FERRETDB_HANDLER=postgresql
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
