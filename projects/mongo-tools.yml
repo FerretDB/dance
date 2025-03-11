@@ -42,15 +42,3 @@ results:
   ferretdb:
     stats:
       pass: 6
-
-  ferretdb-secured:
-    stats:
-      pass: 6
-
-  ferretdb-dev:
-    stats:
-      pass: 6
-
-  ferretdb-dev-secured:
-    stats:
-      pass: 6
