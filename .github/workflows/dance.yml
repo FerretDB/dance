@@ -16,11 +16,11 @@ on:
     inputs:
       ferretdb_image:
         description: FerretDB Docker image
-        default: ghcr.io/ferretdb/ferretdb:1
+        default: ghcr.io/ferretdb/ferretdb:2.0.0
         required: false
       postgres_image:
         description: PostgreSQL Docker image
-        default: postgres:16.4
+        default: ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0
         required: false
 
 env:
@@ -99,8 +99,8 @@ jobs:
       - name: Start environment
         run: bin/task env-up-detach
         env:
-          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb:1' }}
-          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'postgres:16.4' }}
+          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb:2.0.0' }}
+          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0' }}
 
       - name: Run init
         run: bin/task init build

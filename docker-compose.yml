@@ -45,7 +45,7 @@ services:
       - ./build/mongod_secured.conf:/etc/mongod.conf
 
   ferretdb-postgresql:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
+    image: ghcr.io/ferretdb/ferretdb:1
     restart: on-failure
     depends_on: ["postgres"]
     ports:
@@ -63,7 +63,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb-sqlite-replset:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
+    image: ghcr.io/ferretdb/ferretdb:1
     restart: on-failure
     ports:
       - 27002:27002
@@ -79,7 +79,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb-postgresql-secured:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
+    image: ghcr.io/ferretdb/ferretdb:1
     restart: on-failure
     depends_on: [ "postgres" ]
     ports:
@@ -101,7 +101,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb-sqlite-replset-secured:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:1}
+    image: ghcr.io/ferretdb/ferretdb:1
     restart: on-failure
     ports:
       - 27004:27004
@@ -121,9 +121,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   postgres:
-    build:
-      context: ./build/deps
-      dockerfile: postgres.Dockerfile
+    image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0}
     platform: linux/amd64
     restart: on-failure
     ports:
@@ -136,7 +134,7 @@ services:
       - POSTGRES_DB=postgres
 
   ferretdb2:
-    image: ghcr.io/ferretdb/ferretdb:2.0.0
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:2.0.0}
     restart: on-failure
     depends_on: ["postgres"]
     ports:
