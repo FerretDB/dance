@@ -120,6 +120,23 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  ferretdb2:
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+    restart: on-failure
+    depends_on: ["postgres-documentdb"]
+    ports:
+      - 47001:47001
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:47001
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
+      # - FERRETDB_REPL_SET_NAME=rs0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   # Different FerretDB v1 instances must use different POSTGRES_DB to avoid error such as
   # `relation "_ferretdb_database_metadata" already exists (SQLSTATE 42P07)`.
   postgres:
@@ -144,23 +161,6 @@ services:
       - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
-
-  ferretdb2:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
-    restart: on-failure
-    depends_on: ["postgres-documentdb"]
-    ports:
-      - 47001:47001
-    environment:
-      # Always UTC+05:45. Set to catch timezone problems.
-      - TZ=Asia/Kathmandu
-      - FERRETDB_LOG_LEVEL=error
-      - FERRETDB_LISTEN_ADDR=:47001
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
-      - FERRETDB_AUTH=false
-      # - FERRETDB_REPL_SET_NAME=rs0
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
   mongosh:
     build:
