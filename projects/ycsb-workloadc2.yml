@@ -12,7 +12,6 @@ results:
     stats:
       pass: 2
 
-  # TODO https://github.com/FerretDB/dance/issues/1154
-  # ferretdb2:
-  #   stats:
-  #     pass: 2
+  ferretdb2:
+    stats:
+      pass: 2
