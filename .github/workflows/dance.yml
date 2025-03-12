@@ -62,11 +62,8 @@ jobs:
           - mongo-tools
 
           - ycsb-workloada
-          - ycsb-workloada2
           - ycsb-workloadb
-          - ycsb-workloadb2
           - ycsb-workloadc
-          - ycsb-workloadc2
 
     steps:
       - name: Install Tailscale
