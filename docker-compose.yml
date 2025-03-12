@@ -136,6 +136,8 @@ services:
     image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     platform: linux/amd64
     restart: on-failure
+    ports:
+      - 5432:5432
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
