@@ -42,7 +42,6 @@ results:
       pass: 3
     fail:
       - plain # internal error: failed SASL auth: FATAL: password authentication failed for user "dummy"
-
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
       - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
 
@@ -70,12 +69,11 @@ results:
       - noauth # Authentication failed
       - plain # Unsupported authentication mechanism "PLAIN"
 
-  # TODO https://github.com/FerretDB/dance/issues/1154
-  # ferretdb2:
-  #    stats:
-  #      fail: 3
-  #      pass: 3
-  #    fail:
-  #      - plain # Unsupported authentication mechanism "PLAIN"
-  #      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
-  #      - sha256 # Authentication failed
+  ferretdb2:
+    stats:
+      fail: 3
+      pass: 3
+    fail:
+      - plain # Received authentication for mechanism PLAIN which is not enabled
+      - sha1 # Received authentication for mechanism SCRAM-SHA-1 which is not enabled
+      - sha256 # Authentication failed
