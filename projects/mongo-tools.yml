@@ -62,3 +62,7 @@ results:
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
+
+  ferretdb2:
+    stats:
+      pass: 6
