@@ -81,7 +81,7 @@ services:
   ferretdb-postgresql-secured:
     image: ghcr.io/ferretdb/ferretdb:1
     restart: on-failure
-    depends_on: [ "postgres" ]
+    depends_on: ["postgres"]
     ports:
       - 27003:27003
     environment:
@@ -133,7 +133,7 @@ services:
       - POSTGRES_DB=dance
 
   postgres-documentdb:
-    image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0}
+    image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     platform: linux/amd64
     restart: on-failure
     environment:
@@ -144,9 +144,9 @@ services:
       - POSTGRES_DB=postgres
 
   ferretdb2:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:2.0.0}
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
     restart: on-failure
-    depends_on: ["postgres"]
+    depends_on: ["postgres-documentdb"]
     ports:
       - 47001:47001
     environment:

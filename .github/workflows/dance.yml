@@ -12,16 +12,6 @@ on:
       - main
   schedule:
     - cron: "12 3 * * *" # after FerretDB's Docker workflow
-  workflow_dispatch:
-    inputs:
-      ferretdb_image:
-        description: FerretDB Docker image
-        default: ghcr.io/ferretdb/ferretdb:2.0.0
-        required: false
-      postgres_image:
-        description: PostgreSQL Docker image
-        default: ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0
-        required: false
 
 env:
   GOPATH: /home/runner/go
@@ -98,9 +88,6 @@ jobs:
 
       - name: Start environment
         run: bin/task env-up-detach
-        env:
-          FERRETDB_IMAGE: ${{ inputs.ferretdb_image || 'ghcr.io/ferretdb/ferretdb:2.0.0' }}
-          POSTGRES_IMAGE: ${{ inputs.postgres_image || 'ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0' }}
 
       - name: Run init
         run: bin/task init build
