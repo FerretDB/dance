@@ -39,11 +39,8 @@ git submodule update --init
 ## Starting environment
 
 ```sh
-export FERRETDB_IMAGE=ghcr.io/ferretdb/ferretdb-dev:main
-export POSTGRES_IMAGE=postgres:16
-
 bin/task env-up
-bin/task DB=ferretdb-postgresql
+bin/task DB=ferretdb2
 ```
 
 The first command starts all databases defined in `docker-compose.yml`.
@@ -54,13 +51,13 @@ During FerretDB development, it is recommended to run it on the host with the sa
 This way, the fix-build-test development cycle will be faster as it does not involve Docker image building.
 
 Alternatively, the Docker image with the name `ferretdb-local` can be built by `task docker-local` in the FerretDB repository.
-In this case, `FERRETDB_IMAGE` must be unset to use that default image name.
+In this case, `FERRETDB_IMAGE=ferretdb-local` can be set to use that image.
 
 ## Running tests
 
 ```sh
 bin/task dance
-bin/task dance DB=ferretdb-postgresql,mongodb CONFIG=python-example.yml
+bin/task dance DB=ferretdb2,mongodb CONFIG=python-example.yml
 ```
 
 The first command runs all project configurations.

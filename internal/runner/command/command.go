@@ -23,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
 
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/runner"
@@ -109,6 +110,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 	res := make(map[string]config.TestResult, len(c.p.Tests))
 
 	for _, t := range c.p.Tests {
+		start := time.Now()
 		c.l.InfoContext(ctx, "Running test", slog.String("test", t.Name))
 
 		b, err := execScript(ctx, c.p.Dir, t.Name, t.Cmd, c.verbose)
@@ -118,13 +120,15 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 			Output: string(b),
 		}
 
+		args := []any{slog.String("test", t.Name), slog.Duration("duration", time.Since(start))}
 		if err != nil {
-			c.l.WarnContext(ctx, "Test failed", slog.String("test", t.Name), slog.String("error", err.Error()))
+			args = append(args, slog.String("error", err.Error()))
+			c.l.WarnContext(ctx, "Test failed", args...)
 
 			tc.Status = config.Fail
 			tc.Output += "\n" + err.Error()
 		} else {
-			c.l.InfoContext(ctx, "Test passed", slog.String("test", t.Name))
+			c.l.InfoContext(ctx, "Test passed", args...)
 		}
 
 		res[t.Name] = tc
