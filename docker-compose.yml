@@ -156,7 +156,6 @@ services:
       - TZ=Asia/Kathmandu
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47001
-      - FERRETDB_HANDLER=postgresql
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
