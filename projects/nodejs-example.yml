@@ -53,3 +53,13 @@ results:
     fail:
       - noauth # Authentication failed
       - plain # Unsupported authentication mechanism "PLAIN"
+
+  # TODO https://github.com/FerretDB/dance/issues/1154
+  # ferretdb2:
+  #    stats:
+  #      fail: 3
+  #      pass: 3
+  #    fail:
+  #      - plain # Unsupported authentication mechanism "PLAIN"
+  #      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
+  #      - sha256 # Authentication failed

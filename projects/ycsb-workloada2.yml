@@ -15,3 +15,8 @@ results:
   ferretdb-postgresql:
     stats:
       pass: 3
+
+  # TODO https://github.com/FerretDB/dance/issues/1154
+  # ferretdb2:
+  #   stats:
+  #     pass: 3
