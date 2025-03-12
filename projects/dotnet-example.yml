@@ -41,9 +41,7 @@ results:
       fail: 3
       pass: 3
     fail:
-      # TODO https://github.com/FerretDB/dance/issues/889
       - plain # internal error: failed SASL auth: FATAL: password authentication failed for user "dummy"
-
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
       - sha256 # Unsupported authentication mechanism "SCRAM-SHA-256"
 
