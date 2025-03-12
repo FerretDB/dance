@@ -48,6 +48,7 @@ jobs:
         config:
           - dotnet-example
           - java-example
+          - nodejs-example
           - python-example
 
           - mongo-tools
