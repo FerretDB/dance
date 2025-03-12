@@ -1,0 +1,17 @@
+---
+# Workload C: Read only
+runner: ycsb
+params:
+  dir: ycsb
+  args:
+    - workloads/workloadc2
+    - mongodb.url={{.MONGODB_URI}}
+
+results:
+  mongodb:
+    stats:
+      pass: 2
+
+  ferretdb-postgresql:
+    stats:
+      pass: 2

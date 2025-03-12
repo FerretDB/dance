@@ -1,0 +1,17 @@
+---
+# Workload A: Update heavy workload
+runner: ycsb
+params:
+  dir: ycsb
+  args:
+    - workloads/workloada2
+    - mongodb.url={{.MONGODB_URI}}
+
+results:
+  mongodb:
+    stats:
+      pass: 3
+
+  ferretdb-postgresql:
+    stats:
+      pass: 3
