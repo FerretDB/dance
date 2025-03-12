@@ -57,7 +57,7 @@ services:
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
       # use different database from ferretdb-postgresql-secured to avoid error
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/dance?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/dance?sslmode=disable
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -91,7 +91,7 @@ services:
       - FERRETDB_LISTEN_ADDR=:27003
       - FERRETDB_HANDLER=postgresql
       # use different database from ferretdb-postgresql to avoid error
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://postgres_user:postgres_password@postgres:5432/postgres?sslmode=disable
       - FERRETDB_TEST_ENABLE_NEW_AUTH=true
       - FERRETDB_SETUP_USERNAME=username
       - FERRETDB_SETUP_PASSWORD=password
@@ -128,8 +128,8 @@ services:
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_password
       - POSTGRES_DB=dance
 
   postgres-documentdb:
