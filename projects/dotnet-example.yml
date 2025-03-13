@@ -77,3 +77,12 @@ results:
       - plain # Unsupported authentication mechanism "PLAIN"
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
       - sha256 # Authentication failed
+
+  ferretdb2-secured:
+    stats:
+      fail: 3
+      pass: 3
+    fail:
+      - noauth # Command dropDatabase requires authentication
+      - plain # Unsupported authentication mechanism "PLAIN"
+      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"

@@ -66,3 +66,7 @@ results:
   ferretdb2:
     stats:
       pass: 6
+
+  ferretdb2-secured:
+    stats:
+      pass: 6
