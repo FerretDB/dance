@@ -19,3 +19,7 @@ results:
   ferretdb2:
     stats:
       pass: 3
+
+  ferretdb-dev:
+    stats:
+      pass: 3

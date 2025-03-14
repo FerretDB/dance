@@ -66,3 +66,15 @@ results:
   ferretdb2:
     stats:
       pass: 6
+
+  ferretdb2-secured:
+    stats:
+      pass: 6
+
+  ferretdb2-dev:
+    stats:
+      pass: 6
+
+  ferretdb2-dev-secured:
+    stats:
+      pass: 6
