@@ -154,6 +154,40 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  ferretdb2-dev:
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    restart: on-failure
+    depends_on: ["postgres-documentdb-dev"]
+    ports:
+      - 47003:47003
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:47003
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
+      # - FERRETDB_REPL_SET_NAME=rs0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ferretdb2-dev-secured:
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    restart: on-failure
+    depends_on: ["postgres-documentdb-dev"]
+    ports:
+      - 47004:47004
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:47004
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=true
+      # - FERRETDB_REPL_SET_NAME=rs0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   # Different FerretDB v1 instances must use different POSTGRES_DB to avoid error such as
   # `relation "_ferretdb_database_metadata" already exists (SQLSTATE 42P07)`.
   postgres:
@@ -172,6 +206,18 @@ services:
     restart: on-failure
     ports:
       - 5432:5432
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  postgres-documentdb-dev:
+    # Use ferretdb branch build
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
+    platform: linux/amd64
+    restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
