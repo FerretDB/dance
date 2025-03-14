@@ -5,7 +5,7 @@ go 1.24
 toolchain go1.24.1
 
 require (
-	github.com/go-task/task/v3 v3.42.0
+	github.com/go-task/task/v3 v3.42.1
 	github.com/pingcap/go-ycsb v1.0.1
 	github.com/quasilyte/go-consistent v0.6.1
 	golang.org/x/perf v0.0.0-20250305200902-02a15fd477ba
