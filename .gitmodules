@@ -20,14 +20,6 @@
 	url = https://github.com/FerretDB/python-example.git
 	branch = main
 
-[submodule "enmeshed-runtime"]
-	path = projects/enmeshed-runtime
-	url = https://github.com/nmshd/runtime.git
-	branch = main
-[submodule "meteor"]
-	path = projects/meteor
-	url = https://github.com/meteor/meteor.git
-	branch = devel
 [submodule "mongo"]
 	path = projects/mongo
 	url = https://github.com/mongodb/mongo.git
@@ -36,6 +28,15 @@
 	path = projects/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
 	branch = master
+
+[submodule "enmeshed-runtime"]
+	path = projects/enmeshed-runtime
+	url = https://github.com/nmshd/runtime.git
+	branch = main
+[submodule "meteor"]
+	path = projects/meteor
+	url = https://github.com/meteor/meteor.git
+	branch = devel
 [submodule "restheart"]
 	path = projects/restheart
 	url = https://github.com/SoftInstigate/restheart.git
