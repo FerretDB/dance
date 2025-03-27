@@ -1,0 +1,16 @@
+---
+runner: command
+params:
+  dir: mongo-core-test
+  setup: |
+    python3 -m venv .
+    ./bin/pip3 install pymongo
+
+  tests:
+    - name: normal
+      cmd: ./bin/python3 run.py 7 '{{.MONGODB_URI}}' ../mongo/jstests
+
+results:
+  mongodb:
+    stats:
+      pass: 1
