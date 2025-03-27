@@ -45,3 +45,8 @@
 	path = projects/restheart
 	url = https://github.com/SoftInstigate/restheart.git
 	branch = master
+
+[submodule "mongodb-benchmarking"]
+	path = projects/mongodb-benchmarking
+	url = https://github.com/idealo/mongodb-benchmarking.git
+	branch = main
