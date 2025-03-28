@@ -108,7 +108,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 
 	dockerHostURI := uri
 
-	_, port, err := net.SplitHostPort(dockerHostURI.Host)
+	host, port, err := net.SplitHostPort(dockerHostURI.Host)
 	if err != nil {
 		return nil, err
 	}
@@ -122,6 +122,8 @@ func templateData(uri url.URL) (map[string]any, error) {
 		"MONGODB_URI_SHA1":        sha1URI.String(),
 		"MONGODB_URI_SHA256":      sha256URI.String(),
 		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
+		"MONGODB_HOST":            host,
+		"MONGODB_PORT":            port,
 	}, nil
 }
 

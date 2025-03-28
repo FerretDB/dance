@@ -7,10 +7,19 @@ params:
     ./bin/pip3 install pymongo
 
   tests:
-    - name: normal
-      cmd: ./bin/python3 run.py 7 '{{.MONGODB_URI}}' ../mongo/jstests
+    - name: noauth
+      cmd: >
+          MONGO_HOST='{{.MONGODB_HOST}}'
+          MONGO_PORT='{{.MONGODB_PORT}}'
+          MONGO_USERNAME=''
+          MONGO_PASSWORD=''
+          ./bin/python3 run.py 7
 
 results:
   mongodb:
+    stats:
+      pass: 1
+
+  ferretdb2:
     stats:
       pass: 1
