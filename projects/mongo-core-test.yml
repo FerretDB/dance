@@ -1,0 +1,25 @@
+---
+runner: command
+params:
+  dir: mongo-core-test
+  setup: |
+    python3 -m venv .
+    ./bin/pip3 install pymongo
+
+  tests:
+    - name: noauth
+      cmd: >
+          MONGO_HOST='{{.MONGODB_HOST}}'
+          MONGO_PORT='{{.MONGODB_PORT}}'
+          MONGO_USERNAME=''
+          MONGO_PASSWORD=''
+          ./bin/python3 run.py 7
+
+results:
+  mongodb:
+    stats:
+      pass: 1
+
+  ferretdb2:
+    stats:
+      pass: 1

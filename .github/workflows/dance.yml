@@ -50,6 +50,7 @@ jobs:
           - python-example
 
           - mongo-tools
+          - mongo-core-test
 
           - ycsb-workloada
           - ycsb-workloada2
