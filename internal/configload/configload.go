@@ -66,7 +66,7 @@ func Load(file, db string) (*config.Config, error) {
 }
 
 // templateData returns a map with template data for the given MongoDB URI.
-func templateData(uri url.URL, db string) (map[string]any, error) {
+func templateData(uri url.URL) (map[string]any, error) {
 	anonymousURI := uri
 	anonymousURI.User = nil
 
@@ -124,7 +124,6 @@ func templateData(uri url.URL, db string) (map[string]any, error) {
 		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
 		"MONGODB_HOST":            host,
 		"MONGODB_PORT":            port,
-		"DB":                      db,
 	}, nil
 }
 
@@ -149,7 +148,7 @@ func loadContent(content, db string) (*config.Config, error) {
 		return nil, fmt.Errorf("failed to parse project config file template: %w", err)
 	}
 
-	data, err := templateData(*u, db)
+	data, err := templateData(*u)
 	if err != nil {
 		return nil, err
 	}

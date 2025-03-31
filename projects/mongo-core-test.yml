@@ -9,11 +9,12 @@ params:
   tests:
     - name: noauth
       cmd: >
-          MONGO_HOST='{{.MONGODB_HOST}}'
-          MONGO_PORT='{{.MONGODB_PORT}}'
-          MONGO_USERNAME=''
-          MONGO_PASSWORD=''
-          ./bin/python3 run.py 7
+        MONGO_HOST='{{.MONGODB_HOST}}'
+        MONGO_PORT='{{.MONGODB_PORT}}'
+        MONGO_USERNAME=''
+        MONGO_PASSWORD=''
+        TEST_DIRECTORY='../mongo/jstests'
+        ./bin/python3 run.py 8
 
 results:
   mongodb:
