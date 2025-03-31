@@ -23,7 +23,7 @@
 [submodule "mongo"]
 	path = projects/mongo
 	url = https://github.com/mongodb/mongo.git
-	branch = v7.0
+	branch = v8.0
 [submodule "mongo-go-driver"]
 	path = projects/mongo-go-driver
 	url = https://github.com/mongodb/mongo-go-driver.git
