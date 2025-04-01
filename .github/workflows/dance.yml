@@ -96,10 +96,9 @@ jobs:
         run: bin/task init build
 
       - name: Dance!
-        run: bin/task dance CONFIG=${{ matrix.config }}.yml
+        run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.config == 'mongo-core-test' && true || false }} # to view test output on CI
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
-          VERBOSE_FLAG: ${{ matrix.config }} == 'mongo-core-test' && true || false }} # to view test output on CI
 
       - name: Collect logs
         if: failure()
