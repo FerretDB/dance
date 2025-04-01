@@ -95,6 +95,13 @@ jobs:
       - name: Run init
         run: bin/task init build
 
+      - name: Install Mongo client
+        if : ${{ matrix.config == 'mongo-core-test' }}
+        run: |
+          curl -OL https://repo.mongodb.org/apt/debian/dists/stretch/mongodb-org/5.0/main/binary-amd64/mongodb-org-shell_5.0.30_amd64.deb
+          dpkg -i mongodb-org-shell_5.0.30_amd64.deb
+          mongo --version
+
       - name: Dance!
         run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.config == 'mongo-core-test' && true || false }} # to view test output on CI
         env:
