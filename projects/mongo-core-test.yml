@@ -13,9 +13,7 @@ params:
         MONGO_PORT='{{.MONGODB_PORT}}'
         MONGO_USERNAME=''
         MONGO_PASSWORD=''
-        TEST_DIRECTORY='../mongo/jstests'
-        EXEC_DIRECTORY='/projects/mongo/jstests'
-        MONGO_COMMAND='docker compose run --rm legacy-mongo-shell'
+        TEST_DIRECTORY=$(readlink -f ../mongo/jstests)
         ./bin/python3 run.py 8
 
 results:

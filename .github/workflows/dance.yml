@@ -89,13 +89,6 @@ jobs:
         run: go generate -x
         working-directory: tools
 
-      - name: Install Mongo client
-        if : ${{ matrix.config == 'mongo-core-test' }}
-        run: |
-          curl -OL https://repo.mongodb.org/apt/debian/dists/stretch/mongodb-org/5.0/main/binary-amd64/mongodb-org-shell_5.0.30_amd64.deb
-          sudo apt-get update && apt-get install -y libcurl3 ./mongodb-org-shell_5.0.30_amd64.deb
-          mongo --version
-
       - name: Start environment
         run: bin/task env-up-detach
 
