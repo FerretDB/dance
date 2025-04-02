@@ -9,7 +9,6 @@ params:
   tests:
     - name: noauth
       cmd: >
-        MONGO_HOST='{{.MONGODB_DOCKER_HOST}}'
         MONGO_PORT='{{.MONGODB_PORT}}'
         MONGO_USERNAME=''
         MONGO_PASSWORD=''

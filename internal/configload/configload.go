@@ -113,8 +113,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 		return nil, err
 	}
 
-	dockerHost := "host.docker.internal"
-	dockerHostURI.Host = net.JoinHostPort(dockerHost, port)
+	dockerHostURI.Host = net.JoinHostPort("host.docker.internal", port)
 
 	return map[string]any{
 		"MONGODB_URI":             uri.String(),
@@ -123,7 +122,6 @@ func templateData(uri url.URL) (map[string]any, error) {
 		"MONGODB_URI_SHA1":        sha1URI.String(),
 		"MONGODB_URI_SHA256":      sha256URI.String(),
 		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
-		"MONGODB_DOCKER_HOST":     dockerHost,
 		"MONGODB_PORT":            port,
 	}, nil
 }
