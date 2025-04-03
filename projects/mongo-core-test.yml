@@ -4,15 +4,16 @@ params:
   dir: mongo-core-test
   setup: |
     python3 -m venv .
-    ./bin/pip3 install pymongo
+    COMPOSE_FILE='mongo5.yml' TEST_DIRECTORY=$(readlink -f ../mongo/jstests) docker compose up -d
 
   tests:
     - name: noauth
       cmd: >
+        COMPOSE_FILE='mongo5.yml'
+        TEST_DIRECTORY=$(readlink -f ../mongo/jstests)
         MONGO_PORT='{{.MONGODB_PORT}}'
         MONGO_USERNAME=''
         MONGO_PASSWORD=''
-        TEST_DIRECTORY=$(readlink -f ../mongo/jstests)
         ./bin/python3 run.py 8
 
 results:
