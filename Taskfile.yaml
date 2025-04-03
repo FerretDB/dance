@@ -87,7 +87,7 @@ tasks:
     deps: [build]
     dir: projects
     cmds:
-      - ../bin/dance {{.DANCE_FLAG}} --verbose={{.VERBOSE_FLAG}} --database={{.DB}} {{.CONFIG}}
+      - ../bin/dance --verbose={{.VERBOSE_FLAG}} --database={{.DB}} {{.CONFIG}}
 
   lint:
     desc: "Run linters"

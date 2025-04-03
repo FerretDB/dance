@@ -3,13 +3,13 @@ runner: command
 params:
   dir: mongo-core-test
   setup: |
-    python3 -m venv .
-    COMPOSE_FILE='mongo5.yml' TEST_DIRECTORY=$(readlink -f ../mongo/jstests) docker compose up -d
+    env COMPOSE_FILE='mongo8.yml' TEST_DIRECTORY=$(readlink -f ../mongo/jstests) docker compose up -d legacy-mongo
 
   tests:
     - name: noauth
       cmd: >
-        COMPOSE_FILE='mongo5.yml'
+        env
+        COMPOSE_FILE='mongo8.yml'
         TEST_DIRECTORY=$(readlink -f ../mongo/jstests)
         MONGO_PORT='{{.MONGODB_PORT}}'
         MONGO_USERNAME=''
