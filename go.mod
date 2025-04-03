@@ -2,10 +2,8 @@ module github.com/FerretDB/dance
 
 go 1.24
 
-toolchain go1.24.2
-
 require (
-	github.com/alecthomas/kong v1.9.0
+	github.com/alecthomas/kong v1.10.0
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/sethvargo/go-githubactions v1.3.0
 	github.com/stretchr/testify v1.10.0
