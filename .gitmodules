@@ -31,7 +31,7 @@
 [submodule "mongo-core-test"]
 	path = projects/mongo-core-test
     url = https://github.com/FerretDB/mongo-core-test.git
-	branch = command-args
+	branch = main
 
 [submodule "enmeshed-runtime"]
 	path = projects/enmeshed-runtime
