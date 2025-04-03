@@ -44,20 +44,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { config: dotnet-example }
-          - { config: java-example }
-          - { config: nodejs-example }
-          - { config: python-example }
+          - config: dotnet-example
+          - config: java-example
+          - config: nodejs-example
+          - config: python-example
 
-          - { config: mongo-tools }
-          - { config: mongo-core-test, verbose: true } # verbose to view test output on CI
+          - config: mongo-tools
+          - config: mongo-core-test
+            verbose: true # verbose to view test output on CI
 
-          - { config: ycsb-workloada }
-          - { config: ycsb-workloada2 }
-          - { config: ycsb-workloadb }
-          - { config: ycsb-workloadb2 }
-          - { config: ycsb-workloadc }
-          - { config: ycsb-workloadc2 }
+          - config: ycsb-workloada
+          - config: ycsb-workloada2
+          - config: ycsb-workloadb
+          - config: ycsb-workloadb2
+          - config: ycsb-workloadc
+          - config: ycsb-workloadc2
 
     steps:
       - name: Install Tailscale
