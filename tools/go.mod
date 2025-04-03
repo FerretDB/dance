@@ -2,6 +2,8 @@ module github.com/FerretDB/dance/tools
 
 go 1.24.1
 
+toolchain go1.24.2
+
 require (
 	github.com/go-task/task/v3 v3.42.1
 	github.com/pingcap/go-ycsb v1.0.1
