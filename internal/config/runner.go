@@ -37,9 +37,10 @@ type RunnerParams interface {
 
 // RunnerParamsCommand represents `command` runner parameters.
 type RunnerParamsCommand struct {
-	Dir   string
-	Setup string
-	Tests []RunnerParamsCommandTest
+	Dir      string
+	Setup    string
+	Teardown string
+	Tests    []RunnerParamsCommandTest
 }
 
 // RunnerParamsCommandTest represents a single test in `command` runner parameters.
