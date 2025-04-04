@@ -96,4 +96,18 @@ func TestCommand(t *testing.T) {
 		_, err = c.Run(ctx)
 		require.ErrorContains(t, err, "exit status 2")
 	})
+
+	t.Run("Setup", func(t *testing.T) {
+		p := &config.RunnerParamsCommand{
+			Tests:    tests,
+			Teardown: "exit 2",
+			Setup:    "exit 3",
+		}
+
+		c, err := New(p, slog.Default(), false)
+		require.NoError(t, err)
+
+		_, err = c.Run(ctx)
+		require.ErrorContains(t, err, "exit status 3")
+	})
 }
