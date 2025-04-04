@@ -30,20 +30,19 @@ func TestCommand(t *testing.T) {
 
 	ctx := context.Background()
 
-	p := &config.RunnerParamsCommand{
-		Tests: []config.RunnerParamsCommandTest{
-			{
-				Name: "test1",
-				Cmd:  "exit 0",
-			},
-			{
-				Name: "test2",
-				Cmd:  "exit 1",
-			},
+	tests := []config.RunnerParamsCommandTest{
+		{
+			Name: "test1",
+			Cmd:  "exit 0",
+		},
+		{
+			Name: "test2",
+			Cmd:  "exit 1",
 		},
 	}
 
 	t.Run("Normal", func(t *testing.T) {
+		p := &config.RunnerParamsCommand{Tests: tests}
 		c, err := New(p, slog.Default(), false)
 		require.NoError(t, err)
 
@@ -64,6 +63,7 @@ func TestCommand(t *testing.T) {
 	})
 
 	t.Run("Verbose", func(t *testing.T) {
+		p := &config.RunnerParamsCommand{Tests: tests}
 		c, err := New(p, slog.Default(), true)
 		require.NoError(t, err)
 
@@ -82,5 +82,18 @@ func TestCommand(t *testing.T) {
 			},
 		}
 		assert.Equal(t, expected, res)
+	})
+
+	t.Run("Teardown", func(t *testing.T) {
+		p := &config.RunnerParamsCommand{
+			Tests:    tests,
+			Teardown: "exit 2",
+		}
+
+		c, err := New(p, slog.Default(), false)
+		require.NoError(t, err)
+
+		_, err = c.Run(ctx)
+		require.ErrorContains(t, err, "exit status 2")
 	})
 }
