@@ -97,16 +97,36 @@ func execScript(ctx context.Context, dir, file, content string, verbose bool) ([
 }
 
 // Run implements [runner.Runner] interface.
-func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error) {
+func (c *command) Run(ctx context.Context) (res map[string]config.TestResult, err error) {
+	var b []byte
+
 	if c.p.Setup != "" {
 		c.l.InfoContext(ctx, "Running setup")
 
-		b, err := execScript(ctx, c.p.Dir, "setup", c.p.Setup, c.verbose)
-		if err != nil {
-			return nil, fmt.Errorf("%s\n%w", b, err)
+		if b, err = execScript(ctx, c.p.Dir, "setup", c.p.Setup, c.verbose); err != nil {
+			err = fmt.Errorf("%s\n%w", b, err)
+
+			return
 		}
 	}
 
+	if c.p.Teardown != "" {
+		defer func() {
+			c.l.InfoContext(ctx, "Running teardown")
+
+			if b, err = execScript(ctx, c.p.Dir, "teardown", c.p.Teardown, c.verbose); err != nil {
+				err = fmt.Errorf("%s\n%w", b, err)
+			}
+		}()
+	}
+
+	res = c.runTests(ctx)
+
+	return
+}
+
+// runTests executes tests and returns the results.
+func (c *command) runTests(ctx context.Context) map[string]config.TestResult {
 	res := make(map[string]config.TestResult, len(c.p.Tests))
 
 	for _, t := range c.p.Tests {
@@ -134,7 +154,7 @@ func (c *command) Run(ctx context.Context) (map[string]config.TestResult, error)
 		res[t.Name] = tc
 	}
 
-	return res, nil
+	return res
 }
 
 // check interfaces
