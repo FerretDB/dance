@@ -4,15 +4,17 @@ go 1.24.1
 
 toolchain go1.24.2
 
-require (
-	github.com/go-task/task/v3 v3.42.1
-	github.com/pingcap/go-ycsb v1.0.1
-	github.com/quasilyte/go-consistent v0.6.1
-	golang.org/x/perf v0.0.0-20250305200902-02a15fd477ba
-	golang.org/x/pkgsite v0.0.0-20250321205054-d037ac96d503
-	golang.org/x/tools v0.31.0
-	golang.org/x/vuln v1.1.4
-	mvdan.cc/gofumpt v0.7.0
+tool (
+	github.com/go-task/task/v3/cmd/task
+	github.com/pingcap/go-ycsb/cmd/go-ycsb
+	github.com/quasilyte/go-consistent
+	golang.org/x/perf/cmd/benchstat
+	golang.org/x/pkgsite/cmd/pkgsite
+	golang.org/x/tools/cmd/deadcode
+	golang.org/x/tools/cmd/goimports
+	golang.org/x/tools/cmd/stringer
+	golang.org/x/vuln/cmd/govulncheck
+	mvdan.cc/gofumpt
 )
 
 require (
@@ -87,6 +89,7 @@ require (
 	github.com/go-redis/redis/v9 v9.0.0-rc.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
+	github.com/go-task/task/v3 v3.42.1 // indirect
 	github.com/go-task/template v0.1.0 // indirect
 	github.com/go-toolsmith/astcast v1.0.0 // indirect
 	github.com/go-toolsmith/astequal v1.0.0 // indirect
@@ -132,6 +135,7 @@ require (
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pingcap/errors v0.11.5-0.20211224045212-9687c2b0f87c // indirect
 	github.com/pingcap/failpoint v0.0.0-20210918120811-547c13e3eb00 // indirect
+	github.com/pingcap/go-ycsb v1.0.1 // indirect
 	github.com/pingcap/kvproto v0.0.0-20220705053936-aa9c2d20cd2a // indirect
 	github.com/pingcap/log v0.0.0-20211215031037-e024ba4eb0ee // indirect
 	github.com/pjbgf/sha1cd v0.3.2 // indirect
@@ -140,6 +144,7 @@ require (
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
+	github.com/quasilyte/go-consistent v0.6.1 // indirect
 	github.com/radovskyb/watcher v1.0.7 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/sajari/fuzzy v1.0.0 // indirect
@@ -173,11 +178,15 @@ require (
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.37.0 // indirect
 	golang.org/x/oauth2 v0.28.0 // indirect
+	golang.org/x/perf v0.0.0-20250305200902-02a15fd477ba // indirect
+	golang.org/x/pkgsite v0.0.0-20250401190322-e806f9c8871f // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/telemetry v0.0.0-20240522233618-39ace7a40ae7 // indirect
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/tools v0.31.0 // indirect
+	golang.org/x/vuln v1.1.4 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.126.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
@@ -191,6 +200,7 @@ require (
 	gopkg.in/tomb.v2 v2.0.0-20161208151619-d5d1b5820637 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	mvdan.cc/gofumpt v0.7.0 // indirect
 	mvdan.cc/sh/v3 v3.11.0 // indirect
 	rsc.io/markdown v0.0.0-20231214224604-88bb533a6020 // indirect
 )
