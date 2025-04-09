@@ -96,7 +96,7 @@ jobs:
         run: bin/task init build
 
       - name: Dance!
-        run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.verbose != '' && matrix.verbose || false }}
+        run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.verbose || 'false' }}
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
 

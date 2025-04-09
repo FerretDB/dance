@@ -93,7 +93,7 @@ func TestCommand(t *testing.T) {
 		c, err := New(p, slog.Default(), false)
 		require.NoError(t, err)
 
-		canceledCtx, cancel := context.WithCancel(context.Background())
+		canceledCtx, cancel := context.WithCancel(ctx)
 
 		cancel()
 
