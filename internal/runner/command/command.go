@@ -114,7 +114,8 @@ func (c *command) Run(ctx context.Context) (res map[string]config.TestResult, er
 		defer func() {
 			c.l.InfoContext(ctx, "Running teardown")
 
-			if b, err = execScript(ctx, c.p.Dir, "teardown", c.p.Teardown, c.verbose); err != nil {
+			// canceled context should not prevent teardown
+			if b, err = execScript(context.WithoutCancel(ctx), c.p.Dir, "teardown", c.p.Teardown, c.verbose); err != nil {
 				err = fmt.Errorf("%s\n%w", b, err)
 			}
 		}()

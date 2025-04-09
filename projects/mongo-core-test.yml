@@ -4,6 +4,8 @@ params:
   dir: mongo-core-test
   setup: |
     env COMPOSE_FILE='mongo8.yml' TEST_DIRECTORY=$(readlink -f ../mongo/jstests) docker compose up -d legacy-mongo
+  teardown: |
+    env COMPOSE_FILE='mongo8.yml' docker compose down legacy-mongo
 
   tests:
     - name: noauth
