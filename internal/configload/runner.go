@@ -29,9 +29,10 @@ type runnerParams interface {
 
 // runnerParamsCommand represents `command` runner parameters in the project configuration YAML file.
 type runnerParamsCommand struct {
-	Dir   string `yaml:"dir"`
-	Setup string `yaml:"setup"`
-	Tests []struct {
+	Dir      string `yaml:"dir"`
+	Setup    string `yaml:"setup"`
+	Teardown string `yaml:"teardown"`
+	Tests    []struct {
 		Name string `yaml:"name"`
 		Cmd  string `yaml:"cmd"`
 	} `yaml:"tests"`
@@ -44,8 +45,9 @@ func (rp *runnerParamsCommand) convert() (config.RunnerParams, error) {
 	}
 
 	res := &config.RunnerParamsCommand{
-		Dir:   rp.Dir,
-		Setup: rp.Setup,
+		Dir:      rp.Dir,
+		Setup:    rp.Setup,
+		Teardown: rp.Teardown,
 	}
 
 	for _, t := range rp.Tests {

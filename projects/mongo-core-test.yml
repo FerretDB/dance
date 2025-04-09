@@ -1,0 +1,28 @@
+---
+runner: command
+params:
+  dir: mongo-core-test
+  setup: |
+    env COMPOSE_FILE='mongo8.yml' TEST_DIRECTORY=$(readlink -f ../mongo/jstests) docker compose up -d legacy-mongo
+  teardown: |
+    env COMPOSE_FILE='mongo8.yml' docker compose down legacy-mongo
+
+  tests:
+    - name: noauth
+      cmd: >
+        env
+        COMPOSE_FILE='mongo8.yml'
+        TEST_DIRECTORY=$(readlink -f ../mongo/jstests)
+        MONGO_PORT='{{.MONGODB_PORT}}'
+        MONGO_USERNAME=''
+        MONGO_PASSWORD=''
+        python3 run.py 8
+
+results:
+  mongodb:
+    stats:
+      pass: 1
+
+  ferretdb2:
+    stats:
+      pass: 1

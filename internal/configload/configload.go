@@ -122,6 +122,7 @@ func templateData(uri url.URL) (map[string]any, error) {
 		"MONGODB_URI_SHA1":        sha1URI.String(),
 		"MONGODB_URI_SHA256":      sha256URI.String(),
 		"MONGODB_URI_DOCKER_HOST": dockerHostURI.String(),
+		"MONGODB_PORT":            port,
 	}, nil
 }
 

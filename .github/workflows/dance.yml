@@ -43,20 +43,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - dotnet-example
-          - java-example
-          - nodejs-example
-          - python-example
+        include:
+          - { config: dotnet-example }
+          - { config: java-example }
+          - { config: nodejs-example }
+          - { config: python-example }
 
-          - mongo-tools
+          - { config: mongo-tools }
+          - { config: mongo-core-test, verbose: true } # verbose to view test output on CI
 
-          - ycsb-workloada
-          - ycsb-workloada2
-          - ycsb-workloadb
-          - ycsb-workloadb2
-          - ycsb-workloadc
-          - ycsb-workloadc2
+          - { config: ycsb-workloada }
+          - { config: ycsb-workloada2 }
+          - { config: ycsb-workloadb }
+          - { config: ycsb-workloadb2 }
+          - { config: ycsb-workloadc }
+          - { config: ycsb-workloadc2 }
 
     steps:
       - name: Install Tailscale
@@ -95,7 +96,7 @@ jobs:
         run: bin/task init build
 
       - name: Dance!
-        run: bin/task dance CONFIG=${{ matrix.config }}.yml
+        run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.verbose || 'false' }}
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
 

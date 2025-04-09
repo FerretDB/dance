@@ -30,7 +30,7 @@
 	branch = master
 [submodule "mongo-core-test"]
 	path = projects/mongo-core-test
-    url = https://github.com/mongodb-developer/mongo-core-test.git
+    url = https://github.com/FerretDB/mongo-core-test.git
 	branch = main
 
 [submodule "enmeshed-runtime"]

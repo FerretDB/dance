@@ -93,7 +93,11 @@ func TestCommand(t *testing.T) {
 		c, err := New(p, slog.Default(), false)
 		require.NoError(t, err)
 
-		_, err = c.Run(ctx)
+		canceledCtx, cancel := context.WithCancel(ctx)
+
+		cancel()
+
+		_, err = c.Run(canceledCtx)
 		require.ErrorContains(t, err, "exit status 2")
 	})
 
