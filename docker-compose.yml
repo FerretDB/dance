@@ -53,6 +53,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27001
       - FERRETDB_HANDLER=postgresql
@@ -70,6 +71,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27002
       - FERRETDB_HANDLER=sqlite
@@ -87,6 +89,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27003
       - FERRETDB_HANDLER=postgresql
@@ -108,6 +111,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:27004
       - FERRETDB_HANDLER=sqlite
@@ -129,6 +133,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47001
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
@@ -146,6 +151,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47002
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
@@ -163,6 +169,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47003
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
@@ -180,6 +187,7 @@ services:
     environment:
       # Always UTC+05:45. Set to catch timezone problems.
       - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47004
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
