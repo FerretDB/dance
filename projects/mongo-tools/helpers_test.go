@@ -81,7 +81,7 @@ func runDockerComposeCommand(tb testing.TB, command string, args ...string) {
 
 	args = append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
 	cmd := exec.Command(bin, args...)
-	cmd.Stdout = os.Stdout
+	cmd.Stdout = os.Stderr // makes logs on CI easier to understand
 	cmd.Stderr = os.Stderr
 
 	tb.Logf("Running %s", strings.Join(cmd.Args, " "))

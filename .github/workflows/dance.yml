@@ -69,11 +69,12 @@ jobs:
           tags: tag:ci
           version: latest
 
+      - name: Create directory for logs
+        run: mkdir -p /tmp/logs
+
       - name: Start pinging Tailscale
         if: github.event_name != 'pull_request'
-        run: |
-          mkdir -p /tmp/logs
-          tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
+        run: tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
 
       - name: Checkout code
         uses: actions/checkout@v4
