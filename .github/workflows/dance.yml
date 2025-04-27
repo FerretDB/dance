@@ -101,6 +101,23 @@ jobs:
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
 
+      - name: Setup nushell
+        if: failure()
+        uses: FerretDB/github-actions/setup-nushell@main
+
+      - name: Show listening ports
+        if: failure()
+        shell: /usr/local/bin/nu {0}
+        run: |
+          docker compose ps -a --format json |
+          from json -o |
+          get Publishers |
+          flatten |
+          where PublishedPort != 0 |
+          get PublishedPort |
+          uniq |
+          each { |port| lsof -nPi $':($port)' +c0 }
+
       - name: Collect logs
         if: failure()
         run: bin/task env-logs-collect > /tmp/logs/compose.txt
