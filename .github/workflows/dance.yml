@@ -105,6 +105,10 @@ jobs:
         if: failure()
         uses: FerretDB/github-actions/setup-nushell@main
 
+      - name: Show Docker ports
+        if: failure()
+        run: docker compose ps -a --no-trunc
+
       - name: Show listening ports
         if: failure()
         shell: /usr/local/bin/nu {0}
