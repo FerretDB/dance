@@ -33,19 +33,10 @@
     url = https://github.com/FerretDB/mongo-core-test.git
 	branch = main
 
-[submodule "enmeshed-runtime"]
-	path = projects/enmeshed-runtime
-	url = https://github.com/nmshd/runtime.git
-	branch = main
 [submodule "meteor"]
 	path = projects/meteor
 	url = https://github.com/meteor/meteor.git
 	branch = devel
-[submodule "restheart"]
-	path = projects/restheart
-	url = https://github.com/SoftInstigate/restheart.git
-	branch = master
-
 [submodule "mongodb-benchmarking"]
 	path = projects/mongodb-benchmarking
 	url = https://github.com/idealo/mongodb-benchmarking.git
