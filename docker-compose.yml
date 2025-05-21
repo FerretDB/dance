@@ -45,7 +45,7 @@ services:
       - ./build/mongod_secured.conf:/etc/mongod.conf
 
   ferretdb-postgresql:
-    image: ghcr.io/ferretdb/ferretdb:1
+    image: ghcr.io/ferretdb/ferretdb-dev:pr-ignore-param
     restart: on-failure
     depends_on: ["postgres"]
     ports:
