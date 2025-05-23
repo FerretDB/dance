@@ -58,6 +58,15 @@ type RunnerParamsGoTest struct {
 	Args []string
 }
 
+// RunnerParamsMongoBench represents `mongobench` runner parameters.
+type RunnerParamsMongoBench struct {
+	Dir  string
+	Args []string
+}
+
+// runnerParams implements [RunnerParams] interface.
+func (rp *RunnerParamsMongoBench) runnerParams() {}
+
 // runnerParams implements [RunnerParams] interface.
 func (rp *RunnerParamsGoTest) runnerParams() {}
 
@@ -74,5 +83,6 @@ func (rp *RunnerParamsYCSB) runnerParams() {}
 var (
 	_ RunnerParams = (*RunnerParamsCommand)(nil)
 	_ RunnerParams = (*RunnerParamsGoTest)(nil)
+	_ RunnerParams = (*RunnerParamsMongoBench)(nil)
 	_ RunnerParams = (*RunnerParamsYCSB)(nil)
 )
