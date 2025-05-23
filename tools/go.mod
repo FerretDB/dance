@@ -5,8 +5,8 @@ go 1.24.1
 toolchain go1.24.2
 
 tool (
-	benchmarking
 	github.com/go-task/task/v3/cmd/task
+	github.com/idealo/mongodb-benchmarking
 	github.com/pingcap/go-ycsb/cmd/go-ycsb
 	github.com/quasilyte/go-consistent
 	golang.org/x/perf/cmd/benchstat
@@ -18,10 +18,9 @@ tool (
 	mvdan.cc/gofumpt
 )
 
-replace benchmarking => github.com/idealo/mongodb-benchmarking v1.5.4
+replace github.com/idealo/mongodb-benchmarking v1.5.4 => ../projects/mongodb-benchmarking
 
 require (
-	benchmarking v0.0.0-00010101000000-000000000000 // indirect
 	cloud.google.com/go v0.110.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/iam v0.13.0 // indirect
@@ -115,6 +114,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
+	github.com/idealo/mongodb-benchmarking v1.5.4 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
