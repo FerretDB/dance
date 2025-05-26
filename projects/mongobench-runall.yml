@@ -1,0 +1,24 @@
+---
+# Run all tests
+runner: mongobench
+params:
+  dir: mongodb-benchmarking
+  args:
+    - -threads 10 -docs 100000 -uri {{.MONGODB_URI}} --runAll
+
+results:
+  mongodb:
+    stats:
+      pass: 3
+
+  ferretdb-postgresql:
+    stats:
+      pass: 3
+
+  ferretdb2:
+    stats:
+      pass: 3
+
+  ferretdb-dev:
+    stats:
+      pass: 3

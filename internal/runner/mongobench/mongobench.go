@@ -16,14 +16,19 @@
 package mongobench
 
 import (
+	"bufio"
 	"context"
+	"encoding/csv"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/runner"
@@ -43,11 +48,102 @@ func New(params *config.RunnerParamsMongoBench, l *slog.Logger) (runner.Runner, 
 	}, nil
 }
 
-// parseOutput parses mongo-bench output.
-func parseOutput(r io.Reader) (map[string]map[string]float64, error) {
-	var res map[string]map[string]float64
+// parseFilenames parses the file names that store benchmark results.
+// Each operation is stored in different files such as `benchmark_results_insert.csv`,
+// `benchmark_results_update.csv`, `benchmark_results_delete.csv` and `benchmark_results_upsert.csv`.
+func parseFilenames(r io.Reader) ([]string, error) {
+	var files []string
 
-	return res, errors.New("unimplemented")
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if !strings.HasPrefix(line, "Benchmarking completed. Results saved to ") {
+			continue
+		}
+
+		// `Benchmarking completed. Results saved to benchmark_results_delete.csv`
+		file := strings.TrimSpace(strings.TrimPrefix(line, "Benchmarking completed. Results saved to "))
+		files = append(files, file)
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	if len(files) == 0 {
+		return nil, errors.New("no benchmark results found")
+	}
+
+	return files, nil
+}
+
+// parseMeasurements reads the mongo-bench results from the reader.
+func parseMeasurements(op string, r io.Reader) (map[string]map[string]float64, error) {
+	res := make(map[string]map[string]float64)
+
+	reader := csv.NewReader(r)
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		i, err := strconv.ParseInt(record[0], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		t := time.Unix(i, 0)
+
+		count, err := strconv.ParseInt(record[1], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+
+		mean, err := strconv.ParseFloat(record[1], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		m1Rate, err := strconv.ParseFloat(record[2], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		m5Rate, err := strconv.ParseFloat(record[3], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		m15Rate, err := strconv.ParseFloat(record[4], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		meanRate, err := strconv.ParseFloat(record[5], 64)
+		if err != nil {
+			return nil, err
+		}
+
+		// FIXME each record is measuring from each second during the benchmark, not a single measurement of an operation
+		res[fmt.Sprintf("%s%s", op, t.Format(time.DateTime))] = map[string]float64{
+			"t":         float64(t.Second()), // timestamp (epoch seconds)
+			"count":     float64(count),      // total document count
+			"mean":      mean,                // mean operation rate in docs/sec
+			"m1_rate":   m1Rate,              // moving average rates over 1 minute
+			"m5_rate":   m5Rate,              // moving average rates over 5 minutes
+			"m15_rate":  m15Rate,             // moving average rates over 15 minutes
+			"mean_rate": meanRate,            // cumulative mean rate
+		}
+	}
+
+	return res, nil
 }
 
 // run runs given command in the given directory and returns parsed results.
@@ -67,7 +163,7 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 		return nil, err
 	}
 
-	ms, err := parseOutput(io.TeeReader(pipe, os.Stdout))
+	fileNames, err := parseFilenames(io.TeeReader(pipe, os.Stdout))
 	if err != nil {
 		_ = cmd.Process.Kill()
 		return nil, err
@@ -75,6 +171,32 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 
 	if err = cmd.Wait(); err != nil {
 		return nil, err
+	}
+
+	ms := make(map[string]map[string]float64)
+
+	for _, fileName := range fileNames {
+		relPath := filepath.Join("..", fileName)
+
+		var f *os.File
+
+		if f, err = os.Open(relPath); err != nil {
+			return nil, err
+		}
+
+		defer f.Close()
+
+		op := strings.TrimSuffix(strings.TrimPrefix(fileName, "benchmark_results_"), ".csv")
+
+		var m map[string]map[string]float64
+
+		if m, err = parseMeasurements(op, bufio.NewReader(f)); err != nil {
+			return nil, err
+		}
+
+		for k, v := range m {
+			ms[k] = v
+		}
 	}
 
 	res := make(map[string]config.TestResult)
