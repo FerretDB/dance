@@ -152,6 +152,24 @@ func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float6
 	return res, nil
 }
 
+// readMeasurements reads the measurements from the file with given name.
+func readMeasurements(fileName string) (map[string]map[string]float64, error) {
+	relPath := filepath.Join("..", fileName)
+
+	f, err := os.Open(relPath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		err = f.Close()
+	}()
+
+	op := strings.TrimSuffix(strings.TrimPrefix(fileName, "benchmark_results_"), ".csv")
+
+	return parseMeasurements(op, bufio.NewReader(f))
+}
+
 // run runs given command in the given directory and returns parsed results.
 func run(ctx context.Context, args []string, dir string) (map[string]config.TestResult, error) {
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
@@ -182,21 +200,9 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 	ms := make(map[string]map[string]float64)
 
 	for _, fileName := range fileNames {
-		relPath := filepath.Join("..", fileName)
-
-		var f *os.File
-
-		if f, err = os.Open(relPath); err != nil {
-			return nil, err
-		}
-
-		defer f.Close()
-
-		op := strings.TrimSuffix(strings.TrimPrefix(fileName, "benchmark_results_"), ".csv")
-
 		var m map[string]map[string]float64
 
-		if m, err = parseMeasurements(op, bufio.NewReader(f)); err != nil {
+		if m, err = readMeasurements(fileName); err != nil {
 			return nil, err
 		}
 
