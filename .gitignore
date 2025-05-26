@@ -3,3 +3,6 @@
 /dumps/mongodump_tests/
 /vendor/
 cover.txt
+
+# mongodb-benchmarking
+benchmark_results_*.csv
