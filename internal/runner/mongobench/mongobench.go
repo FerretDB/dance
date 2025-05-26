@@ -18,7 +18,6 @@ package mongobench
 import (
 	"bufio"
 	"context"
-	"encoding/csv"
 	"errors"
 	"fmt"
 	"io"
@@ -48,11 +47,11 @@ func New(params *config.RunnerParamsMongoBench, l *slog.Logger) (runner.Runner, 
 	}, nil
 }
 
-// parseFilenames parses the file names that store benchmark results.
+// parseFileNames parses the file names that store benchmark results.
 // Each operation is stored in different files such as `benchmark_results_insert.csv`,
 // `benchmark_results_update.csv`, `benchmark_results_delete.csv` and `benchmark_results_upsert.csv`.
-func parseFilenames(r io.Reader) ([]string, error) {
-	var files []string
+func parseFileNames(r io.Reader) ([]string, error) {
+	var fileNames []string
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
@@ -62,30 +61,40 @@ func parseFilenames(r io.Reader) ([]string, error) {
 			continue
 		}
 
-		// `Benchmarking completed. Results saved to benchmark_results_delete.csv`
-		file := strings.TrimSpace(strings.TrimPrefix(line, "Benchmarking completed. Results saved to "))
-		files = append(files, file)
+		// parse file name from the line such as `Benchmarking completed. Results saved to benchmark_results_delete.csv`
+		fileName := strings.TrimSpace(strings.TrimPrefix(line, "Benchmarking completed. Results saved to "))
+		fileNames = append(fileNames, fileName)
 	}
 
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
 
-	if len(files) == 0 {
-		return nil, errors.New("no benchmark results found")
+	if len(fileNames) == 0 {
+		return nil, errors.New("no benchmark result files found")
 	}
 
-	return files, nil
+	return fileNames, nil
 }
 
 // parseMeasurements reads the mongo-bench results from the reader.
-func parseMeasurements(op string, r io.Reader) (map[string]map[string]float64, error) {
+func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float64, error) {
 	res := make(map[string]map[string]float64)
 
-	reader := csv.NewReader(r)
+	// cannot use [csv.NewReader] because the file does not contain valid CSV,
+	// it contains 7 header fields while record lines contain 6 fields,
+	// so we parse it manually and assume last field `mean_rate` is missing
+	//
+	//t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
+	//1748240899,13524,13522.216068,756.800000,756.800000,756.800000
+
+	// ignore header
+	if _, _, err := r.ReadLine(); err != nil {
+		return nil, err
+	}
 
 	for {
-		record, err := reader.Read()
+		line, _, err := r.ReadLine()
 		if err == io.EOF {
 			break
 		}
@@ -93,6 +102,8 @@ func parseMeasurements(op string, r io.Reader) (map[string]map[string]float64, e
 		if err != nil {
 			return nil, err
 		}
+
+		record := strings.Split(string(line), ",")
 
 		i, err := strconv.ParseInt(record[0], 10, 64)
 		if err != nil {
@@ -106,40 +117,35 @@ func parseMeasurements(op string, r io.Reader) (map[string]map[string]float64, e
 			return nil, err
 		}
 
-		mean, err := strconv.ParseFloat(record[1], 64)
+		mean, err := strconv.ParseFloat(record[2], 64)
 		if err != nil {
 			return nil, err
 		}
 
-		m1Rate, err := strconv.ParseFloat(record[2], 64)
+		m1Rate, err := strconv.ParseFloat(record[3], 64)
 		if err != nil {
 			return nil, err
 		}
 
-		m5Rate, err := strconv.ParseFloat(record[3], 64)
+		m5Rate, err := strconv.ParseFloat(record[4], 64)
 		if err != nil {
 			return nil, err
 		}
 
-		m15Rate, err := strconv.ParseFloat(record[4], 64)
+		m15Rate, err := strconv.ParseFloat(record[5], 64)
 		if err != nil {
 			return nil, err
 		}
 
-		meanRate, err := strconv.ParseFloat(record[5], 64)
-		if err != nil {
-			return nil, err
-		}
-
-		// FIXME each record is measuring from each second during the benchmark, not a single measurement of an operation
-		res[fmt.Sprintf("%s%s", op, t.Format(time.DateTime))] = map[string]float64{
-			"t":         float64(t.Second()), // timestamp (epoch seconds)
-			"count":     float64(count),      // total document count
-			"mean":      mean,                // mean operation rate in docs/sec
-			"m1_rate":   m1Rate,              // moving average rates over 1 minute
-			"m5_rate":   m5Rate,              // moving average rates over 5 minutes
-			"m15_rate":  m15Rate,             // moving average rates over 15 minutes
-			"mean_rate": meanRate,            // cumulative mean rate
+		// FIXME each record is a measurement produced each second during the benchmark is running,
+		// not a single measurement of an operation
+		res[fmt.Sprintf("%s_%d", op, t.Unix())] = map[string]float64{
+			"t":        float64(t.Unix()), // timestamp (epoch seconds)
+			"count":    float64(count),    // total document count
+			"mean":     mean,              // mean operation rate in docs/sec
+			"m1_rate":  m1Rate,            // moving average rates over 1 minute
+			"m5_rate":  m5Rate,            // moving average rates over 5 minutes
+			"m15_rate": m15Rate,           // moving average rates over 15 minutes
 		}
 	}
 
@@ -163,7 +169,7 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 		return nil, err
 	}
 
-	fileNames, err := parseFilenames(io.TeeReader(pipe, os.Stdout))
+	fileNames, err := parseFileNames(io.TeeReader(pipe, os.Stdout))
 	if err != nil {
 		_ = cmd.Process.Kill()
 		return nil, err
