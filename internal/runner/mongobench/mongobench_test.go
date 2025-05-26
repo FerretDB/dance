@@ -29,16 +29,19 @@ func TestParseFileNames(t *testing.T) {
 	//nolint:lll // verbatim output
 	output := strings.NewReader(`
 
-2025/05/26 11:27:41 Collection dropped. Starting new rate test...
-2025/05/26 11:27:42 Timestamp: 1748226462, Document Count: 19776, Mean Rate: 19773.41 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
+2025/05/26 15:28:13 Collection dropped. Starting new rate test...
+2025/05/26 15:28:14 Timestamp: 1748240894, Document Count: 20138, Mean Rate: 20134.59 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
 Benchmarking completed. Results saved to benchmark_results_insert.csv
-2025/05/26 11:27:42 Starting update test...
-2025/05/26 11:27:43 Timestamp: 1748226463, Document Count: 17893, Mean Rate: 17888.70 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
+2025/05/26 15:28:15 Starting update test...
+2025/05/26 15:28:16 Timestamp: 1748240896, Document Count: 18717, Mean Rate: 18716.72 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
 Benchmarking completed. Results saved to benchmark_results_update.csv
-2025/05/26 11:27:43 Starting delete test...
+2025/05/26 15:28:16 Starting delete test...
+2025/05/26 15:28:17 Timestamp: 1748240897, Document Count: 20690, Mean Rate: 20689.05 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
 Benchmarking completed. Results saved to benchmark_results_delete.csv
-2025/05/26 11:27:44 Collection dropped. Starting new rate test...
-2025/05/26 11:27:45 Timestamp: 1748226465, Document Count: 16680, Mean Rate: 16677.66 docs/sec, m1_rate: 0.00, m5_rate: 0.00, m15_rate: 0.00
+2025/05/26 15:28:18 Collection dropped. Starting new rate test...
+2025/05/26 15:28:19 Timestamp: 1748240899, Document Count: 13524, Mean Rate: 13522.22 docs/sec, m1_rate: 756.80, m5_rate: 756.80, m15_rate: 756.80
+2025/05/26 15:28:20 Timestamp: 1748240900, Document Count: 21505, Mean Rate: 10748.08 docs/sec, m1_rate: 756.80, m5_rate: 756.80, m15_rate: 756.80
+2025/05/26 15:28:21 Timestamp: 1748240901, Document Count: 27081, Mean Rate: 9027.36 docs/sec, m1_rate: 756.80, m5_rate: 756.80, m15_rate: 756.80
 Benchmarking completed. Results saved to benchmark_results_upsert.csv
 `)
 

@@ -81,9 +81,9 @@ func parseFileNames(r io.Reader) ([]string, error) {
 func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float64, error) {
 	res := make(map[string]map[string]float64)
 
-	// cannot use [csv.NewReader] because the file does not contain valid CSV,
+	// Cannot use [csv.NewReader] because the file does not contain valid CSV,
 	// it contains 7 header fields while record lines contain 6 fields,
-	// so we parse it manually and assume last field `mean_rate` is missing
+	// so we parse it manually and assume the last field `mean_rate` is missing.
 	//
 	//t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
 	//1748240899,13524,13522.216068,756.800000,756.800000,756.800000
