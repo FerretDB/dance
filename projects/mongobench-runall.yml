@@ -4,7 +4,13 @@ runner: mongobench
 params:
   dir: mongodb-benchmarking
   args:
-    - -threads 10 -docs 100000 -uri {{.MONGODB_URI}} --runAll
+    - -threads
+    - 10
+    - -docs
+    - 100000
+    - -uri
+    - {{.MONGODB_URI}}
+    - --runAll
 
 results:
   mongodb:

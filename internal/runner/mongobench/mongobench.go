@@ -81,14 +81,9 @@ func parseFileNames(r io.Reader) ([]string, error) {
 func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float64, error) {
 	res := make(map[string]map[string]float64)
 
-	// Cannot use [csv.NewReader] because the file does not contain valid CSV,
+	// cannot use [csv.NewReader] because the file does not contain valid CSV,
 	// it contains 7 header fields while record lines contain 6 fields,
-	// so we parse it manually and assume the last field `mean_rate` is missing.
-	//
-	//t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
-	//1748240899,13524,13522.216068,756.800000,756.800000,756.800000
-
-	// ignore header
+	// so we parse it manually and assume the last field `mean_rate` is missing
 	if _, _, err := r.ReadLine(); err != nil {
 		return nil, err
 	}
@@ -137,8 +132,8 @@ func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float6
 			return nil, err
 		}
 
-		// FIXME each record is a measurement produced each second during the benchmark is running,
-		// not a single measurement of an operation
+		// FIXME each record is a measurement produced each second while the benchmark is running,
+		// instead of a single measurement of an operation
 		res[fmt.Sprintf("%s_%d", op, t.Unix())] = map[string]float64{
 			"t":        float64(t.Unix()), // timestamp (epoch seconds)
 			"count":    float64(count),    // total document count

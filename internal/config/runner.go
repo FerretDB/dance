@@ -24,6 +24,9 @@ const (
 	// RunnerTypeGoTest indicates a Go test runner.
 	RunnerTypeGoTest RunnerType = "gotest"
 
+	// RunnerTypeMongoBench indicates a MongoDB benchmark test runner.
+	RunnerTypeMongoBench RunnerType = "mongobench"
+
 	// RunnerTypeYCSB indicates a YCSB test runner.
 	RunnerTypeYCSB RunnerType = "ycsb"
 )
@@ -58,6 +61,9 @@ type RunnerParamsGoTest struct {
 	Args []string
 }
 
+// runnerParams implements [RunnerParams] interface.
+func (rp *RunnerParamsGoTest) runnerParams() {}
+
 // RunnerParamsMongoBench represents `mongobench` runner parameters.
 type RunnerParamsMongoBench struct {
 	Dir  string
@@ -66,9 +72,6 @@ type RunnerParamsMongoBench struct {
 
 // runnerParams implements [RunnerParams] interface.
 func (rp *RunnerParamsMongoBench) runnerParams() {}
-
-// runnerParams implements [RunnerParams] interface.
-func (rp *RunnerParamsGoTest) runnerParams() {}
 
 // RunnerParamsYCSB represents `ycsb` runner parameters.
 type RunnerParamsYCSB struct {
