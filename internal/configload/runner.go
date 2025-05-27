@@ -106,5 +106,6 @@ func (rp *runnerParamsYCSB) convert() (config.RunnerParams, error) {
 var (
 	_ runnerParams = (*runnerParamsCommand)(nil)
 	_ runnerParams = (*runnerParamsGoTest)(nil)
+	_ runnerParams = (*runnerParamsMongoBench)(nil)
 	_ runnerParams = (*runnerParamsYCSB)(nil)
 )
