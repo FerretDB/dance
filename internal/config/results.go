@@ -22,13 +22,18 @@ import (
 	"golang.org/x/exp/maps"
 )
 
+// Measurements is the actual measurements from a single test.
+type Measurements interface {
+	Values() any
+}
+
 // TestResult represents the actual outcome of a single test.
 //
 //nolint:vet // for readability
 type TestResult struct {
 	Status       Status
 	Output       string
-	Measurements map[string]float64
+	Measurements Measurements
 }
 
 // IndentedOutput returns the output of a test result with indented lines.

@@ -61,7 +61,6 @@ Benchmarking completed. Results saved to benchmark_results_upsert.csv
 func TestParseMeasurements(t *testing.T) {
 	t.Parallel()
 
-	//nolint:lll // verbatim results
 	results := strings.NewReader(
 		`t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
 1748240899,13524,13522.216068,756.800000,756.800000,756.800000

@@ -19,7 +19,6 @@ import (
 	"bufio"
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -27,11 +26,35 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/FerretDB/dance/internal/config"
 	"github.com/FerretDB/dance/internal/runner"
 )
+
+// benchmark is numerical results of a benchmark operation.
+//
+// mongodb-benchmarking test produces measurements each second while the benchmark is running,
+// and each index of the slices corresponds to a measurement from each second.
+type benchmark struct {
+	ts        []int64   // timestamp (epoch seconds)
+	counts    []int64   // total document count
+	meanRates []float64 // mean operation rate in docs/sec
+	m1Rates   []float64 // moving average rates over 1 minute
+	m5Rates   []float64 // moving average rates over 5 minutes
+	m15Rates  []float64 // moving average rates over 15 minutes
+}
+
+// Values implements [config.Measurements] interface.
+func (m *benchmark) Values() any {
+	return map[string]any{
+		"ts":         m.ts,
+		"counts":     m.counts,
+		"mean_rates": m.meanRates,
+		"m1_rates":   m.m1Rates,
+		"m5_rates":   m.m5Rates,
+		"m15_rates":  m.m15Rates,
+	}
+}
 
 // mongoBench represents `mongoBench` runner.
 type mongoBench struct {
@@ -78,9 +101,7 @@ func parseFileNames(r io.Reader) ([]string, error) {
 }
 
 // parseMeasurements reads the mongo-bench results from the reader.
-func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float64, error) {
-	res := make(map[string]map[string]float64)
-
+func parseMeasurements(r *bufio.Reader) (*benchmark, error) {
 	// cannot use [csv.NewReader] because the file does not contain valid CSV,
 	// it contains 7 header fields while record lines contain 6 fields,
 	// so we parse it manually and assume the last field `mean_rate` is missing
@@ -88,9 +109,12 @@ func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float6
 		return nil, err
 	}
 
+	var ts, counts []int64
+	var meanRates, m1Rates, m5Rates, m15Rates []float64
+
 	for {
 		line, _, err := r.ReadLine()
-		if err == io.EOF {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 
@@ -100,12 +124,10 @@ func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float6
 
 		record := strings.Split(string(line), ",")
 
-		i, err := strconv.ParseInt(record[0], 10, 64)
+		t, err := strconv.ParseInt(record[0], 10, 64)
 		if err != nil {
 			return nil, err
 		}
-
-		t := time.Unix(i, 0)
 
 		count, err := strconv.ParseInt(record[1], 10, 64)
 		if err != nil {
@@ -132,23 +154,26 @@ func parseMeasurements(op string, r *bufio.Reader) (map[string]map[string]float6
 			return nil, err
 		}
 
-		// FIXME each record is a measurement produced each second while the benchmark is running,
-		// instead of a single measurement of an operation
-		res[fmt.Sprintf("%s_%d", op, t.Unix())] = map[string]float64{
-			"t":        float64(t.Unix()), // timestamp (epoch seconds)
-			"count":    float64(count),    // total document count
-			"mean":     mean,              // mean operation rate in docs/sec
-			"m1_rate":  m1Rate,            // moving average rates over 1 minute
-			"m5_rate":  m5Rate,            // moving average rates over 5 minutes
-			"m15_rate": m15Rate,           // moving average rates over 15 minutes
-		}
+		ts = append(ts, t)
+		counts = append(counts, count)
+		meanRates = append(meanRates, mean)
+		m1Rates = append(m1Rates, m1Rate)
+		m5Rates = append(m5Rates, m5Rate)
+		m15Rates = append(m15Rates, m15Rate)
 	}
 
-	return res, nil
+	return &benchmark{
+		ts:        ts,
+		counts:    counts,
+		meanRates: meanRates,
+		m1Rates:   m1Rates,
+		m5Rates:   m5Rates,
+		m15Rates:  m15Rates,
+	}, nil
 }
 
 // readMeasurements reads the measurements from the file with given name.
-func readMeasurements(fileName string) (map[string]map[string]float64, error) {
+func readMeasurements(fileName string) (*benchmark, error) {
 	relPath := filepath.Join("..", fileName)
 
 	f, err := os.Open(relPath)
@@ -160,9 +185,7 @@ func readMeasurements(fileName string) (map[string]map[string]float64, error) {
 		err = f.Close()
 	}()
 
-	op := strings.TrimSuffix(strings.TrimPrefix(fileName, "benchmark_results_"), ".csv")
-
-	return parseMeasurements(op, bufio.NewReader(f))
+	return parseMeasurements(bufio.NewReader(f))
 }
 
 // run runs given command in the given directory and returns parsed results.
@@ -192,23 +215,17 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 		return nil, err
 	}
 
-	ms := make(map[string]map[string]float64)
+	res := make(map[string]config.TestResult)
 
 	for _, fileName := range fileNames {
-		var m map[string]map[string]float64
+		var m *benchmark
 
 		if m, err = readMeasurements(fileName); err != nil {
 			return nil, err
 		}
 
-		for k, v := range m {
-			ms[k] = v
-		}
-	}
-
-	res := make(map[string]config.TestResult)
-	for t, m := range ms {
-		res[t] = config.TestResult{
+		op := strings.TrimSuffix(strings.TrimPrefix(fileName, "benchmark_results_"), ".csv")
+		res[op] = config.TestResult{
 			Status:       config.Pass,
 			Measurements: m,
 		}
@@ -235,3 +252,6 @@ func (y *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, err
 
 	return run(ctx, args, y.p.Dir)
 }
+
+// check inferface
+var _ config.Measurements = (*benchmark)(nil)
