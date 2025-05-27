@@ -60,6 +60,11 @@ func FuzzLoadContent(f *testing.F) {
 			db:   "ferretdb-postgresql",
 			err:  "failed to convert runner parameters: dir is required",
 		},
+		{
+			file: "unknown_db.yml",
+			db:   "ferretdb-postgresql",
+			err:  `config contains unknown database "ferretdb-unknown"`,
+		},
 	} {
 		b, err := os.ReadFile(filepath.Join("testdata", tc.file))
 		require.NoError(f, err, "file = %s", tc.file)

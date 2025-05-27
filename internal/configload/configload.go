@@ -18,6 +18,7 @@ package configload
 import (
 	"bytes"
 	"fmt"
+	"maps"
 	"net"
 	"net/url"
 	"os"
@@ -189,6 +190,12 @@ func loadContent(content, db string) (*config.Config, error) {
 	params, err := p.convert()
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert runner parameters: %w", err)
+	}
+
+	for resultDB := range maps.Keys(pc.Results) {
+		if _, ok = DBs[resultDB]; !ok {
+			return nil, fmt.Errorf("config contains unknown database %q", resultDB)
+		}
 	}
 
 	res := pc.Results[db]
