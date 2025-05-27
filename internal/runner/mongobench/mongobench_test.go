@@ -69,43 +69,16 @@ func TestParseMeasurements(t *testing.T) {
 1748240902,30000,8288.694528,756.800000,756.800000,756.800000`,
 	)
 
-	actual, err := parseMeasurements("upsert", bufio.NewReader(results))
+	actual, err := parseMeasurements(bufio.NewReader(results))
 	require.NoError(t, err)
 
-	expected := map[string]map[string]float64{
-		"upsert_1748240899": {
-			"t":        1748240899,
-			"count":    13524,
-			"mean":     13522.216068,
-			"m1_rate":  756.800000,
-			"m5_rate":  756.800000,
-			"m15_rate": 756.800000,
-		},
-		"upsert_1748240900": {
-			"t":        1748240900,
-			"count":    21505,
-			"mean":     10748.078321,
-			"m1_rate":  756.800000,
-			"m5_rate":  756.800000,
-			"m15_rate": 756.800000,
-		},
-		"upsert_1748240901": {
-			"t":        1748240901,
-			"count":    27081,
-			"mean":     9027.363746,
-			"m1_rate":  756.800000,
-			"m5_rate":  756.800000,
-			"m15_rate": 756.800000,
-		},
-		"upsert_1748240902": {
-			"t":        1748240902,
-			"count":    30000,
-			"mean":     8288.694528,
-			"m1_rate":  756.800000,
-			"m5_rate":  756.800000,
-			"m15_rate": 756.800000,
-		},
+	expected := &benchmark{
+		ts:        []int64{1748240899, 1748240900, 1748240901, 1748240902},
+		counts:    []int64{13524, 21505, 27081, 30000},
+		meanRates: []float64{13522.216068, 10748.078321, 9027.363746, 8288.694528},
+		m1Rates:   []float64{756.800000, 756.800000, 756.800000, 756.800000},
+		m5Rates:   []float64{756.800000, 756.800000, 756.800000, 756.800000},
+		m15Rates:  []float64{756.800000, 756.800000, 756.800000, 756.800000},
 	}
-
 	assert.Equal(t, expected, actual)
 }

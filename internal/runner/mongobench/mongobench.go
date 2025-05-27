@@ -31,9 +31,9 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 )
 
-// benchmark is numerical results of a benchmark operation.
+// benchmark contains numerical results of a benchmark operation.
 //
-// mongodb-benchmarking test produces measurements each second while the benchmark is running,
+// The mongodb-benchmarking test produces measurements each second while the benchmark is running,
 // and each index of the slices corresponds to a measurement from each second.
 type benchmark struct {
 	ts        []int64   // timestamp (epoch seconds)
@@ -253,5 +253,5 @@ func (y *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, err
 	return run(ctx, args, y.p.Dir)
 }
 
-// check inferface
+// check interface.
 var _ config.Measurements = (*benchmark)(nil)
