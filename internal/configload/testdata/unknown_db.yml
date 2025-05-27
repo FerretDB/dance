@@ -1,0 +1,36 @@
+---
+runner: command
+params:
+  dir: test
+  setup: |
+    python3 -m venv .
+    ./bin/pip3 install -r requirements.txt
+
+  tests:
+    - name: normal
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}'
+    - name: strict
+      cmd: ./bin/python3 pymongo_test.py --strict '{{.MONGODB_URI}}'
+
+results:
+  ferretdb-postgresql:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      - strict
+
+  ferretdb-sqlite-replset:
+    stats:
+      fail: 1
+      pass: 1
+    fail:
+      - strict
+
+  mongodb:
+    stats:
+      pass: 2
+
+  mongodb-secured:
+    stats:
+      pass: 2
