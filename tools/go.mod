@@ -18,6 +18,8 @@ tool (
 	mvdan.cc/gofumpt
 )
 
+// use local submodule path to prevent the error
+// `module declares its path as: benchmarking but was required as: github.com/idealo/mongodb-benchmarking`
 replace github.com/idealo/mongodb-benchmarking v1.5.4 => ../projects/mongodb-benchmarking
 
 require (
