@@ -184,5 +184,5 @@ func (y *ycsb) Run(ctx context.Context) (map[string]config.TestResult, error) {
 	return run(ctx, args, y.p.Dir)
 }
 
-// check interface
+// check interface.
 var _ config.Measurements = (*measurement)(nil)
