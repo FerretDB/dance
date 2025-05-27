@@ -62,7 +62,7 @@ type mongoBench struct {
 	l *slog.Logger
 }
 
-// New creates a new `mongoBench` runner with given parameters.
+// New creates a new runner with given parameters.
 func New(params *config.RunnerParamsMongoBench, l *slog.Logger) (runner.Runner, error) {
 	return &mongoBench{
 		p: params,
@@ -172,7 +172,7 @@ func parseMeasurements(r *bufio.Reader) (*benchmark, error) {
 	}, nil
 }
 
-// readMeasurements reads the measurements from the file with given name.
+// readMeasurements reads the measurements from the file with the given name.
 func readMeasurements(fileName string) (*benchmark, error) {
 	relPath := filepath.Join("..", fileName)
 
