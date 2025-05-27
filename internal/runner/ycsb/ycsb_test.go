@@ -53,50 +53,51 @@ Run finished, takes 14.676689042s
 	actual, err := parseOutput(output)
 	require.NoError(t, err)
 
-	expected := map[string]map[string]float64{
-		"read": {
-			"takes":    14.7,
-			"count":    25030,
-			"ops":      1705.6,
-			"avg":      0.000293,
-			"min":      0.000175,
-			"max":      0.002407,
-			"perc50":   0.000288,
-			"perc90":   0.000331,
-			"perc95":   0.000353,
-			"perc99":   0.000427,
-			"perc999":  0.000757,
-			"perc9999": 0.001312,
-		},
-		"update": {
-			"takes":    14.7,
-			"count":    24970,
-			"ops":      1701.4,
-			"avg":      0.000288,
-			"min":      0.000171,
-			"max":      0.002261,
-			"perc50":   0.000282,
-			"perc90":   0.000324,
-			"perc95":   0.000345,
-			"perc99":   0.000411,
-			"perc999":  0.000786,
-			"perc9999": 0.002151,
-		},
-		"total": {
-			"takes":    14.7,
-			"count":    50000,
-			"ops":      3406.9,
-			"avg":      0.000291,
-			"min":      0.000171,
-			"max":      0.002407,
-			"perc50":   0.000285,
-			"perc90":   0.000328,
-			"perc95":   0.000349,
-			"perc99":   0.000421,
-			"perc999":  0.000777,
-			"perc9999": 0.001913,
-		},
+	expectedRead := map[string]float64{
+		"takes":    14.7,
+		"count":    25030,
+		"ops":      1705.6,
+		"avg":      0.000293,
+		"min":      0.000175,
+		"max":      0.002407,
+		"perc50":   0.000288,
+		"perc90":   0.000331,
+		"perc95":   0.000353,
+		"perc99":   0.000427,
+		"perc999":  0.000757,
+		"perc9999": 0.001312,
 	}
+	assert.Equal(t, expectedRead, actual["read"].Values())
 
-	assert.Equal(t, expected, actual)
+	expectedUpdate := map[string]float64{
+		"takes":    14.7,
+		"count":    24970,
+		"ops":      1701.4,
+		"avg":      0.000288,
+		"min":      0.000171,
+		"max":      0.002261,
+		"perc50":   0.000282,
+		"perc90":   0.000324,
+		"perc95":   0.000345,
+		"perc99":   0.000411,
+		"perc999":  0.000786,
+		"perc9999": 0.002151,
+	}
+	assert.Equal(t, expectedUpdate, actual["update"].Values())
+
+	expectedTotal := map[string]float64{
+		"takes":    14.7,
+		"count":    50000,
+		"ops":      3406.9,
+		"avg":      0.000291,
+		"min":      0.000171,
+		"max":      0.002407,
+		"perc50":   0.000285,
+		"perc90":   0.000328,
+		"perc95":   0.000349,
+		"perc99":   0.000421,
+		"perc999":  0.000777,
+		"perc9999": 0.001913,
+	}
+	assert.Equal(t, expectedTotal, actual["total"].Values())
 }
