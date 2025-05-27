@@ -17,10 +17,6 @@ results:
     stats:
       pass: 4
 
-  ferretdb-postgresql:
-    stats:
-      pass: 4
-
   ferretdb2:
     stats:
       pass: 4
