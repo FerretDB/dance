@@ -39,5 +39,5 @@
 	branch = devel
 [submodule "mongodb-benchmarking"]
 	path = projects/mongodb-benchmarking
-	url = https://github.com/idealo/mongodb-benchmarking.git
+	url = https://github.com/FerretDB/mongodb-benchmarking.git
 	branch = main

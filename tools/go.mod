@@ -5,8 +5,8 @@ go 1.24.1
 toolchain go1.24.2
 
 tool (
+	github.com/FerretDB/mongodb-benchmarking
 	github.com/go-task/task/v3/cmd/task
-	github.com/idealo/mongodb-benchmarking
 	github.com/pingcap/go-ycsb/cmd/go-ycsb
 	github.com/quasilyte/go-consistent
 	golang.org/x/perf/cmd/benchstat
@@ -19,8 +19,8 @@ tool (
 )
 
 // use local submodule path to prevent the error
-// `module declares its path as: benchmarking but was required as: github.com/idealo/mongodb-benchmarking`
-replace github.com/idealo/mongodb-benchmarking v1.5.4 => ../projects/mongodb-benchmarking
+// `module declares its path as: benchmarking but was required as: github.com/FerretDB/mongodb-benchmarking`
+replace github.com/FerretDB/mongodb-benchmarking v1.5.4 => ../projects/mongodb-benchmarking
 
 require (
 	cloud.google.com/go v0.110.2 // indirect
@@ -30,6 +30,7 @@ require (
 	cloud.google.com/go/spanner v1.45.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/AndreasBriese/bbloom v0.0.0-20180913140656-343706a395b7 // indirect
+	github.com/FerretDB/mongodb-benchmarking v1.5.4 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/Ladicle/tabwriter v1.0.0 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
@@ -116,7 +117,6 @@ require (
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
-	github.com/idealo/mongodb-benchmarking v1.5.4 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
