@@ -124,6 +124,9 @@ func parseMeasurements(r *bufio.Reader) (*benchmark, error) {
 
 		record := strings.Split(string(line), ",")
 
+		if len(record) < 6 {
+			return nil, errors.New("malformed line: insufficient fields")
+		}
 		t, err := strconv.ParseInt(record[0], 10, 64)
 		if err != nil {
 			return nil, err
