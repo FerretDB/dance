@@ -104,7 +104,8 @@ func parseOutput(r io.Reader) (map[string]*measurement, error) {
 
 		res = make(map[string]*measurement)
 		for _, m := range ms {
-			res[strings.ToLower(m.Operation)] = &m
+			mCopy := m
+			res[strings.ToLower(m.Operation)] = &mCopy
 		}
 	}
 
