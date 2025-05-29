@@ -1,0 +1,13 @@
+---
+runner: command
+params:
+  dir: test
+
+  tests:
+    - name: normal
+      cmd: ./bin/python3 pymongo_test.py '{{.MONGODB_URI}}'
+
+results:
+  ferretdb-unknown:
+    stats:
+      pass: 2

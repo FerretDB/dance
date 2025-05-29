@@ -19,12 +19,12 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
+	"maps"
 	"net"
 	"net/url"
 	"os"
 	"path/filepath"
 	"slices"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -32,7 +32,6 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/sethvargo/go-githubactions"
-	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 
 	"github.com/FerretDB/dance/internal/config"
@@ -61,13 +60,12 @@ func waitForPort(ctx context.Context, port int) error {
 }
 
 func logResult(label string, res map[string]config.TestResult) {
-	keys := maps.Keys(res)
+	keys := slices.Sorted(maps.Keys(res))
 	if len(keys) == 0 {
 		return
 	}
 
 	log.Printf("%s tests:", label)
-	sort.Strings(keys)
 	for _, t := range keys {
 		log.Printf("===> %s:", t)
 
@@ -92,8 +90,7 @@ var cli struct {
 }
 
 func parseCLI() {
-	dbs := maps.Keys(configload.DBs)
-	slices.Sort(dbs)
+	dbs := slices.Sorted(maps.Keys(configload.DBs))
 
 	dbsHelp := make([]string, len(dbs))
 	for i, db := range dbs {
@@ -141,8 +138,7 @@ func main() {
 	}
 
 	if len(cli.Database) == 0 {
-		cli.Database = maps.Keys(configload.DBs)
-		slices.Sort(cli.Database)
+		cli.Database = slices.Sorted(maps.Keys(configload.DBs))
 	}
 
 	for _, db := range cli.Database {
