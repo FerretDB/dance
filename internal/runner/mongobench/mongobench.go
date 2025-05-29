@@ -75,8 +75,10 @@ func parseFileNames(r io.Reader) ([]string, error) {
 	return fileNames, nil
 }
 
-// parseMeasurements reads the file and gets the last measurement and parses them.
-func parseMeasurements(filepath string) (map[string]float64, error) {
+// readResult reads the file and gets the last measurement and parses it.
+// The file contains measurements taken each second while the benchmark was running,
+// the last measurement is parsed and returned.
+func readResult(filepath string) (map[string]float64, error) {
 	f, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
@@ -176,7 +178,7 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 	for _, fileName := range fileNames {
 		var m map[string]float64
 
-		if m, err = parseMeasurements(filepath.Join("..", "projects", fileName)); err != nil {
+		if m, err = readResult(filepath.Join("..", "projects", fileName)); err != nil {
 			return nil, err
 		}
 
@@ -191,7 +193,7 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 }
 
 // Run implements [runner.Runner] interface.
-func (y *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, error) {
+func (m *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, error) {
 	bin := filepath.Join("..", "bin", "mongodb-benchmarking")
 	if _, err := os.Stat(bin); err != nil {
 		return nil, err
@@ -202,9 +204,9 @@ func (y *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, err
 		return nil, err
 	}
 
-	args := append([]string{bin}, y.p.Args...)
+	args := append([]string{bin}, m.p.Args...)
 
-	y.l.InfoContext(ctx, "Run", slog.String("cmd", strings.Join(args, " ")))
+	m.l.InfoContext(ctx, "Run", slog.String("cmd", strings.Join(args, " ")))
 
-	return run(ctx, args, y.p.Dir)
+	return run(ctx, args, m.p.Dir)
 }

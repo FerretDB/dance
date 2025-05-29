@@ -58,7 +58,7 @@ Benchmarking completed. Results saved to benchmark_results_upsert.csv
 	assert.Equal(t, expected, actual)
 }
 
-func TestParseMeasurements(t *testing.T) {
+func TestReadResult(t *testing.T) {
 	t.Parallel()
 
 	results := `t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
@@ -77,7 +77,7 @@ func TestParseMeasurements(t *testing.T) {
 	_, err = f.Write([]byte(results))
 	require.NoError(t, err)
 
-	actual, err := parseMeasurements(f.Name())
+	actual, err := readResult(f.Name())
 	require.NoError(t, err)
 
 	expected := map[string]float64{
