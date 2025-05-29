@@ -131,13 +131,7 @@ func (c *Client) Push(ctx context.Context, config, database string, res map[stri
 
 	for t, tr := range res {
 		t = strings.ReplaceAll(t, ".", "_") // to make it compatible with FerretDB v1
-
-		var measurements any
-		if tr.Measurements != nil {
-			measurements = tr.Measurements.Values()
-		}
-
-		passed = append(passed, bson.E{Key: t, Value: bson.D{{"m", measurements}}})
+		passed = append(passed, bson.E{t, bson.D{{"m", tr.Measurements}}})
 	}
 
 	doc := bson.D{

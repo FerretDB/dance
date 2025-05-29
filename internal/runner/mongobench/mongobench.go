@@ -31,31 +31,6 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 )
 
-// benchmark contains numerical results of a benchmark operation.
-//
-// The mongodb-benchmarking test produces measurements each second while the benchmark is running,
-// and each index of the slices corresponds to a measurement from each second.
-type benchmark struct {
-	ts        []int64   // timestamp (epoch seconds)
-	counts    []int64   // total document count
-	meanRates []float64 // mean operation rate in docs/sec
-	m1Rates   []float64 // moving average rates over 1 minute
-	m5Rates   []float64 // moving average rates over 5 minutes
-	m15Rates  []float64 // moving average rates over 15 minutes
-}
-
-// Values implements [config.Measurements] interface.
-func (m *benchmark) Values() any {
-	return map[string]any{
-		"ts":         m.ts,
-		"counts":     m.counts,
-		"mean_rates": m.meanRates,
-		"m1_rates":   m.m1Rates,
-		"m5_rates":   m.m5Rates,
-		"m15_rates":  m.m15Rates,
-	}
-}
-
 // mongoBench represents `mongoBench` runner.
 type mongoBench struct {
 	p *config.RunnerParamsMongoBench
@@ -100,86 +75,9 @@ func parseFileNames(r io.Reader) ([]string, error) {
 	return fileNames, nil
 }
 
-// parseMeasurements reads the mongo-bench results from the reader.
-func parseMeasurements(r *bufio.Reader) (*benchmark, error) {
-	// cannot use [csv.NewReader] because the file does not contain valid CSV,
-	// it contains 7 header fields while record lines contain 6 fields,
-	// so we parse it manually and assume the last field `mean_rate` is missing
-	if _, _, err := r.ReadLine(); err != nil {
-		return nil, err
-	}
-
-	var ts, counts []int64
-	var meanRates, m1Rates, m5Rates, m15Rates []float64
-
-	for {
-		line, _, err := r.ReadLine()
-		if errors.Is(err, io.EOF) {
-			break
-		}
-
-		if err != nil {
-			return nil, err
-		}
-
-		record := strings.Split(string(line), ",")
-
-		if len(record) < 6 {
-			return nil, errors.New("malformed line: insufficient fields")
-		}
-		t, err := strconv.ParseInt(record[0], 10, 64)
-		if err != nil {
-			return nil, err
-		}
-
-		count, err := strconv.ParseInt(record[1], 10, 64)
-		if err != nil {
-			return nil, err
-		}
-
-		mean, err := strconv.ParseFloat(record[2], 64)
-		if err != nil {
-			return nil, err
-		}
-
-		m1Rate, err := strconv.ParseFloat(record[3], 64)
-		if err != nil {
-			return nil, err
-		}
-
-		m5Rate, err := strconv.ParseFloat(record[4], 64)
-		if err != nil {
-			return nil, err
-		}
-
-		m15Rate, err := strconv.ParseFloat(record[5], 64)
-		if err != nil {
-			return nil, err
-		}
-
-		ts = append(ts, t)
-		counts = append(counts, count)
-		meanRates = append(meanRates, mean)
-		m1Rates = append(m1Rates, m1Rate)
-		m5Rates = append(m5Rates, m5Rate)
-		m15Rates = append(m15Rates, m15Rate)
-	}
-
-	return &benchmark{
-		ts:        ts,
-		counts:    counts,
-		meanRates: meanRates,
-		m1Rates:   m1Rates,
-		m5Rates:   m5Rates,
-		m15Rates:  m15Rates,
-	}, nil
-}
-
-// readMeasurements reads the measurements from the file with the given name.
-func readMeasurements(fileName string) (*benchmark, error) {
-	relPath := filepath.Join("..", "projects", fileName)
-
-	f, err := os.Open(relPath)
+// parseMeasurements reads the file and gets the last measurement and parses them.
+func parseMeasurements(filepath string) (map[string]float64, error) {
+	f, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
 	}
@@ -188,7 +86,62 @@ func readMeasurements(fileName string) (*benchmark, error) {
 		err = f.Close()
 	}()
 
-	return parseMeasurements(bufio.NewReader(f))
+	// cannot use [csv.NewReader] because the file does not contain valid CSV,
+	// it contains 7 header fields while record lines contain 6 fields,
+	// so we parse it manually and assume the last field `mean_rate` is missing
+	s := bufio.NewScanner(f)
+
+	var lastLine string
+
+	for s.Scan() {
+		line := s.Text()
+
+		if strings.TrimSpace(line) != "" {
+			lastLine = line
+		}
+	}
+
+	if err = s.Err(); err != nil {
+		return nil, err
+	}
+
+	record := strings.Split(lastLine, ",")
+	if len(record) < 6 {
+		return nil, errors.New("insufficient fields")
+	}
+
+	count, err := strconv.ParseFloat(record[1], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	mean, err := strconv.ParseFloat(record[2], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	m1Rate, err := strconv.ParseFloat(record[3], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	m5Rate, err := strconv.ParseFloat(record[4], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	m15Rate, err := strconv.ParseFloat(record[5], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]float64{
+		"count":    count,
+		"mean":     mean,
+		"m1_rate":  m1Rate,
+		"m5_rate":  m5Rate,
+		"m15_rate": m15Rate,
+	}, nil
 }
 
 // run runs given command in the given directory and returns parsed results.
@@ -221,9 +174,9 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 	res := make(map[string]config.TestResult)
 
 	for _, fileName := range fileNames {
-		var m *benchmark
+		var m map[string]float64
 
-		if m, err = readMeasurements(fileName); err != nil {
+		if m, err = parseMeasurements(filepath.Join("..", "projects", fileName)); err != nil {
 			return nil, err
 		}
 
@@ -255,6 +208,3 @@ func (y *mongoBench) Run(ctx context.Context) (map[string]config.TestResult, err
 
 	return run(ctx, args, y.p.Dir)
 }
-
-// check interface.
-var _ config.Measurements = (*benchmark)(nil)

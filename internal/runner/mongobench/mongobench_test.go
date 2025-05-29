@@ -15,7 +15,7 @@
 package mongobench
 
 import (
-	"bufio"
+	"os"
 	"strings"
 	"testing"
 
@@ -61,24 +61,31 @@ Benchmarking completed. Results saved to benchmark_results_upsert.csv
 func TestParseMeasurements(t *testing.T) {
 	t.Parallel()
 
-	results := strings.NewReader(
-		`t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
+	results := `t,count,mean,m1_rate,m5_rate,m15_rate,mean_rate
 1748240899,13524,13522.216068,756.800000,756.800000,756.800000
 1748240900,21505,10748.078321,756.800000,756.800000,756.800000
 1748240901,27081,9027.363746,756.800000,756.800000,756.800000
-1748240902,30000,8288.694528,756.800000,756.800000,756.800000`,
-	)
-
-	actual, err := parseMeasurements(bufio.NewReader(results))
+1748240902,30000,8288.694528,756.800000,756.800000,756.800000
+`
+	f, err := os.CreateTemp(t.TempDir(), "benchmark_results_delete")
 	require.NoError(t, err)
 
-	expected := &benchmark{
-		ts:        []int64{1748240899, 1748240900, 1748240901, 1748240902},
-		counts:    []int64{13524, 21505, 27081, 30000},
-		meanRates: []float64{13522.216068, 10748.078321, 9027.363746, 8288.694528},
-		m1Rates:   []float64{756.800000, 756.800000, 756.800000, 756.800000},
-		m5Rates:   []float64{756.800000, 756.800000, 756.800000, 756.800000},
-		m15Rates:  []float64{756.800000, 756.800000, 756.800000, 756.800000},
+	t.Cleanup(func() {
+		assert.NoError(t, f.Close())
+	})
+
+	_, err = f.Write([]byte(results))
+	require.NoError(t, err)
+
+	actual, err := parseMeasurements(f.Name())
+	require.NoError(t, err)
+
+	expected := map[string]float64{
+		"count":    30000,
+		"mean":     8288.694528,
+		"m1_rate":  756.800000,
+		"m5_rate":  756.800000,
+		"m15_rate": 756.800000,
 	}
 	assert.Equal(t, expected, actual)
 }

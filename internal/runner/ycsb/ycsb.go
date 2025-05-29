@@ -49,24 +49,6 @@ type measurement struct {
 	Perc9999Us float64 `json:"99.99th(us),string"`
 }
 
-// Values implements [config.Measurements] interface.
-func (m *measurement) Values() any {
-	return map[string]float64{
-		"takes":    m.TakesS,
-		"count":    float64(m.Count),
-		"ops":      m.OPS,
-		"avg":      (time.Duration(m.AvgUs) * time.Microsecond).Seconds(),
-		"min":      (time.Duration(m.MinUs) * time.Microsecond).Seconds(),
-		"max":      (time.Duration(m.MaxUs) * time.Microsecond).Seconds(),
-		"perc50":   (time.Duration(m.Perc50Us) * time.Microsecond).Seconds(),
-		"perc90":   (time.Duration(m.Perc90Us) * time.Microsecond).Seconds(),
-		"perc95":   (time.Duration(m.Perc95Us) * time.Microsecond).Seconds(),
-		"perc99":   (time.Duration(m.Perc99Us) * time.Microsecond).Seconds(),
-		"perc999":  (time.Duration(m.Perc999Us) * time.Microsecond).Seconds(),
-		"perc9999": (time.Duration(m.Perc9999Us) * time.Microsecond).Seconds(),
-	}
-}
-
 // ycsb represents `ycsb` runner.
 type ycsb struct {
 	p *config.RunnerParamsYCSB
@@ -82,8 +64,8 @@ func New(params *config.RunnerParamsYCSB, l *slog.Logger) (runner.Runner, error)
 }
 
 // parseOutput parses go-ycsb JSON output.
-func parseOutput(r io.Reader) (map[string]*measurement, error) {
-	var res map[string]*measurement
+func parseOutput(r io.Reader) (map[string]map[string]float64, error) {
+	var res map[string]map[string]float64
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
@@ -102,9 +84,22 @@ func parseOutput(r io.Reader) (map[string]*measurement, error) {
 			return nil, err
 		}
 
-		res = make(map[string]*measurement)
+		res = make(map[string]map[string]float64)
 		for _, m := range ms {
-			res[strings.ToLower(m.Operation)] = &m
+			res[strings.ToLower(m.Operation)] = map[string]float64{
+				"takes":    m.TakesS,
+				"count":    float64(m.Count),
+				"ops":      m.OPS,
+				"avg":      (time.Duration(m.AvgUs) * time.Microsecond).Seconds(),
+				"min":      (time.Duration(m.MinUs) * time.Microsecond).Seconds(),
+				"max":      (time.Duration(m.MaxUs) * time.Microsecond).Seconds(),
+				"perc50":   (time.Duration(m.Perc50Us) * time.Microsecond).Seconds(),
+				"perc90":   (time.Duration(m.Perc90Us) * time.Microsecond).Seconds(),
+				"perc95":   (time.Duration(m.Perc95Us) * time.Microsecond).Seconds(),
+				"perc99":   (time.Duration(m.Perc99Us) * time.Microsecond).Seconds(),
+				"perc999":  (time.Duration(m.Perc999Us) * time.Microsecond).Seconds(),
+				"perc9999": (time.Duration(m.Perc9999Us) * time.Microsecond).Seconds(),
+			}
 		}
 	}
 
@@ -183,6 +178,3 @@ func (y *ycsb) Run(ctx context.Context) (map[string]config.TestResult, error) {
 
 	return run(ctx, args, y.p.Dir)
 }
-
-// check interface.
-var _ config.Measurements = (*measurement)(nil)
