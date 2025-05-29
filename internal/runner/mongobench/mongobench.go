@@ -174,7 +174,7 @@ func parseMeasurements(r *bufio.Reader) (*benchmark, error) {
 
 // readMeasurements reads the measurements from the file with the given name.
 func readMeasurements(fileName string) (*benchmark, error) {
-	relPath := filepath.Join("..", "projects", "mongodb-benchmarking", fileName)
+	relPath := filepath.Join("..", "projects", fileName)
 
 	f, err := os.Open(relPath)
 	if err != nil {
