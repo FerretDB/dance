@@ -21,12 +21,12 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"maps"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/FerretDB/dance/internal/config"
 )
@@ -71,7 +71,7 @@ func Run(ctx context.Context, dir string, args []string, parallel int) (map[stri
 		}
 	}
 
-	files := maps.Keys(filesM)
+	files := slices.Collect(maps.Keys(filesM))
 
 	res := make(map[string]config.TestResult, len(files))
 
