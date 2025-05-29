@@ -99,6 +99,12 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 	runDockerComposeCommand(
 		t,
 		"mongorestore",
+		"--version",
+	)
+
+	runDockerComposeCommand(
+		t,
+		"mongorestore",
 		"--verbose=2",
 		"--nsInclude="+db+".*",
 		"--nsFrom="+db+".*",
@@ -118,6 +124,12 @@ func mongorestore(t *testing.T, db, root, newDB string) {
 // mongodump dumps database <db> into <root>/<db> directory.
 func mongodump(t *testing.T, db, root string) {
 	t.Helper()
+
+	runDockerComposeCommand(
+		t,
+		"mongodump",
+		"--version",
+	)
 
 	runDockerComposeCommand(
 		t,
