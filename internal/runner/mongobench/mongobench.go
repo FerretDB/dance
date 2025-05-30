@@ -78,14 +78,17 @@ func parseFileNames(r io.Reader) ([]string, error) {
 // readResult reads the file and gets the last measurement and parses it.
 // The file contains measurements taken each second while the benchmark was running,
 // the last measurement is parsed and returned.
-func readResult(filepath string) (map[string]float64, error) {
-	f, err := os.Open(filepath)
-	if err != nil {
-		return nil, err
+func readResult(filePath string) (result map[string]float64, err error) {
+	var f *os.File
+
+	if f, err = os.Open(filePath); err != nil {
+		return
 	}
 
 	defer func() {
-		err = f.Close()
+		if e := f.Close(); e != nil && err == nil {
+			err = e
+		}
 	}()
 
 	// cannot use [csv.NewReader] because the file does not contain valid CSV,
@@ -104,7 +107,7 @@ func readResult(filepath string) (map[string]float64, error) {
 	}
 
 	if err = s.Err(); err != nil {
-		return nil, err
+		return
 	}
 
 	record := strings.Split(lastLine, ",")
@@ -112,38 +115,37 @@ func readResult(filepath string) (map[string]float64, error) {
 		return nil, errors.New("insufficient fields")
 	}
 
-	count, err := strconv.ParseFloat(record[1], 64)
-	if err != nil {
-		return nil, err
+	var count, mean, m1Rate, m5Rate, m15Rate float64
+
+	if count, err = strconv.ParseFloat(record[1], 64); err != nil {
+		return
 	}
 
-	mean, err := strconv.ParseFloat(record[2], 64)
-	if err != nil {
-		return nil, err
+	if mean, err = strconv.ParseFloat(record[2], 64); err != nil {
+		return
 	}
 
-	m1Rate, err := strconv.ParseFloat(record[3], 64)
-	if err != nil {
-		return nil, err
+	if m1Rate, err = strconv.ParseFloat(record[3], 64); err != nil {
+		return
 	}
 
-	m5Rate, err := strconv.ParseFloat(record[4], 64)
-	if err != nil {
-		return nil, err
+	if m5Rate, err = strconv.ParseFloat(record[4], 64); err != nil {
+		return
 	}
 
-	m15Rate, err := strconv.ParseFloat(record[5], 64)
-	if err != nil {
-		return nil, err
+	if m15Rate, err = strconv.ParseFloat(record[5], 64); err != nil {
+		return
 	}
 
-	return map[string]float64{
+	result = map[string]float64{
 		"count":    count,
 		"mean":     mean,
 		"m1_rate":  m1Rate,
 		"m5_rate":  m5Rate,
 		"m15_rate": m15Rate,
-	}, nil
+	}
+
+	return
 }
 
 // run runs given command in the given directory and returns parsed results.
@@ -166,6 +168,8 @@ func run(ctx context.Context, args []string, dir string) (map[string]config.Test
 	fileNames, err := parseFileNames(io.TeeReader(pipe, os.Stdout))
 	if err != nil {
 		_ = cmd.Process.Kill()
+		_ = cmd.Wait()
+
 		return nil, err
 	}
 
