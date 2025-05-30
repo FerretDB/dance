@@ -74,6 +74,20 @@ func (rp *runnerParamsGoTest) convert() (config.RunnerParams, error) {
 	}, nil
 }
 
+// runnerParamsMongoBench represents `mongobench` runner parameters in the project configuration YAML file.
+type runnerParamsMongoBench struct {
+	Dir  string   `yaml:"dir"`
+	Args []string `yaml:"args"`
+}
+
+// convert implements [runnerParams] interface.
+func (rp *runnerParamsMongoBench) convert() (config.RunnerParams, error) {
+	return &config.RunnerParamsMongoBench{
+		Dir:  rp.Dir,
+		Args: rp.Args,
+	}, nil
+}
+
 // runnerParamsYCSB represents `ycsb` runner parameters in the project configuration YAML file.
 type runnerParamsYCSB struct {
 	Dir  string   `yaml:"dir"`
@@ -92,5 +106,6 @@ func (rp *runnerParamsYCSB) convert() (config.RunnerParams, error) {
 var (
 	_ runnerParams = (*runnerParamsCommand)(nil)
 	_ runnerParams = (*runnerParamsGoTest)(nil)
+	_ runnerParams = (*runnerParamsMongoBench)(nil)
 	_ runnerParams = (*runnerParamsYCSB)(nil)
 )
