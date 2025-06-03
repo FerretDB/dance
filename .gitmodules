@@ -37,7 +37,3 @@
 	path = projects/meteor
 	url = https://github.com/meteor/meteor.git
 	branch = devel
-[submodule "mongodb-benchmarking"]
-	path = projects/mongodb-benchmarking
-	url = https://github.com/idealo/mongodb-benchmarking.git
-	branch = main

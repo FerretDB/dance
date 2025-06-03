@@ -16,10 +16,9 @@ package config
 
 import (
 	"fmt"
-	"sort"
+	"maps"
+	"slices"
 	"strings"
-
-	"golang.org/x/exp/maps"
 )
 
 // TestResult represents the actual outcome of a single test.
@@ -97,8 +96,7 @@ func (expected *ExpectedResults) Compare(actual map[string]TestResult) (*Compare
 		Unknown:  make(map[string]TestResult),
 	}
 
-	tests := maps.Keys(actual)
-	sort.Strings(tests)
+	tests := slices.Sorted(maps.Keys(actual))
 
 	m := expected.mapStatuses()
 

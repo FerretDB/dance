@@ -16,8 +16,8 @@ linters-settings:
             desc: use `context` package instead
           - pkg: golang.org/x/exp/slices
             desc: use `slices` package instead
-          - pkg: maps
-            desc: use `golang.org/x/exp/maps` package instead
+          - pkg: golang.org/x/exp/maps
+            desc: use `maps` package instead
   errcheck:
     check-type-assertions: false
     check-blank: false
