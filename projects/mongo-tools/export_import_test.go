@@ -36,19 +36,16 @@ func TestExportImport(t *testing.T) {
 		documentsCount int    // document count
 	}
 
-	for name, tc := range map[string]testCase{
-		"Shipwrecks": {
-			coll:           "shipwrecks",
-			db:             "sample_geospatial",
-			documentsCount: 11095,
-		},
-		"Accounts": {
-			coll:           "accounts",
-			db:             "sample_analytics",
-			documentsCount: 1746,
-		},
-	} {
-		t.Run(name, func(t *testing.T) {
+	for _, tc := range []testCase{{
+		coll:           "shipwrecks",
+		db:             "sample_geospatial",
+		documentsCount: 11095,
+	}, {
+		coll:           "accounts",
+		db:             "sample_analytics",
+		documentsCount: 1746,
+	}} {
+		t.Run(tc.coll, func(t *testing.T) {
 			t.Parallel()
 
 			dbName1 := fmt.Sprintf("%s_%s_export1", tc.db, tc.coll)
