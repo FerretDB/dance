@@ -81,11 +81,10 @@ func runDockerComposeCommand(tb testing.TB, command string, args ...string) {
 
 	args = append([]string{"compose", "run", "--rm", "mongosh", command}, args...)
 	cmd := exec.Command(bin, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 
-	tb.Logf("Running %s", strings.Join(cmd.Args, " "))
-	err = cmd.Run()
+	tb.Logf("%s", strings.Join(cmd.Args, " "))
+	b, err := cmd.CombinedOutput()
+	tb.Logf("%s", b)
 	require.NoError(tb, err)
 }
 

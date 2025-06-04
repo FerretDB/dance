@@ -71,11 +71,12 @@ jobs:
           tags: tag:ci
           version: latest
 
+      - name: Create directory for logs
+        run: mkdir -p /tmp/logs
+
       - name: Start pinging Tailscale
         if: github.event_name != 'pull_request'
-        run: |
-          mkdir -p /tmp/logs
-          tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
+        run: tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -101,6 +102,27 @@ jobs:
         run: bin/task dance CONFIG=${{ matrix.config }}.yml VERBOSE_FLAG=${{ matrix.verbose || 'false' }}
         env:
           DANCE_PUSH: ${{ secrets.DANCE_PUSH }}
+
+      - name: Setup nushell
+        if: failure()
+        uses: FerretDB/github-actions/setup-nushell@main
+
+      - name: Show Docker ports
+        if: failure()
+        run: docker compose ps -a --no-trunc
+
+      - name: Show listening ports
+        if: failure()
+        shell: /usr/local/bin/nu {0}
+        run: |
+          docker compose ps -a --format json |
+          from json -o |
+          get Publishers |
+          flatten |
+          where PublishedPort != 0 |
+          get PublishedPort |
+          uniq |
+          each { |port| lsof -nPi $':($port)' +c0 }
 
       - name: Collect logs
         if: failure()

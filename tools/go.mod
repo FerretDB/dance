@@ -18,8 +18,6 @@ tool (
 	mvdan.cc/gofumpt
 )
 
-replace github.com/idealo/mongodb-benchmarking => github.com/FerretDB/mongodb-benchmarking v0.0.0-20250529035102-a8e5993d9712
-
 require (
 	cloud.google.com/go v0.110.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
@@ -114,7 +112,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.1.0 // indirect
 	github.com/hailocab/go-hostpool v0.0.0-20160125115350-e80d13ce29ed // indirect
-	github.com/idealo/mongodb-benchmarking v0.0.0-00010101000000-000000000000 // indirect
+	github.com/idealo/mongodb-benchmarking v1.5.5 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
