@@ -36,19 +36,16 @@ func TestExportImport(t *testing.T) {
 		documentsCount int    // document count
 	}
 
-	for name, tc := range map[string]testCase{
-		"Shipwrecks": {
-			coll:           "shipwrecks",
-			db:             "sample_geospatial",
-			documentsCount: 11095,
-		},
-		"Accounts": {
-			coll:           "accounts",
-			db:             "sample_analytics",
-			documentsCount: 1746,
-		},
-	} {
-		t.Run(name, func(t *testing.T) {
+	for _, tc := range []testCase{{
+		coll:           "shipwrecks",
+		db:             "sample_geospatial",
+		documentsCount: 11095,
+	}, {
+		coll:           "accounts",
+		db:             "sample_analytics",
+		documentsCount: 1746,
+	}} {
+		t.Run(tc.coll, func(t *testing.T) {
 			t.Parallel()
 
 			dbName1 := fmt.Sprintf("%s_%s_export1", tc.db, tc.coll)
@@ -93,6 +90,12 @@ func mongoimport(t *testing.T, file, db, coll string) {
 	runDockerComposeCommand(
 		t,
 		"mongoimport",
+		"--version",
+	)
+
+	runDockerComposeCommand(
+		t,
+		"mongoimport",
 		"--verbose=2",
 		"--db="+db,
 		"--collection="+coll,
@@ -107,6 +110,12 @@ func mongoimport(t *testing.T, file, db, coll string) {
 // mongoexport exports collection from <db>/<coll> to the <file> file.
 func mongoexport(t *testing.T, file, db, coll string) {
 	t.Helper()
+
+	runDockerComposeCommand(
+		t,
+		"mongoexport",
+		"--version",
+	)
 
 	runDockerComposeCommand(
 		t,
