@@ -24,7 +24,7 @@ results:
     pass:
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
     fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
+      # 2dsphere indexes are not supported
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
@@ -34,11 +34,7 @@ results:
     fail:
       # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
 
   ferretdb-postgresql-secured:
     stats:
@@ -47,7 +43,7 @@ results:
     pass:
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
     fail:
-      # TODO https://github.com/FerretDB/dance/issues/892
+      # 2dsphere indexes are not supported
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
 
@@ -57,11 +53,7 @@ results:
     fail:
       # TODO https://github.com/FerretDB/dance/issues/892
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_analytics
-      - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore/sample_geospatial
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Accounts
-      - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport/Shipwrecks
 
   ferretdb2:
     stats:
