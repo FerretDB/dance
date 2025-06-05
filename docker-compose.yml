@@ -161,7 +161,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev:
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    image: ghcr.io/ferretdb/ferretdb-dev:main
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -179,7 +179,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev-secured:
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    image: ghcr.io/ferretdb/ferretdb-dev:main
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -223,7 +223,7 @@ services:
 
   postgres-documentdb-dev:
     # Use ferretdb branch build
-    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
+    image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb
     platform: linux/amd64
     restart: on-failure
     environment:
