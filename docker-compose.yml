@@ -125,7 +125,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
     ports:
@@ -143,7 +143,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-secured:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
     ports:
@@ -161,7 +161,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev:
-    image: ghcr.io/ferretdb/ferretdb-dev:main
+    image: ${FERRETDB_DEV_IMAGE:ghcr.io/ferretdb/ferretdb-dev:main}
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -179,7 +179,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev-secured:
-    image: ghcr.io/ferretdb/ferretdb-dev:main
+    image: ${FERRETDB_DEV_IMAGE:ghcr.io/ferretdb/ferretdb-dev:main}
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -209,11 +209,8 @@ services:
       - POSTGRES_DB=dance
 
   postgres-documentdb:
-    image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
-    platform: linux/amd64
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     restart: on-failure
-    ports:
-      - 5432:5432
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
       - TZ=America/St_Johns
@@ -224,7 +221,6 @@ services:
   postgres-documentdb-dev:
     # Use ferretdb branch build
     image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb
-    platform: linux/amd64
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
