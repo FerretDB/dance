@@ -271,3 +271,20 @@ services:
       dockerfile: markdownlint.Dockerfile
     volumes:
       - .:/workdir
+
+  ferretdb-prod:
+    image: ghcr.io/ferretdb/ferretdb:2.0-prod
+    restart: on-failure
+    depends_on: ["postgres-documentdb"]
+    ports:
+      - 48001:48001
+    environment:
+      - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:48001
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-prod:5432/prod_db?sslmode=disable
+      - FERRETDB_AUTH=false
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
