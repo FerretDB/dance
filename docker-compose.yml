@@ -161,7 +161,6 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev:
-    # development build of main branch of FerretDB and ferretdb branch of documentdb
     image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:latest}
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
@@ -217,6 +216,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev-branch:
+    # development build of main branch of FerretDB and ferretdb branch of documentdb
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
     restart: on-failure
     depends_on: ["postgres-documentdb-dev-branch"]
@@ -229,25 +229,6 @@ services:
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47006
       - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-branch:5432/postgres?sslmode=disable
-      - FERRETDB_AUTH=false
-      # - FERRETDB_REPL_SET_NAME=rs0
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  ferretdb2-prod:
-    # production build of main branch of FerretDB and ferretdb branch of documentdb
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb}
-    restart: on-failure
-    depends_on: ["postgres-documentdb-prod-current"]
-    ports:
-      - 47007:47007
-    environment:
-      # Always UTC+05:45. Set to catch timezone problems.
-      - TZ=Asia/Kathmandu
-      - FERRETDB_TELEMETRY=disabled
-      - FERRETDB_LOG_LEVEL=error
-      - FERRETDB_LISTEN_ADDR=:47007
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-prod-current:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:

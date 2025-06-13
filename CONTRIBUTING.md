@@ -8,7 +8,7 @@ Names uniquely identify both projects and tests within the project.
 
 Tests are run against a *database* identified by name.
 Each database has a single canonical MongoDB URI and configuration.
-Different configurations should be represented as different named databases.
+Different configurations should be represented as different [named databases](#database-names).
 Databases may be run locally (for example, with Docker Compose) or remotely.
 
 Project tests a run against a database by a *runner* that returns *test results*.
@@ -68,3 +68,13 @@ Both parameters are optional.
 
 We expect most or all tests to pass when run against MongoDB; a few exceptions should have comments explaining why.
 Tests failing against FerretDB should have issue links in the comments.
+
+### Database names
+
+Different database names are used to represent different configurations.
+
+- `-dev` suffix means "development build" (i.e., not production).
+- `-branch` suffix means "branch build" (i.e., not release).
+- `-secured` suffix means authentication is enabled.
+
+A combinations of these suffixes may be used, for example, `ferretdb2-dev-branch`.
