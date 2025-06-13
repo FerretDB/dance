@@ -277,7 +277,6 @@ services:
       - POSTGRES_DB=postgres
 
   postgres-documentdb-dev-branch:
-    # development build of ferretdb branch
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
     restart: on-failure
     environment:
