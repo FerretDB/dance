@@ -52,6 +52,7 @@ This way, the fix-build-test development cycle will be faster as it does not inv
 
 Alternatively, the Docker image with the name `ferretdb-local` can be built by `task docker-local` in the FerretDB repository.
 In this case, `FERRETDB_IMAGE=ferretdb-local` can be set to use that image.
+Similarly, you can specify `POSTGRES_DOCUMENTDB_IMAGE` for the image build from the FerretDB/documentdb repository.
 
 ## Running tests
 
