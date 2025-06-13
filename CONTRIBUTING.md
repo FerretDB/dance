@@ -8,7 +8,7 @@ Names uniquely identify both projects and tests within the project.
 
 Tests are run against a *database* identified by name.
 Each database has a single canonical MongoDB URI and configuration.
-Different configurations should be represented as different [named databases](#database-names).
+Different configurations should be represented as different named databases.
 Databases may be run locally (for example, with Docker Compose) or remotely.
 
 Project tests a run against a database by a *runner* that returns *test results*.
@@ -21,6 +21,43 @@ Project configuration can not contain database-specific tests; instead, some tes
 
 The dance tool runs tests described by project configuration and compares actual and expected results.
 The dance tool itself does not start and stop databases, but the repository provides `docker-compose.yml` and `Taskfile.yml`, which do that.
+
+## Database names
+
+<!-- Keep in sync with configload.go and docker-compose.yml -->
+
+Database names follow common convention by adding the following prefixes in the specific order:
+
+1. `-dev` suffix means ["development build"](https://pkg.go.dev/github.com/FerretDB/FerretDB/v2/build/version#hdr-Go_build_tags) -
+   the slow build with the race detector, contrasting to production builds.
+   We use development builds to detect data races, and other bugs and production builds to track performance.
+2. `-branch` suffix means "branch build" -
+   the build of the latest commit in the `main` branch, contrasting to the build of the latest release tag.
+   We use branch builds to track changes over time, and release builds to serve as a baseline.
+3. `-secured` suffix means authentication is enabled.
+
+### MongoDB
+
+* `mongodb` - the latest release
+* `mongodb-secured` - the latest release with authentication enabled
+
+### FerretDB v1
+
+We use only production builds for FerretDB v1.
+
+* `ferretdb-postgresql` - the latest release with PostgreSQL backend
+* `ferretdb-postgresql-secured` - the latest release with PostgreSQL backend and authentication enabled
+* `ferretdb-sqlite-replset` - the latest release with SQLite backend in replica set mode
+* `ferretdb-sqlite-replset-secured` - the latest release with SQLite backend in replica set mode and authentication enabled
+
+### FerretDB v2
+
+* `ferretdb2` - production build of the latest release
+* `ferretdb2-secured` - production build of the latest release with authentication enabled
+* `ferretdb2-dev` - development build of the latest release
+* `ferretdb2-dev-secured` - development build of the latest release with authentication enabled
+* `ferretdb2-branch` - production build of the `main` branch
+* `ferretdb2-dev-branch` - development build of the `main` branch
 
 ## Cloning repository
 
@@ -69,13 +106,3 @@ Both parameters are optional.
 
 We expect most or all tests to pass when run against MongoDB; a few exceptions should have comments explaining why.
 Tests failing against FerretDB should have issue links in the comments.
-
-### Database names
-
-Different database names are used to represent different configurations.
-
-* `-dev` suffix means "development build" (i.e., not production).
-*`-branch` suffix means "branch build" (i.e., not release).
-*`-secured` suffix means authentication is enabled.
-
-Combinations of these suffixes may be used, for example, `ferretdb2-dev-branch`.

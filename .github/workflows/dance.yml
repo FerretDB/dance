@@ -11,7 +11,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "12 3 * * *" # after FerretDB's Docker workflow
+    - cron: "12 3 * * *" # after FerretDB's Packages workflow
 
 env:
   GOPATH: /home/runner/go

@@ -1,4 +1,5 @@
 ---
+# Keep in sync with CONTRIBUTING.md and configload.go.
 services:
   mongodb:
     build:
@@ -124,7 +125,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2:
+  ferretdb2: # production build of the latest release
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
@@ -142,7 +143,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-secured:
+  ferretdb2-secured: # production build of the latest release with authentication enabled
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
@@ -160,7 +161,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev:
+  ferretdb2-dev: # development build of the latest release
     image: ghcr.io/ferretdb/ferretdb-dev:latest
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
@@ -178,7 +179,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev-secured:
+  ferretdb2-dev-secured: # development build of the latest release with authentication enabled
     image: ghcr.io/ferretdb/ferretdb-dev:latest
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
@@ -196,7 +197,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-branch:
+  ferretdb2-branch: # production build of the `main` branch
     image: ghcr.io/ferretdb/ferretdb-dev:main-prod
     restart: on-failure
     depends_on: ["postgres-documentdb-branch"]
@@ -214,7 +215,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev-branch:
+  ferretdb2-dev-branch: # development build of the `main` branch
     image: ghcr.io/ferretdb/ferretdb-dev:main
     restart: on-failure
     depends_on: ["postgres-documentdb-dev-branch"]
@@ -244,7 +245,7 @@ services:
       - POSTGRES_PASSWORD=postgres_password
       - POSTGRES_DB=dance
 
-  postgres-documentdb:
+  postgres-documentdb: # production build of the latest release
     image: ${POSTGRES_DOCUMENTDB_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     restart: on-failure
     ports:
@@ -256,7 +257,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-dev:
+  postgres-documentdb-dev: # development build of the latest release
     image: ghcr.io/ferretdb/postgres-documentdb-dev:17
     restart: on-failure
     environment:
@@ -266,7 +267,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-branch:
+  postgres-documentdb-branch: # production build of the `ferretdb` branch
     image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb-prod
     restart: on-failure
     environment:
@@ -276,7 +277,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-dev-branch:
+  postgres-documentdb-dev-branch: # development build of the `ferretdb` branch
     image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb
     restart: on-failure
     environment:
