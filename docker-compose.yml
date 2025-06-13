@@ -221,19 +221,8 @@ services:
       - POSTGRES_DB=postgres
 
   postgres-documentdb-dev-release:
-    # development build of release
+    # development build of the latest release
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17}
-    restart: on-failure
-    environment:
-      # UTC−03:30/−02:30. Set to catch timezone problems.
-      - TZ=America/St_Johns
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
-
-  postgres-documentdb-dev:
-    # development build of ferretdb branch
-    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
@@ -245,6 +234,17 @@ services:
   postgres-documentdb-prod:
     # production build of ferretdb branch
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb-prod}
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  postgres-documentdb-dev:
+    # development build of ferretdb branch
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
