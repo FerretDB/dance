@@ -73,8 +73,8 @@ Tests failing against FerretDB should have issue links in the comments.
 
 Different database names are used to represent different configurations.
 
-- `-dev` suffix means "development build" (i.e., not production).
-- `-branch` suffix means "branch build" (i.e., not release).
-- `-secured` suffix means authentication is enabled.
+* `-dev` suffix means "development build" (i.e., not production).
+*`-branch` suffix means "branch build" (i.e., not release).
+*`-secured` suffix means authentication is enabled.
 
 A combinations of these suffixes may be used, for example, `ferretdb2-dev-branch`.
