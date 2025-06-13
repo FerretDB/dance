@@ -77,4 +77,4 @@ Different database names are used to represent different configurations.
 *`-branch` suffix means "branch build" (i.e., not release).
 *`-secured` suffix means authentication is enabled.
 
-A combinations of these suffixes may be used, for example, `ferretdb2-dev-branch`.
+Combinations of these suffixes may be used, for example, `ferretdb2-dev-branch`.
