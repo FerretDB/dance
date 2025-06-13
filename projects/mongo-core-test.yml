@@ -23,6 +23,6 @@ results:
     stats:
       pass: 1
 
-  ferretdb2:
+  ferretdb2-branch:
     stats:
       pass: 1
