@@ -125,9 +125,9 @@ services:
       - "host.docker.internal:host-gateway"
 
   ferretdb2:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
-    depends_on: ["postgres-documentdb-release"]
+    depends_on: ["postgres-documentdb"]
     ports:
       - 47001:47001
     environment:
@@ -136,16 +136,16 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47001
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-release:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-secured:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
-    depends_on: ["postgres-documentdb-release"]
+    depends_on: ["postgres-documentdb"]
     ports:
       - 47002:47002
     environment:
@@ -154,7 +154,7 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47002
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-release:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=true
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
@@ -162,9 +162,9 @@ services:
 
   ferretdb2-dev:
     # development build of main branch of FerretDB and ferretdb branch of documentdb
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:latest}
     restart: on-failure
-    depends_on: ["postgres-documentdb-dev-current"]
+    depends_on: ["postgres-documentdb-dev"]
     ports:
       - 47003:47003
     environment:
@@ -173,16 +173,16 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47003
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-current:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   ferretdb2-dev-secured:
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:latest}
     restart: on-failure
-    depends_on: ["postgres-documentdb-dev-current"]
+    depends_on: ["postgres-documentdb-dev"]
     ports:
       - 47004:47004
     environment:
@@ -191,16 +191,17 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47004
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-current:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=true
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-release:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb}
+  ferretdb2-branch:
+    # production build of main branch of FerretDB and ferretdb branch of documentdb
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
     restart: on-failure
-    depends_on: ["postgres-documentdb-release"]
+    depends_on: ["postgres-documentdb-branch"]
     ports:
       - 47005:47005
     environment:
@@ -209,16 +210,16 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47005
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-release:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-branch:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev-release:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev}
+  ferretdb2-dev-branch:
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
     restart: on-failure
-    depends_on: ["postgres-documentdb-dev-release"]
+    depends_on: ["postgres-documentdb-dev-branch"]
     ports:
       - 47006:47006
     environment:
@@ -227,7 +228,7 @@ services:
       - FERRETDB_TELEMETRY=disabled
       - FERRETDB_LOG_LEVEL=error
       - FERRETDB_LISTEN_ADDR=:47006
-      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-release:5432/postgres?sslmode=disable
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-branch:5432/postgres?sslmode=disable
       - FERRETDB_AUTH=false
       # - FERRETDB_REPL_SET_NAME=rs0
     extra_hosts:
@@ -264,7 +265,7 @@ services:
       - POSTGRES_PASSWORD=postgres_password
       - POSTGRES_DB=dance
 
-  postgres-documentdb-release:
+  postgres-documentdb:
     image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     restart: on-failure
     ports:
@@ -276,7 +277,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-dev-release:
+  postgres-documentdb-dev:
     # development build of the latest release
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17}
     restart: on-failure
@@ -287,7 +288,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-prod-current:
+  postgres-documentdb-branch:
     # production build of ferretdb branch
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb-prod}
     restart: on-failure
@@ -298,7 +299,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-dev-current:
+  postgres-documentdb-dev-branch:
     # development build of ferretdb branch
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
     restart: on-failure

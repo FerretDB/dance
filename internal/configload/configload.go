@@ -46,9 +46,8 @@ var DBs = map[string]string{
 	"ferretdb2-dev":         "mongodb://127.0.0.1:47003/",
 	"ferretdb2-dev-secured": "mongodb://username:password@127.0.0.1:47004/",
 
-	"ferretdb2-release":     "mongodb://127.0.0.1:47005/",
-	"ferretdb2-dev-release": "mongodb://127.0.0.1:47006/",
-	"ferretdb2-prod":        "mongodb://127.0.0.1:47007/",
+	"ferretdb2-branch":     "mongodb://127.0.0.1:47005/",
+	"ferretdb2-dev-branch": "mongodb://127.0.0.1:47006/",
 }
 
 // projectConfig represents project configuration YAML file.
