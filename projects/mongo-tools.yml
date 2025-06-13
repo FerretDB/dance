@@ -70,3 +70,11 @@ results:
   ferretdb2-dev-secured:
     stats:
       pass: 6
+
+  ferretdb2-branch:
+    stats:
+      pass: 6
+
+  ferretdb2-dev-branch:
+    stats:
+      pass: 6

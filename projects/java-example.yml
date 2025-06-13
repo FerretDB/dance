@@ -116,3 +116,12 @@ results:
       - noauth # Command dropDatabase requires authentication
       - plain # Unsupported authentication mechanism "PLAIN"
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
+
+  ferretdb2-dev-branch:
+    stats:
+      fail: 3
+      pass: 3
+    fail:
+      - noauth # Command dropDatabase requires authentication
+      - plain # Unsupported authentication mechanism "PLAIN"
+      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
