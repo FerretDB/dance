@@ -232,7 +232,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-current-prod:
+  ferretdb2-prod-current:
     # production build of main branch of FerretDB and ferretdb branch of documentdb
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb}
     restart: on-failure
@@ -251,7 +251,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-current-dev:
+  ferretdb2-dev-current:
     # development build of main branch of FerretDB and ferretdb branch of documentdb
     image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev}
     restart: on-failure
