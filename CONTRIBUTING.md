@@ -22,6 +22,43 @@ Project configuration can not contain database-specific tests; instead, some tes
 The dance tool runs tests described by project configuration and compares actual and expected results.
 The dance tool itself does not start and stop databases, but the repository provides `docker-compose.yml` and `Taskfile.yml`, which do that.
 
+## Database names
+
+<!-- Keep in sync with configload.go and docker-compose.yml -->
+
+Database names follow common convention by adding the following prefixes in the specific order:
+
+1. `-dev` suffix means ["development build"](https://pkg.go.dev/github.com/FerretDB/FerretDB/v2/build/version#hdr-Go_build_tags) -
+   the slow build with the race detector, contrasting to production builds.
+   We use development builds to detect data races, and other bugs and production builds to track performance.
+2. `-branch` suffix means "branch build" -
+   the build of the latest commit in the `main` branch, contrasting to the build of the latest release tag.
+   We use branch builds to track changes over time, and release builds to serve as a baseline.
+3. `-secured` suffix means authentication is enabled.
+
+### MongoDB
+
+* `mongodb` - the latest release
+* `mongodb-secured` - the latest release with authentication enabled
+
+### FerretDB v1
+
+We use only production builds for FerretDB v1.
+
+* `ferretdb-postgresql` - the latest release with PostgreSQL backend
+* `ferretdb-postgresql-secured` - the latest release with PostgreSQL backend and authentication enabled
+* `ferretdb-sqlite-replset` - the latest release with SQLite backend in replica set mode
+* `ferretdb-sqlite-replset-secured` - the latest release with SQLite backend in replica set mode and authentication enabled
+
+### FerretDB v2
+
+* `ferretdb2` - production build of the latest release
+* `ferretdb2-secured` - production build of the latest release with authentication enabled
+* `ferretdb2-dev` - development build of the latest release
+* `ferretdb2-dev-secured` - development build of the latest release with authentication enabled
+* `ferretdb2-branch` - production build of the `main` branch
+* `ferretdb2-dev-branch` - development build of the `main` branch
+
 ## Cloning repository
 
 Projects are included in the repository as git submodules.
@@ -52,6 +89,7 @@ This way, the fix-build-test development cycle will be faster as it does not inv
 
 Alternatively, the Docker image with the name `ferretdb-local` can be built by `task docker-local` in the FerretDB repository.
 In this case, `FERRETDB_IMAGE=ferretdb-local` can be set to use that image.
+Similarly, you can specify `POSTGRES_DOCUMENTDB_IMAGE` for the image build from the FerretDB/documentdb repository.
 
 ## Running tests
 

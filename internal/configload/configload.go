@@ -30,21 +30,22 @@ import (
 )
 
 // DBs contains MongoDB URIs for different databases.
+// Keep in sync with CONTRIBUTING.md and docker-compose.yml.
 var DBs = map[string]string{
 	"mongodb":         "mongodb://127.0.0.1:37001/",
 	"mongodb-secured": "mongodb://username:password@127.0.0.1:37002/?authSource=admin",
 
-	"ferretdb-postgresql":         "mongodb://127.0.0.1:27001/",
-	"ferretdb-postgresql-secured": "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
-
+	"ferretdb-postgresql":             "mongodb://127.0.0.1:27001/",
+	"ferretdb-postgresql-secured":     "mongodb://username:password@127.0.0.1:27003/?authSource=admin",
 	"ferretdb-sqlite-replset":         "mongodb://127.0.0.1:27002/?replicaSet=rs0",
 	"ferretdb-sqlite-replset-secured": "mongodb://username:password@127.0.0.1:27004/?authSource=admin&replicaSet=rs0",
 
-	"ferretdb2":         "mongodb://127.0.0.1:47001/",
-	"ferretdb2-secured": "mongodb://username:password@127.0.0.1:47002/",
-
+	"ferretdb2":             "mongodb://127.0.0.1:47001/",
+	"ferretdb2-secured":     "mongodb://username:password@127.0.0.1:47002/",
 	"ferretdb2-dev":         "mongodb://127.0.0.1:47003/",
 	"ferretdb2-dev-secured": "mongodb://username:password@127.0.0.1:47004/",
+	"ferretdb2-branch":      "mongodb://127.0.0.1:47005/",
+	"ferretdb2-dev-branch":  "mongodb://127.0.0.1:47006/",
 }
 
 // projectConfig represents project configuration YAML file.
