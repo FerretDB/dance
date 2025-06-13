@@ -69,24 +69,7 @@ results:
       - noauth # Authentication failed
       - plain # Unsupported authentication mechanism "PLAIN"
 
-  ferretdb2:
-    stats:
-      fail: 3
-      pass: 3
-    fail:
-      - plain # Received authentication for mechanism PLAIN which is not enabled
-      - sha1 # Received authentication for mechanism SCRAM-SHA-1 which is not enabled
-      - sha256 # Authentication failed
-
-  ferretdb2-secured:
-    stats:
-      fail: 3
-      pass: 3
-    fail:
-      - noauth # Command dropDatabase requires authentication
-      - plain # Unsupported authentication mechanism "PLAIN"
-      - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
-
+  # to test that changes in the example are compatible with the latest release
   ferretdb2-dev:
     stats:
       fail: 3
@@ -96,6 +79,7 @@ results:
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
       - sha256 # Authentication failed
 
+  # to test that changes in the example are compatible with the latest release
   ferretdb2-dev-secured:
     stats:
       fail: 3
@@ -105,6 +89,7 @@ results:
       - plain # Unsupported authentication mechanism "PLAIN"
       - sha1 # Unsupported authentication mechanism "SCRAM-SHA-1"
 
+  # to prevent regressions
   ferretdb2-dev-branch:
     stats:
       fail: 3
