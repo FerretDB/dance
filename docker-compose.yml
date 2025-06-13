@@ -210,7 +210,6 @@ services:
 
   postgres-documentdb:
     image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
-    platform: linux/amd64
     restart: on-failure
     ports:
       - 5432:5432
@@ -221,10 +220,31 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
+  postgres-documentdb-dev-release:
+    # development build of release
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17}
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
   postgres-documentdb-dev:
-    # Use ferretdb branch build
+    # development build of ferretdb branch
     image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
-    platform: linux/amd64
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  postgres-documentdb-prod:
+    # production build of ferretdb branch
+    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb-prod}
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
