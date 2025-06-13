@@ -19,3 +19,7 @@ results:
   ferretdb2-dev:
     stats:
       pass: 2
+
+  ferretdb2-branch:
+    stats:
+      pass: 2

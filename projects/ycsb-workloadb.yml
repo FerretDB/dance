@@ -23,3 +23,7 @@ results:
   ferretdb2-dev:
     stats:
       pass: 3
+
+  ferretdb2-branch:
+    stats:
+      pass: 3
