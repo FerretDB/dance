@@ -12,10 +12,12 @@ results:
     stats:
       pass: 2
 
+  # to track baseline performance
   ferretdb2:
     stats:
       pass: 2
 
-  ferretdb2-dev:
+  # to track performance
+  ferretdb2-branch:
     stats:
       pass: 2

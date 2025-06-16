@@ -23,6 +23,7 @@ results:
     stats:
       pass: 1
 
-  ferretdb2:
+  # to track regressions
+  ferretdb2-branch:
     stats:
       pass: 1

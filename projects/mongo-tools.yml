@@ -55,18 +55,17 @@ results:
       - github.com/FerretDB/dance/projects/mongo-tools/TestDumpRestore
       - github.com/FerretDB/dance/projects/mongo-tools/TestExportImport
 
+  # to track baseline performance
   ferretdb2:
     stats:
       pass: 6
 
+  # to test that changes in the project are compatible with the latest release
   ferretdb2-secured:
     stats:
       pass: 6
 
-  ferretdb2-dev:
-    stats:
-      pass: 6
-
-  ferretdb2-dev-secured:
+  # to track performance
+  ferretdb2-branch:
     stats:
       pass: 6

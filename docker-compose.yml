@@ -1,4 +1,5 @@
 ---
+# Keep in sync with CONTRIBUTING.md and configload.go.
 services:
   mongodb:
     build:
@@ -124,8 +125,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+  ferretdb2: # production build of the latest release
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
     ports:
@@ -142,8 +143,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-secured:
-    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main-prod}
+  ferretdb2-secured: # production build of the latest release with authentication enabled
+    image: ${FERRETDB_IMAGE:-ghcr.io/ferretdb/ferretdb:latest}
     restart: on-failure
     depends_on: ["postgres-documentdb"]
     ports:
@@ -160,8 +161,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev:
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+  ferretdb2-dev: # development build of the latest release
+    image: ghcr.io/ferretdb/ferretdb-dev:latest
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -178,8 +179,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ferretdb2-dev-secured:
-    image: ${FERRETDB_DEV_IMAGE:-ghcr.io/ferretdb/ferretdb-dev:main}
+  ferretdb2-dev-secured: # development build of the latest release with authentication enabled
+    image: ghcr.io/ferretdb/ferretdb-dev:latest
     restart: on-failure
     depends_on: ["postgres-documentdb-dev"]
     ports:
@@ -196,6 +197,42 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  ferretdb2-branch: # production build of the `main` branch
+    image: ghcr.io/ferretdb/ferretdb-dev:main-prod
+    restart: on-failure
+    depends_on: ["postgres-documentdb-branch"]
+    ports:
+      - 47005:47005
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:47005
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-branch:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
+      # - FERRETDB_REPL_SET_NAME=rs0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ferretdb2-dev-branch: # development build of the `main` branch
+    image: ghcr.io/ferretdb/ferretdb-dev:main
+    restart: on-failure
+    depends_on: ["postgres-documentdb-dev-branch"]
+    ports:
+      - 47006:47006
+    environment:
+      # Always UTC+05:45. Set to catch timezone problems.
+      - TZ=Asia/Kathmandu
+      - FERRETDB_TELEMETRY=disabled
+      - FERRETDB_LOG_LEVEL=error
+      - FERRETDB_LISTEN_ADDR=:47006
+      - FERRETDB_POSTGRESQL_URL=postgres://username:password@postgres-documentdb-dev-branch:5432/postgres?sslmode=disable
+      - FERRETDB_AUTH=false
+      # - FERRETDB_REPL_SET_NAME=rs0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   # Different FerretDB v1 instances must use different POSTGRES_DB to avoid error such as
   # `relation "_ferretdb_database_metadata" already exists (SQLSTATE 42P07)`.
   postgres:
@@ -208,9 +245,8 @@ services:
       - POSTGRES_PASSWORD=postgres_password
       - POSTGRES_DB=dance
 
-  postgres-documentdb:
-    image: ${POSTGRES_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
-    platform: linux/amd64
+  postgres-documentdb: # production build of the latest release
+    image: ${POSTGRES_DOCUMENTDB_IMAGE:-ghcr.io/ferretdb/postgres-documentdb:17}
     restart: on-failure
     ports:
       - 5432:5432
@@ -221,10 +257,28 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  postgres-documentdb-dev:
-    # Use ferretdb branch build
-    image: ${POSTGRES_DEV_IMAGE:-ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb}
-    platform: linux/amd64
+  postgres-documentdb-dev: # development build of the latest release
+    image: ghcr.io/ferretdb/postgres-documentdb-dev:17
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  postgres-documentdb-branch: # production build of the `ferretdb` branch
+    image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb-prod
+    restart: on-failure
+    environment:
+      # UTC−03:30/−02:30. Set to catch timezone problems.
+      - TZ=America/St_Johns
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+
+  postgres-documentdb-dev-branch: # development build of the `ferretdb` branch
+    image: ghcr.io/ferretdb/postgres-documentdb-dev:17-ferretdb
     restart: on-failure
     environment:
       # UTC−03:30/−02:30. Set to catch timezone problems.
