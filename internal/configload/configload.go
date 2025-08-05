@@ -174,6 +174,8 @@ func loadContent(content, db string) (*config.Config, error) {
 		p = &runnerParamsCommand{}
 	case config.RunnerTypeGoTest:
 		p = &runnerParamsGoTest{}
+	case config.RunnerTypeMongoBench:
+		p = &runnerParamsMongoBench{}
 	case config.RunnerTypeYCSB:
 		p = &runnerParamsYCSB{}
 	default:
