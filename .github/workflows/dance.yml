@@ -77,7 +77,7 @@ jobs:
         run: tailscale ping -c 0 --until-direct --timeout 2s --verbose ${{ secrets.DANCE_PUSH_HOST }} 2>&1 > /tmp/logs/tailscale.txt &
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true
 
