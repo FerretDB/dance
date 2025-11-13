@@ -9,8 +9,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/sethvargo/go-githubactions v1.3.1
 	github.com/stretchr/testify v1.11.1
-	go.mongodb.org/mongo-driver v1.17.4
-	golang.org/x/sys v0.37.0
+	go.mongodb.org/mongo-driver v1.17.6
+	golang.org/x/sys v0.38.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
