@@ -52,6 +52,8 @@ jobs:
           - { config: mongo-tools }
           - { config: mongo-core-test, verbose: true } # verbose to view test output on CI
 
+          - { config: mongobench-runall }
+
           - { config: ycsb-workloada }
           - { config: ycsb-workloada2 }
           - { config: ycsb-workloadb }

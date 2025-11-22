@@ -40,6 +40,7 @@ import (
 	"github.com/FerretDB/dance/internal/runner"
 	"github.com/FerretDB/dance/internal/runner/command"
 	"github.com/FerretDB/dance/internal/runner/gotest"
+	"github.com/FerretDB/dance/internal/runner/mongobench"
 	"github.com/FerretDB/dance/internal/runner/ycsb"
 )
 
@@ -196,6 +197,8 @@ func main() {
 				runner, err = command.New(c.Params.(*config.RunnerParamsCommand), rl, cli.Verbose)
 			case config.RunnerTypeGoTest:
 				runner, err = gotest.New(c.Params.(*config.RunnerParamsGoTest), rl, cli.Verbose)
+			case config.RunnerTypeMongoBench:
+				runner, err = mongobench.New(c.Params.(*config.RunnerParamsMongoBench), rl)
 			case config.RunnerTypeYCSB:
 				runner, err = ycsb.New(c.Params.(*config.RunnerParamsYCSB), rl)
 			default:

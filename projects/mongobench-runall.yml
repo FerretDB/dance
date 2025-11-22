@@ -1,0 +1,26 @@
+---
+# Run all tests
+runner: mongobench
+params:
+  dir: .
+  args:
+    - -threads
+    - 10
+    - -docs
+    - 100000
+    - -uri
+    - {{.MONGODB_URI}}
+    - --runAll
+
+results:
+  mongodb:
+    stats:
+      pass: 4
+
+  ferretdb2:
+    stats:
+      pass: 4
+
+  ferretdb2-dev:
+    stats:
+      pass: 4
